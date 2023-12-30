@@ -52,7 +52,7 @@ const ForgotPassword = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h4' sx={{ mb: 1.5 }}>
-              Forgot Password? 🔒
+              Forgot Password?
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
               Enter your email and we&prime;ll send you instructions to reset your password
