@@ -2,20 +2,35 @@ const navigation = () => {
   return [
     {
       title: 'Home',
-      path: '/home',
+      path: '/admin/home',
       icon: 'tabler:smart-home',
     },
     {
-      title: 'Second Page',
-      path: '/second-page',
+      title: 'Bookings',
+      path: '/admin/bookings',
+      icon: 'tabler:address-book',
+    },
+    {
+      title: 'Inbox',
+      path: '/admin/inbox',
       icon: 'tabler:mail',
+    },
+    {
+      title: 'Users',
+      path: '/admin/users',
+      icon: 'tabler:users',
+    },
+    {
+      title: 'Finance',
+      path: '/admin/finane',
+      icon: 'tabler:report-money',
     },
     {
       path: '/acl',
       action: 'read',
       subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'tabler:shield',
+      title: 'Account',
+      icon: 'tabler:user-circle',
     }
   ]
 }

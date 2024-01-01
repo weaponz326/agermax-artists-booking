@@ -31,7 +31,7 @@ const Home = () => {
 
 // Override the default guard behavior for this page
 Home.authGuard = false;
-Home.guestGuard = true;
+Home.guestGuard = false;
 Home.acl = {
   action: 'manage',
   subject: 'all' // Adjust the permissions as per your application's ACL configuration
