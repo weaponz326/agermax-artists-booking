@@ -71,13 +71,13 @@ const Register = () => {
     <Box className='content-center'>
       <Card>
         <CardContent sx={{ p: theme => `${theme.spacing(10.5, 8, 8)} !important` }}>
-          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Avatar src='/images/logo.png' alt='Logo' />
             <Typography variant='h3' sx={{ ml: 2.5, fontWeight: 700 }}>
               {themeConfig.templateName}
             </Typography>
           </Box>
-          <Box sx={{ mb: 6 }}>
+          <Box sx={{ mb: 4 }}>
             <Typography variant='h4' sx={{ mb: 1.5 }}>
               Register
             </Typography>
@@ -122,7 +122,7 @@ const Register = () => {
                 </Box>
               }
             />
-            <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+            <Button fullWidth type='submit' variant='contained' sx={{ mb: 2 }}>
               Sign up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -135,7 +135,7 @@ const Register = () => {
                 Sign in instead
               </Typography>
             </Box>
-            {/* <Divider
+            <Divider
                 sx={{
                   color: 'text.disabled',
                   '& .MuiDivider-wrapper': { px: 6 },
@@ -163,7 +163,7 @@ const Register = () => {
                 <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
                   <Icon icon='mdi:google' />
                 </IconButton>
-              </Box> */}
+              </Box>
           </form>
         </CardContent>
       </Card>

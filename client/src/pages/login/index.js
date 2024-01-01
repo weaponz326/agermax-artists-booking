@@ -201,7 +201,7 @@ const LoginPage = () => {
                 Create an account
               </Typography>
             </Box>
-            {/* <Divider
+            <Divider
                 sx={{
                   color: 'text.disabled',
                   '& .MuiDivider-wrapper': { px: 6 },
@@ -229,7 +229,7 @@ const LoginPage = () => {
                 <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
                   <Icon icon='mdi:google' />
                 </IconButton>
-              </Box> */}
+              </Box>
           </form>
         </CardContent>
       </Card>

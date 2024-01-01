@@ -27,7 +27,7 @@ const FooterContent = () => {
 
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography sx={{ mr: 2, display: 'flex', color: 'text.secondary' }}>
+      {/* <Typography sx={{ mr: 2, display: 'flex', color: 'text.secondary' }}>
         {`© ${new Date().getFullYear()}, Made with `}
         <Box component='span' sx={{ mx: 1, color: 'error.main' }}>
           ❤️
@@ -56,7 +56,7 @@ const FooterContent = () => {
             Support
           </Typography>
         </Box>
-      )}
+      )} */}
     </Box>
   )
 }
