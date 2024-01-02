@@ -1,0 +1,36 @@
+.navbar{
+  background-color: #1E1E1E;
+  margin-bottom: 50px;
+}
+.mr-2{
+   background-color: #B6C6CD;
+   border-radius: 30px;
+   width: 426px;
+   height: 35px;
+}
+.logo-name{
+  color: white;
+}
+.button-custom{
+  background-color: #FC8E5E;
+  border-radius: 10px;
+  color: white;
+  border-color: white;
+  width: 280px;
+  height: 34px;
+}
+.badge{
+  background-color: #378ECE;
+  color: blue;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 70px;
+  height: 20px;
+}
+.custom-badge{
+
+  color: black;
+}
+.hot{
+  font-size: 20px;
+}

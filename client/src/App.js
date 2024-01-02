@@ -11,6 +11,8 @@ import ArtistAll from './pages/main/ArtistAll';
 import ArtistDetail from './pages/main/ArtistDetail';
 import EventsAll from './pages/main/EventsAll';
 import Navbar from './layouts/Navbar';
+import Header from './layouts/Header';
+import Cards from './layouts/Cards';
 import AdminDashboard from './pages/admin/admin/AdminDashboard'
 import AdminUsers from './pages/admin/admin/AdminUsers'
 import AdminCalendar from './pages/admin/admin/AdminCalendar'
@@ -44,7 +46,9 @@ import OrganizerAccountSettings from './pages/admin/organizer/OrganizerAccountSe
 function App() {
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
+      <Header />
+      <Cards />
       <Router>
         <Routes>
           <Route path='auth' element={<Auth />}>
