@@ -22,7 +22,7 @@ const navigation = () => {
     },
     {
       title: 'Finance',
-      path: '/admin/finane',
+      path: '/admin/finance',
       icon: 'tabler:report-money',
     },
     {

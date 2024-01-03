@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 
+Chart.register(...registerables);
 
 // ** Example Data and Options for Bar Chart
 const barChartData = {
