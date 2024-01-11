@@ -22,7 +22,7 @@ const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
 const Home = () => {
   return (
     <LandingPageContentWrapper>
-      <h1>Welcome to Our Event Management Platform</h1>
+      <h1>Welcome to Our Artists Management Platform</h1>
       <p>Discover events, manage bookings, and connect with artists from around the world.</p>
       {/* Additional content goes here */}
     </LandingPageContentWrapper>
