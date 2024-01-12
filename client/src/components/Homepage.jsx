@@ -1,5 +1,7 @@
 import React from 'react'
 import Header from './Header'
+import { MdFacebook } from 'react-icons/md'
+import { FaInstagram, FaTwitter } from 'react-icons/fa'
 // import './homepage.css'
 // import '../styles/homepages.css'
 import EventPreview from './Component/EventPreview'
@@ -132,11 +134,11 @@ export const Homepage = () => {
             <div className='get-started'>Let’s get you started.</div>
             <div className='subscription-form'>
               <input className='subscription-email' type='email' placeholder='Email' />
-              <div className='subscription-reg-wrapper'>
+              <a href='' className='subscription-reg-wrapper'>
                 <a href='' className='subscription-register'>
                   Register
                 </a>
-              </div>
+              </a>
             </div>
             <div className='subscribe'>
               <input type='checkbox' />
@@ -169,9 +171,15 @@ export const Homepage = () => {
             </li>
           </ul>
           <div className='social-media'>
-            <i class='fab fa-facebook-f'>f</i>
-            <i class='fab fa-twitter'>t</i>
-            <i class='fab fa-instagram'>i</i>
+            <a href='' class='fab fa-facebook-f'>
+              <MdFacebook />
+            </a>
+            <a href='' class='fab fa-twitter'>
+              <FaTwitter />
+            </a>
+            <a href='' class='fab fa-instagram'>
+              <FaInstagram />
+            </a>
           </div>
         </div>
         <div className='copyright-terms'>
