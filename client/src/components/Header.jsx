@@ -1,6 +1,3 @@
-// import { Component } from "./Component";
-// import "../screens/Desktop/style.css";
-import { Component } from './Component'
 import Carousel from './Carousel'
 export default function Header() {
   return (
@@ -8,10 +5,10 @@ export default function Header() {
       <div className='header-background'>
         <div className='top-bar'>
           <div className='logo first-img'>
-            <img className='logo-img ' alt='App dark' src='/img/app-dark-1.png' />
+            <img className='logo-img ' alt='App dark' src='../public/images/app-dark-1.png' />
           </div>
           <div className='search-component'>
-            <Component />
+            <input type='search' name='' id='' />
           </div>
           <div className='logo last-img'>
             <img className='logo-img ' alt='Ellipse' src='/img/ellipse-121.png' />

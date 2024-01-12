@@ -2,6 +2,7 @@
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
+import { Homepage } from 'src/components/Homepage'
 
 // Your styled component for the content
 const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
@@ -18,11 +19,15 @@ const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
 
 const Home = () => {
   return (
-    <LandingPageContentWrapper>
-      <h1>Welcome to Our Artists Management Platform</h1>
+    <div>
+      <Homepage />
+    </div>
+
+    // <LandingPageContentWrapper>
+    /* <h1>Welcome to Our Artists Management Platform</h1>
       <p>Discover events, manage bookings, and connect with artists from around the world.</p>
-      {/* Additional content goes here */}
-    </LandingPageContentWrapper>
+      Additional content goes here */
+    /* </LandingPageContentWrapper> */
   )
 }
 
@@ -35,6 +40,7 @@ Home.acl = {
 }
 
 // Set a custom layout for the Home page that doesn't include the AppBar and TopBar
-Home.getLayout = page => <BlankLayoutWithAppBar>{page}</BlankLayoutWithAppBar>
+// Home.getLayout = page => <BlankLayoutWithAppBar>{page}</BlankLayoutWithAppBar>
+Home.getLayout = page => <div>{page}</div>
 
 export default Home

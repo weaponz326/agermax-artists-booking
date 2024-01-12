@@ -403,9 +403,8 @@ header .greetings-message {
 }
 
 footer {
-  height: 237px;
   background-color: #e2e8ed;
-  padding: 64px;
+  padding: 32px 5rem;
   display: flex;
   flex-direction: column;
 }
