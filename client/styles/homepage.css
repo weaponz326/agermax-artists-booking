@@ -437,7 +437,9 @@ header .greetings-message {
   display: flex;
   gap: 15px;
 }
-
+a {
+  text-decoration: none;
+}
 .subscription-reg-wrapper {
   background-color: #fc8a5e;
   border-radius: 16px;
@@ -464,6 +466,11 @@ footer .links {
 
 footer .logo {
   display: flex;
+  gap: 12px;
+}
+
+footer img {
+  border-radius: 10px;
 }
 
 footer .copyright-terms {
@@ -485,6 +492,7 @@ footer ul {
   display: flex;
   align-items: center;
   justify-content: center;
+  list-style: none;
 }
 
 .terms-privacy {

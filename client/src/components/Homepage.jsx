@@ -135,18 +135,26 @@ export const Homepage = () => {
       </main>
       <footer>
         <div className='links'>
-          <div className='logo'>
+          <a href='' className='logo'>
             <img
               src='https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fG11c2ljfGVufDB8fDB8fHww'
               alt='AgerMax Logo'
             />
-            <div className='logo-text'>Agermax</div>
-          </div>
+            <div className='logo-text'>AGERMAX</div>
+          </a>
           <ul className='footer-nav'>
-            <li>Home</li>
-            <li>About Us</li>
-            <li>Contact</li>
-            <li>Newsletter</li>
+            <li>
+              <a href=''>Home</a>
+            </li>
+            <li>
+              <a href=''>About Us</a>
+            </li>
+            <li>
+              <a href=''>Contact</a>
+            </li>
+            <li>
+              <a href=''>Newsletter</a>
+            </li>
           </ul>
           <div className='social-media'>
             <i class='fab fa-facebook-f'>f</i>
@@ -155,11 +163,17 @@ export const Homepage = () => {
           </div>
         </div>
         <div className='copyright-terms'>
-          <div className='copyright'>@copyright 2024</div>
+          <div className='copyright'>@Copyright 2024</div>
           <ul className='terms-privacy'>
-            <li>Terms</li>
-            <li>Privacy Policy</li>
-            <li>Cookies</li>
+            <li>
+              <a href=''>Terms</a>
+            </li>
+            <li>
+              <a href=''>Privacy Policy</a>
+            </li>
+            <li>
+              <a href=''>Cookies</a>
+            </li>
           </ul>
         </div>
       </footer>
