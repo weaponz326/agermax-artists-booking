@@ -1,9 +1,10 @@
 import Carousel from './Carousel'
+import Navbar from './Component/Navbar'
 export default function Header() {
   return (
     <header>
       <div className='header-background'>
-        <div className='top-bar'>
+        {/* <div className='top-bar'>
           <div className='logo first-img'>
             <img className='logo-img ' alt='App dark' src='../public/images/app-dark-1.png' />
           </div>
@@ -13,8 +14,9 @@ export default function Header() {
           <div className='logo last-img'>
             <img className='logo-img ' alt='Ellipse' src='/img/ellipse-121.png' />
           </div>
-        </div>
+        </div> */}
 
+        <Navbar />
         <div className='greetings'>
           <div>
             <p className='greetings-hi'>Hey John!&nbsp;&nbsp;👋</p>

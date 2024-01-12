@@ -44,7 +44,11 @@ export const Homepage = () => {
         </section>
         <section className='about'>
           <div className='about-img'>
-            <img alt='Rectangle' src='/img/rectangle-22462.png' />
+            <img
+              className='about-img'
+              alt='Rectangle'
+              src='https://images.unsplash.com/photo-1547357245-1277166ee18a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHBsYXklMjBndWl0YXJ8ZW58MHx8MHx8fDA%3D'
+            />
           </div>
           <div className='about-message'>
             <div className='about-message-title'>About</div>
