@@ -82,10 +82,11 @@ header .greetings-message {
   /* height: 252px; */
   width: 250px;
   padding: 5px;
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
-  /* background-color: red; */
+  background-color: white;
+  border-radius: 18px;
+  align-items: center;
 }
 
 .carousel-img {
@@ -94,6 +95,7 @@ header .greetings-message {
   height: 161px;
   position: relative;
   width: 236px;
+  border-radius: 18px;
 }
 
 .carousel-title-text {
@@ -101,12 +103,14 @@ header .greetings-message {
   font-family: 'Inter', Helvetica;
   font-size: 17px;
   font-weight: 600;
+  align-self: flex-start;
 }
 
 .carousel-genre {
   display: flex;
   gap: 10px;
   justify-content: flex-start;
+  align-self: flex-start;
   margin-top: 1rem;
 }
 
@@ -137,6 +141,8 @@ header .greetings-message {
   border-radius: 10px;
   height: 34px;
   margin-top: 2rem;
+  align-self: flex-start;
+  width: 100%;
 }
 
 .upcoming-events {
@@ -184,22 +190,24 @@ header .greetings-message {
   margin-top: 64px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .events-preview-img {
-  background-image: url('/static/img/rectangle-2-15.png');
+  background-image: url('https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fG11c2ljfGVufDB8fDB8fHww');
   object-fit: cover;
   background-position: center;
   background-size: cover;
   background-clip: border-box;
   height: 274px;
-  width: 370px;
+  min-width: 320px;
   /* background-color: rebeccapurple; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem 2rem;
+  border-radius: 18px;
 }
 
 .calendar {
