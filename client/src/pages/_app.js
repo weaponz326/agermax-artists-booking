@@ -1,3 +1,6 @@
+// ** CSS Styles Imports
+import 'styles/artist-profile.css'
+
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'

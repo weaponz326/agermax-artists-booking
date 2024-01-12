@@ -1,3 +1,4 @@
+import { FaSearch } from 'react-icons/fa'
 export default function Navbar() {
   return (
     <div className='top-bar nav-bar'>
@@ -9,6 +10,7 @@ export default function Navbar() {
         />
       </div>
       <div className='search-component'>
+        <FaSearch />
         <input className='search-field' type='search' name='' id='' placeholder='&#128269; Find amazing artist....' />
       </div>
       <div className='logo last-img'>

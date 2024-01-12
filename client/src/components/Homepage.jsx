@@ -3,7 +3,7 @@ import Header from './Header'
 import { MdFacebook } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 // import './homepage.css'
-// import '../styles/homepages.css'
+// import '../styles/homepage.css'
 import EventPreview from './Component/EventPreview'
 
 export const Homepage = () => {
@@ -171,13 +171,13 @@ export const Homepage = () => {
             </li>
           </ul>
           <div className='social-media'>
-            <a href='' class='fab fa-facebook-f'>
+            <a href='' className='fab fa-facebook-f'>
               <MdFacebook />
             </a>
-            <a href='' class='fab fa-twitter'>
+            <a href='' className='fab fa-twitter'>
               <FaTwitter />
             </a>
-            <a href='' class='fab fa-instagram'>
+            <a href='' className='fab fa-instagram'>
               <FaInstagram />
             </a>
           </div>
