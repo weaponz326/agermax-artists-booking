@@ -6,7 +6,7 @@ import Header from "../../components/header";
 import "./homepage.css";
 import EventPreview from "../../components/Component/EventPreview";
 
-export const Page = () => {
+export const Homepage = () => {
   return (
     <div className="homepage">
       <Header />
@@ -71,13 +71,101 @@ export const Page = () => {
           <div className="faq-question">
             <div className="faq-question-no">
               <p>FAQ Question 1</p>
-              <div className="faq-collapse-icon"></div>
+              <div className="faq-collapse-icon">-</div>
+            </div>
+            <div className="faq-message">
+              Molestie sit facilisi risus maecenas amet nisi iaculis. Maximus
+              ipsum velit si amet luctus. Ac erat mi duis euismod suscipit
+              lorem.
+            </div>
+          </div>
+          <hr className="faq-divider" />
+          <div className="faq-question">
+            <div className="faq-question-no">
+              <p>FAQ Question 2</p>
+              <div className="faq-collapse-icon">+</div>
+            </div>
+            <div className="faq-message"></div>
+          </div>
+          <hr className="faq-divider" />
+
+          <div className="faq-question">
+            <div className="faq-question-no">
+              <p>FAQ Question 3</p>
+              <div className="faq-collapse-icon">+</div>
+            </div>
+            <div className="faq-message"></div>
+          </div>
+          <hr className="faq-divider" />
+
+          <div className="faq-question">
+            <div className="faq-question-no">
+              <p>FAQ Question 4</p>
+              <div className="faq-collapse-icon">+</div>
+            </div>
+            <div className="faq-message"></div>
+          </div>
+          <hr className="faq-divider" />
+
+          <div className="faq-question">
+            <div className="faq-question-no">
+              <p>FAQ Question 5</p>
+              <div className="faq-collapse-icon">+</div>
             </div>
             <div className="faq-message"></div>
           </div>
         </section>
+
+        <section className="subscription">
+          <div className="subscription-details">
+            <div className="join-agermax">Haven’t joined Agermax yet?</div>
+            <div className="get-started">Let’s get you started.</div>
+            <div className="subscription-form">
+              <input
+                className="subscription-email"
+                type="email"
+                placeholder="Email"
+              />
+              <div className="subscription-reg-wrapper">
+                <a href="" className="subscription-register">
+                  Register
+                </a>
+              </div>
+            </div>
+            <div className="subscribe">
+              <input type="checkbox" />
+              <p>Subscribe to receive event and promotion notifications.</p>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer></footer>
+      <footer>
+        <div className="links">
+          <div className="logo">
+            <img src="" alt="AgerMax Logo" />
+            <div className="logo-text">Agermax</div>
+          </div>
+          <ul className="footer-nav">
+            <li>Home</li>
+            <li>About Us</li>
+            <li>Contact</li>
+            <li>Newsletter</li>
+          </ul>
+          <div className="social-media">
+            <i class="fab fa-facebook-f">f</i>
+            <i class="fab fa-twitter">t</i>
+            <i class="fab fa-instagram">i</i>
+          </div>
+        </div>
+        <div className="copyright-terms">
+          <div className="copyright">@copyright 2024</div>
+          <ul className="terms-privacy">
+            <li>Terms</li>
+            <li>Privacy Policy</li>
+            <li>Cookies</li>
+          </ul>
+        </div>
+      </footer>
     </div>
   );
 };

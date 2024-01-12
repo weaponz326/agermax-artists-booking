@@ -18,6 +18,10 @@ header {
   position: relative;
 }
 
+main {
+  padding: 2rem;
+}
+
 .top-bar {
   display: flex;
   justify-content: space-evenly;
@@ -281,4 +285,169 @@ header .greetings-message {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.faq {
+  padding: 180px;
+}
+
+.faq-title {
+  font-size: 48px;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.faq-question {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 0;
+}
+.faq-question-no {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.faq-collapse-icon {
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-divider {
+  border: 0.5px solid #7777772c;
+}
+
+.subscription {
+  padding: 0 180px;
+  margin-bottom: 5rem;
+}
+.subscription-details {
+  background-color: #ffffff4c;
+  border-radius: 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.join-agermax {
+  color: #000;
+  letter-spacing: 1.6px;
+  font-family: DM Sans, Helvetica;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.subscribe {
+  color: #444444;
+  font-family: 'DM Sans', Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  display: flex;
+}
+
+.subscription-email {
+  color: #666;
+  letter-spacing: 1.2px;
+  font-size: 24px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  padding-inline: 20px;
+  background-color: #edf1f5;
+  border-radius: 16px;
+  border: 0.2px solid #edf1f5;
+  flex: 1.5;
+}
+
+.subscription-register {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+}
+
+.get-started {
+  color: #444;
+  letter-spacing: 1.2px;
+  font-family: DM Sans, Helvetica;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.subscription-form {
+  background-color: #edf0f4;
+  border: 1.5px solid;
+  border-color: #dfdfdf;
+  border-radius: 16px;
+  height: 84px;
+  display: flex;
+  gap: 15px;
+}
+
+.subscription-reg-wrapper {
+  background-color: #fc8a5e;
+  border-radius: 16px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+footer {
+  height: 237px;
+  background-color: #e2e8ed;
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+footer .links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem;
+}
+
+footer .logo {
+  display: flex;
+}
+
+footer .copyright-terms {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem;
+  gap: 10px;
+}
+
+footer .logo-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+footer ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terms-privacy {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 2rem;
 }
