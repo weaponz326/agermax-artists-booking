@@ -2,7 +2,7 @@ import { IconsansBoldClock3 } from './IconsansBoldClock3'
 import { IconsansBoldArrowRight } from './IconsansBoldArrowRight'
 export default function EventPreview() {
   return (
-    <div className='events-preview-img'>
+    <a href='' className='events-preview-img'>
       <div className='calendar'>
         <div className='calendar-icon'>
           <span className='calender-date calendar-month'>Dec</span>
@@ -20,6 +20,6 @@ export default function EventPreview() {
           <div className='text-wrapper-21'>01:00</div>
         </div>
       </div>
-    </div>
+    </a>
   )
 }

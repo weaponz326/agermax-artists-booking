@@ -8,10 +8,16 @@ export default function Carousel() {
       />
       <div className='carousel-title-text'>Mike Eriksson</div>
       <div className='carousel-genre'>
-        <div className='carousel-genre-text'>Rock</div>
-        <div className='carousel-genre-text'>Trubadur</div>
+        <a href='' className='carousel-genre-text'>
+          Rock
+        </a>
+        <a href='' className='carousel-genre-text'>
+          Trubadur
+        </a>
       </div>
-      <button className='book-now'>Book Now</button>
+      <a href='' className='book-now'>
+        Book Now
+      </a>
     </div>
   )
 }

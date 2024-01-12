@@ -44,7 +44,6 @@ header {
 }
 
 main {
-  padding: 2rem;
 }
 
 .top-bar {
@@ -174,13 +173,16 @@ header .greetings-message {
   margin-top: 2rem;
   align-self: flex-start;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .upcoming-events {
   display: flex;
   justify-content: space-between;
   margin-top: 4rem;
-  padding: 0 4rem;
+  padding: 0 0rem;
 }
 .see-all {
   color: #fc8a5e;
@@ -198,7 +200,7 @@ header .greetings-message {
 
 .events-genre-buttons {
   margin-top: 16px;
-  padding: 0 64px;
+  padding: 0;
   display: flex;
   justify-content: flex-start;
   gap: 25px;
@@ -239,7 +241,7 @@ header .greetings-message {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 1%;
   border-radius: 18px;
 }
 
@@ -252,11 +254,12 @@ header .greetings-message {
   background-color: white;
   width: 35px;
   height: 35px;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .calendar-month {
@@ -271,7 +274,6 @@ header .greetings-message {
   flex-direction: column;
   color: white;
   gap: 12px;
-  margin-bottom: 20px;
 }
 
 .event-preview-schedule {

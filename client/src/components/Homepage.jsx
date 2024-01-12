@@ -12,14 +12,26 @@ export const Homepage = () => {
         <section className='events'>
           <div className='upcoming-events'>
             <span className='events-nav upcoming'>Upcoming Events 🎉</span>
-            <span className='events-nav see-all'>See all</span>
+            <span className='events-nav see-all'>
+              <a href=''>See all</a>
+            </span>
           </div>
           <div className='events-genre-buttons'>
-            <div className='genre-btn'>🎹 Pop</div>
-            <div className='genre-btn'>🎸 Rock</div>
-            <div className='genre-btn'>🎶 Trubadur</div>
-            <div className='genre-btn'>🎶 Trubadur</div>
-            <div className='genre-btn'>🎹 Pop</div>
+            <a href='' className='genre-btn'>
+              🎹 Pop
+            </a>
+            <a href='' className='genre-btn'>
+              🎸 Rock
+            </a>
+            <a href='' className='genre-btn'>
+              🎶 Trubadur
+            </a>
+            <a href='' className='genre-btn'>
+              🎶 Trubadur
+            </a>
+            <a href='' className='genre-btn'>
+              🎹 Pop
+            </a>
           </div>
           <div className='events-preview'>
             <EventPreview />
