@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from './Header'
-import { MdFacebook } from 'react-icons/md'
+import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 // import './homepage.css'
 // import '../styles/homepage.css'
@@ -52,9 +52,10 @@ export const Homepage = () => {
             <EventPreview />
             <EventPreview />
           </div>
-          <div className='events-read-more-btn'>
-            <a href=''>Load More... ➡️</a>
-          </div>
+          <a href='' className='events-load-more-btn'>
+            <MdRefresh className='events-refresh-icon' />
+            Load More...
+          </a>
         </section>
         <section className='about'>
           <div className='about-img'>

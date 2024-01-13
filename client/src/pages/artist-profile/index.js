@@ -143,6 +143,6 @@ const Tag = ({ children }) => {
   )
 }
 
-function Iframe(props) {
-  return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />
-}
+// function Iframe(props) {
+//   return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />
+// }
