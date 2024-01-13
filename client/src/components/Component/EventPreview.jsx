@@ -1,8 +1,11 @@
 import { IconsansBoldClock3 } from './IconsansBoldClock3'
 import { IconsansBoldArrowRight } from './IconsansBoldArrowRight'
+import Link from 'next/link'
+import { Router, useRouter } from 'next/router'
 export default function EventPreview() {
+  const router = useRouter()
   return (
-    <a href='' className='events-preview-img'>
+    <div onClick={() => router.push('')} className='events-preview-img'>
       <div className='calendar'>
         <div className='calendar-icon'>
           <div className='calendar-icon-ins-con'>
@@ -22,6 +25,6 @@ export default function EventPreview() {
           <div className='event-prev-detail'>01:00</div>
         </div>
       </div>
-    </a>
+    </div>
   )
 }

@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Carousel() {
   return (
     <div className='carousel-container'>
@@ -8,16 +10,16 @@ export default function Carousel() {
       />
       <div className='carousel-title-text'>Mike Eriksson</div>
       <div className='carousel-genre'>
-        <a href='' className='carousel-genre-text'>
+        <Link href='' className='carousel-genre-text'>
           Rock
-        </a>
-        <a href='' className='carousel-genre-text'>
+        </Link>
+        <Link href='' className='carousel-genre-text'>
           Trubadur
-        </a>
+        </Link>
       </div>
-      <a href='' className='book-now'>
+      <Link href='' className='book-now'>
         Book Now
-      </a>
+      </Link>
     </div>
   )
 }

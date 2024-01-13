@@ -2,6 +2,7 @@ import React from 'react'
 import Header from './Header'
 import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
+import Link from 'next/link'
 // import './homepage.css'
 // import '../styles/homepage.css'
 import EventPreview from './Component/EventPreview'
@@ -15,25 +16,25 @@ export const Homepage = () => {
           <div className='upcoming-events'>
             <span className='events-nav upcoming'>Upcoming Events 🎉</span>
             <span className='events-nav see-all'>
-              <a href=''>See all</a>
+              <Link href=''>See all</Link>
             </span>
           </div>
           <div className='events-genre-buttons'>
-            <a href='' className='genre-btn'>
+            <Link href='' className='genre-btn'>
               🎹 Pop
-            </a>
-            <a href='' className='genre-btn'>
+            </Link>
+            <Link href='' className='genre-btn'>
               🎸 Rock
-            </a>
-            <a href='' className='genre-btn'>
+            </Link>
+            <Link href='' className='genre-btn'>
               🎶 Trubadur
-            </a>
-            <a href='' className='genre-btn'>
+            </Link>
+            <Link href='' className='genre-btn'>
               🎶 Trubadur
-            </a>
-            <a href='' className='genre-btn'>
+            </Link>
+            <Link href='' className='genre-btn'>
               🎹 Pop
-            </a>
+            </Link>
           </div>
           <div className='events-preview'>
             <EventPreview />
@@ -52,10 +53,10 @@ export const Homepage = () => {
             <EventPreview />
             <EventPreview />
           </div>
-          <a href='' className='events-load-more-btn'>
+          <Link href='' className='events-load-more-btn'>
             <MdRefresh className='events-refresh-icon' />
             Load More...
-          </a>
+          </Link>
         </section>
         <section className='about'>
           <div className='about-img'>
@@ -71,12 +72,12 @@ export const Homepage = () => {
               Donec laoreet ante et nisi ultrices lacinia. Phasellus facilisis sapien ex. Vivamus ac nulla blandit
               ligula vulputate convallis. Mauris ut felis sit amet lectus vehicula ullamcorper quis at est. Dictumst
               malesuada nostra eget tincidunt curabitur aliquet viverra platea. Felis augue fusce platea in nostra.
-              Vehicula venenatis iaculis enim accumsan a.
+              Vehicula venenatis iaculis enim accumsan Link.
             </div>
             <div className='about-read-more-btn'>
-              <a href=''>
+              <Link href=''>
                 Read more <img className='arrow' alt='Arrow' src='/img/arrow-2.svg' />
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -135,11 +136,11 @@ export const Homepage = () => {
             <div className='get-started'>Let’s get you started.</div>
             <div className='subscription-form'>
               <input className='subscription-email' type='email' placeholder='Email' />
-              <a href='' className='subscription-reg-wrapper'>
-                <a href='' className='subscription-register'>
+              <div href='' className='subscription-reg-wrapper'>
+                <Link href='' className='subscription-register'>
                   Register
-                </a>
-              </a>
+                </Link>
+              </div>
             </div>
             <div className='subscribe'>
               <input type='checkbox' />
@@ -150,50 +151,50 @@ export const Homepage = () => {
       </main>
       <footer>
         <div className='links'>
-          <a href='' className='logo'>
+          <Link href='' className='logo'>
             <img
               src='https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fG11c2ljfGVufDB8fDB8fHww'
               alt='AgerMax Logo'
             />
             <div className='logo-text'>AGERMAX</div>
-          </a>
+          </Link>
           <ul className='footer-nav'>
             <li>
-              <a href=''>Home</a>
+              <Link href=''>Home</Link>
             </li>
             <li>
-              <a href=''>About Us</a>
+              <Link href=''>About Us</Link>
             </li>
             <li>
-              <a href=''>Contact</a>
+              <Link href=''>Contact</Link>
             </li>
             <li>
-              <a href=''>Newsletter</a>
+              <Link href=''>Newsletter</Link>
             </li>
           </ul>
           <div className='social-media'>
-            <a href='' className='fab fa-facebook-f'>
+            <Link href='' className='fab fa-facebook-f'>
               <MdFacebook />
-            </a>
-            <a href='' className='fab fa-twitter'>
+            </Link>
+            <Link href='' className='fab fa-twitter'>
               <FaTwitter />
-            </a>
-            <a href='' className='fab fa-instagram'>
+            </Link>
+            <Link href='' className='fab fa-instagram'>
               <FaInstagram />
-            </a>
+            </Link>
           </div>
         </div>
         <div className='copyright-terms'>
           <div className='copyright'>@Copyright 2024</div>
           <ul className='terms-privacy'>
             <li>
-              <a href=''>Terms</a>
+              <Link href=''>Terms</Link>
             </li>
             <li>
-              <a href=''>Privacy Policy</a>
+              <Link href=''>Privacy Policy</Link>
             </li>
             <li>
-              <a href=''>Cookies</a>
+              <Link href=''>Cookies</Link>
             </li>
           </ul>
         </div>
