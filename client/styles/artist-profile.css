@@ -4,10 +4,10 @@ main {
 
 .page-layout {
   gap: 2rem;
-  width: 60%;
+  width: 95%;
   min-height: 100vh;
   display: grid;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   grid-template-columns: 30% 70%;
 }
 
@@ -18,7 +18,7 @@ main {
 }
 
 .page-layout section {
-  padding-top: 5rem;
+  /* padding-top: 10rem; */
 }
 
 /* Card Layout */
@@ -31,7 +31,7 @@ main {
 }
 
 .profile-card {
-  top: 20px;
+  top: 90px;
   position: sticky;
 }
 
