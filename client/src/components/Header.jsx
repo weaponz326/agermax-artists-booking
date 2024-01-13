@@ -1,5 +1,5 @@
 import Carousel from './Carousel'
-import Navbar from './Component/Navbar'
+import Navbar from './Navbar'
 export default function Header() {
   return (
     <header>
@@ -15,6 +15,12 @@ export default function Header() {
         </div>
       </div>
       <div className='header-carousel'>
+        <Carousel />
+        <Carousel />
+        <Carousel />
+        <Carousel />
+        <Carousel />
+        <Carousel />
         <Carousel />
         <Carousel />
         <Carousel />

@@ -5,7 +5,7 @@ import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
 // import './homepage.css'
 // import '../styles/homepage.css'
-import EventPreview from './Component/EventPreview'
+import EventPreview from './EventPreview'
 
 export const Homepage = () => {
   return (
