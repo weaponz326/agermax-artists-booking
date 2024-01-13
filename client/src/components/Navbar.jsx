@@ -8,7 +8,7 @@ export default function Navbar() {
       </div>
       <div className='search-component'>
         <FaSearch />
-        <input className='search-field' type='search' name='' id='' placeholder='&#128269; Find amazing artist....' />
+        <input className='search-field' type='search' name='' id='' placeholder='Find amazing artist....' />
       </div>
       <div className='logo last-img'>
         <img className='logo-img ' alt='Ellipse' src='/images/ellipse-121.png' />

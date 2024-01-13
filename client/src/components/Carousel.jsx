@@ -1,22 +1,31 @@
 import Link from 'next/link'
+import Router from 'next/router'
 
-export default function Carousel() {
+export default function Carousel({ imgSrc }) {
   return (
     <div className='carousel-container'>
-      <div className='carousel-img'></div>
-      {/* <img className='carousel-img' alt='Rectangle' src='/images/rectangle-332-5.png' /> */}
+      <img className='carousel-img' alt='Rectangle' src={imgSrc} width={250} height={300} />
       <div className='carousel-title-text'>Mike Eriksson</div>
-      <div className='carousel-genre'>
-        <Link href='' className='carousel-genre-text'>
-          Rock
-        </Link>
-        <Link href='' className='carousel-genre-text'>
-          Trubadur
-        </Link>
-      </div>
-      <Link href='' className='book-now'>
-        Book Now
+      <Tag />
+      <Button />
+    </div>
+  )
+}
+
+const Tag = () => {
+  return (
+    <div className='carousel-genre'>
+      <Link href='#'>
+        <span className='carousel-genre-text'>Rock</span>
       </Link>
     </div>
+  )
+}
+
+const Button = () => {
+  return (
+    <button type='button' className='book-now' onClick={() => Router.push('#')}>
+      Book Now
+    </button>
   )
 }
