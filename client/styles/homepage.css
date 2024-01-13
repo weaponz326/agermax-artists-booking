@@ -3,6 +3,7 @@
   flex-direction: column;
   font-family: 'Inter', Helvetica;
   background: rgb(237, 241, 244);
+  max-width: 1920px;
 }
 header {
   color: white;
@@ -99,11 +100,12 @@ header .greetings-message {
 
 .header-carousel {
   padding: 0 4rem;
-  /* display: flex;
-  justify-content: center;
-  flex-wrap: wrap; */
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  display: flex;
+  justify-content: space-between;
+  overflow: auto;
+  /* flex-wrap: wrap; */
+  /* display: grid; */
+  /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
   margin-top: -6.5rem;
   padding: 0 4rem;
   gap: 2rem;
@@ -111,10 +113,15 @@ header .greetings-message {
   top: 0rem;
 }
 
+.header-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .carousel-container {
   /* height: 252px; */
-  min-width: 250px;
+  min-width: 300px;
   max-width: 300px;
+  width: 100%;
   flex: 1;
   padding: 5px;
   display: flex;
@@ -227,7 +234,7 @@ header .greetings-message {
 .events-preview {
   margin-top: 64px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(407px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2.5rem;
 }
 
@@ -239,7 +246,7 @@ header .greetings-message {
   background-clip: border-box;
   height: 274px;
   flex: 1;
-  min-width: 280px;
+  /* min-width: 280px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;

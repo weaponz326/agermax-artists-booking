@@ -152,10 +152,7 @@ export const Homepage = () => {
       <footer>
         <div className='links'>
           <Link href='' className='logo'>
-            <img
-              src='https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fG11c2ljfGVufDB8fDB8fHww'
-              alt='AgerMax Logo'
-            />
+            <img src='/images/logo.png' alt='AgerMax Logo' />
             <div className='logo-text'>AGERMAX</div>
           </Link>
           <ul className='footer-nav'>
