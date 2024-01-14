@@ -4,7 +4,6 @@ import Carousel from './Carousel'
 import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
 import Link from 'next/link'
-import { allowDefaultColorValue } from '@iconify/tools/lib/colors/attribs'
 
 export default function Header() {
   return (
@@ -43,7 +42,6 @@ const HeaderCarouselContainer = () => {
         }
       })
       const photos = data.results
-      // console.log('photo1: ', photos)
       const { data: artists } = await getAllArtist()
 
       const allArtists = []
@@ -51,10 +49,9 @@ const HeaderCarouselContainer = () => {
       for (let i = 0; i < artists.length; i++) {
         allArtists.push({ ...artists[i], imgUrl: photos[i].urls.regular })
       }
-      // console.log('all artist: ', allArtists)
       setArtistsLists(allArtists)
+      console.log(allArtists)
     }
-
     getRandomArtistPhotos()
   }, [])
 

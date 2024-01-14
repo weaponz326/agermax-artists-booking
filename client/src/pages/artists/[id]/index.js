@@ -1,12 +1,27 @@
-import { useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
+import { useRouter } from 'next/router'
+import axios from 'axios'
 
-function App(props) {
-  console.log('selectedid: ', props)
+function App() {
+  const router = useRouter()
+  const { id: artistId } = router.query
+  const [artistDetails, setArtistDetails] = useState([])
+
+  useEffect(() => {
+    const getArtistDetails = async () => {
+      const artistDetails = await axios.get(`https://jsonplaceholder.typicode.com/users/${artistId}`)
+      setArtistDetails(artistDetails.data)
+      console.log(artistDetails)
+    }
+
+    getArtistDetails()
+  }, [])
+
   return (
     <main>
       <div className='page-layout'>
-        <ArtisteProfileSection />
+        <ArtisteProfileSection artistDetails={artistDetails} />
         <EventsSection />
       </div>
     </main>
@@ -69,14 +84,14 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = () => {
+const ArtisteProfileSection = ({ artistDetails }) => {
   return (
     <section>
       <Card className='profile-card'>
         <div className='avatar-container'>
           <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='profile-image' />
         </div>
-        <h5 id='username'>John Doe</h5>
+        <h5 id='username'>{artistDetails.name}</h5>
         <div className='tags-container'>
           <Tag>Rock</Tag>
           <Tag>Trubadur</Tag>

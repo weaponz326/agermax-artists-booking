@@ -11,7 +11,7 @@ export default function Carousel({ data }) {
         <div key={artist.id} className='carousel-container'>
           <img className='carousel-img' alt='Rectangle' src={artist.imgUrl} width={250} height={300} />
           <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
-            {artist.username}
+            {artist.name}
           </Link>
 
           {/* A good place to map your tags from Api calls */}
