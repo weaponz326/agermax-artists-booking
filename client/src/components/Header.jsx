@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Carousel from './Carousel'
 import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
+import Link from 'next/link'
 export default function Header() {
   return (
     <header>
@@ -50,17 +51,27 @@ const HeaderCarouselContainer = () => {
   if (!artistsList.length) {
     return (
       <div className='header-carousel'>
-        {Array.from({ length: defNumImgs }).map(img => (
-          <Carousel imgSrc={'/images/rectangle-2-15.png'} />
-        ))}
+        <div className='header-carousel-layout'>
+          {Array.from({ length: defNumImgs }).map(img => (
+            <Carousel imgSrc={'/images/rectangle-2-15.png'} />
+          ))}
+        </div>
       </div>
     )
   } else {
     return (
       <div className='header-carousel'>
-        {artistsList.map(artist => (
-          <Carousel imgSrc={artist.urls.regular} />
-        ))}
+        <div className='hot-artists-nav'>
+          <p>Hot Artists 🔥</p>
+          <Link href={'#'} className='see-all-artists'>
+            <p>See all</p>
+          </Link>
+        </div>
+        <div className='header-carousel-layout'>
+          {artistsList.map(artist => (
+            <Carousel imgSrc={artist.urls.regular} />
+          ))}
+        </div>
       </div>
     )
   }

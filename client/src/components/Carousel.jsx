@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Router from 'next/router'
+import Button from './Button'
 
 export default function Carousel({ imgSrc }) {
   return (
@@ -29,14 +30,5 @@ const Tag = ({ genre }) => {
         <span className='carousel-genre-text'>{genre}</span>
       </Link>
     </div>
-  )
-}
-
-//Button Component
-const Button = ({ buttonText }) => {
-  return (
-    <button type='button' className='book-now' onClick={() => Router.push('/artist-profile')}>
-      {buttonText}
-    </button>
   )
 }
