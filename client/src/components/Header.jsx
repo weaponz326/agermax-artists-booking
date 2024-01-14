@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import Carousel from './Carousel'
 import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
@@ -23,7 +24,7 @@ export default function Header() {
 
 const HeaderCarouselContainer = () => {
   //Declare static default number of images to display
-  const defaultNumofImages = 10
+  const defNumImgs = 10
 
   const [artistsList, setArtistsLists] = useState([])
   const [query, setQuery] = useState('Music Artists')
@@ -49,7 +50,7 @@ const HeaderCarouselContainer = () => {
   if (!artistsList.length) {
     return (
       <div className='header-carousel'>
-        {Array.from({ length: defaultNumofImages }).map(img => (
+        {Array.from({ length: defNumImgs }).map(img => (
           <Carousel imgSrc={'/images/rectangle-2-15.png'} />
         ))}
       </div>

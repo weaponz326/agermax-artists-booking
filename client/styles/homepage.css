@@ -168,13 +168,14 @@ header .greetings-message {
   font-family: 'Inter', Helvetica;
   font-size: 13px;
   font-weight: 500;
-  width: 70px;
   background-color: #62afe84c;
   border-radius: 6px;
   text-align: center;
   height: 20px;
   display: flex;
   justify-content: center;
+  padding: 0.2rem 0.4rem;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.281);
 
   align-items: center;
 }
@@ -276,6 +277,8 @@ header .greetings-message {
   top: 0;
   left: 0;
   width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
   border-radius: 1.1rem;
   height: 100%;
 
