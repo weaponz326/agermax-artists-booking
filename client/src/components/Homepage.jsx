@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from './Header'
-import { MdFacebook, MdRefresh } from 'react-icons/md'
+import { MdFacebook, MdRefresh, MdAddCircleOutline } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
 import Unsplash from './mock-apis/Unsplash'
@@ -36,23 +36,7 @@ export const Homepage = () => {
               <Link href=''>See all</Link>
             </span>
           </div>
-          <div className='events-genre-buttons'>
-            <Link href='' className='genre-btn'>
-              🎹 Pop
-            </Link>
-            <Link href='' className='genre-btn'>
-              🎸 Rock
-            </Link>
-            <Link href='' className='genre-btn'>
-              🎶 Trubadur
-            </Link>
-            <Link href='' className='genre-btn'>
-              🎶 Trubadur
-            </Link>
-            <Link href='' className='genre-btn'>
-              🎹 Pop
-            </Link>
-          </div>
+          <EventsGenreButtons genreList={mockGenreList} />
           <EventsLayout imgList={imgList} />
           <Link href='' className='events-load-more-btn'>
             <MdRefresh className='events-refresh-icon' />
@@ -84,7 +68,9 @@ export const Homepage = () => {
         </section>
         <section className='faq'>
           <div className='faq-title'>Frequently Asked Questions</div>
-          <div className='faq-question'>
+          <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+
+          {/* <div className='faq-question'>
             <div className='faq-question-no'>
               <p>FAQ Question 1</p>
               <div className='faq-collapse-icon'>-</div>
@@ -94,7 +80,6 @@ export const Homepage = () => {
               duis euismod suscipit lorem.
             </div>
           </div>
-          <hr className='faq-divider' />
           <div className='faq-question'>
             <div className='faq-question-no'>
               <p>FAQ Question 2</p>
@@ -128,7 +113,7 @@ export const Homepage = () => {
               <div className='faq-collapse-icon'>+</div>
             </div>
             <div className='faq-message'></div>
-          </div>
+          </div> */}
         </section>
 
         <section className='subscription'>
@@ -150,53 +135,125 @@ export const Homepage = () => {
           </div>
         </section>
       </main>
-      <footer>
-        <div className='links'>
-          <Link href='' className='logo'>
-            <img src='/images/logo.png' alt='AgerMax Logo' />
-            <div className='logo-text'>AGERMAX</div>
-          </Link>
-          <ul className='footer-nav'>
-            <li>
-              <Link href=''>Home</Link>
-            </li>
-            <li>
-              <Link href=''>About Us</Link>
-            </li>
-            <li>
-              <Link href=''>Contact</Link>
-            </li>
-            <li>
-              <Link href=''>Newsletter</Link>
-            </li>
-          </ul>
-          <div className='social-media'>
-            <Link href='' className='fab fa-facebook-f'>
-              <MdFacebook />
-            </Link>
-            <Link href='' className='fab fa-twitter'>
-              <FaTwitter />
-            </Link>
-            <Link href='' className='fab fa-instagram'>
-              <FaInstagram />
-            </Link>
-          </div>
-        </div>
-        <div className='copyright-terms'>
-          <div className='copyright'>@Copyright 2024</div>
-          <ul className='terms-privacy'>
-            <li>
-              <Link href=''>Terms</Link>
-            </li>
-            <li>
-              <Link href=''>Privacy Policy</Link>
-            </li>
-            <li>
-              <Link href=''>Cookies</Link>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
+
+const EventsGenreButtons = ({ genreList }) => {
+  return (
+    <div className='events-genre-buttons'>
+      {genreList.map(genre => (
+        <Link href={genre.page} className='genre-btn'>
+          {' '}
+          {genre.icon} {genre.title}{' '}
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+const Footer = () => {
+  return (
+    <footer>
+      <div className='links'>
+        <Link href='' className='logo'>
+          <img src='/images/logo.png' alt='AgerMax Logo' />
+          <div className='logo-text'>AGERMAX</div>
+        </Link>
+        <ul className='footer-nav'>
+          <li>
+            <Link href=''>Home</Link>
+          </li>
+          <li>
+            <Link href=''>About Us</Link>
+          </li>
+          <li>
+            <Link href=''>Contact</Link>
+          </li>
+          <li>
+            <Link href=''>Newsletter</Link>
+          </li>
+        </ul>
+        <div className='social-media'>
+          <Link href='#' className='fab fa-facebook-f'>
+            <MdFacebook />
+          </Link>
+          <Link href='#' className='fab fa-twitter'>
+            <FaTwitter />
+          </Link>
+          <Link href='#' className='fab fa-instagram'>
+            <FaInstagram />
+          </Link>
+        </div>
+      </div>
+      <div className='copyright-terms'>
+        <div className='copyright'>@Copyright Agermax 2024</div>
+        <ul className='terms-privacy'>
+          <li>
+            <Link href=''>Terms</Link>
+          </li>
+          <li>
+            <Link href=''>Privacy Policy</Link>
+          </li>
+          <li>
+            <Link href=''>Cookies</Link>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  )
+}
+
+const mockGenreList = [
+  { title: 'Rock', icon: '🎸', page: '#' },
+  { title: 'Trubadur', icon: '🎸', page: '#' },
+  { title: 'Pop', icon: '🎹', page: '#' },
+  { title: 'R&B', icon: '🎸', page: '#' }
+]
+
+const faqData = [
+  {
+    question: 'What is Agermax?',
+    answer:
+      'Agermax is an Artist booking platform for all. It has incredible catalogue of the most popular artists. On this platform, you can check the upcoming events of these artists. You can schedule and book them also.'
+  },
+  {
+    question: 'How to book an Artist?',
+    answer: 'You can book an artist by visiting their profile, check their calendar and events and book them'
+  }
+  // Add more FAQ items as needed
+]
+
+const FaqAccordion = ({ faqTitle, faqData }) => {
+  const [openIndex, setOpenIndex] = useState(0)
+
+  const handleToggle = index => {
+    setOpenIndex(prevIndex => (prevIndex === index ? null : index))
+  }
+
+  return (
+    <div className='faq-questions'>
+      {faqData.map((faq, index) => (
+        <div key={index} className='faq-question'>
+          <div className='question-element'>
+            <div className={`question ${openIndex === index ? 'open' : ''}`} onClick={() => handleToggle(index)}>
+              {faq.question}
+            </div>
+            <button onClick={() => handleToggle(index)}>
+              {openIndex === index ? (
+                <div className='faq-collapse-icon'>-</div>
+              ) : (
+                <div className='faq-collapse-icon'>+</div>
+              )}
+            </button>
+          </div>
+          {openIndex === index && <div className='answer'>{faq.answer}</div>}
+          <hr className='faq-divider' />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default FaqAccordion
