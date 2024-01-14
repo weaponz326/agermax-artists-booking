@@ -1,8 +1,8 @@
 import { useState } from 'react'
-// import 'styles/artist-profile.css'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
-// import 'styles/index.css'
-function App() {
+
+function App(props) {
+  console.log('selectedid: ', props)
   return (
     <main>
       <div className='page-layout'>

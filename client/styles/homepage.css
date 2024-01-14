@@ -508,7 +508,7 @@ header .greetings-message {
 }
 
 .faq-title {
-  font-size: 48px;
+  font-size: var(--large-titles);
   color: #333333;
   text-align: center;
   margin-bottom: 3rem;
@@ -587,7 +587,6 @@ header .greetings-message {
 .subscribe {
   color: #444444;
   font-family: 'DM Sans', Helvetica;
-  font-size: 20px;
   font-weight: 400;
   letter-spacing: 1px;
   line-height: 2;

@@ -2,23 +2,31 @@ import Link from 'next/link'
 import Router from 'next/router'
 import Button from './Button'
 
-export default function Carousel({ imgSrc }) {
+export default function Carousel({ data }) {
+  // console.log('data: ', data)
+  if (data.length == 0) return null
   return (
-    <div className='carousel-container'>
-      <img className='carousel-img' alt='Rectangle' src={imgSrc} width={250} height={300} />
-      <div className='carousel-title-text'>Mike Eriksson</div>
+    <>
+      {data.map(artist => (
+        <div key={artist.id} className='carousel-container'>
+          <img className='carousel-img' alt='Rectangle' src={artist.imgUrl} width={250} height={300} />
+          <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
+            {artist.username}
+          </Link>
 
-      {/* A good place to map your tags from Api calls */}
+          {/* A good place to map your tags from Api calls */}
 
-      <div className='carousel-genre'>
-        <Tag genre={'Rock'} />
-        <Tag genre={'Gospel'} />
-        <Tag genre={'R&B'} />
-        <Tag genre={'Afrobeat'} />
-        <Tag genre={'Cools'} />
-      </div>
-      <Button buttonText={'Book Now'} />
-    </div>
+          <div className='carousel-genre'>
+            <Tag genre={'Rock'} />
+            <Tag genre={'Gospel'} />
+            <Tag genre={'R&B'} />
+            <Tag genre={'Afrobeat'} />
+            <Tag genre={'Cools'} />
+          </div>
+          <Button buttonText={'Book Now'} />
+        </div>
+      ))}
+    </>
   )
 }
 

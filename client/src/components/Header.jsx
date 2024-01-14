@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-
+import { getAllArtist, getArtistById } from '../services/artist'
 import Carousel from './Carousel'
 import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
 import Link from 'next/link'
+import { allowDefaultColorValue } from '@iconify/tools/lib/colors/attribs'
+
 export default function Header() {
   return (
     <header>
@@ -40,8 +42,17 @@ const HeaderCarouselContainer = () => {
           page: Math.floor(Math.random() * 20) + 1
         }
       })
-      console.log(data)
-      setArtistsLists(data.results)
+      const photos = data.results
+      // console.log('photo1: ', photos)
+      const { data: artists } = await getAllArtist()
+
+      const allArtists = []
+
+      for (let i = 0; i < artists.length; i++) {
+        allArtists.push({ ...artists[i], imgUrl: photos[i].urls.regular })
+      }
+      // console.log('all artist: ', allArtists)
+      setArtistsLists(allArtists)
     }
 
     getRandomArtistPhotos()
@@ -52,9 +63,9 @@ const HeaderCarouselContainer = () => {
     return (
       <div className='header-carousel'>
         <div className='header-carousel-layout'>
-          {Array.from({ length: defNumImgs }).map(img => (
-            <Carousel imgSrc={'/images/rectangle-2-15.png'} />
-          ))}
+          <Carousel data={artistsList} />
+          {/* {Array.from({ length: defNumImgs }).map(img => (
+          ))} */}
         </div>
       </div>
     )
@@ -63,14 +74,14 @@ const HeaderCarouselContainer = () => {
       <div className='header-carousel'>
         <div className='hot-artists-nav'>
           <p>Hot Artists 🔥</p>
-          <Link href={'#'} className='see-all-artists'>
+          <Link href={'/artist-profile'} className='see-all-artists'>
             <p>See all</p>
           </Link>
         </div>
         <div className='header-carousel-layout'>
-          {artistsList.map(artist => (
-            <Carousel imgSrc={artist.urls.regular} />
-          ))}
+          <Carousel data={artistsList} />
+          {/* {artistsList.map(artist => (
+          ))} */}
         </div>
       </div>
     )
