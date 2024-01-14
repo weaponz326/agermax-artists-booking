@@ -35,7 +35,7 @@ const HeaderCarouselContainer = () => {
         params: {
           query: query,
           per_page: 10,
-          page: 1
+          page: Math.floor(Math.random() * 20) + 1
         }
       })
       console.log(data)

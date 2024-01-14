@@ -6,26 +6,37 @@ export default function Carousel({ imgSrc }) {
     <div className='carousel-container'>
       <img className='carousel-img' alt='Rectangle' src={imgSrc} width={250} height={300} />
       <div className='carousel-title-text'>Mike Eriksson</div>
-      <Tag />
-      <Button />
+
+      {/* A good place to map your tags from Api calls */}
+
+      <div className='carousel-genre'>
+        <Tag genre={'Rock'} />
+        <Tag genre={'Gospel'} />
+        <Tag genre={'R&B'} />
+        <Tag genre={'Afrobeat'} />
+        <Tag genre={'Cools'} />
+      </div>
+      <Button buttonText={'Book Now'} />
     </div>
   )
 }
 
-const Tag = () => {
+//Tag Component
+const Tag = ({ genre }) => {
   return (
     <div className='carousel-genre'>
       <Link href='#'>
-        <span className='carousel-genre-text'>Rock</span>
+        <span className='carousel-genre-text'>{genre}</span>
       </Link>
     </div>
   )
 }
 
-const Button = () => {
+//Button Component
+const Button = ({ buttonText }) => {
   return (
-    <button type='button' className='book-now' onClick={() => Router.push('#')}>
-      Book Now
+    <button type='button' className='book-now' onClick={() => Router.push('/artist-profile')}>
+      {buttonText}
     </button>
   )
 }

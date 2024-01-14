@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
-// import './homepage.css'
-// import '../styles/homepage.css'
-import EventPreview from './EventPreview'
+import Unsplash from './mock-apis/Unsplash'
+import EventsLayout from './EventsLayout'
 
 export const Homepage = () => {
+  const [imgList, setImgList] = useState([])
+  const [query, setQuery] = useState('Music concerts')
+  useEffect(() => {
+    //get artists images from unsplash api
+    const getRandomArtistPhotos = async () => {
+      const { data } = await Unsplash.get('/search/photos', {
+        params: {
+          query: query,
+          per_page: 12,
+          page: Math.floor(Math.random() * 20) + 1
+        }
+      })
+      console.log(data)
+      setImgList(data.results)
+    }
+
+    getRandomArtistPhotos()
+  }, [])
   return (
     <div className='homepage'>
       <Header />
@@ -36,23 +53,7 @@ export const Homepage = () => {
               🎹 Pop
             </Link>
           </div>
-          <div className='events-preview'>
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-            <EventPreview />
-          </div>
+          <EventsLayout imgList={imgList} />
           <Link href='' className='events-load-more-btn'>
             <MdRefresh className='events-refresh-icon' />
             Load More...

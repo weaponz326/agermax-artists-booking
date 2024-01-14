@@ -1,3 +1,6 @@
+* {
+  position: relative;
+}
 .homepage {
   display: flex;
   flex-direction: column;
@@ -42,9 +45,6 @@ header {
 
 .search-field::placeholder {
   color: white;
-}
-
-main {
 }
 
 .top-bar {
@@ -150,14 +150,17 @@ header .greetings-message {
   font-size: 17px;
   font-weight: 600;
   align-self: flex-start;
+  margin-bottom: 0.9rem;
 }
 
 .carousel-genre {
   display: flex;
-  gap: 10px;
+  gap: 0.2rem;
   justify-content: flex-start;
-  align-self: flex-start;
-  margin-top: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-items: flex-start;
 }
 
 .carousel-genre-text {
@@ -244,19 +247,40 @@ header .greetings-message {
 }
 
 .events-preview-img {
-  background-image: url('/images/rectangle-2-15.png');
   object-fit: cover;
   background-position: cover;
   background-size: cover;
   background-clip: border-box;
+  /* width: 274px; */
   height: 274px;
   flex: 1;
-  /* min-width: 280px; */
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
   padding: 15px;
   border-radius: 18px;
+  position: relative;
+}
+
+.events-preview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 274px;
+  border-radius: 1.1rem;
+  padding: 1rem;
+}
+.evt-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 1.1rem;
+  height: 100%;
+
+  z-index: 0;
+  /* inset: 0; */
 }
 
 .calendar {
@@ -273,6 +297,7 @@ header .greetings-message {
   text-align: center;
   margin-right: 5px;
   padding: 1px;
+  align-self: flex-end;
 }
 
 .calendar-icon-ins-con {
@@ -298,6 +323,7 @@ header .greetings-message {
   flex-direction: column;
   color: white;
   gap: 12px;
+  z-index: 1;
 }
 
 .event-prev-detail {
