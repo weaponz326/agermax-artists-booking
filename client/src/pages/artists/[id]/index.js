@@ -5,6 +5,7 @@ import axios from 'axios'
 
 function App() {
   const router = useRouter()
+  console.log(router.query)
   const { id: artistId } = router.query
   const [artistDetails, setArtistDetails] = useState([])
 
@@ -89,7 +90,7 @@ const ArtisteProfileSection = ({ artistDetails }) => {
     <section>
       <Card className='profile-card'>
         <div className='avatar-container'>
-          <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='profile-image' />
+          <img src={'https://source.unsplash.com/3tYZjGSBwbk'} alt='profile-image' />
         </div>
         <h5 id='username'>{artistDetails.name}</h5>
         <div className='tags-container'>

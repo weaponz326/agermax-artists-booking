@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { getAllArtist, getArtistById } from '../services/artist'
+import { getAllArtists, getArtistById } from '../services/artist'
 import Carousel from './Carousel'
 import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
 import Link from 'next/link'
+import { Fragment } from 'react'
 
-export default function Header() {
+export default function Header({ artistsList }) {
+  if (!artistsList.length) return null
   return (
     <header>
       <div className='header-background'>
@@ -19,50 +21,18 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <HeaderCarouselContainer />
+      <HeaderCarouselContainer artistsList={artistsList} />
     </header>
   )
 }
 
-const HeaderCarouselContainer = () => {
-  //Declare static default number of images to display
-  const defNumImgs = 10
-
-  const [artistsList, setArtistsLists] = useState([])
-  const [query, setQuery] = useState('Music Artists')
-
-  useEffect(() => {
-    //get artists images from unsplash api
-    const getRandomArtistPhotos = async () => {
-      const { data } = await Unsplash.get('/search/photos', {
-        params: {
-          query: query,
-          per_page: 10,
-          page: Math.floor(Math.random() * 20) + 1
-        }
-      })
-      const photos = data.results
-      const { data: artists } = await getAllArtist()
-
-      const allArtists = []
-
-      for (let i = 0; i < artists.length; i++) {
-        allArtists.push({ ...artists[i], imgUrl: photos[i].urls.regular })
-      }
-      setArtistsLists(allArtists)
-      console.log(allArtists)
-    }
-    getRandomArtistPhotos()
-  }, [])
-
+const HeaderCarouselContainer = ({ artistsList }) => {
   //Conditional Rendering depending on availability of APi call
   if (!artistsList.length) {
     return (
       <div className='header-carousel'>
         <div className='header-carousel-layout'>
-          <Carousel data={artistsList} />
-          {/* {Array.from({ length: defNumImgs }).map(img => (
-          ))} */}
+          <Carousel />
         </div>
       </div>
     )
@@ -71,14 +41,16 @@ const HeaderCarouselContainer = () => {
       <div className='header-carousel'>
         <div className='hot-artists-nav'>
           <p>Hot Artists 🔥</p>
-          <Link href={'/artist-profile'} className='see-all-artists'>
+          <Link href={'#'} className='see-all-artists'>
             <p>See all</p>
           </Link>
         </div>
         <div className='header-carousel-layout'>
-          <Carousel data={artistsList} />
-          {/* {artistsList.map(artist => (
-          ))} */}
+          {artistsList.map(artist => (
+            <Fragment key={artist.id}>
+              <Carousel artist={artist} />
+            </Fragment>
+          ))}
         </div>
       </div>
     )

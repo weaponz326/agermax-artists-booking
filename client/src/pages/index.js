@@ -12,6 +12,7 @@ import Unsplash from 'src/components/mock-apis/Unsplash'
 import EventsLayout from 'src/components/EventsLayout'
 import Image from 'next/image'
 import Button from 'src/components/Button'
+import { getAllArtists, getArtistsData, getRandomArtistsPhotos } from 'src/services/artist'
 
 // Your styled component for the content
 const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
@@ -33,26 +34,19 @@ const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
 /* </LandingPageContentWrapper> */
 const Home = () => {
   const [imgList, setImgList] = useState([])
-  const [query, setQuery] = useState('Music concerts')
+  const [artistsList, setArtistsList] = useState([])
   useEffect(() => {
-    //get artists images from unsplash api
-    const getRandomArtistPhotos = async () => {
-      const { data } = await Unsplash.get('/search/photos', {
-        params: {
-          query: query,
-          per_page: 12,
-          page: Math.floor(Math.random() * 20) + 1
-        }
-      })
-      console.log(data)
-      setImgList(data.results)
+    const fetchData = async () => {
+      const { artistsData, artistsPhotos } = await getArtistsData()
+      setArtistsList(artistsData)
+      setImgList(artistsPhotos)
     }
 
-    getRandomArtistPhotos()
+    fetchData()
   }, [])
   return (
     <div className='homepage'>
-      <Header />
+      <Header artistsList={artistsList} />
       <main>
         <EventsSection imgList={imgList} />
         <AboutSection />
@@ -140,7 +134,7 @@ export const EventsGenreButtons = ({ genreList }) => {
   return (
     <div className='events-genre-buttons'>
       {genreList.map(genre => (
-        <Link href={genre.page} className='genre-btn'>
+        <Link href={genre.page} key={Math.random()} className='genre-btn'>
           {' '}
           {genre.icon} {genre.title}{' '}
         </Link>

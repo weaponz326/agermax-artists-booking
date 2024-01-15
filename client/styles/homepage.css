@@ -184,15 +184,15 @@ header .greetings-message {
 
 .carousel-container {
   /* height: 252px; */
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 15.6rem;
+  max-width: 15.625rem;
   width: 100%;
   flex: 1;
-  padding: 5px;
+  padding: 0.24rem;
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: 18px;
+  border-radius: 1rem;
   align-items: center;
 }
 
@@ -204,15 +204,15 @@ header .greetings-message {
   background-size: cover;
   object-fit: cover;
   width: 100%;
-  height: 161px;
+  height: 10rem;
   position: relative;
-  border-radius: 18px;
+  border-radius: 1rem;
 }
 
 .carousel-title-text {
   color: #183d4c;
   font-family: 'Inter', Helvetica;
-  font-size: 17px;
+  font-size: 1rem;
   font-weight: 600;
   align-self: flex-start;
   margin-bottom: 0.9rem;
@@ -307,7 +307,7 @@ header .greetings-message {
 .upcoming {
   color: #183d4c;
   font-family: 'Inter', Helvetica;
-  font-size: 17px;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -339,7 +339,7 @@ header .greetings-message {
 }
 
 .events-preview {
-  margin-top: 64px;
+  margin-top: 4rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2.5rem;

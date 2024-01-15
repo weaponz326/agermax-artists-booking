@@ -1,32 +1,28 @@
 import Link from 'next/link'
 import Router from 'next/router'
 import Button from './Button'
+import Image from 'next/image'
 
-export default function Carousel({ data }) {
-  // console.log('data: ', data)
-  if (data.length == 0) return null
+export default function Carousel({ artist }) {
+  if (!artist) return null
   return (
-    <>
-      {data.map(artist => (
-        <div key={artist.id} className='carousel-container'>
-          <img className='carousel-img' alt='Rectangle' src={artist.imgUrl} width={250} height={300} />
-          <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
-            {artist.name}
-          </Link>
+    <div className='carousel-container'>
+      <Image className='carousel-img' alt='Artist-Image' src={artist.artistImg} width={250} height={300} />
+      <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
+        {artist.name}
+      </Link>
 
-          {/* A good place to map your tags from Api calls */}
+      {/* A good place to map your tags from Api calls */}
 
-          <div className='carousel-genre'>
-            <Tag genre={'Rock'} />
-            <Tag genre={'Gospel'} />
-            <Tag genre={'R&B'} />
-            <Tag genre={'Afrobeat'} />
-            <Tag genre={'Cools'} />
-          </div>
-          <Button buttonText={'Book Now'} />
-        </div>
-      ))}
-    </>
+      <div className='carousel-genre'>
+        <Tag genre={'Rock'} />
+        <Tag genre={'Gospel'} />
+        <Tag genre={'R&B'} />
+        <Tag genre={'Afrobeat'} />
+        <Tag genre={'Cools'} />
+      </div>
+      <Button buttonText={'Book Now'} />
+    </div>
   )
 }
 
