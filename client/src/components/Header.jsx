@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { getAllArtists, getArtistById } from '../services/artist'
 import Carousel from './Carousel'
 import Navbar from './Navbar'

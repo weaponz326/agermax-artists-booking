@@ -7,7 +7,7 @@ export default function Carousel({ artist }) {
   if (!artist) return null
   return (
     <div className='carousel-container'>
-      <Image className='carousel-img' alt='Artist-Image' src={artist.artistImg} width={250} height={300} />
+      <img className='carousel-img' alt='Artist-Image' src={artist.artistImg} width={250} height={300} />
       <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
         {artist.name}
       </Link>
