@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from './Header'
-import { MdFacebook, MdRefresh, MdAddCircleOutline } from 'react-icons/md'
+import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
 import Unsplash from './mock-apis/Unsplash'
@@ -31,66 +31,89 @@ export const Homepage = () => {
     <div className='homepage'>
       <Header />
       <main>
-        <section className='events'>
-          <div className='upcoming-events'>
-            <span className='events-nav upcoming'>Upcoming Events 🎉</span>
-            <span className='events-nav see-all'>
-              <Link href=''>See all</Link>
-            </span>
-          </div>
-          <EventsGenreButtons genreList={mockGenreList} />
-          <EventsLayout imgList={imgList} />
-          <Link href='' className='events-load-more-btn'>
-            <MdRefresh className='events-refresh-icon' />
-            Load More...
-          </Link>
-        </section>
-        <section className='about'>
-          <div className='about-content'>
-            <Image className='about-content-img' src={'/images/rectangle-22462.png'} width={350} height={350} />
-            {/* <img className='about-content-img' alt='Rectangle' src='/images/rectangle-22462.png' /> */}
-            <div className='about-message'>
-              <div className='about-message-title'>About</div>
-              <div className='about-message-content'>
-                Donec laoreet ante et nisi ultrices lacinia. Phasellus facilisis sapien ex. Vivamus ac nulla blandit
-                ligula vulputate convallis. Mauris ut felis sit amet lectus vehicula ullamcorper quis at est. Dictumst
-                malesuada nostra eget tincidunt curabitur aliquet viverra platea. Felis augue fusce platea in nostra.
-                Vehicula venenatis iaculis enim accumsan Link.......
-              </div>
-              <div>
-                <Link href=''>
-                  <Button buttonText={`Read more`} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className='faq'>
-          <div className='faq-title'>Frequently Asked Questions</div>
-          <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
-        </section>
-
-        <section className='subscription'>
-          <div className='subscription-details'>
-            <div className='join-agermax'>Haven’t joined Agermax yet?</div>
-            <div className='get-started'>Let’s get you started.</div>
-            <form className='subscription-form'>
-              <input className='subscription-email' type='email' placeholder='someone@example.com' required />
-              <Button buttonText={'Register'} type={'submit'} />
-            </form>
-            <div className='subscribe'>
-              <input type='checkbox' />
-              <p>Subscribe to receive event and promotion notifications.</p>
-            </div>
-          </div>
-        </section>
+        <EventsSection imgList={imgList} />
+        <AboutSection />
+        <FaqSection />
+        <SubscriptionSection />
       </main>
       <Footer />
     </div>
   )
 }
 
-const EventsGenreButtons = ({ genreList }) => {
+const EventsSection = ({ imgList }) => {
+  return (
+    <section className='events'>
+      <div className='upcoming-events'>
+        <span className='events-nav upcoming'>Upcoming Events 🎉</span>
+        <span className='events-nav see-all'>
+          <Link href=''>See all</Link>
+        </span>
+      </div>
+      <EventsGenreButtons genreList={mockGenreList} />
+      <EventsLayout imgList={imgList} />
+      <Link href='' className='events-load-more-btn'>
+        <MdRefresh className='events-refresh-icon' />
+        Load More...
+      </Link>
+    </section>
+  )
+}
+
+const AboutSection = () => {
+  return (
+    <section className='about'>
+      <div className='about-content'>
+        <Image className='about-content-img' src={'/images/rectangle-22462.png'} width={350} height={350} />
+        {/* <img className='about-content-img' alt='Rectangle' src='/images/rectangle-22462.png' /> */}
+        <div className='about-message'>
+          <div className='about-message-title'>About</div>
+          <div className='about-message-content'>
+            Donec laoreet ante et nisi ultrices lacinia. Phasellus facilisis sapien ex. Vivamus ac nulla blandit ligula
+            vulputate convallis. Mauris ut felis sit amet lectus vehicula ullamcorper quis at est. Dictumst malesuada
+            nostra eget tincidunt curabitur aliquet viverra platea. Felis augue fusce platea in nostra. Vehicula
+            venenatis iaculis enim accumsan Link.......
+          </div>
+          <div>
+            <Link href=''>
+              <Button buttonText={`Read more`} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const FaqSection = () => {
+  return (
+    <section className='faq'>
+      <div className='faq-title'>Frequently Asked Questions</div>
+      <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+    </section>
+  )
+}
+
+const SubscriptionSection = () => {
+  return (
+    <section className='subscription'>
+      <div className='subscription-details'>
+        <div className='join-agermax'>Haven’t joined Agermax yet?</div>
+        <div className='get-started'>Let’s get you started.</div>
+        <form className='subscription-form'>
+          <input className='subscription-email' type='email' placeholder='someone@example.com' required />
+          <Button buttonText={'Register'} type={'submit'} />
+        </form>
+        <div className='subscribe'>
+          <input type='checkbox' />
+          <p>Subscribe to receive event and promotion notifications.</p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export const EventsGenreButtons = ({ genreList }) => {
   return (
     <div className='events-genre-buttons'>
       {genreList.map(genre => (
@@ -103,7 +126,7 @@ const EventsGenreButtons = ({ genreList }) => {
   )
 }
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer>
       <div className='links'>
@@ -175,7 +198,7 @@ const faqData = [
   // Add more FAQ items as needed
 ]
 
-const FaqAccordion = ({ faqTitle, faqData }) => {
+export const FaqAccordion = ({ faqTitle, faqData }) => {
   const [openIndex, setOpenIndex] = useState(0)
 
   const handleToggle = index => {
@@ -205,5 +228,3 @@ const FaqAccordion = ({ faqTitle, faqData }) => {
     </div>
   )
 }
-
-export default FaqAccordion
