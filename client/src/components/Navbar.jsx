@@ -7,36 +7,47 @@ export default function Navbar() {
   const [selectNavItem, setSelectNavItem] = useState('')
   const [navItemsDetails, setNavItemsDetails] = useState(null)
   const navBarRef = useRef()
+  // const [navbarHeight, setNavBarHeight] = useState(null)
 
-  useEffect(() => {
-    const handleClickOutside = e => {
-      if (navBarRef.current && !navBarRef.current.contains(e.target)) {
-        setNavItemsOpen(false)
-        setNavItemsDetails(null)
-        setSelectNavItem('')
+  // useEffect(() => {
+  //   setNavBarHeight(currentHeight => navBarRef.current.clientHeight)
+  //   // console.log(navbarHeight)
+  //   //clean up
+  // })
 
-        console.log(navBarRef.current)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [navBarRef])
+  const handleModalEffect = () => {
+    setNavItemsOpen(false)
+    setNavItemsDetails(null)
+    setSelectNavItem('')
+  }
 
   useEffect(() => {
     if (selectNavItem === 'Events') {
       setNavItemsDetails(() => {
-        return <div className='nav-item-detail'>Events Coming Soon. Stay Tuned!</div>
+        return (
+          <>
+            <div className='nav-item-detail'>Events Coming Soon. Stay Tuned!</div>
+            <Backdrop handleModalEffect={handleModalEffect} />
+          </>
+        )
       })
     } else if (selectNavItem === 'Performers') {
       setNavItemsDetails(currentItem => {
-        return <Search displayNavItems={displayNavItems} />
+        return (
+          <>
+            <Search displayNavItems={displayNavItems} navItemsOpen={navItemsOpen} />
+            <Backdrop handleModalEffect={handleModalEffect} />
+          </>
+        )
       })
     } else if (selectNavItem === 'Articles') {
       setNavItemsDetails(() => {
-        return <div className='nav-item-detail'>Very soon, this will come also. Stay tuned!</div>
+        return (
+          <>
+            <div className='nav-item-detail'>Very soon, this will come also. Stay tuned!</div>
+            <Backdrop handleModalEffect={handleModalEffect} />
+          </>
+        )
       })
     }
   }, [selectNavItem])
@@ -110,14 +121,21 @@ export const Articles = ({ setActiveNavItem, activeNavItem }) => {
   )
 }
 
-const Search = ({ displayNavItems }) => {
+const Search = ({ displayNavItems, navItemsOpen }) => {
   function handleClick() {
     displayNavItems()
   }
 
   return (
     <div className='search-bar'>
-      <input type='search' name='' id='' placeholder='Find amazing artists' autoFocus onClick={handleClick} />
+      <input
+        type='search'
+        name=''
+        id=''
+        placeholder='Find amazing artists'
+        onClick={handleClick}
+        autoFocus={navItemsOpen}
+      />
       <IconContext.Provider value={{ color: 'white', size: '1.2rem' }}>
         <div className='search-icon'>
           <FaSearch />
@@ -125,4 +143,19 @@ const Search = ({ displayNavItems }) => {
       </IconContext.Provider>
     </div>
   )
+}
+
+export const Backdrop = ({ handleModalEffect, navbarHeight }) => {
+  // const [value, setValue] = useState(navbarHeight)
+  // let topValue
+  // let topSearchValue
+  // useEffect(() => {
+  //   topValue = document.querySelector('.header-navbar').clientHeight
+  //   topSearchValue = document.querySelector('.search-bar').clientHeight
+  //   console.log(topValue, topSearchValue)
+  //   setValue(Number(topValue))
+  // }, [])
+  // topValue = String(topValue)
+  // console.log(topValue)
+  return <div className='backdrop' onClick={() => handleModalEffect()}></div>
 }
