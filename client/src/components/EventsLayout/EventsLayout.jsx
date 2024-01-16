@@ -1,5 +1,5 @@
-import { IconsansBoldClock3 } from './IconsansBoldClock3'
-import { IconsansBoldArrowRight } from './IconsansBoldArrowRight'
+import { IconsansBoldClock3 } from '../IconsansBoldClock3'
+import { IconsansBoldArrowRight } from '../IconsansBoldArrowRight'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import Router from 'next/router'

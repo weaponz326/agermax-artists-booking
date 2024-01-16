@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
+import styles from './artist-profile.module.css'
 
 function ArtistProfile() {
   return (
     <CustomPagesLayout>
       <main>
-        <div className='page-layout'>
+        <div className={styles['page-layout']}>
           <ArtisteProfileSection />
           <EventsSection />
         </div>
@@ -24,22 +25,22 @@ const EventsSection = () => {
   }
 
   return (
-    <section className='events-section'>
-      <Card className='events-card'>
+    <section className={styles['events-section']}>
+      <Card className={styles['events-card']}>
         <TabView config={tabConfig} />
       </Card>
-      <div className='divider'></div>
-      <div className='videos-block'>
-        <div className='video-item'>
-          <PlayCircle size={80} className='play-icon' color='white' />
+      <div className={styles['divider']}></div>
+      <div className={styles['videos-block']}>
+        <div className={styles['video-item']}>
+          <PlayCircle size={80} className={styles['play-icon']} color='white' />
           <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
         </div>
-        <div className='video-item'>
-          <PlayCircle size={80} className='play-icon' color='white' />
+        <div className={styles['video-item']}>
+          <PlayCircle size={80} className={styles['play-icon']} color='white' />
           <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
         </div>
-        <div className='video-item'>
-          <PlayCircle size={80} className='play-icon' color='white' />
+        <div className={styles['video-item']}>
+          <PlayCircle size={80} className={styles['play-icon']} color='white' />
           <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
         </div>
       </div>
@@ -51,22 +52,22 @@ const TabView = ({ config }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   return (
-    <div className='tab-container'>
-      <div className='tab-menu'>
-        <div className='tab-menu-wrapper'>
+    <div className={styles['tab-container']}>
+      <div className={styles['tab-menu']}>
+        <div className={styles['tab-menu-wrapper']}>
           {Object.keys(config).map((item, index) => (
             <div
               onClick={() => setCurrentIndex(index)}
               key={`tab-item-${index}`}
               data-active={currentIndex === index}
-              className='tab-item'
+              className={styles['tab-item']}
             >
               {item}
             </div>
           ))}
         </div>
       </div>
-      <div className='tab-content-wrapper'>{Object.values(config)[currentIndex]}</div>
+      <div className={styles['tab-content-wrapper']}>{Object.values(config)[currentIndex]}</div>
     </div>
   )
 }
@@ -74,21 +75,21 @@ const TabView = ({ config }) => {
 const ArtisteProfileSection = () => {
   return (
     <section>
-      <Card className='profile-card'>
-        <div className='avatar-container'>
+      <Card className={styles['profile-card']}>
+        <div className={styles['avatar-container']}>
           <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='profile-image' />
         </div>
-        <h5 id='username'>John Doe</h5>
-        <div className='tags-container'>
+        <h5 id={styles['username']}>John Doe</h5>
+        <div className={styles['tags-container']}>
           <Tag>Rock</Tag>
           <Tag>Trubadur</Tag>
         </div>
-        <div className='button-container'>
+        <div className={styles['button-container']}>
           <Button>Book now</Button>
         </div>
-        <div className='bio-container'>
-          <p className='title'>Biography</p>
-          <p className='body'>
+        <div className={styles['bio-container']}>
+          <p className={styles['title']}>Biography</p>
+          <p className={styles['body']}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque obcaecati, minima nisi consectetur ipsa
             voluptate amet cumque nihil ab ipsum modi illum.
           </p>
@@ -100,21 +101,21 @@ const ArtisteProfileSection = () => {
 
 const EventsTable = ({}) => {
   return (
-    <div className='events-table'>
+    <div className={styles['events-table']}>
       {[1, 2, 3].map((num, index) => (
-        <div key={`event-tile-${index}`} className='event-tile'>
-          <div className='date'>
+        <div key={`event-tile-${index}`} className={styles['event-tile']}>
+          <div className={styles['date']}>
             <p>Dec</p>
             <h5>18</h5>
           </div>
-          <div className='event-name'>
-            <div className='name'>
+          <div className={styles['event-name']}>
+            <div className={styles['name']}>
               <h5>John Doe</h5>
               <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
             </div>
-            <p className='location-name'>Stockholm Music Stadium</p>
+            <p className={styles['location-name']}>Stockholm Music Stadium</p>
           </div>
-          <div className='event-location'>
+          <div className={styles['event-location']}>
             <a href='#'>
               Open Map <ExportSquare size={13} />
             </a>
@@ -135,11 +136,11 @@ const Card = ({ children, className }) => {
   return <div className={`card ${className}`}>{children}</div>
 }
 
-const Button = ({ children }) => <button className='button'>{children}</button>
+const Button = ({ children }) => <button className={styles['button']}>{children}</button>
 
 const Tag = ({ children }) => {
   return (
-    <div className='tag'>
+    <div className={styles['tag']}>
       <span>{children}</span>
     </div>
   )

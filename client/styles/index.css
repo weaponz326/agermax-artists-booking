@@ -32,4 +32,5 @@
   position: relative;
   box-sizing: border-box;
   color: var(--text-color);
+  z-index: -1;
 }
