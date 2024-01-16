@@ -2,17 +2,16 @@
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
-import { Homepage } from 'src/components/Homepage'
 import React, { useEffect, useState } from 'react'
 import Header from 'src/components/Header'
 import { MdFacebook, MdRefresh } from 'react-icons/md'
-import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
-import Unsplash from 'src/components/mock-apis/Unsplash'
 import EventsLayout from 'src/components/EventsLayout'
 import Image from 'next/image'
 import Button from 'src/components/Button'
-import { getAllArtists, getArtistsData, getRandomArtistsPhotos } from 'src/services/artist'
+import { getArtistsData } from 'src/services/artist'
+import Footer from 'src/components/Footer'
+import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 
 // Your styled component for the content
 const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
@@ -45,7 +44,7 @@ const Home = () => {
     fetchData()
   }, [])
   return (
-    <div className='homepage'>
+    <CustomPagesLayout className='homepage'>
       <Header artistsList={artistsList} />
       <main>
         <EventsSection imgList={imgList} />
@@ -53,8 +52,7 @@ const Home = () => {
         <FaqSection />
         <SubscriptionSection />
       </main>
-      <Footer />
-    </div>
+    </CustomPagesLayout>
   )
 }
 
@@ -92,7 +90,7 @@ const AboutSection = () => {
             venenatis iaculis enim accumsan Link.......
           </div>
           <div>
-            <Link href=''>
+            <Link href='/about'>
               <Button buttonText={`Read more`} />
             </Link>
           </div>
@@ -140,58 +138,6 @@ export const EventsGenreButtons = ({ genreList }) => {
         </Link>
       ))}
     </div>
-  )
-}
-
-export const Footer = () => {
-  return (
-    <footer>
-      <div className='links'>
-        <Link href='' className='logo'>
-          <img src='/images/logo.png' alt='AgerMax Logo' />
-          <div className='logo-text'>AGERMAX</div>
-        </Link>
-        <ul className='footer-nav'>
-          <li>
-            <Link href=''>Home</Link>
-          </li>
-          <li>
-            <Link href=''>About Us</Link>
-          </li>
-          <li>
-            <Link href=''>Contact</Link>
-          </li>
-          <li>
-            <Link href=''>Newsletter</Link>
-          </li>
-        </ul>
-        <div className='social-media'>
-          <Link href='#' className='fab fa-facebook-f'>
-            <MdFacebook />
-          </Link>
-          <Link href='#' className='fab fa-twitter'>
-            <FaTwitter />
-          </Link>
-          <Link href='#' className='fab fa-instagram'>
-            <FaInstagram />
-          </Link>
-        </div>
-      </div>
-      <div className='copyright-terms'>
-        <div className='copyright'>@Copyright Agermax 2024</div>
-        <ul className='terms-privacy'>
-          <li>
-            <Link href=''>Terms</Link>
-          </li>
-          <li>
-            <Link href=''>Privacy Policy</Link>
-          </li>
-          <li>
-            <Link href=''>Cookies</Link>
-          </li>
-        </ul>
-      </div>
-    </footer>
   )
 }
 

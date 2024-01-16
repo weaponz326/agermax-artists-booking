@@ -1,7 +1,8 @@
 * {
   position: relative;
 }
-.homepage {
+.homepage,
+.custom-pages-layout {
   display: flex;
   flex-direction: column;
   font-family: 'Inter', Helvetica;

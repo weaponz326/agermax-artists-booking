@@ -7,13 +7,6 @@ export default function Navbar() {
   const [selectNavItem, setSelectNavItem] = useState('')
   const [navItemsDetails, setNavItemsDetails] = useState(null)
   const navBarRef = useRef()
-  // const [navbarHeight, setNavBarHeight] = useState(null)
-
-  // useEffect(() => {
-  //   setNavBarHeight(currentHeight => navBarRef.current.clientHeight)
-  //   // console.log(navbarHeight)
-  //   //clean up
-  // })
 
   const handleModalEffect = () => {
     setNavItemsOpen(false)
@@ -146,16 +139,5 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 }
 
 export const Backdrop = ({ handleModalEffect, navbarHeight }) => {
-  // const [value, setValue] = useState(navbarHeight)
-  // let topValue
-  // let topSearchValue
-  // useEffect(() => {
-  //   topValue = document.querySelector('.header-navbar').clientHeight
-  //   topSearchValue = document.querySelector('.search-bar').clientHeight
-  //   console.log(topValue, topSearchValue)
-  //   setValue(Number(topValue))
-  // }, [])
-  // topValue = String(topValue)
-  // console.log(topValue)
   return <div className='backdrop' onClick={() => handleModalEffect()}></div>
 }

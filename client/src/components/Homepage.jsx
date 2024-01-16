@@ -1,35 +1,50 @@
+// pages/index.js
+import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
 import React, { useEffect, useState } from 'react'
-import Header from './Header'
+import Header from 'src/components/Header'
 import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
 import Link from 'next/link'
-import Unsplash from './mock-apis/Unsplash'
-import EventsLayout from './EventsLayout'
+import EventsLayout from 'src/components/EventsLayout'
 import Image from 'next/image'
-import Button from './Button'
+import Button from 'src/components/Button'
+import { getArtistsData } from 'src/services/artist'
 
-export const Homepage = () => {
+// Your styled component for the content
+const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
+  textAlign: 'center',
+  '& h1': {
+    margin: theme.spacing(4, 0),
+    color: theme.palette.text.primary
+  },
+  '& p': {
+    margin: theme.spacing(2, 0),
+    color: theme.palette.text.secondary
+  }
+}))
+
+// <LandingPageContentWrapper>
+/* <h1>Welcome to Our Artists Management Platform</h1>
+  <p>Discover events, manage bookings, and connect with artists from around the world.</p>
+  Additional content goes here */
+/* </LandingPageContentWrapper> */
+const Home = () => {
   const [imgList, setImgList] = useState([])
-  const [query, setQuery] = useState('Music concerts')
+  const [artistsList, setArtistsList] = useState([])
   useEffect(() => {
-    //get artists images from unsplash api
-    const getRandomArtistPhotos = async () => {
-      const { data } = await Unsplash.get('/search/photos', {
-        params: {
-          query: query,
-          per_page: 12,
-          page: Math.floor(Math.random() * 20) + 1
-        }
-      })
-      console.log(data)
-      setImgList(data.results)
+    const fetchData = async () => {
+      const { artistsData, artistsPhotos } = await getArtistsData()
+      setArtistsList(artistsData)
+      setImgList(artistsPhotos)
     }
 
-    getRandomArtistPhotos()
+    fetchData()
   }, [])
   return (
     <div className='homepage'>
-      <Header />
+      <Header artistsList={artistsList} />
       <main>
         <EventsSection imgList={imgList} />
         <AboutSection />
@@ -117,7 +132,7 @@ export const EventsGenreButtons = ({ genreList }) => {
   return (
     <div className='events-genre-buttons'>
       {genreList.map(genre => (
-        <Link href={genre.page} className='genre-btn'>
+        <Link href={genre.page} key={Math.random()} className='genre-btn'>
           {' '}
           {genre.icon} {genre.title}{' '}
         </Link>
@@ -228,3 +243,17 @@ export const FaqAccordion = ({ faqTitle, faqData }) => {
     </div>
   )
 }
+
+// Override the default guard behavior for this page
+Home.authGuard = false
+Home.guestGuard = false
+Home.acl = {
+  action: 'manage',
+  subject: 'all' // Adjust the permissions as per your application's ACL configuration
+}
+
+// Set a custom layout for the Home page that doesn't include the AppBar and TopBar
+// Home.getLayout = page => <BlankLayoutWithAppBar>{page}</BlankLayoutWithAppBar>
+Home.getLayout = page => <div>{page}</div>
+
+export default Home
