@@ -1,6 +1,7 @@
 import { FaSearch } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
@@ -19,7 +20,7 @@ export default function Navbar() {
       setNavItemsDetails(() => {
         return (
           <>
-            <div className='nav-item-detail'>Events Coming Soon. Stay Tuned!</div>
+            <div className='page-nav-item-detail'>Events Coming Soon. Stay Tuned!</div>
             <Backdrop handleModalEffect={handleModalEffect} />
           </>
         )
@@ -37,7 +38,7 @@ export default function Navbar() {
       setNavItemsDetails(() => {
         return (
           <>
-            <div className='nav-item-detail'>Very soon, this will come also. Stay tuned!</div>
+            <div className='page-nav-item-detail'>Very soon, this will come also. Stay tuned!</div>
             <Backdrop handleModalEffect={handleModalEffect} />
           </>
         )
@@ -64,7 +65,9 @@ export default function Navbar() {
     <nav className='header-navbar' ref={navBarRef}>
       <nav className='top-bar nav-bar'>
         <div className='logo first-img'>
-          <img className='logo-img ' alt='App dark' src='/images/logo.png' />
+          <Link href='/'>
+            <img className='logo-img ' alt='App dark' src='/images/logo.png' />
+          </Link>
         </div>
         {showNavItems}
         <div className='logo last-img'>
@@ -78,7 +81,7 @@ export default function Navbar() {
 
 export const NavItems = ({ setActiveNavItem, activeNavItem }) => {
   return (
-    <div className='nav-items'>
+    <div className='page-nav-items'>
       <Performers setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
       <Events setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
       <Articles setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
@@ -87,7 +90,7 @@ export const NavItems = ({ setActiveNavItem, activeNavItem }) => {
 }
 
 export const Performers = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Performers' ? 'nav-item active-nav-item' : 'nav-item'
+  const setActiveClass = activeNavItem === 'Performers' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
 
   return (
     <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>
@@ -96,7 +99,7 @@ export const Performers = ({ setActiveNavItem, activeNavItem }) => {
   )
 }
 export const Events = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Events' ? 'nav-item active-nav-item' : 'nav-item'
+  const setActiveClass = activeNavItem === 'Events' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
 
   return (
     <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>
@@ -105,7 +108,7 @@ export const Events = ({ setActiveNavItem, activeNavItem }) => {
   )
 }
 export const Articles = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Articles' ? 'nav-item active-nav-item' : 'nav-item'
+  const setActiveClass = activeNavItem === 'Articles' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
 
   return (
     <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>

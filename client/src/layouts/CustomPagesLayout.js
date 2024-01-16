@@ -4,7 +4,7 @@ const CustomPagesLayout = ({ children }) => {
   return (
     <div>
       <Navbar />
-      <main>{children}</main>
+      <main className='page-layout-layout'>{children}</main>
       <Footer />
     </div>
   )

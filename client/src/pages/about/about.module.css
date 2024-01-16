@@ -1,6 +1,13 @@
 .about-container {
-  margin-top: 6rem;
   padding: 4rem;
+  margin-top: 2rem;
+}
+
+@media (width < 700px) {
+  .about-container {
+    padding: 0;
+    padding-inline: 2rem;
+  }
 }
 
 /* Add more styles as needed */
