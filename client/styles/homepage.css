@@ -65,9 +65,12 @@ header {
 
 .nav-item {
   color: white;
+  opacity: 0.5;
+  padding-inline: 0.5rem;
 }
 .active-nav-item {
-  border-bottom: 2px solid white;
+  opacity: 1;
+  border-bottom: 2px solid #fc8e5e;
 }
 .nav-item:hover {
   cursor: pointer;
