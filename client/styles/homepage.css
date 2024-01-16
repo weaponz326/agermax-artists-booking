@@ -688,6 +688,7 @@ footer .links {
   flex-wrap: wrap;
   align-items: center;
   padding: 3rem;
+  gap: 1rem;
 }
 
 footer .logo {
@@ -704,6 +705,7 @@ footer .copyright-terms {
   justify-content: space-between;
   padding: 3rem;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 footer .logo-text {
@@ -774,6 +776,11 @@ footer .social-media {
   footer .copyright-terms {
     padding: 0;
     margin: 1rem 0;
+    gap: 1rem;
+  }
+  footer .copyright-terms {
+    flex-direction: column-reverse;
+    align-items: flex-start;
   }
 
   .search-bar {
