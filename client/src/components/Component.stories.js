@@ -1,12 +1,12 @@
-import { Component } from ".";
+// import { Component } from ".";
 
-export default {
-  title: "Components/Component",
-  component: Component,
-};
+// export default {
+//   title: "Components/Component",
+//   component: Component,
+// };
 
-export const Default = {
-  args: {
-    className: {},
-  },
-};
+// export const Default = {
+//   args: {
+//     className: {},
+//   },
+// };

@@ -4,12 +4,12 @@ import Box from '@mui/material/Box'
 import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
 import React, { useEffect, useState } from 'react'
 import Header from 'src/components/Header'
-import { MdFacebook, MdRefresh } from 'react-icons/md'
+import { MdRefresh } from 'react-icons/md'
 import Link from 'next/link'
 import EventsLayout from 'src/components/EventsLayout'
 import Image from 'next/image'
 import Button from 'src/components/Button'
-import { getArtistsData } from 'src/services/artist'
+import getArtistsData from 'src/services/artist'
 import Footer from 'src/components/Footer'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 
@@ -62,7 +62,7 @@ const EventsSection = ({ imgList }) => {
       <div className='upcoming-events'>
         <span className='events-nav upcoming'>Upcoming Events 🎉</span>
         <span className='events-nav see-all'>
-          <Link href=''>See all</Link>
+          <Link href='#'>See all</Link>
         </span>
       </div>
       <EventsGenreButtons genreList={mockGenreList} />

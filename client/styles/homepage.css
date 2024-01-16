@@ -204,7 +204,7 @@ header .greetings-message {
   justify-content: space-between;
 }
 .see-all-artists {
-  display: none;
+  /* display: none; */
 }
 
 .header-carousel p {
@@ -223,7 +223,8 @@ header .greetings-message {
 
 .carousel-container {
   min-width: 15.6rem;
-  max-width: 15.625rem;
+  width: 15.625rem;
+  max-width: 20rem;
   width: 100%;
   flex: 1;
   padding: 0.24rem;
@@ -232,6 +233,7 @@ header .greetings-message {
   background-color: white;
   border-radius: 1rem;
   align-items: center;
+  box-shadow: 1px 1px 1px #183d4c49, -1px -1px 1px #183d4c49;
 }
 
 .carousel-img {
@@ -595,8 +597,7 @@ header .greetings-message {
 }
 
 .subscription {
-  padding: 0 4rem;
-  margin-bottom: 5rem;
+  padding: 2rem 4rem;
 }
 .subscription-details {
   margin: 0 auto;

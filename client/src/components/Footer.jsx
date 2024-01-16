@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer>
       <div className='links'>
-        <Link href='' className='logo'>
+        <Link href='/' className='logo'>
           <img src='/images/logo.png' alt='AgerMax Logo' />
           <div className='logo-text'>AGERMAX</div>
         </Link>

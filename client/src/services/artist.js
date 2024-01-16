@@ -1,11 +1,9 @@
 import axios from 'axios'
 import Unsplash from 'src/components/mock-apis/Unsplash'
-import { useState, useEffect } from 'react'
 
 const baseUrl = 'https://jsonplaceholder.typicode.com/users'
 export async function getAllArtists() {
   const { data: artists } = await axios.get(baseUrl)
-  // console.log(artists)
   return artists
 }
 
@@ -21,11 +19,10 @@ export const getRandomArtistsPhotos = async () => {
       page: Math.floor(Math.random() * 20) + 1
     }
   })
-  // console.log(data.results)
   return data.results
 }
 
-export async function getArtistsData() {
+export default async function getArtistsData() {
   const artistsPhotos = await getRandomArtistsPhotos()
   const artistsList = await getAllArtists()
 

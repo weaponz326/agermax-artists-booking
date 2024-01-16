@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import Unsplash from './mock-apis/Unsplash'
 import Link from 'next/link'
 import { Fragment } from 'react'
+import HeaderCarouselContainer from './HeaderCarouselContainer'
 
 export default function Header({ artistsList }) {
   if (!artistsList.length) return null
@@ -20,38 +21,11 @@ export default function Header({ artistsList }) {
           </div>
         </div>
       </div>
-      <HeaderCarouselContainer artistsList={artistsList} />
+      <HeaderCarouselContainer
+        layout={'header-carousel-layout'}
+        className={'header-carousel'}
+        artistsList={artistsList}
+      />
     </header>
   )
-}
-
-const HeaderCarouselContainer = ({ artistsList }) => {
-  //Conditional Rendering depending on availability of APi call
-  if (!artistsList.length) {
-    return (
-      <div className='header-carousel'>
-        <div className='header-carousel-layout'>
-          <Carousel />
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <div className='header-carousel'>
-        <div className='hot-artists-nav'>
-          <p>Hot Artists 🔥</p>
-          <Link href={'#'} className='see-all-artists'>
-            <p>See all</p>
-          </Link>
-        </div>
-        <div className='header-carousel-layout'>
-          {artistsList.map(artist => (
-            <Fragment key={artist.id}>
-              <Carousel artist={artist} />
-            </Fragment>
-          ))}
-        </div>
-      </div>
-    )
-  }
 }
