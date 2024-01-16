@@ -215,6 +215,7 @@ header .greetings-message {
   display: flex;
   gap: 2rem;
   overflow: auto;
+  padding-bottom: 0.1rem;
 }
 
 .header-carousel-layout::-webkit-scrollbar {

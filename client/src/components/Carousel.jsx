@@ -6,7 +6,7 @@ export default function Carousel({ artist }) {
   return (
     <div className='carousel-container'>
       <img className='carousel-img' alt='Artist-Image' src={artist.artistImg} width={250} height={300} />
-      <Link href={`/artists/${artist.id}`} className='carousel-title-text'>
+      <Link href={`/artist-profile`} className='carousel-title-text'>
         {artist.name}
       </Link>
 
@@ -19,7 +19,9 @@ export default function Carousel({ artist }) {
         <Tag genre={'Afrobeat'} />
         <Tag genre={'Cools'} />
       </div>
-      <Button buttonText={'Book Now'} />
+      <Link href={'/artist-profile'} style={{ width: '100%' }}>
+        <Button buttonText={'Book Now'} />
+      </Link>
     </div>
   )
 }

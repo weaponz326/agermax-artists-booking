@@ -2,9 +2,11 @@ import Footer from 'src/components/Footer'
 import Navbar from 'src/components/Navbar'
 const CustomPagesLayout = ({ children }) => {
   return (
-    <div>
+    <div style={{ height: '100vh' }}>
       <Navbar />
-      <main className='page-layout-layout'>{children}</main>
+      <main style={{ minHeight: '100%' }} className='page-layout-layout'>
+        {children}
+      </main>
       <Footer />
     </div>
   )

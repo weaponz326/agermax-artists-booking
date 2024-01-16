@@ -12,7 +12,7 @@ const Footer = () => {
         </Link>
         <ul className='footer-nav'>
           <li>
-            <Link href=''>Home</Link>
+            <Link href='/'>Home</Link>
           </li>
           <li>
             <Link href=''>About Us</Link>
