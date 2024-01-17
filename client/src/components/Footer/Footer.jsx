@@ -1,38 +1,44 @@
 import Link from 'next/link'
-import { MdFacebook, MdRefresh } from 'react-icons/md'
+import { MdFacebook } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
-import { useEffect } from 'react'
+import styles from './footer.module.css'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
   return (
-    <footer>
-      <div className='links'>
-        <Link href='/' className='logo'>
+    <footer className={styles['footer']}>
+      <div className={styles['links']}>
+        <Link href='/' className={styles['logo']}>
           <img src='/images/logo.png' alt='AgerMax Logo' />
-          <div className='logo-text'>AGERMAX</div>
+          <div className={styles['logo-text']}>AGERMAX</div>
         </Link>
-        <div className='footer-nav'>
+        <div className={styles['footer-nav']}>
           <Link href='/'>Home</Link>
           <Link href='/about'>About Us</Link>
           <Link href=''>Contact</Link>
           <Link href=''>Newsletter</Link>
         </div>
-        <div className='social-media'>
-          <Link href='#' className='fab fa-facebook-f'>
-            <MdFacebook />
+        <div className={styles['social-media']}>
+          <Link href='#'>
+            <span style={{ fontSize: '1.5rem' }}>
+              <MdFacebook />
+            </span>
           </Link>
-          <Link href='#' className='fab fa-twitter'>
-            <FaTwitter />
+          <Link href='#' className={styles['fab fa-twitter']}>
+            <span style={{ fontSize: '1.5rem' }}>
+              <FaTwitter />
+            </span>
           </Link>
-          <Link href='#' className='fab fa-instagram'>
-            <FaInstagram />
+          <Link href='/instagram' className={styles['fab fa-instagram']}>
+            <span style={{ fontSize: '1.5rem' }}>
+              <FaInstagram />
+            </span>
           </Link>
         </div>
       </div>
-      <div className='copyright-terms'>
-        <div className='copyright'>@Copyright Agermax {currentYear}</div>
-        <div className='terms-privacy'>
+      <div className={styles['copyright-terms']}>
+        <div className={styles['copyright']}>@Copyright Agermax {currentYear}</div>
+        <div className={styles['terms-privacy']}>
           <Link href=''>Terms</Link>
           <Link href=''>Privacy Policy</Link>
           <Link href=''>Cookies</Link>

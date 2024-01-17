@@ -1,23 +1,18 @@
-import { getAllArtists, getArtistById } from '../../services/artist'
-import Carousel from '../Carousel/Carousel'
 import Navbar from '../Navbar/Navbar'
-import Unsplash from '../mock-apis/Unsplash'
-import Link from 'next/link'
-import { Fragment } from 'react'
 import HeaderCarouselContainer from '../HeaderCarouselContainer/HeaderCarouselContainer'
-
+import styles from './header.module.css'
 export default function Header({ artistsList }) {
   if (!artistsList.length) return null
   return (
-    <header>
-      <div className='header-background'>
+    <header className='header'>
+      <div className={styles['header-background']}>
         <Navbar />
-        <div className='greetings'>
+        <div className={styles['greetings']}>
           <div>
-            <p className='greetings-hi'>Hey John!&nbsp;&nbsp;👋</p>
+            <p className={styles['greetings-hi']}>Hey John!&nbsp;&nbsp;👋</p>
           </div>
           <div>
-            <p className='greetings-message'>Book amazing artists for your next events</p>
+            <p className={styles['greetings-message']}>Book amazing artists for your next events</p>
           </div>
         </div>
       </div>

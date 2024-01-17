@@ -2,6 +2,7 @@ import { FaSearch } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import styles from './navbar.module.css'
 
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
@@ -20,7 +21,7 @@ export default function Navbar() {
       setNavItemsDetails(() => {
         return (
           <>
-            <div className='page-nav-item-detail'>Events Coming Soon. Stay Tuned!</div>
+            <div className={styles['page-nav-item-detail']}>Events Coming Soon. Stay Tuned!</div>
             <Backdrop handleModalEffect={handleModalEffect} />
           </>
         )
@@ -38,7 +39,7 @@ export default function Navbar() {
       setNavItemsDetails(() => {
         return (
           <>
-            <div className='page-nav-item-detail'>Very soon, this will come also. Stay tuned!</div>
+            <div className={styles['page-nav-item-detail']}>Very soon, this will come also. Stay tuned!</div>
             <Backdrop handleModalEffect={handleModalEffect} />
           </>
         )
@@ -62,16 +63,16 @@ export default function Navbar() {
   )
 
   return (
-    <nav className='header-navbar' ref={navBarRef}>
-      <nav className='top-bar nav-bar'>
+    <nav className={styles['header-navbar']} ref={navBarRef}>
+      <nav className={`${styles['top-bar']} ${styles['nav-bar']}`}>
         <Link href='/'>
-          <div className='logo first-img'>
-            <img className='logo-img ' alt='App dark' src='/images/logo.png' />
+          <div className={`${styles['logo']} ${styles['first-img']}`}>
+            <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
           </div>
         </Link>
         {showNavItems}
-        <div className='logo last-img'>
-          <img className='logo-img ' alt='Ellipse' src='/images/ellipse-121.png' />
+        <div className={`${styles['logo']} ${styles['last-img']}`}>
+          <img className={styles['logo-img ']} alt='Ellipse' src='/images/ellipse-121.png' />
         </div>
       </nav>
       {navItemsDetails}
@@ -81,7 +82,7 @@ export default function Navbar() {
 
 export const NavItems = ({ setActiveNavItem, activeNavItem }) => {
   return (
-    <div className='page-nav-items'>
+    <div className={styles['page-nav-items']}>
       <Performers setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
       <Events setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
       <Articles setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
@@ -90,28 +91,37 @@ export const NavItems = ({ setActiveNavItem, activeNavItem }) => {
 }
 
 export const Performers = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Performers' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
+  const setActiveClass = activeNavItem === 'Performers' ? 'active-page-nav-item' : 'page-nav-item'
 
   return (
-    <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>
+    <span
+      className={`${styles[setActiveClass]} ${styles['page-nav-item']}`}
+      onClick={e => setActiveNavItem(e.target.textContent)}
+    >
       Performers
     </span>
   )
 }
 export const Events = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Events' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
+  const setActiveClass = activeNavItem === 'Events' ? 'active-page-nav-item' : 'page-nav-item'
 
   return (
-    <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>
+    <span
+      className={`${styles[setActiveClass]} ${styles['page-nav-item']}`}
+      onClick={e => setActiveNavItem(e.target.textContent)}
+    >
       Events
     </span>
   )
 }
 export const Articles = ({ setActiveNavItem, activeNavItem }) => {
-  const setActiveClass = activeNavItem === 'Articles' ? 'page-nav-item active-page-nav-item' : 'page-nav-item'
+  const setActiveClass = activeNavItem === 'Articles' ? 'active-page-nav-item' : 'page-nav-item'
 
   return (
-    <span className={setActiveClass} onClick={e => setActiveNavItem(e.target.textContent)}>
+    <span
+      className={`${styles[setActiveClass]} ${styles['page-nav-item']}`}
+      onClick={e => setActiveNavItem(e.target.textContent)}
+    >
       Articles
     </span>
   )
@@ -123,7 +133,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   }
 
   return (
-    <div className='search-bar'>
+    <div className={styles['search-bar']}>
       <input
         type='search'
         name=''
@@ -133,7 +143,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
         autoFocus={navItemsOpen}
       />
       <IconContext.Provider value={{ color: 'white', size: '1.2rem' }}>
-        <div className='search-icon'>
+        <div className={styles['search-icon']}>
           <FaSearch />
         </div>
       </IconContext.Provider>
@@ -142,5 +152,5 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 }
 
 export const Backdrop = ({ handleModalEffect }) => {
-  return <div className='backdrop' onClick={() => handleModalEffect()}></div>
+  return <div className={styles['backdrop']} onClick={() => handleModalEffect()}></div>
 }
