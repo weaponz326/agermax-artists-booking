@@ -23,7 +23,7 @@ const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
             <p>See all</p>
           </Link>
         </div>
-        <div className={styles[layout]}>
+        <div className={layout}>
           {artistsList.map(artist => (
             <Fragment key={artist.id}>
               <Carousel artist={artist} />
