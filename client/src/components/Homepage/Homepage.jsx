@@ -157,7 +157,7 @@ export const FaqAccordion = ({ faqTitle, faqData }) => {
             >
               {faq.question}
             </div>
-            <button onClick={() => handleToggle(index)}>
+            <button className={styles['faq-accordion-btn']} onClick={() => handleToggle(index)}>
               {openIndex === index ? (
                 <div className={styles['faq-collapse-icon']}>-</div>
               ) : (
