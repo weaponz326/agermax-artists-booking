@@ -1,17 +1,41 @@
 .main {
-  background: var(--main-background-color);
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
+  background: var(--grey-background);
+  background-color: rebeccapurple;
 }
-
+.event-text {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
+}
 .page-layout {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   gap: 2rem;
-  width: 95%;
+  width: 100%;
   /* min-height: 100vh; */
   display: grid;
-  /* margin: 0 auto; */
+
+  margin: 0 auto;
+  max-width: 60rem;
   grid-template-columns: 30% 70%;
 }
 
 .divider {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   height: 1px;
   margin: 3rem 0;
   background-color: #ddd;
@@ -20,24 +44,45 @@
 /* Card Layout */
 
 .card {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 1rem;
   background: white;
   border-radius: 1rem;
   box-shadow: 0 0 20px 1px #00000008;
+  background-color: white;
 }
 
 .profile-card {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   top: 90px;
   position: sticky;
 }
 
 .profile-card .avatar-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   display: grid;
   padding: 1rem 0;
   place-items: center;
 }
 
 .profile-card .avatar-container img {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -45,12 +90,22 @@
 }
 
 .profile-card #username {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-weight: 500;
   text-align: center;
   font-size: var(--large-size);
 }
 
 .profile-card .tags-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   gap: 0.5rem;
   display: flex;
   margin: 1rem 0;
@@ -60,6 +115,11 @@
 }
 
 .tag {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 0.3em 0.5em;
   border-radius: 0.5em;
   color: var(--tag-color);
@@ -68,21 +128,36 @@
 }
 
 .profile-card .button-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   text-align: center;
   padding: 0 1.5rem;
 }
 
 /* Button */
 .button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   width: 100%;
   padding: 1rem;
-  color: white;
+  color: rgb(255, 255, 255);
   border-radius: 1rem;
   font-size: var(--medium-size);
   background-color: var(--button-color);
 }
 
 .profile-card .bio-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -90,28 +165,53 @@
 }
 
 .profile-card .bio-container .title {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-size: var(--smaller-size);
   color: var(--grey-heading-color);
   margin-bottom: 0.8rem;
 }
 
 .profile-card .bio-container .body {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-size: var(--normal-size);
   color: var(--text-color);
 }
 
 .events-card {
-  padding: 2rem 3rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
+  padding: 6rem 1rem 2rem;
   /* z-index: -1; */
 }
 
 /* Tab menu */
 
 .tab-menu {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   border-bottom: 1px solid #eee;
 }
 
 .tab-menu-wrapper {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   gap: 1rem;
   display: flex;
   overflow-x: scroll;
@@ -122,6 +222,11 @@
 }
 
 .tab-menu-wrapper .tab-item {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 0.8rem 0;
   cursor: pointer;
   white-space: nowrap;
@@ -149,6 +254,11 @@
 
 /* Events Table Styles */
 .events-table {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
@@ -156,6 +266,11 @@
 }
 
 .events-table .event-tile {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 0.8rem 1rem;
   display: flex;
   color: var(--text-color);
@@ -164,65 +279,125 @@
 }
 
 .events-table .event-tile > div {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .events-table .event-tile .date {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   padding: 0 1rem;
   text-align: center;
   border-right: 1px solid #ddd;
 }
 
 .events-table .event-tile .event-name {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   flex: 1;
   padding: 0 1rem;
 }
 
 .events-table .event-tile .date p {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-size: var(--smaller-size);
   color: var(--text-color);
 }
 
 .events-table .event-tile .date h5 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-size: var(--large-size);
   font-weight: 500;
 }
 
 .events-table .event-tile .event-name .name {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   font-size: var(--large-size);
   font-weight: 500;
   display: flex;
   gap: 10px;
 }
 .events-table .event-tile .event-name .location-name {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   color: var(--button-color);
 }
 
 .events-table .event-tile .event-name img {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   width: 20px;
   height: 20px;
   border-radius: 50%;
 }
 
 .events-table .event-tile .event-location {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   text-align: right;
   gap: 2px;
   font-size: var(--smaller-size);
 }
 
 .events-section .videos-block {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   gap: 1rem;
   display: flex;
   flex-direction: column;
 }
 
 .events-section .videos-block .video-item {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   overflow: hidden;
   border-radius: 2rem;
 }
 .events-section .videos-block .play-icon {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -230,5 +405,10 @@
   transform: translate(-50%, -50%);
 }
 .events-section .videos-block .video-item img {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  position: relative;
   object-fit: cover;
 }

@@ -89,18 +89,20 @@
 .carousel-genre-text {
   color: #378ece;
   font-family: 'Inter', Helvetica;
-  font-size: 13px;
+  font-size: 0.7rem;
   font-weight: 500;
   background-color: #62afe84c;
-  border-radius: 6px;
+  border-radius: 0.45rem;
   text-align: center;
-  height: 20px;
   display: flex;
   justify-content: center;
   padding: 0.2rem 0.4rem;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.281);
-
   align-items: center;
+}
+
+.carousel-genre-text:hover {
+  filter: brightness(95%);
 }
 
 .carousel-container button {

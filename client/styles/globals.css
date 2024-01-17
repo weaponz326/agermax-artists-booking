@@ -15,6 +15,15 @@
   --box-shadow: 0px 6px 12px rgba(19, 41, 104, 0.1);
   --card-overlay-box: white;
 
+  /* artist-profile */
+  --main-background-color: #edf1f4;
+  --button-color: #fc8e5e;
+  --text-color: #183d4c;
+  --tag-color: #378ece;
+  --tag-background-color: #d2e5f3;
+  --grey-background: #f1f4f7;
+  --grey-heading-color: #b0bbc9;
+
   /* Font Sizes */
   --large-size: 1.6rem;
   --large-titles: 2.5rem;

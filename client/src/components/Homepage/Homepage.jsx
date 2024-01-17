@@ -9,7 +9,6 @@ import Button from 'src/components/Button/Button'
 import getArtistsData from 'src/services/artist'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './homepage.module.css'
-import Router from 'next/router'
 
 const HomePage = () => {
   const [imgList, setImgList] = useState([])
@@ -166,7 +165,7 @@ export const FaqAccordion = ({ faqTitle, faqData }) => {
             </button>
           </div>
           {openIndex === index && <div className={styles['answer']}>{faq.answer}</div>}
-          <hr className={styles['faq-divider']} />
+          <div className={styles['faq-divider']}></div>
         </div>
       ))}
     </div>
