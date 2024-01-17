@@ -10,7 +10,6 @@ import EventsLayout from 'src/components/EventsLayout/EventsLayout'
 import Image from 'next/image'
 import Button from 'src/components/Button/Button'
 import getArtistsData from 'src/services/artist'
-import Footer from 'src/components/Footer/Footer'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 
 // Your styled component for the content
