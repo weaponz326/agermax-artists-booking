@@ -20,9 +20,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
-
-// ** Custom Component Import
-import CustomTextField from 'src/@core/components/mui/text-field'
+import TextField from '@mui/material/TextField'
 
 // ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
@@ -123,32 +121,58 @@ const TabAccount = () => {
           <CardHeader title='Profile Details' />
           <form>
             <CardContent sx={{ pt: 0 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ImgStyled src={imgSrc} alt='Profile Pic' />
-                <div>
-                  <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-                    Upload New Photo
-                    <input
-                      hidden
-                      type='file'
-                      value={inputValue}
-                      accept='image/png, image/jpeg'
-                      onChange={handleInputImageChange}
-                      id='account-settings-upload-image'
-                    />
-                  </ButtonStyled>
-                  <ResetButtonStyled color='secondary' variant='tonal' onClick={handleInputImageReset}>
-                    Reset
-                  </ResetButtonStyled>
-                  <Typography sx={{ mt: 4, color: 'text.disabled' }}>Allowed PNG or JPEG. Max size of 800K.</Typography>
+              <div id='uploadArea' className='upload-area'>
+                <div id='dropZoon' className='upload-area__drop-zoon drop-zoon'>
+                  <div className='upload-btn'>
+                    <span className='drop-zoon__icon'>
+                      <i className='bx bxs-file-image btn-icon'></i>
+                      <span className='btn-text'>Image</span>
+                    </span>
+                  </div>
+                  <span id='loadingText' className='drop-zoon__loading-text'>
+                    Loading
+                  </span>
+                  <img
+                    src=''
+                    alt='Preview Image'
+                    id='previewImage'
+                    className='drop-zoon__preview-image'
+                    draggable='false'
+                  />
+                  <input type='file' id='fileInput' className='drop-zoon__file-input' accept='image/*' />
                 </div>
-              </Box>
+
+                <div id='fileDetails' className='upload-area__file-details file-details'>
+                  <div id='uploadedFile' className='uploaded-file'>
+                    <div className='uploaded-file__icon-container'>
+                      <i className='bx bxs-file-blank uploaded-file__icon'></i>
+                      <span className='uploaded-file__icon-text'></span>
+                    </div>
+
+                    <div id='uploadedFileInfo' className='uploaded-file__info'>
+                      <span className='uploaded-file__name'></span>
+                      <span className='uploaded-file__counter'>0%</span>
+                    </div>
+                    <strong className='upload-area__tooltip'>
+                      <span className='upload-area__tooltip-data'></span>
+                    </strong>
+                    <div id='deleteButton' className='delete-button' role='button' tabIndex='0'>
+                      <svg xmlns='http://www.w3.org/2000/svg' height='14' width='14' viewBox='0 0 448 512'>
+                        <path
+                          d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z'
+                          fill='#ce0f0f'
+                        />
+                      </svg>{' '}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
             <Divider />
             <CardContent>
               <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     label='First Name'
                     placeholder='John'
@@ -157,7 +181,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     label='Last Name'
                     placeholder='Doe'
@@ -166,7 +190,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     type='email'
                     label='Email'
@@ -176,7 +200,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     label='Organization'
                     placeholder='Pixinvent'
@@ -185,7 +209,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     type='number'
                     label='Phone Number'
@@ -196,7 +220,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     label='Address'
                     placeholder='Address'
@@ -205,7 +229,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     label='State'
                     placeholder='California'
@@ -214,7 +238,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     type='number'
                     label='Zip Code'
@@ -224,7 +248,7 @@ const TabAccount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     select
                     fullWidth
                     defaultValue=''
@@ -239,10 +263,10 @@ const TabAccount = () => {
                     <MenuItem value='france'>France</MenuItem>
                     <MenuItem value='united-kingdom'>United Kingdom</MenuItem>
                     <MenuItem value='united-states'>United States</MenuItem>
-                  </CustomTextField>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     select
                     fullWidth
                     defaultValue=''
@@ -257,10 +281,10 @@ const TabAccount = () => {
                     <MenuItem value='french'>French</MenuItem>
                     <MenuItem value='german'>German</MenuItem>
                     <MenuItem value='portuguese'>Portuguese</MenuItem>
-                  </CustomTextField>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     select
                     fullWidth
                     defaultValue=''
@@ -287,10 +311,10 @@ const TabAccount = () => {
                     <MenuItem value='gmt-05-ind'>(GMT-05:00) Indiana (East)</MenuItem>
                     <MenuItem value='gmt-04'>(GMT-04:00) Atlantic Time (Canada)</MenuItem>
                     <MenuItem value='gmt-04-clp'>(GMT-04:00) Caracas, La Paz</MenuItem>
-                  </CustomTextField>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField
+                  <TextField
                     select
                     fullWidth
                     defaultValue=''
@@ -304,7 +328,7 @@ const TabAccount = () => {
                     <MenuItem value='eur'>EUR</MenuItem>
                     <MenuItem value='pound'>Pound</MenuItem>
                     <MenuItem value='bitcoin'>Bitcoin</MenuItem>
-                  </CustomTextField>
+                  </TextField>
                 </Grid>
 
                 <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(6.5)} !important` }}>
@@ -447,5 +471,242 @@ const TabAccount = () => {
     </Grid>
   )
 }
+// Select Upload-Area
+const uploadArea = document.querySelector('#uploadArea')
+
+// Select Drop-Zoon Area
+const dropZoon = document.querySelector('#dropZoon');
+
+// Loading Text
+const loadingText = document.querySelector('#loadingText');
+
+// Slect File Input
+const fileInput = document.querySelector('#fileInput');
+
+// Select Preview Image
+const previewImage = document.querySelector('#previewImage');
+
+// File-Details Area
+const fileDetails = document.querySelector('#fileDetails');
+
+// Uploaded File
+const uploadedFile = document.querySelector('#uploadedFile');
+
+// Uploaded File Info
+const uploadedFileInfo = document.querySelector('#uploadedFileInfo');
+
+// Uploaded File  Name
+const uploadedFileName = document.querySelector('.uploaded-file__name');
+
+// Uploaded File Icon
+const uploadedFileIconText = document.querySelector('.uploaded-file__icon-text');
+
+// Uploaded File Counter
+const uploadedFileCounter = document.querySelector('.uploaded-file__counter');
+
+// ToolTip Data
+const toolTipData = document.querySelector('.upload-area__tooltip-data');
+
+//Delete Button
+const deleteButton = document.querySelector('#deleteButton');
+
+// Images Types
+const imagesTypes = [
+  "jpeg",
+  "png",
+  "svg",
+  "gif"
+];
+
+// Append Images Types Array Inisde Tooltip Data
+toolTipData.innerHTML = [...imagesTypes].join(', .');
+
+// When (drop-zoon) has (dragover) Event
+dropZoon.addEventListener('dragover', function (event) {
+  // Prevent Default Behavior
+  event.preventDefault();
+
+  // Add Class (drop-zoon--over) On (drop-zoon)
+  dropZoon.classList.add('drop-zoon--over');
+});
+
+// When (drop-zoon) has (dragleave) Event
+dropZoon.addEventListener('dragleave', function (event) {
+  // Remove Class (drop-zoon--over) from (drop-zoon)
+  dropZoon.classList.remove('drop-zoon--over');
+});
+
+// When (drop-zoon) has (drop) Event
+dropZoon.addEventListener('drop', function (event) {
+  // Prevent Default Behavior
+  event.preventDefault();
+
+  // Remove Class (drop-zoon--over) from (drop-zoon)
+  dropZoon.classList.remove('drop-zoon--over');
+
+  // Select The Dropped File
+  const file = event.dataTransfer.files[0];
+
+  // Call Function uploadFile(), And Send To Her The Dropped File
+  uploadFile(file);
+});
+
+// When (drop-zoon) has (click) Event
+dropZoon.addEventListener('click', function (event) {
+  // Click The (fileInput)
+  fileInput.click();
+});
+
+// When (fileInput) has (change) Event
+fileInput.addEventListener('change', function (event) {
+  // Select The Chosen File
+  const file = event.target.files[0];
+
+  // Call Function uploadFile(), And Send To Her The Chosen File :)
+  uploadFile(file);
+});
+
+// Upload File Function
+function uploadFile(file) {
+  // FileReader()
+  const fileReader = new FileReader();
+  // File Type
+  const fileType = file.type;
+  // File Size
+  const fileSize = file.size;
+
+  // If File Is Passed from the (File Validation) Function
+  if (fileValidate(fileType, fileSize)) {
+    // Add Class (drop-zoon--Uploaded) on (drop-zoon)
+    dropZoon.classList.add('drop-zoon--Uploaded');
+
+    // Show Loading-text
+    loadingText.style.display = "block";
+    // Hide Preview Image
+    previewImage.style.display = 'none';
+
+    // Remove Class (uploaded-file--open) From (uploadedFile)
+    uploadedFile.classList.remove('uploaded-file--open');
+    // Remove Class (uploaded-file__info--active) from (uploadedFileInfo)
+    uploadedFileInfo.classList.remove('uploaded-file__info--active');
+
+    // After File Reader Loaded
+    fileReader.addEventListener('load', function () {
+      // After Half Second
+      setTimeout(function () {
+        // Add Class (upload-area--open) On (uploadArea)
+        uploadArea.classList.add('upload-area--open');
+
+        // Hide Loading-text (please-wait) Element
+        loadingText.style.display = "none";
+        // Show Preview Image
+        previewImage.style.display = 'block';
+
+        deleteButton.style.display = 'flex';
+
+        setTimeout(function() {
+        deleteButton.style.opacity = '1';
+    }, 1500); // Delay of 1500 milliseconds
+
+        // Add Class (file-details--open) On (fileDetails)
+        fileDetails.classList.add('file-details--open');
+        // Add Class (uploaded-file--open) On (uploadedFile)
+        uploadedFile.classList.add('uploaded-file--open');
+        // Add Class (uploaded-file__info--active) On (uploadedFileInfo)
+        uploadedFileInfo.classList.add('uploaded-file__info--active');
+      }, 500); // 0.5s
+
+      // Add The (fileReader) Result Inside (previewImage) Source
+      previewImage.setAttribute('src', fileReader.result);
+
+      // Add File Name Inside Uploaded File Name
+      uploadedFileName.innerHTML = file.name;
+
+
+      // Call Function progressMove();
+      progressMove();
+    });
+
+    // Read (file) As Data Url
+    fileReader.readAsDataURL(file);
+  } else { // Else
+
+    this; // (this) Represent The fileValidate(fileType, fileSize) Function
+
+  };
+};
+
+deleteButton.addEventListener('click', function() {
+    resetUploader();
+});
+
+function resetUploader() {
+    fileInput.value = '';
+    previewImage.style.display = 'none';
+    previewImage.src = '';
+    deleteButton.style.display = 'none';
+    dropZoon.classList.remove('drop-zoon--Uploaded', 'drop-zoon--over');
+    loadingText.style.display = "none";
+    fileDetails.classList.remove('file-details--open');
+    uploadedFile.classList.remove('uploaded-file--open');
+    uploadedFileInfo.classList.remove('uploaded-file__info--active');
+    uploadedFileName.innerHTML = '';
+    uploadedFileIconText.innerHTML = '';
+    uploadedFileCounter.innerHTML = '0%';
+    uploadArea.classList.remove('upload-area--open');
+    deleteButton.style.opacity = '0';
+}
+
+
+// Progress Counter Increase Function
+function progressMove() {
+  // Counter Start
+  let counter = 0;
+
+  // After 600ms
+  setTimeout(() => {
+    // Every 100ms
+    let counterIncrease = setInterval(() => {
+      // If (counter) is equle 100
+      if (counter === 100) {
+        // Stop (Counter Increase)
+        clearInterval(counterIncrease);
+      } else { // Else
+        // plus 10 on counter
+        counter = counter + 10;
+        // add (counter) vlaue inisde (uploadedFileCounter)
+        uploadedFileCounter.innerHTML = `${counter}%`
+      }
+    }, 100);
+  }, 600);
+};
+
+
+// Simple File Validate Function
+function fileValidate(fileType, fileSize) {
+  // File Type Validation
+  let isImage = imagesTypes.filter((type) => fileType.indexOf(`image/${type}`) !== -1);
+
+  // If The Uploaded File Type Is 'jpeg'
+  if (isImage[0] === 'jpeg') {
+    // Add Inisde (uploadedFileIconText) The (jpg) Value
+    uploadedFileIconText.innerHTML = 'jpg';
+  } else { // else
+    // Add Inisde (uploadedFileIconText) The Uploaded File Type
+    uploadedFileIconText.innerHTML = isImage[0];
+  };
+
+  // If The Uploaded File Is An Image
+  if (isImage.length !== 0) {
+    // Check, If File Size Is 2MB or Less
+    if (fileSize <= 5000000) { // 5MB
+      return true;
+    } else { // Else File Size
+      return alert('your Image Should be 5 MB or Less');
+    };
+  } else { // Else File Type
+    return alert('Please make sure to upload an Image');
+  };
+};
 
 export default TabAccount
