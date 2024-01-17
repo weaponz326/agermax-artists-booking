@@ -31,6 +31,10 @@ const artistSchema = new mongoose.Schema({
     type: String,
     required: true 
   },
+  address: { 
+    type: String,
+    required: true 
+  },
   organizationNumber: { 
     type: String 
   },
