@@ -6,12 +6,17 @@ import Router from 'next/router'
 import styles from './events-layout.module.css'
 export default function EventsLayout({ imgList }) {
   return (
-    <div className={styles['events-preview']}>
-      {imgList.map((img, index) => (
-        <Fragment key={index}>
-          <EventCard imgUrl={img.urls.regular} />
-        </Fragment>
-      ))}
+    <div className={styles['main-events']}>
+      <span className={`${styles['events-nav']} ${styles['see-all']}`}>
+        <Link href='#'>See all</Link>
+      </span>
+      <div className={styles['events-preview']}>
+        {imgList.map((img, index) => (
+          <Fragment key={index}>
+            <EventCard imgUrl={img.urls.regular} />
+          </Fragment>
+        ))}
+      </div>
     </div>
   )
 }

@@ -4,13 +4,18 @@
   margin-top: 4rem;
   padding: 0 0rem;
 }
-.see-all a {
+.see-all {
   color: #fc8a5e;
   font-family: 'Inter', Helvetica;
   font-size: 1rem;
   font-weight: 500;
   text-align: right;
   transition: all 0.3s ease-in-out;
+}
+
+.main-events {
+  display: flex;
+  flex-direction: column;
 }
 
 .see-all a:hover,
@@ -25,7 +30,6 @@
 }
 
 .events-genre-buttons {
-  margin-top: 1rem;
   padding: 0;
   display: flex;
   justify-content: flex-start;
@@ -47,16 +51,10 @@
   display: none;
 }
 
-.events {
-  padding: 0 64px;
-}
-
 .events-preview {
-  margin-top: 4rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2.5rem;
-  padding: 1rem 4rem;
 }
 
 .events-preview-img {
@@ -164,8 +162,9 @@
 
 @media (width < 700px) {
   .events,
-  .events-preview {
-    padding: 0.5rem 0.5rem;
+  .main-events,
+  .events-genre-buttons {
+    padding: 0.5rem 0;
   }
 
   .see-all-artists {
@@ -178,10 +177,11 @@
 
   .upcoming-events {
     margin-top: 0;
+    padding: 0;
   }
 
   .events-preview {
-    margin-top: 2rem;
+    margin-top: 0;
   }
 
   .about-content {

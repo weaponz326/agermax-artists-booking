@@ -1,0 +1,401 @@
+.homepage,
+.custom-pages-layout {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', Helvetica;
+  background: rgb(237, 241, 244);
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.fab {
+  font-size: 1.5rem;
+}
+
+.book-now:hover {
+  background-color: #e26732;
+}
+
+.upcoming-events {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+}
+.see-all a,
+.see-all-artists p {
+  color: #fc8a5e;
+  font-family: 'Inter', Helvetica;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: right;
+  transition: all 0.3s ease-in-out;
+}
+
+.see-all a:hover,
+.see-all-artists p:hover {
+  text-decoration: underline;
+}
+.upcoming {
+  color: #183d4c;
+  font-family: 'Inter', Helvetica;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0;
+}
+
+.events {
+  padding: 0 4rem;
+}
+
+.events-genre-buttons {
+  margin-top: 1rem;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.genre-btn {
+  color: #183d4c;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0.1rem 0.3rem;
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.281), -1px 1px rgba(0, 0, 0, 0.281);
+  overflow: auto;
+}
+
+.genre-btn::-webkit-scrollbar {
+  display: none;
+}
+
+.events-load-more-btn {
+  background-color: var(--off-light-body-background);
+  color: black;
+  font-family: 'Inter', Helvetica;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+  border-radius: 0.5rem;
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+}
+
+.events-load-more {
+  display: flex;
+  justify-content: center;
+}
+
+.about-read-more {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.about {
+  padding: 4rem;
+  display: flex;
+  /* flex-wrap: wrap; */
+  gap: 3rem;
+  display: grid;
+}
+.about-message-title {
+  color: #333333;
+  font-family: 'Inter', Helvetica;
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: 2.4px;
+  line-height: normal;
+}
+
+.about-content {
+  border-radius: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 65rem;
+  margin: 0 auto;
+}
+
+.about-content-img {
+  max-width: 25rem;
+  aspect-ratio: 1;
+  flex: 1;
+}
+
+.about-message {
+  flex: 1.6;
+}
+.about-message-content {
+  color: #666666;
+  font-family: 'Inter', Helvetica;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  text-align: justify;
+  flex: 1;
+}
+
+.about button {
+  margin-top: 0.5rem;
+  width: 100%;
+  max-width: 13rem;
+  height: 2.5rem;
+}
+.faq {
+  padding: 4rem;
+}
+
+.faq-title {
+  font-size: var(--large-titles);
+  color: #333333;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.faq-questions {
+  padding: 0;
+  max-width: 65rem;
+  margin: 0 auto;
+}
+.faq-question {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 0;
+}
+
+.question.open {
+  font-size: 1.5rem;
+}
+
+.answer {
+  color: #666666;
+  font-size: 1rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.question-element {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.faq-question-no {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.faq-collapse-icon {
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.faq-divider {
+  border: 0.5px solid #7777772c;
+}
+
+.subscription {
+  padding: 2rem 4rem;
+}
+.subscription-details {
+  margin: 0 auto;
+  background-color: #ffffff4c;
+  border-radius: 19px;
+  display: flex;
+  flex-direction: column;
+  max-width: 65rem;
+  gap: 2rem;
+}
+.join-agermax {
+  color: #000;
+  letter-spacing: 1.6px;
+  font-family: DM Sans, Helvetica;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.subscribe {
+  color: #444444;
+  font-family: 'DM Sans', Helvetica;
+  font-weight: 400;
+  line-height: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subscription-register {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+}
+
+.get-started {
+  color: #444;
+  letter-spacing: 1.2px;
+  font-family: DM Sans, Helvetica;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.subscription-form {
+  background-color: #edf0f4;
+  display: flex;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  height: 3rem;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.068), -1px 1px 1px rgba(0, 0, 0, 0.068);
+  max-width: 50rem;
+}
+.subscription-email {
+  color: #666;
+  letter-spacing: 1.2px;
+  font-weight: 300;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  background-color: #edf1f5;
+  border-radius: 0.5rem;
+  border: 0.2px solid #edf1f5;
+  flex: 1.9;
+  padding-inline: 1rem;
+}
+
+.subscription-form button {
+  margin: 0;
+  flex: 1;
+  height: 100%;
+}
+
+.search-icon {
+  color: white;
+}
+
+@media (width < 700px) {
+  .header-background,
+  .header-carousel,
+  .about,
+  .faq,
+  .subscription,
+  .header-navbar {
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .events {
+    padding: 0.5rem 0.5rem;
+  }
+
+  .top-bar {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-carousel {
+    padding-top: 0;
+    margin-top: -8rem;
+  }
+
+  .search-bar {
+    background-color: red;
+    color: red;
+    border-radius: 1.2rem;
+    width: 100%;
+    width: 100%;
+    max-width: 25rem;
+  }
+
+  header .greetings {
+    margin: 10rem 0 0 0;
+    text-align: left;
+  }
+
+  header .greetings-message {
+    text-align: left;
+  }
+
+  .see-all-artists {
+    display: inline-block;
+  }
+
+  .events {
+    padding-top: 0;
+  }
+
+  .upcoming-events {
+    margin-top: 0;
+  }
+
+  .events-preview {
+    margin-top: 2rem;
+  }
+
+  .about-content {
+    flex-direction: column;
+  }
+
+  .about-content-img {
+    margin: 0 auto;
+  }
+
+  .faq-title,
+  .about-message-title,
+  .join-agermax {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0rem;
+    text-align: left;
+  }
+
+  .subscription p {
+    font-size: 1rem;
+    align-self: baseline;
+  }
+
+  .subscription input[type='checkbox'] {
+    width: auto;
+    height: auto;
+    align-self: baseline;
+  }
+}
+
+@media (max-width: 500px) {
+  .header-background,
+  .header-carousel,
+  .header-navbar {
+    padding: 0.5rem 1rem;
+  }
+  .first-img {
+    display: none;
+  }
+
+  .page-nav-item-detail {
+    margin: 0;
+    text-align: left;
+  }
+
+  .search-bar {
+    margin: 0;
+  }
+}
