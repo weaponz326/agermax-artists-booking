@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artists.module.css'
 import getArtistsData from 'src/services/artist'
-import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer'
+import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer/HeaderCarouselContainer'
 
 const ArtistsPage = () => {
   const [artistsDataList, setArtistDataList] = useState([])

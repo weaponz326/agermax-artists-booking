@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { MdFacebook, MdRefresh } from 'react-icons/md'
 import { FaInstagram, FaTwitter } from 'react-icons/fa'
+import { useEffect } from 'react'
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear()
   return (
     <footer>
       <div className='links'>
@@ -10,20 +12,12 @@ const Footer = () => {
           <img src='/images/logo.png' alt='AgerMax Logo' />
           <div className='logo-text'>AGERMAX</div>
         </Link>
-        <ul className='footer-nav'>
-          <li>
-            <Link href='/'>Home</Link>
-          </li>
-          <li>
-            <Link href=''>About Us</Link>
-          </li>
-          <li>
-            <Link href=''>Contact</Link>
-          </li>
-          <li>
-            <Link href=''>Newsletter</Link>
-          </li>
-        </ul>
+        <div className='footer-nav'>
+          <Link href='/'>Home</Link>
+          <Link href='/about'>About Us</Link>
+          <Link href=''>Contact</Link>
+          <Link href=''>Newsletter</Link>
+        </div>
         <div className='social-media'>
           <Link href='#' className='fab fa-facebook-f'>
             <MdFacebook />
@@ -37,18 +31,12 @@ const Footer = () => {
         </div>
       </div>
       <div className='copyright-terms'>
-        <div className='copyright'>@Copyright Agermax 2024</div>
-        <ul className='terms-privacy'>
-          <li>
-            <Link href=''>Terms</Link>
-          </li>
-          <li>
-            <Link href=''>Privacy Policy</Link>
-          </li>
-          <li>
-            <Link href=''>Cookies</Link>
-          </li>
-        </ul>
+        <div className='copyright'>@Copyright Agermax {currentYear}</div>
+        <div className='terms-privacy'>
+          <Link href=''>Terms</Link>
+          <Link href=''>Privacy Policy</Link>
+          <Link href=''>Cookies</Link>
+        </div>
       </div>
     </footer>
   )

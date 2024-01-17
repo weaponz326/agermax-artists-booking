@@ -1,5 +1,5 @@
-import Footer from 'src/components/Footer'
-import Navbar from 'src/components/Navbar'
+import Footer from 'src/components/Footer/Footer'
+import Navbar from 'src/components/Navbar/Navbar'
 const CustomPagesLayout = ({ children }) => {
   return (
     <div style={{ height: '100vh' }}>

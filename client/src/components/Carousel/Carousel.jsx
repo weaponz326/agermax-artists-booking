@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Button from './Button'
+import Button from '../Button/Button'
 
 export default function Carousel({ artist }) {
   if (!artist) return null

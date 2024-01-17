@@ -3,14 +3,14 @@ import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
 import React, { useEffect, useState } from 'react'
-import Header from 'src/components/Header'
+import Header from 'src/components/Header/Header'
 import { MdRefresh } from 'react-icons/md'
 import Link from 'next/link'
-import EventsLayout from 'src/components/EventsLayout'
+import EventsLayout from 'src/components/EventsLayout/EventsLayout'
 import Image from 'next/image'
-import Button from 'src/components/Button'
+import Button from 'src/components/Button/Button'
 import getArtistsData from 'src/services/artist'
-import Footer from 'src/components/Footer'
+import Footer from 'src/components/Footer/Footer'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 
 // Your styled component for the content

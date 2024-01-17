@@ -64,11 +64,11 @@ export default function Navbar() {
   return (
     <nav className='header-navbar' ref={navBarRef}>
       <nav className='top-bar nav-bar'>
-        <div className='logo first-img'>
-          <Link href='/'>
+        <Link href='/'>
+          <div className='logo first-img'>
             <img className='logo-img ' alt='App dark' src='/images/logo.png' />
-          </Link>
-        </div>
+          </div>
+        </Link>
         {showNavItems}
         <div className='logo last-img'>
           <img className='logo-img ' alt='Ellipse' src='/images/ellipse-121.png' />
@@ -141,6 +141,6 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   )
 }
 
-export const Backdrop = ({ handleModalEffect, navbarHeight }) => {
+export const Backdrop = ({ handleModalEffect }) => {
   return <div className='backdrop' onClick={() => handleModalEffect()}></div>
 }
