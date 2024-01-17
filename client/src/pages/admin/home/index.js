@@ -1,154 +1,67 @@
-// ** MUI Imports
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { Bar, Line } from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js';
+// ** MUI Import
+import Grid from '@mui/material/Grid'
 
-Chart.register(...registerables);
+// ** Demo Component Imports
+import CrmSessions from 'src/views/dashboards/crm/CrmSessions'
+import CrmRevenueGrowth from 'src/views/dashboards/crm/CrmRevenueGrowth'
+import CrmProjectStatus from 'src/views/dashboards/crm/CrmProjectStatus'
+import CrmSalesWithAreaChart from 'src/views/dashboards/crm/CrmSalesWithAreaChart'
+import CrmSalesWithRadarChart from 'src/views/dashboards/crm/CrmSalesWithRadarChart'
+import CrmEarningReportsWithTabs from 'src/views/dashboards/crm/CrmEarningReportsWithTabs'
 
-// ** Example Data and Options for Bar Chart
-const barChartData = {
-  labels: Array.from({ length: 12 }, (_, i) => new Date(0, i).toLocaleString('default', { month: 'short' })),
-  datasets: [
-    {
-      label: 'Total Bookings',
-      data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 400)),
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
+// ** Custom Component Imports
+import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+import CardStatsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
 
-const barChartOptions = {
-  responsive: true,
-  scales: {
-    y: {
-      beginAtZero: true,
-    },
-  },
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-};
-
-// ** Example Data and Options for Line Chart
-const lineChartData = {
-  labels: Array.from({ length: 10 }, (_, i) => i + 1),
-  datasets: [
-    {
-      label: 'Income',
-      data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100)),
-      fill: false,
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      tension: 0.1,
-    },
-  ],
-};
-
-const lineChartOptions = {
-  responsive: true,
-  scales: {
-    y: {
-      beginAtZero: true,
-    },
-  },
-  plugins: {
-    legend: {
-      display: true,
-    },
-  },
-};
-
-
-// ** Dashboard Component
-const Dashboard = () => {
+const CrmDashboard = () => {
   return (
-    <Grid container spacing={3}>
-      {/* Total Bookings Bar Chart */}
-      <Grid item xs={12} md={8}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Total bookings
-            </Typography>
-            <Bar data={barChartData} options={barChartOptions} />
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Statistics Cards */}
-      <Grid item xs={12} md={4}>
-        <Grid container spacing={2}>
-          {/* Total Artists */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Total Artists</Typography>
-                <Typography variant="h4">24</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          {/* Pending Bookings */}
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle1">Pending bookings</Typography>
-                <Typography variant="h6">4</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          {/* Unpaid Invoices */}
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle1">Unpaid invoices</Typography>
-                <Typography variant="h6">1</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          {/* Total Organizers */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Total Organizers</Typography>
-                <Typography variant="h4">13</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          {/* Unread Messages */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle1">Unread messages</Typography>
-                <Typography variant="h6">2</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+    <ApexChartWrapper>
+      <Grid container spacing={6}>
+        <Grid item xs={6} sm={4} lg={2}>
+          <CrmSalesWithAreaChart />
         </Grid>
+        <Grid item xs={6} sm={4} lg={2}>
+          <CrmSessions />
+        </Grid>
+        <Grid item xs={6} sm={4} lg={2}>
+          <CardStatsVertical
+            stats='1.28k'
+            chipText='-12.2%'
+            chipColor='default'
+            avatarColor='error'
+            title='Total Profit'
+            subtitle='Last week'
+            avatarIcon='tabler:currency-dollar'
+          />
+        </Grid>
+        <Grid item xs={6} sm={4} lg={2}>
+          <CardStatsVertical
+            stats='24.67k'
+            chipText='+25.2%'
+            avatarColor='info'
+            chipColor='default'
+            title='Total Sales'
+            subtitle='Last week'
+            avatarIcon='tabler:chart-bar'
+          />
+        </Grid>
+        <Grid item xs={12} sm={8} lg={4}>
+          <CrmRevenueGrowth />
+        </Grid>
+        {/* <Grid item xs={12} lg={8}>
+          <CrmEarningReportsWithTabs />
+        </Grid> */}
+        <Grid item xs={12} md={6} lg={4}>
+          <CrmSalesWithRadarChart />
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={4}>
+          <CrmProjectStatus />
+        </Grid>
+
       </Grid>
+    </ApexChartWrapper>
+  )
+}
 
-      {/* Income Line Chart */}
-      <Grid item xs={12} md={8}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Income
-            </Typography>
-            <Line data={lineChartData} options={lineChartOptions} />
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Add more Grid items for other components like 'Recent bookings' and 'Recent users' */}
-      {/* ... */}
-    </Grid>
-  );
-};
-
-export default Dashboard;
+export default CrmDashboard
