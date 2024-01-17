@@ -19,6 +19,8 @@ import CardContent from '@mui/material/CardContent'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import Avatar from 'src/@core/components/mui/avatar'
+import TextField from '@mui/material/TextField'
+
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -128,7 +130,7 @@ const LoginPage = () => {
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { value, onChange, onBlur } }) => (
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     autoFocus
                     label='Email'
@@ -148,7 +150,7 @@ const LoginPage = () => {
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { value, onChange, onBlur } }) => (
-                  <CustomTextField
+                  <TextField
                     fullWidth
                     value={value}
                     onBlur={onBlur}

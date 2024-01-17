@@ -1,5 +1,3 @@
-// ** CSS Styles Imports
-
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
@@ -9,6 +7,10 @@ import NProgress from 'nprogress'
 
 // ** Emotion Imports
 import { CacheProvider } from '@emotion/react'
+
+// ** Store Imports
+import { store } from 'src/store'
+import { Provider } from 'react-redux'
 
 // ** Config Imports
 
@@ -94,14 +96,15 @@ const App = props => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   return (
+    <Provider store={store}>
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>{`${themeConfig.templateName} - Artist Booking Manager`}</title>
+        <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
         <meta
           name='description'
-          content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+          content={`${themeConfig.templateName} –Artist Booking Platform`}
         />
-        <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+        <meta name='keywords' content='' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
@@ -126,6 +129,7 @@ const App = props => {
         </SettingsProvider>
       </AuthProvider>
     </CacheProvider>
+    </Provider>
   )
 }
 
