@@ -16,7 +16,7 @@ const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
     )
   } else {
     return (
-      <div className={styles[className]}>
+      <div className={className}>
         <div className={styles['hot-artists-nav']}>
           <p>Hot Artists 🔥</p>
           <Link href={'/artists'} className={styles['see-all-artists']}>
