@@ -92,7 +92,7 @@
   border: none;
 } */
 .search-bar {
-  width: 100%;
+  width: 80%;
   /* max-width: 30rem; */
   border: 1px solid red;
   outline: none;
@@ -100,9 +100,11 @@
   position: relative;
   margin: 0 auto;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   z-index: 2;
+  border-radius: 1.9rem;
+  padding: 0 0.1rem 0 1rem;
 }
 
 .search-item {
@@ -121,7 +123,6 @@
   justify-content: center;
   /* border: 1px solid rebeccapurple; */
   color: var(--text-color);
-  padding: 0.2rem 0.85rem;
   font-size: var(--smaller-size);
 }
 
@@ -130,7 +131,7 @@
 }
 
 .search-item-divider {
-  margin: auto 0;
+  margin: auto 0.5rem;
   height: 70%;
   width: 1px;
   background-color: rgba(128, 128, 128, 0.24);
@@ -147,6 +148,8 @@
   gap: 0.35rem;
   border-radius: 50%;
   border: none;
+  justify-self: flex-end;
+  align-self: flex-end;
 }
 
 .search-bar input::placeholder {

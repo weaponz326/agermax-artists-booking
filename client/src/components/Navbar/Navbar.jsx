@@ -140,30 +140,29 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
           <p>Search Event Venue</p>
         </div>
       </div>
-      <div className={styles['search-item-divider']}></div>
       <div className={styles['search-item']}>
+        <div className={styles['search-item-divider']}></div>
         <div className={styles['search-item-detail']}>
           <p>When</p>
           <p>Search Event Schedule</p>
         </div>
       </div>
-      <div className={styles['search-item-divider']}></div>
 
       <div className={styles['search-item']}>
+        <div className={styles['search-item-divider']}></div>
         <div className={styles['search-item-detail']}>
           <p>Who</p>
           <p>Search Event Artists</p>
         </div>
       </div>
-      <div className={styles['search-item-divider']}></div>
 
       <div className={styles['search-item']}>
+        <div className={styles['search-item-divider']}></div>
         <div className={styles['search-item-detail']}>
           <p>Guest</p>
           <p>Guest Artists</p>
         </div>
       </div>
-      <div className={styles['search-item-divider']}></div>
 
       <div className={styles['search-item']}>
         <div className={styles['search-item-detail']}>
