@@ -42,7 +42,16 @@
 
 html,
 body {
-  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--clr-light);
+  color: var(--clr-black);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.125rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 a {
