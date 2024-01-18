@@ -1,4 +1,4 @@
-/* Upload Area */
+/* General Styles */
 .uploadArea {
   width: 180px;
   text-align: center;
@@ -16,11 +16,9 @@
   0% {
     margin-top: 30px;
   }
-
   80% {
     margin-top: -10px;
   }
-
   100% {
     margin-top: 0;
   }
@@ -51,8 +49,7 @@
   font-weight: 500;
   opacity: 0;
   visibility: hidden;
-  transition: none 300ms ease-in-out;
-  transition-property: opacity, visibility;
+  transition: opacity 300ms ease-in-out, visibility 300ms ease-in-out;
 }
 
 .tooltip:hover .tooltipData {
@@ -84,12 +81,11 @@
   display: flex;
   font-size: 25px;
   color: var(--clr-blue);
-  transition: opacity 300ms ease-in-out;
   align-items: center;
+  transition: opacity 300ms ease-in-out;
 }
 
-.dropZoonHover:hover .dropZoonIcon,
-.dropZoonHover:hover .dropZoonParagraph {
+.dropZoonHover:hover .dropZoonIcon {
   opacity: 0.7;
 }
 
@@ -98,22 +94,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: none;
   color: var(--clr-light-blue);
   z-index: 10;
   font-size: 13px;
-}
-
-.btnText {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.btnIcon {
-  font-size: 19px;
-  margin-right: 3px;
-  margin-left: -3px;
 }
 
 .uploadBtn {
@@ -136,7 +119,6 @@
   object-fit: cover;
   padding: 0.3125rem;
   border-radius: 50%;
-  display: none;
   z-index: 1000;
   transition: opacity 300ms ease-in-out;
 }
@@ -154,13 +136,7 @@
   background: #e0f1fd;
 }
 
-.dropZoonOver .dropZoonIcon,
-.dropZoonOver .dropZoonParagraph {
-  opacity: 0.7;
-}
-
-.dropZoonUploaded .dropZoonIcon,
-.dropZoonUploaded .dropZoonParagraph {
+.dropZoonUploaded .dropZoonIcon {
   display: none;
 }
 
@@ -170,9 +146,7 @@
   visibility: hidden;
   opacity: 0;
   text-align: left;
-  transition: none 500ms ease-in-out;
-  transition-property: opacity, visibility;
-  transition-delay: 500ms;
+  transition: height 500ms ease-in-out, opacity 500ms ease-in-out, visibility 500ms ease-in-out;
 }
 
 .fileDetailsOpen {
@@ -186,10 +160,31 @@
   display: flex;
   align-items: center;
   padding: 0.625rem 0;
-  visibility: hidden;
-  opacity: 0;
-  transition: cubic-bezier(.36, .62, .71, .46);
-  transition-property: visibility, opacity;
+  transition: visibility 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.uploadedFileCounter {
+  font-size: 13px; /* Adjusted text size */
+  color: var(--clr-light-gray);
+  width: 32px;
+  position: relative;
+  display: inline-block;
+}
+
+.uploadedFileCounter::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0; /* Initially no width */
+  height: 2px;
+  background-color: rgb(10, 213, 108); /* Green color */
+  transition: width 0.5s ease;
+}
+
+/* Add a modifier class to expand the green bar */
+.uploadedFileCounterActive::after {
+  width: 100%; /* Full width to indicate completion */
 }
 
 .uploadedFileOpen {
@@ -226,8 +221,8 @@
 }
 
 .deleteButton {
-  display: none;
-  opacity: 0;
+  display: flex;
+  opacity: 1;
   width: 50px;
   height: 30px;
   border-radius: 9px;
@@ -239,5 +234,3 @@
   align-items: center;
   justify-content: center;
 }
-
-/* ... other styles as needed */
