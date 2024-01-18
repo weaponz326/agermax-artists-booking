@@ -1,5 +1,8 @@
 .about-container {
   padding: 8rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (width < 700px) {
@@ -7,6 +10,82 @@
     padding: 6.5rem 2rem;
     padding-inline: 2rem;
   }
+}
+
+/* AboutPage.module.css */
+
+.aboutPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.aboutSection {
+  margin-bottom: 40px;
+}
+
+.aboutContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.aboutText {
+  flex: 1;
+}
+
+.aboutImage img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.testimonialsSection,
+.faqSection,
+.contactSection,
+.gallerySection {
+  margin-bottom: 40px;
+}
+
+.testimonials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.testimonialItem {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.faqItem {
+  margin-bottom: 20px;
+}
+
+.contactDetails {
+  max-width: 400px;
+}
+
+.socialMedia a {
+  margin-right: 10px;
+  color: #333;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.galleryItem img {
+  width: 100%;
+  border-radius: 8px;
 }
 
 /* Add more styles as needed */
