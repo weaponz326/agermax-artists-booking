@@ -1,0 +1,42 @@
+/* components/ContactForm.module.css */
+
+.contactForm {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.contact-form-label {
+  margin-bottom: 10px;
+}
+
+.contact-form-input-email,
+.contact-form-input-text {
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+.contact-form-button {
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.contact-form-button:hover {
+  background-color: #2980b9;
+}

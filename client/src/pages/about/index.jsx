@@ -1,9 +1,11 @@
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './about.module.css'
 import { FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import FaqAccordion from 'src/components/FaqAccordion/FaqAccordion'
 import { faqData } from 'src/components/mock-data-apis/mock-data'
+import TestimonialCarousel from 'src/components/TestimonialCarousel/TestimonialCarousel'
+import ContactForm from 'src/components/ContactForm/ContactForm'
 
 const AboutPage = () => {
   return (
@@ -15,8 +17,9 @@ const AboutPage = () => {
               <div className={styles.aboutText}>
                 <h2>About the Artist</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua.
+                  We understand the importance of your event, and our dedicated support team is here to ensure
+                  everything runs smoothly. From initial inquiries to the day of the event, we are committed to
+                  providing unmatched assistance to both artists and event organizers.
                 </p>
               </div>
               <div className={styles.aboutImageContainer}>
@@ -24,8 +27,8 @@ const AboutPage = () => {
                   src={'/images/rectangle-22462.png'}
                   alt='Artist performing'
                   loading='eager'
-                  height={350}
-                  width={450}
+                  height={450}
+                  width={578}
                   style={styles.aboutImage}
                 />
               </div>
@@ -35,12 +38,7 @@ const AboutPage = () => {
           <section className={styles.testimonialsSection}>
             <h2>Testimonials</h2>
             <div className={styles.testimonials}>
-              {/* Testimonial items */}
-              <div className={styles.testimonialItem}>
-                <p>"The artist's performance was incredible. We'll definitely book again!"</p>
-                <p>- Happy Client</p>
-              </div>
-              {/* More testimonials go here */}
+              <TestimonialCarousel />
             </div>
           </section>
 
@@ -50,22 +48,21 @@ const AboutPage = () => {
           </section>
 
           <section className={styles.contactSection}>
-            <h2>Contact Us</h2>
-            <div className={styles.contactContent}>
-              <div className={styles.contactDetails}>
-                <p>Email: artist@example.com</p>
-                <p>Phone: +1 (123) 456-7890</p>
-                <div className={styles.socialMedia}>
-                  <a href='https://www.instagram.com/' target='_blank' rel='noopener noreferrer'>
-                    <FaInstagram size={24} />
-                  </a>
-                  <a href='https://twitter.com/' target='_blank' rel='noopener noreferrer'>
-                    <FaTwitter size={24} />
-                  </a>
-                  <a href='https://www.facebook.com/' target='_blank' rel='noopener noreferrer'>
-                    <FaFacebook size={24} />
-                  </a>
-                </div>
+            <h2>Contact us</h2>
+            {/* <ContactForm /> */}
+            <div className={styles.contactDetails}>
+              <p>Email: artist@example.com</p>
+              <p>Phone: +1 (123) 456-7890</p>
+              <div className={styles.socialMedia}>
+                <a href='https://www.instagram.com/' target='_blank' rel='noopener noreferrer'>
+                  <FaInstagram size={24} />
+                </a>
+                <a href='https://twitter.com/' target='_blank' rel='noopener noreferrer'>
+                  <FaTwitter size={24} />
+                </a>
+                <a href='https://www.facebook.com/' target='_blank' rel='noopener noreferrer'>
+                  <FaFacebook size={24} />
+                </a>
               </div>
             </div>
           </section>

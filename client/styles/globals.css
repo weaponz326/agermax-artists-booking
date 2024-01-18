@@ -40,7 +40,7 @@
   --clr-light-blue: rgb(171, 202, 255);
 }
 
-html,
+/* html,
 body {
   margin: 0;
   padding: 0;
@@ -52,7 +52,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 a {
   text-decoration: none;
@@ -77,6 +77,5 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
-
 
 /* End General Styles */

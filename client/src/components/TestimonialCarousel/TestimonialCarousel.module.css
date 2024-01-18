@@ -1,0 +1,47 @@
+/* components/TestimonialCarousel.module.css */
+
+.testimonialCarousel {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.testimonialItem {
+  text-align: center;
+  padding: 20px;
+}
+
+.testimonialItem img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.quote {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.author {
+  font-weight: bold;
+}
+
+.position {
+  color: #777;
+}
+
+/* components/TestimonialCarousel.module.css */
+
+/* Add this style to change the color of slick arrows */
+.slick-arrow::before,
+.slick-next:before {
+  color: #ff5733 !important; /* Change to your desired color */
+  background-color: #0f0101 !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  color: #e84118; /* Change to your desired color on hover */
+}
