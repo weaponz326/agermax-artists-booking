@@ -61,7 +61,6 @@ code[class*='language-'] {
   padding: 0;
 }
 
-
 * {
   box-sizing: border-box;
 }
@@ -75,7 +74,10 @@ code[class*='language-'] {
   --clr-light-blue: rgb(171, 202, 255);
 }
 
-body {
+/* General Styles below [body] affects the public pages like the homepage */
+/* Consider specific css rules like the .upload */
+
+/* body {
   margin: 0;
   padding: 0;
   background-color: var(--clr-light);
@@ -86,7 +88,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 /* End General Styles */
 
@@ -94,13 +96,14 @@ body {
 .upload-area {
   width: 180px;
   text-align: center;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.upload-area--open { /* Slid Down Animation */
+.upload-area--open {
+  /* Slid Down Animation */
   animation: slidDown 300ms ease-in-out;
 }
 
@@ -120,7 +123,6 @@ body {
 
 /* Header */
 .upload-area__header {
-
 }
 
 .upload-area__title {
@@ -172,7 +174,7 @@ body {
 .upload-area__drop-zoon {
   position: relative;
   height: 130px;
-  width:130px;
+  width: 130px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -186,7 +188,7 @@ body {
 
 .upload-area__drop-zoon:hover {
   border-color: var(--clr-blue);
-  background:#e0f1fd;
+  background: #e0f1fd;
 }
 
 .drop-zoon__icon {
@@ -210,30 +212,30 @@ body {
   display: none;
   color: var(--clr-light-blue);
   z-index: 10;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .btn-text {
-  font-size:14px;
-  font-weight:500;
-  line-height:1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .btn-icon {
-  font-size:19px;
+  font-size: 19px;
   margin-right: 3px;
   margin-left: -3px;
 }
 
 .upload-btn {
-  background:#fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,.2);
-  display:flex;
-  flex-direction:row;
-  justify-content:center;
-  align-items:center;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   padding: 6px 12px;
-  border-radius:50px;
+  border-radius: 50px;
 }
 
 .drop-zoon__preview-image {
@@ -261,7 +263,7 @@ body {
 /* (drop-zoon--over) Modifier Class */
 .drop-zoon--over {
   border-color: var(--clr-blue);
-  background:#e0f1fd;
+  background: #e0f1fd;
 }
 
 .drop-zoon--over .drop-zoon__icon,
@@ -271,7 +273,6 @@ body {
 
 /* (drop-zoon--over) Modifier Class */
 .drop-zoon--Uploaded {
-
 }
 
 .drop-zoon--Uploaded .drop-zoon__icon,
@@ -310,7 +311,7 @@ body {
   padding: 0.625rem 0;
   visibility: hidden;
   opacity: 0;
-  transition: cubic-bezier(.36,.62,.71,.46);
+  transition: cubic-bezier(0.36, 0.62, 0.71, 0.46);
   transition-property: visibility, opacity;
 }
 
@@ -349,18 +350,18 @@ body {
 }
 
 .delete-button {
-  display:none;
-  opacity:0;
-  width:50px;
-  height:30px;
+  display: none;
+  opacity: 0;
+  width: 50px;
+  height: 30px;
   border-radius: 9px;
-  background:#ffc0c0;
-  color:#ce0f0f;
-  margin-left:10px;
-  cursor:pointer;
+  background: #ffc0c0;
+  color: #ce0f0f;
+  margin-left: 10px;
+  cursor: pointer;
   transition: opacity 0.5s ease;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 }
 
 .uploaded-file__info::before,
@@ -402,7 +403,7 @@ body {
 }
 
 .uploaded-file__name {
-  width:80px;
+  width: 80px;
   display: inline-block;
   font-size: 13px;
   white-space: nowrap;
@@ -413,5 +414,5 @@ body {
 .uploaded-file__counter {
   font-size: 13px;
   color: var(--clr-light-gray);
-  width:32px;
+  width: 32px;
 }
