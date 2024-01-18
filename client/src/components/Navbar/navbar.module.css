@@ -20,7 +20,8 @@
   z-index: 999;
   width: 100%;
   text-align: center;
-  background-color: rgb(24, 61, 76);
+  /* background-color: rgb(24, 61, 76); */
+  background-color: #e2e8ed;
   padding: 1rem 4rem;
 }
 

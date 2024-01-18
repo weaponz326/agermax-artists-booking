@@ -81,7 +81,7 @@
   border-radius: 0.5rem;
   height: 2rem;
   padding: 0.5rem 1rem;
-  margin: 0 auto;
+  margin: 1rem auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,7 +209,10 @@
 }
 
 .faq-divider {
-  border: 0.5px solid #7777772c;
+  opacity: 1;
+  margin: 0.5rem 0;
+  background-color: rgba(128, 128, 128, 0.466);
+  height: 1px;
 }
 
 .subscription {

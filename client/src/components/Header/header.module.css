@@ -4,6 +4,7 @@
 }
 .header-background {
   background-color: rgb(24, 61, 76);
+  /* background-color: var(--background-color); */
   display: flex;
   flex-direction: column;
   height: 27rem;

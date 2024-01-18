@@ -110,7 +110,7 @@ const EventsTable = ({}) => {
           </div>
           <div className={styles['event-name']}>
             <div className={styles['name']}>
-              <h5>John Doe</h5>
+              <h5 className={styles['event-text']}>John Doe</h5>
               <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
             </div>
             <p className={styles['location-name']}>Stockholm Music Stadium</p>
@@ -119,10 +119,10 @@ const EventsTable = ({}) => {
             <a href='#'>
               Open Map <ExportSquare size={13} />
             </a>
-            <p>
+            <p className={styles['event-text']}>
               Street address 18 <Location size={12} />
             </p>
-            <p>
+            <p className={styles['event-text']}>
               20:00 - 01:00 <Clock size={12} />
             </p>
           </div>
@@ -133,7 +133,7 @@ const EventsTable = ({}) => {
 }
 
 const Card = ({ children, className }) => {
-  return <div className={`card ${className}`}>{children}</div>
+  return <div className={`${styles['card']} ${className}`}>{children}</div>
 }
 
 const Button = ({ children }) => <button className={styles['button']}>{children}</button>

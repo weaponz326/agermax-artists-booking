@@ -1,6 +1,6 @@
 import styles from './button.module.css'
 const Button = ({ buttonText, type, customStyles }) => {
-  const defaultStyle = styles['book-now']
+  const defaultStyle = styles['default-btn']
   const selectStyle = customStyles ? customStyles : defaultStyle
 
   return (
