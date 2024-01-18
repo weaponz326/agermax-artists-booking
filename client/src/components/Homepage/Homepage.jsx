@@ -9,6 +9,7 @@ import Button from 'src/components/Button/Button'
 import getArtistsData from 'src/services/artist'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './homepage.module.css'
+import FaqAccordion from '../FaqAccordion/FaqAccordion'
 
 const HomePage = () => {
   const [imgList, setImgList] = useState([])
@@ -35,7 +36,7 @@ const HomePage = () => {
   )
 }
 
-const EventsSection = ({ imgList }) => {
+export const EventsSection = ({ imgList }) => {
   return (
     <section className={styles['events']}>
       <div className={styles['upcoming-events']}>
@@ -52,12 +53,11 @@ const EventsSection = ({ imgList }) => {
   )
 }
 
-const AboutSection = () => {
+export const AboutSection = () => {
   return (
     <section className={styles['about']}>
       <div className={styles['about-content']}>
         <Image className={styles['about-content-img']} src={'/images/rectangle-22462.png'} width={350} height={350} />
-        {/* <img className={styles['about-content-img']} alt='Rectangle' src='/images/rectangle-22462.png' /> */}
         <div className={styles['about-message']}>
           <div className={styles['about-message-title']}>About</div>
           <div className={styles['about-message-content']}>
@@ -77,16 +77,18 @@ const AboutSection = () => {
   )
 }
 
-const FaqSection = () => {
+export const FaqSection = () => {
   return (
     <section className={styles['faq']}>
       <div className={styles['faq-title']}>Frequently Asked Questions</div>
-      <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+      <div className={styles['faq-container']}>
+        <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+      </div>
     </section>
   )
 }
 
-const SubscriptionSection = () => {
+export const SubscriptionSection = () => {
   return (
     <section className={styles['subscription']}>
       <div className={styles['subscription-details']}>
@@ -125,7 +127,7 @@ const mockGenreList = [
   { title: 'R&B', icon: '🎸', page: '#' }
 ]
 
-const faqData = [
+export const faqData = [
   {
     question: 'What is Agermax?',
     answer:
@@ -137,39 +139,5 @@ const faqData = [
   }
   // Add more FAQ items as needed
 ]
-
-export const FaqAccordion = ({ faqTitle, faqData }) => {
-  const [openIndex, setOpenIndex] = useState(0)
-
-  const handleToggle = index => {
-    setOpenIndex(prevIndex => (prevIndex === index ? null : index))
-  }
-
-  return (
-    <div className={styles['faq-questions']}>
-      {faqData.map((faq, index) => (
-        <div key={index} className={styles['faq-question']}>
-          <div className={styles['question-element']}>
-            <div
-              className={`${styles['question']} ${openIndex === index ? styles['open'] : ''}`}
-              onClick={() => handleToggle(index)}
-            >
-              {faq.question}
-            </div>
-            <button className={styles['faq-accordion-btn']} onClick={() => handleToggle(index)}>
-              {openIndex === index ? (
-                <div className={styles['faq-collapse-icon']}>-</div>
-              ) : (
-                <div className={styles['faq-collapse-icon']}>+</div>
-              )}
-            </button>
-          </div>
-          {openIndex === index && <div className={styles['answer']}>{faq.answer}</div>}
-          <div className={styles['faq-divider']}></div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default HomePage

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import Router from 'next/router'
 import styles from './events-layout.module.css'
+import Image from 'next/image'
 export default function EventsLayout({ imgList }) {
   return (
     <div className={styles['main-events']}>
@@ -24,7 +25,7 @@ export default function EventsLayout({ imgList }) {
 const EventCard = ({ imgUrl }) => {
   return (
     <div className={styles['events-preview-container']} onClick={() => Router.push('#')}>
-      <img className={styles['evt-img']} src={imgUrl} alt='Alt Text' />
+      <Image className={styles['evt-img']} src={imgUrl} alt='Alt Text' loading='eager' fill />
       <CalendarIcon />
       <EventsDetails />
     </div>

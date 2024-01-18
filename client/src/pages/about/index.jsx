@@ -1,7 +1,9 @@
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './about.module.css'
-// import { Instagram, Twitter, Facebook } from 'iconsax-react'
 import { FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa'
+import Image from 'next/image'
+import FaqAccordion from 'src/components/FaqAccordion/FaqAccordion'
+import { faqData } from 'src/components/mock-data-apis/mock-data'
 
 const AboutPage = () => {
   return (
@@ -17,8 +19,15 @@ const AboutPage = () => {
                   dolore magna aliqua.
                 </p>
               </div>
-              <div className={styles.aboutImage}>
-                <img src='https://source.unsplash.com/8x8ZU9IkrgU' alt='Artist performing' />
+              <div className={styles.aboutImageContainer}>
+                <Image
+                  src={'/images/rectangle-22462.png'}
+                  alt='Artist performing'
+                  loading='eager'
+                  height={350}
+                  width={450}
+                  style={styles.aboutImage}
+                />
               </div>
             </div>
           </section>
@@ -37,13 +46,7 @@ const AboutPage = () => {
 
           <section className={styles.faqSection}>
             <h2>Frequently Asked Questions</h2>
-            <div className={styles.faqItems}>
-              {/* FAQ items go here */}
-              <div className={styles.faqItem}>
-                <h3>How do I book the artist?</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              </div>
-            </div>
+            <FaqAccordion faqData={faqData} />
           </section>
 
           <section className={styles.contactSection}>
@@ -72,10 +75,10 @@ const AboutPage = () => {
             <div className={styles.gallery}>
               {/* Gallery images go here */}
               <div className={styles.galleryItem}>
-                <img src='https://source.unsplash.com/2IWH9bxZAqo' alt='Event 1' />
+                <Image src='https://source.unsplash.com/2IWH9bxZAqo' alt='Event 1' height={200} width={250} />
               </div>
               <div className={styles.galleryItem}>
-                <img src='https://source.unsplash.com/L0k0G-CoxTc' alt='Event 2' />
+                <Image src='https://source.unsplash.com/L0k0G-CoxTc' alt='Event 2' height={200} width={250} />
               </div>
               {/* More gallery items go here */}
             </div>

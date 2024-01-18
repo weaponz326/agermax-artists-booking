@@ -1,12 +1,15 @@
 import Link from 'next/link'
 import Button from '../Button/Button'
 import styles from './carousel.module.css'
+import Image from 'next/image'
 
 export default function Carousel({ artist }) {
   if (!artist) return null
   return (
     <div className={styles['carousel-container']}>
-      <img className={styles['carousel-img']} alt='Artist-Image' src={artist.artistImg} width={250} height={300} />
+      <div className={styles['carousel-img']}>
+        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.artistImg} fill loading='eager' />
+      </div>
       <Link href={`/artist-profile`} className={styles['carousel-title-text']}>
         {artist.name}
       </Link>

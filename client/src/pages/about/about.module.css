@@ -16,6 +16,7 @@
 
 .aboutPage {
   max-width: 1200px;
+  width: 65rem;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -39,9 +40,13 @@
   flex: 1;
 }
 
-.aboutImage img {
+.aboutImageContainer {
+  border-radius: 2rem;
+}
+
+.aboutImage {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 3rem;
 }
 
 .testimonialsSection,
@@ -49,6 +54,14 @@
 .contactSection,
 .gallerySection {
   margin-bottom: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.faqSection {
+  max-width: 60rem;
 }
 
 .testimonials {
@@ -77,6 +90,9 @@
   color: #333;
 }
 
+.gallerySection {
+  width: 100%;
+}
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

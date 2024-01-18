@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Unsplash from 'src/components/mock-apis/Unsplash'
+import Unsplash from 'src/components/mock-data-apis/Unsplash'
 
 const baseUrl = 'https://jsonplaceholder.typicode.com/users'
 export async function getAllArtists() {
