@@ -134,11 +134,51 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 
   return (
     <div className={styles['search-bar']}>
-      <input
+      <div className={styles['search-item']}>
+        <div className={styles['search-item-detail']}>
+          <p>Where</p>
+          <p>Search Event Venue</p>
+        </div>
+      </div>
+      <div className={styles['search-item-divider']}></div>
+      <div className={styles['search-item']}>
+        <div className={styles['search-item-detail']}>
+          <p>When</p>
+          <p>Search Event Schedule</p>
+        </div>
+      </div>
+      <div className={styles['search-item-divider']}></div>
+
+      <div className={styles['search-item']}>
+        <div className={styles['search-item-detail']}>
+          <p>Who</p>
+          <p>Search Event Artists</p>
+        </div>
+      </div>
+      <div className={styles['search-item-divider']}></div>
+
+      <div className={styles['search-item']}>
+        <div className={styles['search-item-detail']}>
+          <p>Guest</p>
+          <p>Guest Artists</p>
+        </div>
+      </div>
+      <div className={styles['search-item-divider']}></div>
+
+      <div className={styles['search-item']}>
+        <div className={styles['search-item-detail']}>
+          <button className={styles['search-btn']} type='submit'>
+            <span>
+              <FaSearch />
+            </span>
+          </button>
+        </div>
+      </div>
+      {/* <input
         type='search'
         name=''
         id=''
-        placeholder='Find amazing artists'
+        placeholder='Find Incredible artists'
         onClick={handleClick}
         autoFocus={navItemsOpen}
       />
@@ -146,7 +186,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
         <div className={styles['search-icon']}>
           <FaSearch />
         </div>
-      </IconContext.Provider>
+      </IconContext.Provider> */}
     </div>
   )
 }
