@@ -1,7 +1,7 @@
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './about.module.css'
 import { FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import FaqAccordion from 'src/components/FaqAccordion/FaqAccordion'
 import { faqData } from 'src/components/mock-data-apis/mock-data'
 import TestimonialCarousel from 'src/components/TestimonialCarousel/TestimonialCarousel'
@@ -23,13 +23,13 @@ const AboutPage = () => {
                 </p>
               </div>
               <div className={styles.aboutImageContainer}>
-                <Image
+                <img
                   src={'/images/rectangle-22462.png'}
                   alt='Artist performing'
                   loading='eager'
                   height={450}
                   width={578}
-                  style={styles.aboutImage}
+                  // style={styles.aboutImage}
                 />
               </div>
             </div>
@@ -72,10 +72,10 @@ const AboutPage = () => {
             <div className={styles.gallery}>
               {/* Gallery images go here */}
               <div className={styles.galleryItem}>
-                <Image src='https://source.unsplash.com/2IWH9bxZAqo' alt='Event 1' height={200} width={250} />
+                <img src='https://source.unsplash.com/2IWH9bxZAqo' alt='Event 1' height={200} width={250} />
               </div>
               <div className={styles.galleryItem}>
-                <Image src='https://source.unsplash.com/L0k0G-CoxTc' alt='Event 2' height={200} width={250} />
+                <img src='https://source.unsplash.com/L0k0G-CoxTc' alt='Event 2' height={200} width={250} />
               </div>
               {/* More gallery items go here */}
             </div>
