@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
 import { width } from '@mui/system'
+import { CSSTransition } from 'react-transition-group'
 
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
@@ -181,79 +182,80 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   return (
     <nav className={styles['main-nav-bar']}>
       {showNavMenu}
-      <div style={menuConfig} className={styles['search-bar']}>
-        <div className={`${styles['search-item']} ${styles['first-item']}`}>
-          <div className={styles['search-item-detail']}>
-            {isMenuItemActive ? (
-              <span>
-                <p>Who</p>
-                <p>Amazing Artists</p>
-              </span>
-            ) : (
-              <span>
-                <p>Amazing Artists</p>
-              </span>
-            )}
+      <CSSTransition timeout={1500} classNames={styles['fades']} in={isMenuItemActive}>
+        <div style={menuConfig} className={styles['search-bar']}>
+          <div className={`${styles['search-item']} ${styles['first-item']}`}>
+            <div className={styles['search-item-detail']}>
+              {isMenuItemActive ? (
+                <span>
+                  <p>Who</p>
+                  <p>Amazing Artists</p>
+                </span>
+              ) : (
+                <span>
+                  <p>Amazing Artists</p>
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={styles['search-item-divider']}></div>
-        <div className={`${styles['search-item']} ${styles['second-item']}`}>
-          <div className={styles['search-item-detail']}>
-            {isMenuItemActive ? (
-              <span>
-                <p>Where</p>
-                <p>Events Venue</p>
-              </span>
-            ) : (
-              <span>
-                <p>Anywhere</p>
-              </span>
-            )}
+          <div className={styles['search-item-divider']}></div>
+          <div className={`${styles['search-item']} ${styles['second-item']}`}>
+            <div className={styles['search-item-detail']}>
+              {isMenuItemActive ? (
+                <span>
+                  <p>Where</p>
+                  <p>Events Venue</p>
+                </span>
+              ) : (
+                <span>
+                  <p>Anywhere</p>
+                </span>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className={styles['search-item-divider']}></div>
-        <div className={`${styles['search-item']} ${styles['third-item']}`}>
-          <div className={styles['search-item-detail']}>
-            {isMenuItemActive ? (
-              <span>
-                <p>When</p>
-                <p>Timelines</p>
-              </span>
-            ) : (
-              <span>
-                <p>Anytime</p>
-              </span>
-            )}
+          <div className={styles['search-item-divider']}></div>
+          <div className={`${styles['search-item']} ${styles['third-item']}`}>
+            <div className={styles['search-item-detail']}>
+              {isMenuItemActive ? (
+                <span>
+                  <p>When</p>
+                  <p>Timelines</p>
+                </span>
+              ) : (
+                <span>
+                  <p>Anytime</p>
+                </span>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className={styles['search-item-divider']}></div>
-        <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
-          <div className={styles['search-item-detail']}>
-            {isMenuItemActive ? (
-              <span>
-                <p>Guests</p>
-                <p>Guests Artists</p>
-              </span>
-            ) : (
-              <span>
-                <p>Any Guests</p>
-              </span>
-            )}
+          <div className={styles['search-item-divider']}></div>
+          <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
+            <div className={styles['search-item-detail']}>
+              {isMenuItemActive ? (
+                <span>
+                  <p>Guests</p>
+                  <p>Guests Artists</p>
+                </span>
+              ) : (
+                <span>
+                  <p>Any Guests</p>
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={`${styles['search-item']} ${styles['fifth-item']}`}>
-          <div className={styles['search-item-detail']}>
-            <button className={styles['search-btn']} type='submit'>
-              <span>
-                <FaSearch />
-              </span>
-            </button>
+          <div className={`${styles['search-item']} ${styles['fifth-item']}`}>
+            <div className={styles['search-item-detail']}>
+              <button className={styles['search-btn']} type='submit'>
+                <span>
+                  <FaSearch />
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* <input
+          {/* <input
         type='search'
         name=''
         id=''
@@ -266,7 +268,8 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
           <FaSearch />
         </div>
       </IconContext.Provider> */}
-      </div>
+        </div>
+      </CSSTransition>
     </nav>
   )
 }
