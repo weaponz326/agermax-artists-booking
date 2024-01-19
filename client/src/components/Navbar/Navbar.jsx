@@ -3,6 +3,7 @@ import { IconContext } from 'react-icons'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
+import { width } from '@mui/system'
 
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
@@ -128,53 +129,118 @@ export const Articles = ({ setActiveNavItem, activeNavItem }) => {
 }
 
 const Search = ({ displayNavItems, navItemsOpen }) => {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMenuItemActive, setIsMenuItemActive] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      // Check if the user is scrolling down
+      const scrolledDown = currentScrollY > 0
+
+      // Check if the user is at the top of the screen
+      const isAtTop = currentScrollY === 0
+
+      // Update state based on scrolling direction and position
+      setIsScrolled(scrolledDown && !isAtTop)
+      setIsMenuItemActive(isAtTop)
+
+      // Save the current scroll position for the next scroll event
+    }
+
+    // Attach the scroll event listener
+    window.addEventListener('scroll', handleScroll)
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [isScrolled, isMenuItemActive]) // Empty dependency array ensures the effect runs only once on mount
+
   function handleClick() {
     displayNavItems()
   }
 
+  const showNavMenu = isScrolled ? null : (
+    <ul className={styles['nav-menu-bar']}>
+      <li className={styles['nav-menu-bar-item']}>
+        <span>Artists</span>
+      </li>
+      <li className={styles['nav-menu-bar-item']}>
+        <span>Events</span>
+      </li>
+      <li className={styles['nav-menu-bar-item']}>
+        <span>Articles</span>
+      </li>
+    </ul>
+  )
+
+  const menuConfig = !isMenuItemActive ? { width: '60%', textAlign: 'center' } : null
+
   return (
     <nav className={styles['main-nav-bar']}>
-      <ul className={styles['nav-menu-bar']}>
-        <li className={styles['nav-menu-bar-item']}>
-          <span>Artist</span>
-        </li>
-        <li className={styles['nav-menu-bar-item']}>
-          <span>Events</span>
-        </li>
-        <li className={styles['nav-menu-bar-item']}>
-          <span>More</span>
-        </li>
-      </ul>
-      <div className={styles['search-bar']}>
+      {showNavMenu}
+      <div style={menuConfig} className={styles['search-bar']}>
         <div className={`${styles['search-item']} ${styles['first-item']}`}>
           <div className={styles['search-item-detail']}>
-            <p>Who</p>
-            <p>Amazing Artists</p>
+            {isMenuItemActive ? (
+              <span>
+                <p>Who</p>
+                <p>Amazing Artists</p>
+              </span>
+            ) : (
+              <span>
+                <p>Amazing Artists</p>
+              </span>
+            )}
           </div>
         </div>
         <div className={styles['search-item-divider']}></div>
         <div className={`${styles['search-item']} ${styles['second-item']}`}>
           <div className={styles['search-item-detail']}>
-            <p>When</p>
-            <p>Event Schedule</p>
+            {isMenuItemActive ? (
+              <span>
+                <p>Where</p>
+                <p>Events Venue</p>
+              </span>
+            ) : (
+              <span>
+                <p>Anywhere</p>
+              </span>
+            )}
           </div>
         </div>
 
         <div className={styles['search-item-divider']}></div>
         <div className={`${styles['search-item']} ${styles['third-item']}`}>
           <div className={styles['search-item-detail']}>
-            <p>Where</p>
-            <p>Event Venue</p>
+            {isMenuItemActive ? (
+              <span>
+                <p>When</p>
+                <p>Timelines</p>
+              </span>
+            ) : (
+              <span>
+                <p>Anytime</p>
+              </span>
+            )}
           </div>
         </div>
 
         <div className={styles['search-item-divider']}></div>
         <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
           <div className={styles['search-item-detail']}>
-            <span>
-              <p>Guest</p>
-              <p>Guest Artists</p>
-            </span>
+            {isMenuItemActive ? (
+              <span>
+                <p>Guests</p>
+                <p>Guests Artists</p>
+              </span>
+            ) : (
+              <span>
+                <p>Any Guests</p>
+              </span>
+            )}
           </div>
         </div>
         <div className={`${styles['search-item']} ${styles['fifth-item']}`}>

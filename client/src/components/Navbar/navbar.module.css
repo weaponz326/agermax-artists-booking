@@ -93,7 +93,11 @@
 } */
 .main-nav-bar {
   width: 100%;
-  border: 1px solid brown;
+  /* border: 1px solid brown; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .nav-menu-bar {
   list-style: none;
@@ -122,51 +126,52 @@
   align-items: stretch;
   z-index: 2;
   border-radius: 2rem;
-  padding: 0 0.1rem 0 0;
+  padding: 0;
   font-size: 0.75rem;
 }
 
 .search-item {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   border-radius: 5rem;
   display: flex;
-  padding: 2.5%;
+  padding: 0 1%;
   flex: 1;
-  justify-content: center;
+  /* justify-content: stretch; */
 }
 
 .search-item.first-item {
-  background-color: burlywood;
+  /* background-color: burlywood; */
 }
 
 .search-item.second-item {
-  background-color: rgb(151, 135, 222);
+  /* background-color: rgb(151, 135, 222); */
 }
 
 .search-item.third-item {
-  background-color: rgb(78, 214, 185);
+  /* background-color: rgb(78, 214, 185); */
 }
 
 .search-item.fourth-item {
-  background-color: rgb(199, 12, 12);
+  /* background-color: rgb(199, 12, 12); */
 }
 
 .search-item.fourth-item:hover {
   border-radius: 5rem 0 0 5rem;
 }
 .search-item.fifth-item {
-  background-color: rgb(199, 12, 12);
+  /* background-color: rgb(199, 12, 12); */
   flex: 0.05;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding: 0;
 }
 .search-item.fifth-item:hover {
   border-radius: 0rem 5rem 5rem 0;
 }
 .search-item:hover {
   cursor: pointer;
-  background-color: rgba(136, 145, 17, 0.123);
+  background-color: rgba(14, 14, 14, 0.123);
 }
 
 .search-item-detail {
@@ -176,13 +181,13 @@
   justify-content: center;
   color: var(--text-color);
   font-size: var(--smaller-size);
+  flex: 1;
+  padding: 0 4%;
 }
 
-/* .search-item-detail:last-child {
-  display: flex;
-  justify-content: stretch;
-  background-color: #ff385c;
-} */
+.search-item-detail span {
+  width: 100%;
+}
 
 .search-item-detail p {
   margin: 0;
@@ -204,7 +209,7 @@
   /* width: 6rem; */
   background-color: #ff385c;
   color: white;
-  padding: 0.75rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
