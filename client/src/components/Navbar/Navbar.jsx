@@ -133,47 +133,61 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   }
 
   return (
-    <div className={styles['search-bar']}>
-      <div className={styles['search-item']}>
-        <div className={styles['search-item-detail']}>
-          <p>Where</p>
-          <p>Search Event Venue</p>
+    <nav className={styles['main-nav-bar']}>
+      <ul className={styles['nav-menu-bar']}>
+        <li className={styles['nav-menu-bar-item']}>
+          <span>Artist</span>
+        </li>
+        <li className={styles['nav-menu-bar-item']}>
+          <span>Events</span>
+        </li>
+        <li className={styles['nav-menu-bar-item']}>
+          <span>More</span>
+        </li>
+      </ul>
+      <div className={styles['search-bar']}>
+        <div className={`${styles['search-item']} ${styles['first-item']}`}>
+          <div className={styles['search-item-detail']}>
+            <p>Who</p>
+            <p>Amazing Artists</p>
+          </div>
         </div>
-      </div>
-      <div className={styles['search-item']}>
         <div className={styles['search-item-divider']}></div>
-        <div className={styles['search-item-detail']}>
-          <p>When</p>
-          <p>Search Event Schedule</p>
+        <div className={`${styles['search-item']} ${styles['second-item']}`}>
+          <div className={styles['search-item-detail']}>
+            <p>When</p>
+            <p>Event Schedule</p>
+          </div>
         </div>
-      </div>
 
-      <div className={styles['search-item']}>
         <div className={styles['search-item-divider']}></div>
-        <div className={styles['search-item-detail']}>
-          <p>Who</p>
-          <p>Search Event Artists</p>
+        <div className={`${styles['search-item']} ${styles['third-item']}`}>
+          <div className={styles['search-item-detail']}>
+            <p>Where</p>
+            <p>Event Venue</p>
+          </div>
         </div>
-      </div>
 
-      <div className={styles['search-item']}>
         <div className={styles['search-item-divider']}></div>
-        <div className={styles['search-item-detail']}>
-          <p>Guest</p>
-          <p>Guest Artists</p>
-        </div>
-      </div>
-
-      <div className={styles['search-item']}>
-        <div className={styles['search-item-detail']}>
-          <button className={styles['search-btn']} type='submit'>
+        <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
+          <div className={styles['search-item-detail']}>
             <span>
-              <FaSearch />
+              <p>Guest</p>
+              <p>Guest Artists</p>
             </span>
-          </button>
+          </div>
         </div>
-      </div>
-      {/* <input
+        <div className={`${styles['search-item']} ${styles['fifth-item']}`}>
+          <div className={styles['search-item-detail']}>
+            <button className={styles['search-btn']} type='submit'>
+              <span>
+                <FaSearch />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* <input
         type='search'
         name=''
         id=''
@@ -186,7 +200,8 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
           <FaSearch />
         </div>
       </IconContext.Provider> */}
-    </div>
+      </div>
+    </nav>
   )
 }
 
