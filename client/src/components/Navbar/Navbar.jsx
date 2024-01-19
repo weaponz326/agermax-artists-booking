@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
 import { width } from '@mui/system'
-import { CSSTransition } from 'react-transition-group'
+import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group'
 
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
@@ -180,9 +180,22 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   const menuConfig = !isMenuItemActive ? { width: '60%', textAlign: 'center' } : null
 
   return (
-    <nav className={styles['main-nav-bar']}>
-      {showNavMenu}
-      <CSSTransition timeout={1500} classNames={styles['fades']} in={isMenuItemActive}>
+    <CSSTransition
+      timeout={40}
+      classNames={{
+        enter: styles['fade-enter'],
+        enterActive: styles['fade-enter-active'],
+        enterDone: styles['fade-enter-done'],
+
+        exit: styles['fade-exit'],
+        exitActive: styles['fade-exit-active'],
+        exitDone: styles['fade-exit-done']
+      }}
+      in={isScrolled}
+      c
+    >
+      <nav className={styles['main-nav-search-bar']}>
+        {showNavMenu}
         <div style={menuConfig} className={styles['search-bar']}>
           <div className={`${styles['search-item']} ${styles['first-item']}`}>
             <div className={styles['search-item-detail']}>
@@ -254,23 +267,9 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
               </button>
             </div>
           </div>
-
-          {/* <input
-        type='search'
-        name=''
-        id=''
-        placeholder='Find Incredible artists'
-        onClick={handleClick}
-        autoFocus={navItemsOpen}
-      />
-      <IconContext.Provider value={{ color: 'white', size: '1.2rem' }}>
-        <div className={styles['search-icon']}>
-          <FaSearch />
         </div>
-      </IconContext.Provider> */}
-        </div>
-      </CSSTransition>
-    </nav>
+      </nav>
+    </CSSTransition>
   )
 }
 

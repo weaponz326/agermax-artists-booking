@@ -91,13 +91,14 @@
   color: white;
   border: none;
 } */
-.main-nav-bar {
+.main-nav-search-bar {
   width: 100%;
   /* border: 1px solid brown; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* transition: all 5s ease-in-out; */
 }
 .nav-menu-bar {
   list-style: none;
@@ -114,7 +115,7 @@
 }
 
 .search-bar {
-  width: 100%;
+  width: 75%;
   /* max-width: 30rem; */
   border: 1px solid red;
   outline: none;
@@ -136,6 +137,7 @@
   display: flex;
   padding: 0 1%;
   flex: 1;
+  /* transition: all 2s ease-in-out; */
   /* justify-content: stretch; */
 }
 
@@ -426,25 +428,37 @@ header .greetings-message {
   }
 }
 
+/* .fade {
+} */
+
 /* styles/transition.css */
 
-.fades {
-  transition: opacity 0.3s ease-in-out;
-}
 .fade-enter {
-  opacity: 0.01;
+  transform: scale(1.05);
+  /* transition: transform 500ms linear; */
 }
 
 .fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms ease-in;
+  transform: scale(0.99);
+  transition: transform 100ms linear;
+}
+
+.fade-enter-done {
+  transform: scale(1);
+  transition: transform 100ms linear;
 }
 
 .fade-exit {
-  opacity: 1;
+  transform: scale(0.95);
+  /* transition: transform 100ms linear; */
 }
 
 .fade-exit-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+  transform: scale(0.98);
+  transition: transform 100ms linear;
+}
+
+.fade-exit-done {
+  transform: scale(1);
+  transition: all 100ms linear;
 }
