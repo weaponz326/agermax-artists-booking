@@ -295,10 +295,10 @@ const SidebarAddUser = props => {
             SelectProps={{ value: role, onChange: e => setRole(e.target.value) }}
           >
             <MenuItem value='admin'>Admin</MenuItem>
-            <MenuItem value='author'>Author</MenuItem>
-            <MenuItem value='editor'>Editor</MenuItem>
-            <MenuItem value='maintainer'>Maintainer</MenuItem>
-            <MenuItem value='subscriber'>Subscriber</MenuItem>
+            <MenuItem value='artist'>Artiste</MenuItem>
+            <MenuItem value='organizer'>Organizer</MenuItem>
+            {/* <MenuItem value='maintainer'>Maintainer</MenuItem>
+            <MenuItem value='subscriber'>Subscriber</MenuItem> */}
           </CustomTextField>
 
           <CustomTextField

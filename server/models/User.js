@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ["Admin", "Artist", "EventOrganizer"],
+    enum: ["admin", "artist", "organizer"],
   },
   // Additional fields specific to each role can be added here
 });

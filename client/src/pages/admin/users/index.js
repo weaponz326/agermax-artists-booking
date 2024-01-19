@@ -45,10 +45,10 @@ import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 // ** renders client column
 const userRoleObj = {
   admin: { icon: 'tabler:device-laptop', color: 'secondary' },
-  author: { icon: 'tabler:circle-check', color: 'success' },
-  editor: { icon: 'tabler:edit', color: 'info' },
-  maintainer: { icon: 'tabler:chart-pie-2', color: 'primary' },
-  subscriber: { icon: 'tabler:user', color: 'warning' }
+  artist: { icon: 'tabler:circle-check', color: 'success' },
+  organizer: { icon: 'tabler:edit', color: 'info' },
+  // maintainer: { icon: 'tabler:chart-pie-2', color: 'primary' },
+  // subscriber: { icon: 'tabler:user', color: 'warning' }
 }
 
 const userStatusObj = {
@@ -320,10 +320,8 @@ const UserList = ({ apiData }) => {
                 >
                   <MenuItem value=''>Select Role</MenuItem>
                   <MenuItem value='admin'>Admin</MenuItem>
-                  <MenuItem value='author'>Author</MenuItem>
-                  <MenuItem value='editor'>Editor</MenuItem>
-                  <MenuItem value='maintainer'>Maintainer</MenuItem>
-                  <MenuItem value='subscriber'>Subscriber</MenuItem>
+                  <MenuItem value='artist'>Artist</MenuItem>
+                  <MenuItem value='organizer'>Event Organizer</MenuItem>
                 </CustomTextField>
               </Grid>
               <Grid item sm={4} xs={12}>
