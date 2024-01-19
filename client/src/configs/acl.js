@@ -2,15 +2,25 @@ import { AbilityBuilder, Ability } from '@casl/ability'
 
 export const AppAbility = Ability
 
-/**
- * Please define your own Ability rules according to your app requirements.
- * We have just shown Admin and Client rules for demo purpose where
- * admin can manage everything and client can just visit ACL page
- */
+// src/configs/acl.js
+
 const defineRulesFor = (role, subject) => {
   const { can, rules } = new AbilityBuilder(AppAbility)
+
   if (role === 'admin') {
     can('manage', 'all')
+  } else if (role === 'artist') {
+    can(['read'], 'bookings')
+    can(['manage'], 'inbox')
+    can(['read'], 'finance')
+    can(['manage'], 'account')
+    // Add other permissions for artist here
+  } else if (role === 'organizer') {
+    can(['read'], 'bookings')
+    can(['manage'], 'inbox')
+    can(['read'], 'finance')
+    can(['manage'], 'account')
+    // Add other permissions for organizer here
   } else if (role === 'client') {
     can(['read'], 'acl-page')
   } else {

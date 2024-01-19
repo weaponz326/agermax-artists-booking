@@ -26,9 +26,7 @@ const navigation = () => {
       icon: 'tabler:report-money',
     },
     {
-      path: '/admin/account/',
-      // action: 'read',
-      // subject: 'acl-page',
+      path: '/admin/account',
       title: 'Account',
       icon: 'tabler:user-circle',
     }
