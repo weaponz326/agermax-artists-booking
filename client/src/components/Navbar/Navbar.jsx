@@ -3,9 +3,8 @@ import { IconContext } from 'react-icons'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
-import { width } from '@mui/system'
 import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group'
-
+import { menuConfig } from './NavbarData'
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
   const [selectNavItem, setSelectNavItem] = useState('')
@@ -132,27 +131,22 @@ export const Articles = ({ setActiveNavItem, activeNavItem }) => {
 const Search = ({ displayNavItems, navItemsOpen }) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuItemActive, setIsMenuItemActive] = useState(true)
+  const searchArtistRef = useRef()
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-
       // Check if the user is scrolling down
       const scrolledDown = currentScrollY > 0
-
       // Check if the user is at the top of the screen
       const isAtTop = currentScrollY === 0
-
       // Update state based on scrolling direction and position
       setIsScrolled(scrolledDown && !isAtTop)
       setIsMenuItemActive(isAtTop)
-
       // Save the current scroll position for the next scroll event
     }
-
     // Attach the scroll event listener
     window.addEventListener('scroll', handleScroll)
-
     // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -161,6 +155,11 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 
   function handleClick() {
     displayNavItems()
+  }
+
+  function handleSearchItemDetailClick(e) {
+    console.log('clicked!')
+    console.log(e.target)
   }
 
   const showNavMenu = isScrolled ? null : (
@@ -177,9 +176,10 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     </ul>
   )
 
-  const menuConfig = !isMenuItemActive ? { width: '60%', textAlign: 'center' } : null
+  const menuSetting = !isMenuItemActive ? { width: '60%', textAlign: 'center' } : null
 
   return (
+    //Apply transition effect to the Nav search bar
     <CSSTransition
       timeout={40}
       classNames={{
@@ -196,66 +196,30 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     >
       <nav className={styles['main-nav-search-bar']}>
         {showNavMenu}
-        <div style={menuConfig} className={styles['search-bar']}>
+        <div style={menuSetting} className={styles['search-bar']}>
           <div className={`${styles['search-item']} ${styles['first-item']}`}>
             <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? (
-                <span>
-                  <p>Who</p>
-                  <p>Amazing Artists</p>
-                </span>
-              ) : (
-                <span>
-                  <p>Amazing Artists</p>
-                </span>
-              )}
+              {isMenuItemActive ? menuConfig[0].config : menuConfig[0].altConfig}
             </div>
           </div>
           <div className={styles['search-item-divider']}></div>
           <div className={`${styles['search-item']} ${styles['second-item']}`}>
             <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? (
-                <span>
-                  <p>Where</p>
-                  <p>Events Venue</p>
-                </span>
-              ) : (
-                <span>
-                  <p>Anywhere</p>
-                </span>
-              )}
+              {isMenuItemActive ? menuConfig[1].config : menuConfig[1].altConfig}
             </div>
           </div>
 
           <div className={styles['search-item-divider']}></div>
           <div className={`${styles['search-item']} ${styles['third-item']}`}>
             <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? (
-                <span>
-                  <p>When</p>
-                  <p>Timelines</p>
-                </span>
-              ) : (
-                <span>
-                  <p>Anytime</p>
-                </span>
-              )}
+              {isMenuItemActive ? menuConfig[2].config : menuConfig[2].altConfig}
             </div>
           </div>
 
           <div className={styles['search-item-divider']}></div>
           <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
             <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? (
-                <span>
-                  <p>Guests</p>
-                  <p>Guests Artists</p>
-                </span>
-              ) : (
-                <span>
-                  <p>Any Guests</p>
-                </span>
-              )}
+              {isMenuItemActive ? menuConfig[3].config : menuConfig[3].altConfig}
             </div>
           </div>
           <div className={`${styles['search-item']} ${styles['fifth-item']}`}>

@@ -115,7 +115,7 @@
 }
 
 .search-bar {
-  width: 75%;
+  width: 85%;
   /* max-width: 30rem; */
   border: 1px solid red;
   outline: none;
@@ -137,11 +137,11 @@
   display: flex;
   padding: 0 1%;
   flex: 1;
-  /* transition: all 2s ease-in-out; */
   /* justify-content: stretch; */
 }
 
 .search-item.first-item {
+  color: black;
   /* background-color: burlywood; */
 }
 
@@ -187,13 +187,29 @@
   padding: 0 4%;
 }
 
+.search-item-detail form,
+.search-item-detail input {
+  width: 100%;
+}
+
 .search-item-detail span {
   width: 100%;
 }
 
-.search-item-detail p {
+.search-item-detail p,
+.search-item-detail input {
   margin: 0;
   font-size: 0.8rem;
+}
+
+.search-item-detail input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.search-artist::placeholder {
+  /* color: rgb(0, 25, 245); */
 }
 
 .search-item-divider {
@@ -220,9 +236,9 @@
   cursor: pointer;
 }
 
-.search-bar input::placeholder {
+/* .search-bar input::placeholder {
   color: rgba(255, 255, 255, 0.349);
-}
+} */
 
 .search-icon {
   position: absolute;
@@ -249,10 +265,6 @@
   border: none;
   flex: 1;
   max-width: 426px;
-}
-
-.search-field::placeholder {
-  color: white;
 }
 
 .top-bar {
