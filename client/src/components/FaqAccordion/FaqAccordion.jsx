@@ -1,6 +1,7 @@
 import { faqData } from '../mock-data-apis/Mock-data'
 import styles from './faqAccordion.module.css'
 import { useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 const FaqAccordion = ({ faqTitle, faqData }) => {
   const [openIndex, setOpenIndex] = useState(0)

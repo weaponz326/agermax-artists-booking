@@ -1,23 +1,284 @@
-/* components/Navbar.module.css */
+/* :root {
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family);
+} */
 
-.navbar {
+.header * {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.header {
+  background-color: #e2e8ed;
+  --middle-form-height: 60px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.headerSticky {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+  top: 0;
+  right: 0;
+  left: 0;
+  position: sticky;
+  z-index: 9999;
+}
+
+.headerWrapper {
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 1600px;
+}
+
+.headerInner {
   display: flex;
   justify-content: space-between;
+  transition: padding-bottom 0.2s linear;
+  padding-bottom: calc(var(--middle-form-height) + 10px);
+}
+
+.headerInner a {
+  color: black;
+  display: grid;
+  font-size: 0.8rem;
+  padding: 0.8rem 1rem;
+  place-content: center;
+  border-radius: 2rem;
+  text-decoration: none;
+}
+
+.headerInner a:hover {
+  background-color: #eee;
+}
+
+.rightSide {
+  gap: 0.5rem;
+  display: flex;
   align-items: center;
-  padding: 1rem;
-  background-color: #ffffff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
-.logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333333;
-  text-decoration: none;
+.links {
+  display: flex;
 }
 
-.links a {
-  margin-left: 1.5rem;
-  color: #333333;
-  text-decoration: none;
+.hamberger {
+  gap: 0.5rem;
+  display: flex;
+  padding: 0.4rem;
+  cursor: pointer;
+  border-radius: 2rem;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+/* MIddle */
+.middleWrapper {
+  /* inset: 0; */
+  left: 0;
+  right: 0;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+}
+
+.middleWrapperInner {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.middleWrapper a {
+  color: #aaa;
+}
+
+.formWrapper {
+  transition: all 0.2s linear;
+}
+
+.middleForm,
+.middleFormMini {
+  display: flex;
+  border-radius: 3rem;
+  border: 1px solid #ddd;
+  box-shadow: var(--box-shadow);
+  --box-shadow: 0 2px 5px 0.2px #00000015;
+}
+
+.middleFormMini {
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.middleForm {
+  transition: all 0.2s linear;
+  height: var(--middle-form-height);
+}
+
+.middleFormHighlight {
+  background-color: #eee;
+  box-shadow: none;
+}
+
+.middleFormItem,
+.middleFormItemMini {
+  display: flex;
+  padding: 0.5rem;
+  border-radius: inherit;
+  cursor: pointer;
+}
+.middleFormItemMini {
+  padding: 1rem 1.5rem;
+}
+
+.middleFormItemInfo {
+  flex: 1;
+  gap: 0.3rem;
+  display: flex;
+  align-items: start;
+  padding: 0 1rem;
+  flex-direction: column;
+}
+
+.searchButton {
+  display: grid;
+  border: none;
+  color: #fff;
+  padding: 0 1.2rem;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  place-content: center;
+  transition: all 0.2s linear;
+  background-color: rgb(255, 0, 106);
+  border-radius: var(--middle-form-height);
+  --height: calc(var(--middle-form-height) - 10px);
+  height: var(--height);
+  min-width: var(--height);
+  max-width: var(--height);
+}
+
+.searchButtonLoose {
+  max-width: calc(var(--middle-form-height) * 3);
+}
+
+.searchButton span {
+  display: none;
+}
+.searchButtonLoose span {
+  display: inline;
+}
+
+.searchButtonInner {
+  gap: 0.8rem;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.middleFormItem {
+  min-width: 150px;
+}
+
+.middleFormItem:first-child,
+.middleFormItem:last-of-type {
+  min-width: 300px;
+}
+
+.middleFormItem:hover {
+  background-color: #eee;
+}
+
+.middleFormItem:not(:first-child)::before,
+.middleFormItemMini:not(:first-child)::before {
+  left: 0;
+  top: 50%;
+  content: '';
+  width: 0.5px;
+  height: 50%;
+  position: absolute;
+  background-color: #ddd;
+  transform: translate(0, -50%);
+}
+
+.middleFormItem:hover::before,
+.middleFormItem:hover + .middleFormItem::before {
+  background-color: transparent;
+}
+
+.middleFormItemFoucs {
+  box-shadow: var(--box-shadow);
+  background-color: white;
+}
+.middleFormItemFoucs:hover {
+  background-color: white;
+}
+
+.middleFormItem.middleFormItemFoucs::before,
+.middleFormItemFoucs + .middleFormItem::before {
+  background-color: transparent;
+}
+
+.middleForm input {
+  border: none;
+  outline: none;
+  padding: 0;
+  font-size: 0.8rem;
+  background-color: transparent;
+}
+
+.middleForm input::placeholder,
+.middleFormItem span {
+  /* font-family: var(--font-family); */
+  line-height: 0.8rem;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.searchButtonInner span {
+  color: #fff;
+}
+
+/* ANIMATION PROCESS */
+.middleWrapperInner .links {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  transition: all 0.1s linear;
+}
+
+.headerSticky .headerInner {
+  padding-bottom: 0;
+}
+
+.headerSticky .middleWrapperInner .links {
+  transform: scale(0.8) translateY(-100%);
+  opacity: 0;
+}
+
+.headerSticky .middleWrapperInner .formWrapper {
+  transform: translateY(-100%);
+}
+
+.headerSticky .middleWrapperInner .formWrapper .middleForm {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+.headerSticky .middleWrapperInner .formWrapper .middleFormMini {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
 }

@@ -4,9 +4,9 @@ import AirbnbCloneNavBar from 'src/components/AirbnbCloneNavBar/AirbnbCloneNavBa
 
 const CustomPagesLayout = ({ children }) => {
   return (
-    <div style={{ height: '100vh', maxWidth: '1600px', marginInline: 'auto' }}>
-      <Navbar />
-      <main style={{ minHeight: '100%', paddingTop: '7rem' }} className='page-layout-layout'>
+    <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto' }}>
+      <AirbnbCloneNavBar />
+      <main style={{ minHeight: '100%' }} className='page-layout-layout'>
         {children}
       </main>
       <Footer />

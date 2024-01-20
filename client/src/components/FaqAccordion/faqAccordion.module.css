@@ -11,6 +11,7 @@
 .faq-questions {
   padding: 0;
   max-width: 65rem;
+  width: 100%;
   /* margin: 0 auto; */
 }
 .faq-question {
@@ -62,4 +63,36 @@
   margin: 0.5rem 0;
   background-color: rgba(128, 128, 128, 0.466);
   height: 1px;
+}
+
+/* styles/transition.css */
+
+.fade-enter {
+  transform: scale(1.2);
+  /* transition: transform 500ms linear; */
+}
+
+.fade-enter-active {
+  transform: scale(1.1);
+  transition: transform 3000ms linear;
+}
+
+.fade-enter-done {
+  transform: scale(1);
+  transition: transform 3000ms linear;
+}
+
+.fade-exit {
+  transform: scale(0.7);
+  /* transition: transform 100ms linear; */
+}
+
+.fade-exit-active {
+  transform: scale(0.98);
+  transition: transform 3000ms linear;
+}
+
+.fade-exit-done {
+  transform: scale(1);
+  transition: all 3000ms linear;
 }

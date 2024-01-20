@@ -6,7 +6,6 @@ export default function Header({ artistsList }) {
   return (
     <header className={styles['header']}>
       <div className={styles['header-background']}>
-        <Navbar />
         <div className={styles['greetings']}>
           <div>
             <p className={styles['greetings-hi']}>Hey John!&nbsp;&nbsp;👋</p>
