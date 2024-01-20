@@ -4,11 +4,17 @@ const connectDB = require('./configs/db');
 const userRoutes = require('./routes/authRoutes');
 const artistRoutes = require('./routes/artistRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const cors = require('cors'); // Import CORS
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: 'http://localhost:3000' // Set the allowed origin
+}));
 
 app.use(express.json());
 
