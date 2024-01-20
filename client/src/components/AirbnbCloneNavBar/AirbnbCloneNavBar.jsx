@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 // import logo from '../../assets/react.svg'
 import styles from './AirbnbCloneNavBar.module.css'
 import { Global, HambergerMenu, ProfileCircle, SearchNormal, SearchNormal1 } from 'iconsax-react'
+import Link from 'next/link'
 
 const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
@@ -24,7 +25,9 @@ const AirbnbCloneNavBar = () => {
       <div className={styles.headerWrapper}>
         <div className={styles.headerInner}>
           <div className={styles.logoContainer}>
-            <img src='/images/logo.png' alt='Agermax-logo' />
+            <Link href='/'>
+              <img src='/images/logo.png' alt='Agermax-logo' />
+            </Link>
           </div>
           <MiddleContainer />
           <div className={styles.rightSide}>

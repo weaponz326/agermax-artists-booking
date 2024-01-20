@@ -8,6 +8,7 @@
   padding: 0;
   position: relative;
   box-sizing: border-box;
+  color: black;
 }
 
 .header {
@@ -58,6 +59,11 @@
   background-color: #eee;
 }
 
+.logoContainer {
+  z-index: 2;
+  cursor: pointer;
+}
+
 .rightSide {
   gap: 0.5rem;
   display: flex;
@@ -96,7 +102,7 @@
 }
 
 .middleWrapper a {
-  color: #aaa;
+  color: black;
 }
 
 .formWrapper {

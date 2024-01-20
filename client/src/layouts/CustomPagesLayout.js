@@ -6,7 +6,7 @@ const CustomPagesLayout = ({ children }) => {
   return (
     <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto' }}>
       <AirbnbCloneNavBar />
-      <main style={{ minHeight: '100%' }} className='page-layout-layout'>
+      <main style={{ minHeight: '100vh' }} className='page-layout-layout'>
         {children}
       </main>
       <Footer />
