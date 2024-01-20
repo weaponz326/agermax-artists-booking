@@ -1,16 +1,26 @@
 import styles from './navbar.module.css'
+import { useState, useRef, useEffect } from 'react'
+
+export default function HandleMenu(e) {
+  const [isActive, setIsActive] = useState(true)
+  const isActiveClass = isActive && styles['active-menu-item']
+
+  function handleActive(e) {
+    e.target.style.backgroundColor = 'red'
+  }
+}
 
 export const menuConfig = [
   {
     config: (
       <form>
-        <p>Who</p>
+        <label htmlFor='search-artist'>Who</label>
         <input
           className={styles['search-artist']}
           type='text'
           name='search-artist'
           placeholder='Search Artists'
-          id='search-artists'
+          id='search-artist'
         />
       </form>
     ),
