@@ -106,7 +106,7 @@
   display: flex;
   color: var(--text-color);
   justify-content: center;
-  gap: 3rem;
+  gap: 2rem;
   margin: 0;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .search-bar {
-  width: 75%;
+  width: 85%;
   /* max-width: 30rem; */
   border: 1px solid red;
   outline: none;
@@ -137,11 +137,11 @@
   display: flex;
   padding: 0 1%;
   flex: 1;
-  /* transition: all 2s ease-in-out; */
   /* justify-content: stretch; */
 }
 
 .search-item.first-item {
+  color: black;
   /* background-color: burlywood; */
 }
 
@@ -175,6 +175,10 @@
   cursor: pointer;
   background-color: rgba(14, 14, 14, 0.123);
 }
+.active-search-item {
+  font-weight: bold;
+  background-color: rgba(14, 14, 14, 0.123);
+}
 
 .search-item-detail {
   display: flex;
@@ -185,15 +189,36 @@
   font-size: var(--smaller-size);
   flex: 1;
   padding: 0 4%;
+  /* border: 1px solid royalblue; */
+  /* background-color: burlywood; */
+  border-radius: 5rem;
+}
+
+.search-item-detail form,
+.search-item-detail input,
+.search-item-detail label {
+  display: block;
+  width: 100%;
 }
 
 .search-item-detail span {
   width: 100%;
 }
 
-.search-item-detail p {
+.search-item-detail p,
+.search-item-detail input {
   margin: 0;
   font-size: 0.8rem;
+}
+
+.search-item-detail input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.search-artist::placeholder {
+  /* color: rgb(0, 25, 245); */
 }
 
 .search-item-divider {
@@ -220,9 +245,9 @@
   cursor: pointer;
 }
 
-.search-bar input::placeholder {
+/* .search-bar input::placeholder {
   color: rgba(255, 255, 255, 0.349);
-}
+} */
 
 .search-icon {
   position: absolute;
@@ -249,10 +274,6 @@
   border: none;
   flex: 1;
   max-width: 426px;
-}
-
-.search-field::placeholder {
-  color: white;
 }
 
 .top-bar {
@@ -434,12 +455,12 @@ header .greetings-message {
 /* styles/transition.css */
 
 .fade-enter {
-  transform: scale(1.05);
+  transform: scale(1.2);
   /* transition: transform 500ms linear; */
 }
 
 .fade-enter-active {
-  transform: scale(0.99);
+  transform: scale(1.1);
   transition: transform 100ms linear;
 }
 
@@ -449,7 +470,7 @@ header .greetings-message {
 }
 
 .fade-exit {
-  transform: scale(0.95);
+  transform: scale(0.7);
   /* transition: transform 100ms linear; */
 }
 
