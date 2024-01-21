@@ -16,3 +16,26 @@
   gap: 1rem;
   place-items: center;
 }
+
+.inactive-page {
+  opacity: 0.5;
+  padding: 0.5% 1.5%;
+  margin: 0.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.inactive-page:hover {
+  opacity: 1;
+}
+
+.active-page {
+  font-weight: bold;
+  background-color: var(--button-color);
+  padding: 0.5% 1.5%;
+  margin: 0.25rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+}

@@ -26,6 +26,13 @@ const ArtistsPage = () => {
   return (
     <CustomPagesLayout>
       <main className={styles['main']}>
+        <Pagination
+          artistsPerPage={artistsPerPage}
+          artistsDataList={artistsDataList}
+          currentArtistsData={currentArtistsData}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
         <HeaderCarouselContainer
           className={styles['artists-page']}
           layout={styles['artists-page-layout']}
@@ -36,6 +43,7 @@ const ArtistsPage = () => {
           artistsDataList={artistsDataList}
           currentArtistsData={currentArtistsData}
           setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
         />
       </main>
     </CustomPagesLayout>
@@ -43,19 +51,19 @@ const ArtistsPage = () => {
 }
 
 //Pagination
-export const Pagination = ({ artistsPerPage, artistsDataList, currentArtistsData, setCurrentPage }) => {
+export const Pagination = ({ artistsPerPage, artistsDataList, currentPage, setCurrentPage }) => {
   const totalNumPages = Math.ceil(artistsDataList.length / artistsPerPage)
   let pages = []
   for (let i = 1; i <= totalNumPages; i++) {
     pages.push(i)
   }
-  console.log(pages)
+
   return (
     <div style={{ textAlign: 'center', marginTop: '1rem' }}>
       {pages.map((page, index) => (
         <button
+          className={page === currentPage ? `${styles['active-page']}` : `${styles['inactive-page']}`}
           onClick={() => setCurrentPage(page)}
-          style={{ padding: '0.25rem 0.5rem', margin: '0.5rem' }}
           key={index}
         >
           {page}

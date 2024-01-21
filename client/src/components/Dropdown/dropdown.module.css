@@ -1,0 +1,27 @@
+.dropdownBubbleWrapper {
+    position: fixed;
+    min-width: 200px;
+    min-height: 200px;
+    z-index: 999999;
+    --box-shadow: 0 0 10px 1px #0002;
+  }
+
+.dropdownBubble{
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dropdownBubble a {
+    padding: .8rem 1rem;
+    text-decoration: none;
+    color: #555;
+    font-size: .9rem;
+}
+
+.dropdownBubble a:hover {
+    background-color: #eee;
+}
