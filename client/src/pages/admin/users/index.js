@@ -40,14 +40,13 @@ import axios from 'axios'
 
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
+import AddUserDrawer from 'src/pages/admin/users/AddUserDrawer'
 
 // ** renders client column
 const userRoleObj = {
   admin: { icon: 'tabler:device-laptop', color: 'secondary' },
   artist: { icon: 'tabler:circle-check', color: 'success' },
-  organizer: { icon: 'tabler:edit', color: 'info' },
-
+  organizer: { icon: 'tabler:edit', color: 'info' }
 }
 
 const userStatusObj = {
@@ -136,43 +135,48 @@ const RowOptions = ({ id }) => {
   )
 }
 
-
 const UserList = () => {
   // ** State for storing users data
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([])
+  const [addUserOpen, setAddUserOpen] = useState(false)
+
 
   // ** Function to fetch users from all categories
   const fetchUsers = async () => {
     try {
-      const apiURL = process.env.NEXT_PUBLIC_API_URL;
+      const apiURL = process.env.NEXT_PUBLIC_API_URL
       const endpoints = [
         `${apiURL}/artists`,
-        // `${apiURL}/organizers`,
-        // `${apiURL}/admin`
-      ];
+        `${apiURL}/organizers`,
+        `${apiURL}/admin`
+      ]
 
-      const responses = await Promise.all(
-        endpoints.map(endpoint => axios.get(endpoint))
-      );
+      const responses = await Promise.all(endpoints.map(endpoint => axios.get(endpoint)))
 
-      const combinedData = responses.flatMap(response => response.data.map(user => ({
-        id: user._id,
-        fullName: `${user.firstName} ${user.lastName}`,
-        email: user.contactEmail,
-        phone: user.contactPhone,
-        address: user.address,
-        // Additional fields can be added as needed
-      })));
+      const combinedData = responses.flatMap(response =>
+        response.data.map(user => ({
+          id: user._id,
+          fullName: `${user.firstName} ${user.lastName}`,
+          email: user.contactEmail,
+          phone: user.contactPhone,
+          address: user.address
+          // Additional fields can be added as needed
+        }))
+      )
 
-      setUsers(combinedData);
+      setUsers(combinedData)
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching user data:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
+  const dispatch = useDispatch()
+
+  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+
 
   const columns = [
     {
@@ -198,9 +202,9 @@ const UserList = () => {
       headerName: 'Address',
       flex: 0.3,
       minWidth: 220
-    },
+    }
     // Add other columns as needed
-  ];
+  ]
 
   return (
     <Grid container spacing={6.5}>
@@ -210,11 +214,9 @@ const UserList = () => {
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Search Filters' />
-          <CardContent>
-            {/* Filter content */}
-          </CardContent>
+          <CardContent>{/* Filter content */}</CardContent>
           <Divider sx={{ m: '0 !important' }} />
-          <TableHeader /* props */ />
+          <TableHeader   toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
             rowHeight={62}
@@ -227,9 +229,9 @@ const UserList = () => {
           />
         </Card>
       </Grid>
-      {/* AddUserDrawer and other components */}
+      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
     </Grid>
-  );
-};
+  )
+}
 
-export default UserList;
+export default UserList

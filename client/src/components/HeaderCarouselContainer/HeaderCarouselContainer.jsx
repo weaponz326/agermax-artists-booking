@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import styles from './header-carousel-container.module.css'
 
-const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
+const HeaderCarouselContainer = ({ artistsList, currentArtistsData, className, layout }) => {
   //Conditional Rendering depending on availability of APi call
-  if (!artistsList.length) {
+  const renderedList = artistsList ? artistsList : currentArtistsData
+  if (!renderedList) {
     return (
       <div className={styles[className]}>
         <div className={styles['header-carousel-layout']}>
@@ -24,7 +25,7 @@ const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
           </Link>
         </div>
         <div className={layout}>
-          {artistsList.map(artist => (
+          {renderedList.map(artist => (
             <Fragment key={artist.id}>
               <Carousel artist={artist} />
             </Fragment>
