@@ -146,7 +146,7 @@ const UserList = () => {
     try {
       const apiURL = process.env.NEXT_PUBLIC_API_URL
       const endpoints = [
-        `${apiURL}/artists`
+        `${apiURL}/artists`,
         `${apiURL}/organizers`,
         `${apiURL}/admin`
       ]

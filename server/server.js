@@ -15,7 +15,7 @@ const app = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: 'http://127.0.0.1:3000' // Set the allowed origin
+  origin: 'http://localhost:3000' // Set the allowed origin
 }));
 
 app.use(express.json());
