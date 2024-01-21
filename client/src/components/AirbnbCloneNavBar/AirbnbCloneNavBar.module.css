@@ -36,13 +36,14 @@
   padding: 1rem;
   margin: 0 auto;
   max-width: 1600px;
+  padding-bottom: 0;
 }
 
 .headerInner {
   display: flex;
   justify-content: space-between;
   transition: padding-bottom 0.2s linear;
-  padding-bottom: calc(var(--middle-form-height) + 10px);
+  padding-bottom: calc(var(--middle-form-height));
 }
 
 .headerInner a {

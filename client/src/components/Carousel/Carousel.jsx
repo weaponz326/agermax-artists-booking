@@ -11,7 +11,7 @@ export default function Carousel({ artist }) {
         <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.artistImg} fill loading='eager' />
       </div>
       <Link href={`/artist-profile`} className={styles['carousel-title-text']}>
-        {artist.name}
+        {artist.first_name} {artist.last_name}
       </Link>
 
       {/* A good place to map your tags from Api calls */}

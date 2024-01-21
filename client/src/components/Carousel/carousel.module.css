@@ -79,11 +79,8 @@
 .carousel-genre {
   display: flex;
   gap: 0.2rem;
-  justify-content: flex-start;
-  align-items: flex-start;
+  align-self: flex-start;
   flex-wrap: wrap;
-  align-content: flex-start;
-  justify-items: flex-start;
 }
 
 .carousel-genre-text {
