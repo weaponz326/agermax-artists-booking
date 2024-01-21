@@ -40,15 +40,13 @@ import axios from 'axios'
 
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
+import AddUserDrawer from 'src/pages/admin/users/AddUserDrawer'
 
 // ** renders client column
 const userRoleObj = {
   admin: { icon: 'tabler:device-laptop', color: 'secondary' },
   artist: { icon: 'tabler:circle-check', color: 'success' },
-  organizer: { icon: 'tabler:edit', color: 'info' },
-  // maintainer: { icon: 'tabler:chart-pie-2', color: 'primary' },
-  // subscriber: { icon: 'tabler:user', color: 'warning' }
+  organizer: { icon: 'tabler:edit', color: 'info' }
 }
 
 const userStatusObj = {
@@ -137,250 +135,103 @@ const RowOptions = ({ id }) => {
   )
 }
 
-const columns = [
-  {
-    flex: 0.25,
-    minWidth: 280,
-    field: 'fullName',
-    headerName: 'User',
-    renderCell: ({ row }) => {
-      const { fullName, email } = row
-
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderClient(row)}
-          <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <Typography
-              noWrap
-              component={Link}
-              href='/apps/user/view/account'
-              sx={{
-                fontWeight: 500,
-                textDecoration: 'none',
-                color: 'text.secondary',
-                '&:hover': { color: 'primary.main' }
-              }}
-            >
-              {fullName}
-            </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-              {email}
-            </Typography>
-          </Box>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.15,
-    field: 'role',
-    minWidth: 170,
-    headerName: 'Role',
-    renderCell: ({ row }) => {
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CustomAvatar
-            skin='light'
-            sx={{ mr: 4, width: 30, height: 30 }}
-            color={userRoleObj[row.role].color || 'primary'}
-          >
-            <Icon icon={userRoleObj[row.role].icon} />
-          </CustomAvatar>
-          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
-          </Typography>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.15,
-    minWidth: 120,
-    headerName: 'Plan',
-    field: 'currentPlan',
-    renderCell: ({ row }) => {
-      return (
-        <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-          {row.currentPlan}
-        </Typography>
-      )
-    }
-  },
-  {
-    flex: 0.15,
-    minWidth: 190,
-    field: 'billing',
-    headerName: 'Billing',
-    renderCell: ({ row }) => {
-      return (
-        <Typography noWrap sx={{ color: 'text.secondary' }}>
-          {row.billing}
-        </Typography>
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 110,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: ({ row }) => {
-      return (
-        <CustomChip
-          rounded
-          skin='light'
-          size='small'
-          label={row.status}
-          color={userStatusObj[row.status]}
-          sx={{ textTransform: 'capitalize' }}
-        />
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    sortable: false,
-    field: 'actions',
-    headerName: 'Actions',
-    renderCell: ({ row }) => <RowOptions id={row.id} />
-  }
-]
-
-const UserList = ({ apiData }) => {
-  // ** State
-  const [role, setRole] = useState('')
-  const [plan, setPlan] = useState('')
-  const [value, setValue] = useState('')
-  const [status, setStatus] = useState('')
+const UserList = () => {
+  // ** State for storing users data
+  const [users, setUsers] = useState([])
   const [addUserOpen, setAddUserOpen] = useState(false)
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
-  // ** Hooks
-  const dispatch = useDispatch()
-  const store = useSelector(state => state.user)
+
+  // ** Function to fetch users from all categories
+  const fetchUsers = async () => {
+    try {
+      const apiURL = process.env.NEXT_PUBLIC_API_URL
+      const endpoints = [
+        `${apiURL}/artists`,
+        `${apiURL}/organizers`,
+        `${apiURL}/admin`
+      ]
+
+      const responses = await Promise.all(endpoints.map(endpoint => axios.get(endpoint)))
+
+      const combinedData = responses.flatMap(response =>
+        response.data.map(user => ({
+          id: user._id,
+          fullName: `${user.firstName} ${user.lastName}`,
+          email: user.contactEmail,
+          phone: user.contactPhone,
+          address: user.address
+          // Additional fields can be added as needed
+        }))
+      )
+
+      setUsers(combinedData)
+    } catch (error) {
+      console.error('Error fetching user data:', error)
+    }
+  }
+
   useEffect(() => {
-    dispatch(
-      fetchData({
-        role,
-        status,
-        q: value,
-        currentPlan: plan
-      })
-    )
-  }, [dispatch, plan, role, status, value])
-
-  const handleFilter = useCallback(val => {
-    setValue(val)
+    fetchUsers()
   }, [])
+  const dispatch = useDispatch()
 
-  const handleRoleChange = useCallback(e => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback(e => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback(e => {
-    setStatus(e.target.value)
-  }, [])
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+
+
+  const columns = [
+    {
+      field: 'fullName',
+      headerName: 'Full Name',
+      flex: 0.25,
+      minWidth: 180
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      flex: 0.25,
+      minWidth: 180
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone',
+      flex: 0.2,
+      minWidth: 160
+    },
+    {
+      field: 'address',
+      headerName: 'Address',
+      flex: 0.3,
+      minWidth: 220
+    }
+    // Add other columns as needed
+  ]
 
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
-        {apiData && (
-          <Grid container spacing={6}>
-            {apiData.statsHorizontalWithDetails.map((item, index) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatsHorizontalWithDetails {...item} />
-                </Grid>
-              )
-            })}
-          </Grid>
-        )}
+        {/* Render stats and other data */}
       </Grid>
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Search Filters' />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <CustomTextField
-                  select
-                  fullWidth
-                  defaultValue='Select Role'
-                  SelectProps={{
-                    value: role,
-                    displayEmpty: true,
-                    onChange: e => handleRoleChange(e)
-                  }}
-                >
-                  <MenuItem value=''>Select Role</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                  <MenuItem value='artist'>Artist</MenuItem>
-                  <MenuItem value='organizer'>Event Organizer</MenuItem>
-                </CustomTextField>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <CustomTextField
-                  select
-                  fullWidth
-                  defaultValue='Select Plan'
-                  SelectProps={{
-                    value: plan,
-                    displayEmpty: true,
-                    onChange: e => handlePlanChange(e)
-                  }}
-                >
-                  <MenuItem value=''>Select Plan</MenuItem>
-                  <MenuItem value='basic'>Basic</MenuItem>
-                  <MenuItem value='company'>Company</MenuItem>
-                  <MenuItem value='enterprise'>Enterprise</MenuItem>
-                  <MenuItem value='team'>Team</MenuItem>
-                </CustomTextField>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <CustomTextField
-                  select
-                  fullWidth
-                  defaultValue='Select Status'
-                  SelectProps={{
-                    value: status,
-                    displayEmpty: true,
-                    onChange: e => handleStatusChange(e)
-                  }}
-                >
-                  <MenuItem value=''>Select Status</MenuItem>
-                  <MenuItem value='pending'>Pending</MenuItem>
-                  <MenuItem value='active'>Active</MenuItem>
-                  <MenuItem value='inactive'>Inactive</MenuItem>
-                </CustomTextField>
-              </Grid>
-            </Grid>
-          </CardContent>
+          <CardContent>{/* Filter content */}</CardContent>
           <Divider sx={{ m: '0 !important' }} />
-          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
+          <TableHeader   toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
             rowHeight={62}
-            rows={store.data}
+            rows={users}
             columns={columns}
             disableRowSelectionOnClick
-            pageSizeOptions={[10, 25, 50]}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+            pageSize={10}
+            rowsPerPageOptions={[10, 25, 50]}
+            // Other DataGrid properties
           />
         </Card>
       </Grid>
-
       <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
     </Grid>
   )
 }
-
-
 
 export default UserList

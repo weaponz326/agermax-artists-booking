@@ -1,7 +1,6 @@
-// controllers/adminController.js
 const Admin = require('../models/Admin');
 
-exports.getAllAdmins = async (req, res) => {
+exports.getAllAdmin = async (req, res) => {
   try {
     const admins = await Admin.find();
     res.json(admins);

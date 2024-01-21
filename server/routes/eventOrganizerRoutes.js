@@ -1,4 +1,3 @@
-// routes/organizerRoutes.js
 const express = require('express');
 const router = express.Router();
 const organizerController = require('../controllers/eventOrganizerController');
