@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./configs/db');
 const userRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const artistRoutes = require('./routes/Routes');
+const artistRoutes = require('./routes/artistRoutes');
 const organizerRoutes = require('./routes/eventOrganizerRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const cors = require('cors'); // Import CORS
@@ -15,7 +15,7 @@ const app = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: 'http://localhost:3000' // Set the allowed origin
+  origin: 'http://127.0.0.1:3000' // Set the allowed origin
 }));
 
 app.use(express.json());
