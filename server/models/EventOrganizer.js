@@ -37,6 +37,6 @@ const organizerSchema = new mongoose.Schema({
   },
 });
 
-const organizer = mongoose.model('organizer', organizerSchema);
+const Organizer = mongoose.model('EventOrganizer', organizerSchema);
 
-module.exports = organizer;
+module.exports = Organizer;

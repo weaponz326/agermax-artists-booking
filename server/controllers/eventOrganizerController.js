@@ -1,4 +1,3 @@
-// controllers/organizerController.js
 const Organizer = require('../models/EventOrganizer');
 
 exports.getAllOrganizers = async (req, res) => {

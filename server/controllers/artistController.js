@@ -1,4 +1,3 @@
-// controllers/artistController.js
 const Artist = require('../models/Artist');
 
 exports.getAllArtists = async (req, res) => {
