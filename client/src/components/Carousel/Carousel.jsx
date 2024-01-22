@@ -30,7 +30,7 @@ export default function Carousel({ artist }) {
 }
 
 //Tag Component
-const Tag = ({ genre }) => {
+export const Tag = ({ genre }) => {
   return (
     <div className={styles['carousel-genre']}>
       <Link href='#'>

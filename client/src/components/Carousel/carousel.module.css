@@ -46,7 +46,7 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   align-items: center;
   box-shadow: 1px 1px 1px #183d4c49, -1px -1px 1px #183d4c49;
 }
@@ -55,7 +55,7 @@
   width: 100%;
   height: 10rem;
   position: relative;
-  border-radius: 1rem;
+  border-radius: inherit;
 }
 
 .carousel-title-text {
@@ -100,7 +100,7 @@
 
 .carousel-container button {
   width: 100%;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
 }
 
 .book-now {
@@ -111,7 +111,7 @@
   font-weight: 500;
   text-align: center;
   border: none;
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
   height: 2rem;
   margin-top: 2rem;
   align-self: flex-start;

@@ -139,7 +139,7 @@
 }
 
 /* Button */
-.button {
+.side-drawer-button {
   margin: 0;
   padding: 0;
   border: none;
@@ -151,6 +151,13 @@
   border-radius: 1rem;
   font-size: var(--medium-size);
   background-color: var(--button-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-drawer {
+  padding: 0 2rem 3rem 0;
 }
 
 .profile-card .bio-container {

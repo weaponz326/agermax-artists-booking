@@ -1,0 +1,56 @@
+.bookingCard * {
+}
+
+.tagSection {
+  display: flex;
+  gap: 0.5rem;
+}
+.chooseWhen {
+  font-size: 1.15rem;
+}
+.bookingCalendarSection {
+  margin-top: 1rem;
+}
+
+.bookingTimeSection {
+  display: flex;
+}
+
+.timeChooserContainer {
+  display: flex;
+  border: 1px solid #cbd4dc;
+  border-radius: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  justify-content: center;
+}
+
+.timeChooserDivider {
+  width: 1px;
+  background-color: #cbd4dc;
+  height: 2.5rem;
+  margin: auto 1rem;
+}
+
+.bookingActionSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actionLevelContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.actionLevel {
+  height: 0.75rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: rgba(252, 139, 94, 0.3);
+}
+
+.actionLevel:first-of-type {
+  background-color: var(--button-color);
+}

@@ -2,13 +2,21 @@ import { useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
+import { Button, Drawer } from 'antd'
+
+import SideDrawer from 'src/components/SideDrawer/SideDrawer'
+import BookingCard from 'src/components/BookingCard/BookingCard'
 
 function ArtistProfile() {
+  const [openSideDrawer, setOpenSideDrawer] = useState(false)
+  const openDrawer = () => {
+    setOpenSideDrawer(!openSideDrawer)
+  }
   return (
     <CustomPagesLayout>
       <main>
         <div className={styles['page-layout']}>
-          <ArtisteProfileSection />
+          <ArtisteProfileSection openDrawer={openDrawer} />
           <EventsSection />
         </div>
       </main>
@@ -72,7 +80,7 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = () => {
+const ArtisteProfileSection = ({ openDrawer }) => {
   return (
     <section>
       <Card className={styles['profile-card']}>
@@ -85,7 +93,7 @@ const ArtisteProfileSection = () => {
           <Tag>Trubadur</Tag>
         </div>
         <div className={styles['button-container']}>
-          <Button>Book now</Button>
+          <SideDrawerButton openDrawer={openDrawer} />
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
@@ -136,7 +144,40 @@ const Card = ({ children, className }) => {
   return <div className={`${styles['card']} ${className}`}>{children}</div>
 }
 
-const Button = ({ children }) => <button className={styles['button']}>{children}</button>
+const SideDrawerButton = () => {
+  const [open, setOpen] = useState(false)
+  const showDrawer = () => {
+    setOpen(true)
+  }
+  const onClose = () => {
+    setOpen(false)
+  }
+
+  const style = {
+    backgroundColor: 'red'
+  }
+  return (
+    <>
+      <Button onClick={showDrawer} className={styles['side-drawer-button']}>
+        Book Now
+      </Button>
+      <Drawer
+        style={style}
+        width={550}
+        className={styles['side-drawer']}
+        title='Book Artist'
+        onClose={onClose}
+        open={open}
+      >
+        <BookingCard />
+      </Drawer>
+    </>
+  )
+}
+
+// <button onClick={openDrawer} className={styles['button']}>
+//   {children}
+// </button>
 
 const Tag = ({ children }) => {
   return (
