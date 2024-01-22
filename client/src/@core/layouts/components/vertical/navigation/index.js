@@ -3,8 +3,64 @@ import { useRef, useState } from 'react'
 
 // ** MUI Imports
 import List from '@mui/material/List'
-import Box from '@mui/material/Box'
-import ListItemButton from '@mui/material/ListItemButton'  // <-- Add this line
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import Link from 'next/link'; // Import Link from Next.js
+import Icon from 'src/@core/components/icon';
+
+
+// Define a Box to contain the quick links, with appropriate styling
+const QuickLinksContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-around',
+  padding: theme.spacing(2), // Add some padding for spacing
+  '& .quick-link': {
+    display: 'flex',
+    flexDirection: 'column', // Stack icon and text vertically
+    alignItems: 'center',
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[2], // Add shadow to the icons
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '& .icon': {
+      fontSize: '1.75rem', // Slightly increase the icon size
+    },
+    '& .quick-link-text': {
+      marginTop: theme.spacing(1), // Space between icon and text
+      fontSize: '0.875rem', // Small text size for the names
+    }
+  }
+}));
+
+// Define the QuickActions component
+const QuickActions = () => {
+  const quickLinks = [
+    { title: 'Invoice', icon: 'tabler:receipt', path: '/admin/invoice' },
+    { title: 'Profile', icon: 'tabler:user', path: '/admin/account' },
+    { title: 'Notifs', icon: 'tabler:bell', path: '/admin/notifications' }
+  ];
+
+  return (
+    <QuickLinksContainer>
+      {quickLinks.map((link, index) => (
+        <Link key={index} href={link.path} passHref>
+          <Tooltip title={link.title} arrow>
+            <IconButton className="quick-link" component="a" sx={{ width: 'auto', height: 'auto' }}>
+              <Icon icon={link.icon} className="icon" />
+              <Typography variant="caption" className="quick-link-text">
+                {link.title}
+              </Typography>
+            </IconButton>
+          </Tooltip>
+        </Link>
+      ))}
+    </QuickLinksContainer>
+  );
+};
+
 
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
 
@@ -88,7 +144,7 @@ if (themeConfig.responsiveFontSizes) {
   // ** Adjust the theme only if the theme mode is 'light'
   if (theme.palette.mode === 'light') {
     theme.palette.background.default = '#f0f0f0' // light grey background for the nav drawer in light mode
-    theme.palette.background.paper = theme.palette.grey[100] // same color for paper elements in the drawer in light mode
+    theme.palette.background.paper = theme.palette.grey[200] // same color for paper elements in the drawer in light mode
   }
 
 
@@ -168,6 +224,9 @@ if (themeConfig.responsiveFontSizes) {
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
               ? afterNavMenuContent(navMenuContentProps)
               : null}
+              <Box sx={{ px: 2, py: 2, bgcolor: 'background.default' }}>
+        <QuickActions />
+      </Box>
           </ScrollWrapper>
         </Box>
         {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed'

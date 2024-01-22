@@ -34,7 +34,7 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover
   },
   '&.active': {
-    backgroundColor: theme.palette.grey[400], // This will be your light grey color for active state
+    backgroundColor: theme.palette.grey[300], // This will be your light grey color for active state
     '& .MuiTypography-root, & svg': {
       color: theme.palette.common.black + ' !important' // Ensuring text color is black for active items
     },
