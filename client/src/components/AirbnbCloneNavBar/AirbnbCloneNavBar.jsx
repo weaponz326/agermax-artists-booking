@@ -47,7 +47,7 @@ const AirbnbCloneNavBar = () => {
       <div className={styles.headerWrapper}>
         <div className={styles.headerInner}>
           <div className={styles.logoContainer}>
-            <a href='#'>
+            <a href='/'>
               <img src='/images/logo.png' alt='Agermax-logo' />
             </a>
           </div>

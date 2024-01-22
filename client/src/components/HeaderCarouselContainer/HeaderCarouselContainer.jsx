@@ -10,7 +10,6 @@ const HeaderCarouselContainer = ({ artistsList, currentArtistsData, className, l
   //Conditional Rendering depending on availability of APi call
   const renderedList = artistsList ? artistsList : currentArtistsData
   if (!renderedList || renderedList.length <= 0) {
-    console.log('PPP')
     return (
       <div className={className}>
         <div className={styles['hot-artists-nav']}>
