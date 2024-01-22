@@ -179,12 +179,12 @@ const VerticalNavGroup = props => {
                 color: 'text.secondary'
               },
               '&.Mui-selected': {
-                backgroundColor: 'action.selected',
+                backgroundColor: theme.palette.grey[400], // Use grey for the selected group
                 '&:hover': {
-                  backgroundColor: 'action.selected'
+                  backgroundColor: theme.palette.grey[400] // Maintain the color on hover
                 },
                 '& .MuiTypography-root, & :not(.menu-item-meta) > svg': {
-                  color: 'text.primary'
+                  color: theme.palette.common.white
                 },
                 '& .menu-item-meta > svg': {
                   color: 'text.secondary'
