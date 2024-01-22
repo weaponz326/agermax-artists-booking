@@ -4,6 +4,8 @@ import { useRef, useState } from 'react'
 // ** MUI Imports
 import List from '@mui/material/List'
 import Box from '@mui/material/Box'
+import ListItemButton from '@mui/material/ListItemButton'  // <-- Add this line
+
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
 
 // ** Third Party Components
@@ -75,13 +77,20 @@ const Navigation = props => {
     setCurrentActiveGroup
   }
 
-  // ** Create new theme for the navigation menu when mode is `semi-dark`
-  let darkTheme = createTheme(themeOptions(settings, 'dark'))
+// ** Create a theme based on the settings
+let theme = createTheme(themeOptions(settings, settings.theme));
 
-  // ** Set responsive font sizes to true
-  if (themeConfig.responsiveFontSizes) {
-    darkTheme = responsiveFontSizes(darkTheme)
+// ** Enhance the theme with responsive fonts if needed
+if (themeConfig.responsiveFontSizes) {
+  theme = responsiveFontSizes(theme);
+}
+
+  // ** Adjust the theme only if the theme mode is 'light'
+  if (theme.palette.mode === 'light') {
+    theme.palette.background.default = '#f0f0f0' // light grey background for the nav drawer in light mode
+    theme.palette.background.paper = theme.palette.grey[100] // same color for paper elements in the drawer in light mode
   }
+
 
   // ** Fixes Navigation InfiniteScroll
   const handleInfiniteScroll = ref => {
@@ -116,7 +125,7 @@ const Navigation = props => {
   const ScrollWrapper = hidden ? Box : PerfectScrollbar
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <Drawer {...props} navHover={navHover} setNavHover={setNavHover} navigationBorderWidth={navigationBorderWidth}>
         <VerticalNavHeader {...props} navHover={navHover} />
         {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed'
