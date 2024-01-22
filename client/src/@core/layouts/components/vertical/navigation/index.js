@@ -43,10 +43,10 @@ const CalendarComponent = () => {
       }}>
         <Box sx={{ mb: 2 }}>
           <Typography variant='subtitle2' component='p'>
-            DEC
+            JAN
           </Typography>
           <Typography variant='h5' component='p' sx={{ fontWeight: 'bold' }}>
-            28
+            21
           </Typography>
         </Box>
         <Typography variant='body1' component='p' sx={{ fontWeight: 'bold' }}>
@@ -98,11 +98,11 @@ const QuickActions = () => {
   ]
 
   return (
-    <QuickLinksContainer >
+    <QuickLinksContainer>
       {quickLinks.map((link, index) => (
         <Link key={index} href={link.path} passHref>
           <Tooltip title={link.title} arrow>
-            <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto',bgcolor: '#fff'  }}>
+            <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto' }}>
               <Icon icon={link.icon} className='icon' />
               <Typography variant='caption' className='quick-link-text'>
                 {link.title}
