@@ -32,16 +32,16 @@
   color: #777;
 }
 
-/* components/TestimonialCarousel.module.css */
-
-/* Add this style to change the color of slick arrows */
-.slick-arrow::before,
-.slick-next:before {
-  color: #ff5733 !important; /* Change to your desired color */
-  background-color: #0f0101 !important;
+.slick-prev,
+.slick-next {
+  color: #ff0000; /* Replace with your desired arrow color */
 }
 
-.slick-prev:hover,
-.slick-next:hover {
-  color: #e84118; /* Change to your desired color on hover */
+/* Additional styles if needed */
+.slick-prev {
+  left: 10px;
+}
+
+.slick-next {
+  right: 10px;
 }

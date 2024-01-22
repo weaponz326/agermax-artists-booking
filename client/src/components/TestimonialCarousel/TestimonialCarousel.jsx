@@ -32,12 +32,21 @@ const TestimonialCarousel = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000
+  }
+
+  const arrowStyles = {
+    color: '#ff0000', // Replace with your desired arrow color
+    // Additional styles if needed
+    left: '10px',
+    right: '10px'
   }
 
   return (
     <div className={styles.testimonialCarousel}>
-      <Slider {...settings}>
+      <Slider {...settings} className={styles.slider}>
         {testimonialData.map(testimonial => (
           <div key={testimonial.id} className={styles.testimonialItem}>
             <img src={testimonial.image} alt={`Testimonial from ${testimonial.author}`} />

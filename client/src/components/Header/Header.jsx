@@ -2,7 +2,6 @@ import Navbar from '../Navbar/Navbar'
 import HeaderCarouselContainer from '../HeaderCarouselContainer/HeaderCarouselContainer'
 import styles from './header.module.css'
 export default function Header({ artistsList }) {
-  if (!artistsList.length) return null
   return (
     <header className={styles['header']}>
       <div className={styles['header-background']}>

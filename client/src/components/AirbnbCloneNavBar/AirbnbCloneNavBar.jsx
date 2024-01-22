@@ -1,46 +1,70 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-// import logo from '../../assets/react.svg'
 import styles from './AirbnbCloneNavBar.module.css'
-import { Global, HambergerMenu, ProfileCircle, SearchNormal, SearchNormal1 } from 'iconsax-react'
-import Link from 'next/link'
+import { formItems } from '../../configs/headerFormConfig'
+import { useHeaderContext } from '../../providers/headerProvider'
+import { Global, HambergerMenu, ProfileCircle, SearchNormal1 } from 'iconsax-react'
+import { DropdownController } from '../Dropdown/DropDown'
 
 const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
   const [shouldStick, setShouldStick] = useState(false)
+  const { toggleHideMiddleForm, hideMiddleForm, setSelectedFormItem } = useHeaderContext()
+
+  const profileMenuItems = [
+    { label: 'Sign Up', href: '/' },
+    { label: 'Log In', href: '/' },
+    { label: 'Gift Cards', href: '/' },
+    { label: 'Agermax, Artists home', href: '/' },
+    { label: 'Help center', href: '/' }
+  ]
 
   useEffect(() => {
-    const handleScroll = e => {
-      console.log('Scroll Y', window.scrollY)
-      setShouldStick(() => window.scrollY >= 1)
+    const handleScroll = _ => {
+      const newValue = window.scrollY > 0
+
+      // toggleHideMiddleForm(newValue)
+      setShouldStick(oldValue => {
+        if (oldValue != newValue) toggleHideMiddleForm(newValue)
+        return newValue
+      })
+
+      if (newValue === true) setSelectedFormItem(null)
     }
 
     window.addEventListener('scroll', handleScroll)
-    return () => window.addEventListener('scroll', handleScroll)
-  }, [shouldStick])
-
-  // console.log({ shouldStick });
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header ref={headerRef} className={`${styles.header} ${shouldStick ? styles.headerSticky : ''}`}>
+    <header
+      ref={headerRef}
+      className={`
+        ${styles.header}
+        ${shouldStick ? styles.headerSticky : ''}
+        ${hideMiddleForm ? styles.shrinkBottomPadding : ''}
+      `}
+    >
       <div className={styles.headerWrapper}>
         <div className={styles.headerInner}>
           <div className={styles.logoContainer}>
-            <Link href='/'>
+            <a href='/'>
               <img src='/images/logo.png' alt='Agermax-logo' />
-            </Link>
+            </a>
           </div>
           <MiddleContainer />
           <div className={styles.rightSide}>
             <div className={styles.links}>
               <a href='#'>Agermax, Artists Home </a>
               <a href='#'>
-                <Global size='1.2rem' />
+                <Global style={{ fontSize: '1.2rem' }} />
               </a>
             </div>
-            <div className={styles.hamberger}>
-              <HambergerMenu size='25' />
-              <ProfileCircle size='32' />
-            </div>
+            <DropdownController items={profileMenuItems}>
+              <div className={styles.hamberger}>
+                <HambergerMenu size='25' />
+                <ProfileCircle size='32' />
+              </div>
+            </DropdownController>
           </div>
         </div>
       </div>
@@ -49,16 +73,23 @@ const AirbnbCloneNavBar = () => {
 }
 
 const MiddleContainer = () => {
+  const { hideMiddleForm } = useHeaderContext()
+  const [selectedFormItems, setSelectedFormItems] = useState(formItems.stays)
+  console.log(hideMiddleForm)
   return (
-    <div className={styles.middleWrapper}>
+    <div className={`${styles.middleWrapper} ${hideMiddleForm ? styles.hideForm : ''}`}>
       <div className={styles.middleWrapperInner}>
         <div className={styles.links}>
-          <a href='#'>Stays</a>
-          <a href='#'>Experiences</a>
+          <a href='#' onClick={() => setSelectedFormItems(formItems.stays)}>
+            Stays
+          </a>
+          <a href='#' onClick={() => setSelectedFormItems(formItems.experiences)}>
+            Experiences
+          </a>
           <a href='#'>Online Experiences</a>
         </div>
-        <div className={styles.formWrapper}>
-          <MiddleForm />
+        <div id='middle-form' className={styles.formWrapper}>
+          <MiddleForm formItems={selectedFormItems} />
           <MiddleFormMini />
         </div>
       </div>
@@ -67,22 +98,36 @@ const MiddleContainer = () => {
 }
 
 const MiddleFormMini = () => {
+  const { toggleHideMiddleForm, setSelectedFormItem } = useHeaderContext()
+
   const formItems = [
     {
-      label: 'Anywhere'
+      label: 'Anywhere',
+      pointer: 'desitnation'
     },
     {
-      label: 'Any week'
+      label: 'Any week',
+      pointer: 'date'
     },
     {
-      label: 'Add guests'
+      label: 'Add guests',
+      pointer: 'guests'
     }
   ]
+
+  const handleToggleForm = pointer => {
+    toggleHideMiddleForm(false)
+    setSelectedFormItem(pointer)
+  }
 
   return (
     <div className={styles.middleFormMini}>
       {formItems.map((item, index) => (
-        <MiddleFormItemMini key={`item-mini-${index}`} label={item.label} />
+        <MiddleFormItemMini
+          onSelect={() => handleToggleForm(item.pointer)}
+          key={`item-mini-${index}`}
+          label={item.label}
+        />
       ))}
     </div>
   )
@@ -96,55 +141,35 @@ const MiddleFormItemMini = ({ onSelect, label }) => {
   )
 }
 
-const MiddleForm = () => {
-  const [selectedItem, setSelectedItem] = useState(null)
-  const formItems = [
-    {
-      label: 'Where',
-      placeholder: 'Search destinations',
-      isInput: true
-    },
-    {
-      label: 'Check in',
-      placeholder: 'Add dates',
-      isInput: false
-    },
-    {
-      label: 'Check out',
-      placeholder: 'Add dates',
-      isInput: false
-    },
-    {
-      label: 'Who',
-      placeholder: 'Add guests',
-      isInput: false,
-      isSearch: true
-    }
-  ]
+const MiddleForm = ({ formItems }) => {
+  const { selectedFormItem, setSelectedFormItem } = useHeaderContext()
 
   useEffect(() => {
     const handleBlur = e => {
-      if (selectedItem === null) return
+      if (selectedFormItem === null) return
       if (!e.target.closest('#middle-form')) {
-        setSelectedItem(null)
+        setSelectedFormItem(null)
       }
     }
 
     window.addEventListener('click', handleBlur)
     return () => window.removeEventListener('click', handleBlur)
-  }, [selectedItem])
+  }, [selectedFormItem])
 
   return (
-    <div id='middle-form' className={`${styles.middleForm} ${selectedItem !== null ? styles.middleFormHighlight : ''}`}>
-      {formItems.map((item, index) => (
-        <MiddleFormItem
-          onSelect={() => setSelectedItem(index)}
-          focus={selectedItem === index}
-          key={`form-item-${index}`}
-          {...item}
-        />
-      ))}
-      <button className={`${styles.searchButton} ${selectedItem !== null ? styles.searchButtonLoose : ''}`}>
+    <div className={`${styles.middleForm} ${selectedFormItem !== null ? styles.middleFormHighlight : ''}`}>
+      {Object.keys(formItems).map((key, index) => {
+        const config = formItems[key]
+
+        return <MiddleFormItem key={`form-item-${index}`} config={config} pointer={key} />
+      })}
+
+      <button
+        className={`
+        ${styles.searchButton}
+        ${selectedFormItem !== null ? styles.searchButtonLoose : ''}
+      `}
+      >
         <div className={styles.searchButtonInner}>
           <SearchNormal1 size={20} />
           <span>Search</span>
@@ -154,19 +179,48 @@ const MiddleForm = () => {
   )
 }
 
-const MiddleFormItem = ({ onSelect, label, isSearch, isInput = false, focus = false, placeholder }) => {
-  return (
-    <div onClick={onSelect} className={`${styles.middleFormItem} ${focus ? styles.middleFormItemFoucs : ''}`}>
-      <div className={styles.middleFormItemInfo}>
-        <label>{label}</label>
-        {focus && isInput ? (
-          <input type='text' autoFocus={true} placeholder={placeholder} />
-        ) : (
-          <span>{placeholder}</span>
-        )}
+const MiddleFormItem = ({ pointer, config }) => {
+  const { selectedFormItem, setSelectedFormItem } = useHeaderContext()
+
+  const handleRenderItem = () => {
+    if (Array.isArray(config)) {
+      return config.map((item, index) => renderItem(item, `${pointer}-${index}`))
+    }
+
+    return [renderItem(config, pointer)]
+  }
+
+  const renderItem = (item, key) => {
+    const value = Array.isArray(config)
+      ? selectedFormItem === pointer
+        ? `${selectedFormItem}-0`
+        : selectedFormItem
+      : selectedFormItem
+
+    const focus = key === value
+
+    return (
+      <div
+        onClick={() => setSelectedFormItem(key)}
+        key={`middle-form-item-${item.label}`}
+        className={`
+        ${styles.middleFormItem}
+        ${focus ? styles.middleFormItemFoucs : ''}
+      `}
+      >
+        <div className={styles.middleFormItemInfo}>
+          <label>{item.label}</label>
+          {focus && item.isInput ? (
+            <input type='text' autoFocus={true} placeholder={item.placeholder} />
+          ) : (
+            <span>{item.placeholder}</span>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return <div className={styles.middleFormItemWrapper}>{...handleRenderItem()}</div>
 }
 
 export default AirbnbCloneNavBar

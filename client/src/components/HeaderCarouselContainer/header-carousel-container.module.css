@@ -46,16 +46,18 @@
   flex-direction: column;
   background-color: white;
   border-radius: 1rem;
-  align-items: center;
+  height: 100%;
+
+  /* align-items: center; */
   box-shadow: 1px 1px 1px #183d4c49, -1px -1px 1px #183d4c49;
 }
 
 .carousel-img {
-  object-fit: cover;
+  /* object-fit: cover;
   background-image: url('/images/rectangle-332-5.png');
   background-position: contain;
   background-size: cover;
-  object-fit: cover;
+  object-fit: cover; */
   width: 100%;
   height: 10rem;
   position: relative;

@@ -1,16 +1,24 @@
 import Footer from 'src/components/Footer/Footer'
 import Navbar from 'src/components/Navbar/Navbar'
 import AirbnbCloneNavBar from 'src/components/AirbnbCloneNavBar/AirbnbCloneNavBar'
+import HeaderContextProvider from 'src/providers/headerProvider'
+import DropdownContextProvider from 'src/providers/dropdownProvider'
+import { DropdownBubble } from 'src/components/Dropdown/DropDown'
 
 const CustomPagesLayout = ({ children }) => {
   return (
-    <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto' }}>
-      <AirbnbCloneNavBar />
-      <main style={{ minHeight: '100' }} className='page-layout-layout'>
-        {children}
-      </main>
-      <Footer />
-    </div>
+    <DropdownContextProvider>
+      <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto' }}>
+        <HeaderContextProvider>
+          <AirbnbCloneNavBar />
+        </HeaderContextProvider>
+        <main style={{ minHeight: '100' }} className='page-layout-layout'>
+          {children}
+        </main>
+        <Footer />
+      </div>
+      <DropdownBubble />
+    </DropdownContextProvider>
   )
 }
 

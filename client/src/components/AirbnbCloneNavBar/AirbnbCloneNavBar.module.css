@@ -1,35 +1,25 @@
-/* :root {
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-family: var(--font-family);
-} */
-
 .header * {
   margin: 0;
   padding: 0;
   position: relative;
   box-sizing: border-box;
-  color: black;
 }
 
 .header {
-  background-color: #e2e8ed;
+  background-color: #fff;
+  --z-index: 9999;
   --middle-form-height: 60px;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  box-sizing: border-box;
 }
 
 .headerSticky {
   margin: 0;
   padding: 0;
-  position: relative;
   box-sizing: border-box;
   top: 0;
   right: 0;
   left: 0;
   position: sticky;
-  z-index: 9999;
+  z-index: var(--z-index);
 }
 
 .headerWrapper {
@@ -82,7 +72,17 @@
   cursor: pointer;
   border-radius: 2rem;
   align-items: center;
+  background-color: #fff;
   border: 1px solid #ccc;
+}
+
+.hamberger:hover,
+.hamberger:focus {
+  box-shadow: var(--box-shadow);
+}
+
+.hamberger:focus {
+  outline-color: blue;
 }
 
 /* MIddle */
@@ -114,9 +114,9 @@
 .middleFormMini {
   display: flex;
   border-radius: 3rem;
+  background-color: #fff;
   border: 1px solid #ddd;
   box-shadow: var(--box-shadow);
-  --box-shadow: 0 2px 5px 0.2px #00000015;
 }
 
 .middleFormMini {
@@ -138,15 +138,44 @@
   box-shadow: none;
 }
 
+.middleFormItemWrapper {
+  display: flex;
+  min-width: 300px;
+  border-radius: inherit;
+}
+
 .middleFormItem,
 .middleFormItemMini {
   display: flex;
   padding: 0.5rem;
   border-radius: inherit;
+}
+
+.middleFormItem {
+  flex: 1;
+}
+
+.middleFormItem,
+.middleFormItemMini,
+.middleFormItem *,
+.middleFormItemMini * {
   cursor: pointer;
 }
+
 .middleFormItemMini {
   padding: 1rem 1.5rem;
+}
+
+.middleFormItem:not(:first-child)::before,
+.middleFormItemMini:not(:first-child)::before {
+  left: 0;
+  top: 50%;
+  height: 50%;
+  content: '';
+  width: 1px;
+  position: absolute;
+  background-color: #ccc;
+  transform: translate(0, -50%);
 }
 
 .middleFormItemInfo {
@@ -158,66 +187,12 @@
   flex-direction: column;
 }
 
-.searchButton {
-  display: grid;
-  border: none;
-  color: #fff;
-  padding: 0 1.2rem;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  place-content: center;
-  transition: all 0.2s linear;
-  background-color: rgb(255, 0, 106);
-  border-radius: var(--middle-form-height);
-  --height: calc(var(--middle-form-height) - 10px);
-  height: var(--height);
-  min-width: var(--height);
-  max-width: var(--height);
-}
-
-.searchButtonLoose {
-  max-width: calc(var(--middle-form-height) * 3);
-}
-
-.searchButton span {
-  display: none;
-}
-.searchButtonLoose span {
-  display: inline;
-}
-
-.searchButtonInner {
-  gap: 0.8rem;
-  display: flex;
-  align-items: center;
-  color: #fff;
-}
-
 .middleFormItem {
   min-width: 150px;
 }
 
-.middleFormItem:first-child,
-.middleFormItem:last-of-type {
-  min-width: 300px;
-}
-
 .middleFormItem:hover {
   background-color: #eee;
-}
-
-.middleFormItem:not(:first-child)::before,
-.middleFormItemMini:not(:first-child)::before {
-  left: 0;
-  top: 50%;
-  content: '';
-  width: 0.5px;
-  height: 50%;
-  position: absolute;
-  background-color: #ddd;
-  transform: translate(0, -50%);
 }
 
 .middleFormItem:hover::before,
@@ -254,7 +229,43 @@
   color: #aaa;
 }
 
-.searchButtonInner span {
+.searchButton {
+  display: grid;
+  border: none;
+  color: #fff;
+  padding: 0 1.2rem;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  place-content: center;
+  transition: all 0.2s linear;
+  background-color: rgb(255, 0, 106);
+  border-radius: var(--middle-form-height);
+  --height: calc(var(--middle-form-height) - 10px);
+  height: var(--height);
+  min-width: var(--height);
+  max-width: var(--height);
+}
+
+.searchButtonLoose {
+  max-width: calc(var(--middle-form-height) * 3);
+}
+
+.searchButton span {
+  display: none;
+}
+.searchButtonLoose span {
+  display: inline;
+}
+
+.searchButtonInner {
+  gap: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.searchButtonInner * {
   color: #fff;
 }
 
@@ -265,26 +276,26 @@
   transition: all 0.1s linear;
 }
 
-.headerSticky .headerInner {
+.shrinkBottomPadding .headerInner {
   padding-bottom: 0;
 }
 
-.headerSticky .middleWrapperInner .links {
+.hideForm .middleWrapperInner .links {
   transform: scale(0.8) translateY(-100%);
   opacity: 0;
 }
 
-.headerSticky .middleWrapperInner .formWrapper {
+.hideForm .middleWrapperInner .formWrapper {
   transform: translateY(-100%);
 }
 
-.headerSticky .middleWrapperInner .formWrapper .middleForm {
+.hideForm .middleWrapperInner .formWrapper .middleForm {
   opacity: 0;
   pointer-events: none;
   transform: scale(0.8);
 }
 
-.headerSticky .middleWrapperInner .formWrapper .middleFormMini {
+.hideForm .middleWrapperInner .formWrapper .middleFormMini {
   opacity: 1;
   pointer-events: all;
   transform: translate(-50%, -50%) scale(1);
