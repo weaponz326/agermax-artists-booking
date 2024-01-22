@@ -138,6 +138,9 @@
   padding: 0 1.5rem;
 }
 
+.side {
+  /* right: 500px; */
+}
 /* Button */
 .side-drawer-button {
   margin: 0;
@@ -157,7 +160,13 @@
 }
 
 .side-drawer {
-  padding: 0 2rem 3rem 0;
+  /* padding: 0 2rem 3rem 0; */
+  z-index: 1000 !important;
+  display: flex;
+}
+
+.ant-drawer-header {
+  display: none;
 }
 
 .profile-card .bio-container {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
-import { Button, Drawer } from 'antd'
+import { Button, Drawer, ConfigProvider } from 'antd'
 
 import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import BookingCard from 'src/components/BookingCard/BookingCard'
@@ -144,8 +144,9 @@ const Card = ({ children, className }) => {
   return <div className={`${styles['card']} ${className}`}>{children}</div>
 }
 
-const SideDrawerButton = () => {
+export const SideDrawerButton = () => {
   const [open, setOpen] = useState(false)
+  const [bookingCardType, setBookingCardType] = useState('schedule')
   const showDrawer = () => {
     setOpen(true)
   }
@@ -154,30 +155,38 @@ const SideDrawerButton = () => {
   }
 
   const style = {
-    backgroundColor: 'red'
+    backgroundColor: 'transparent',
+    position: 'relative',
+    padding: '0',
+    paddingTop: '5rem',
+    right: '3rem',
+    display: 'flex'
   }
   return (
-    <>
+    <div className={styles.side}>
       <Button onClick={showDrawer} className={styles['side-drawer-button']}>
         Book Now
       </Button>
       <Drawer
+        onClose={onClose}
         style={style}
         width={550}
         className={styles['side-drawer']}
-        title='Book Artist'
-        onClose={onClose}
         open={open}
+        autoFocus
+        closable={false}
+        title={null}
       >
-        <BookingCard />
+        <BookingCard
+          setOpen={setOpen}
+          onClose={onClose}
+          bookingCardType={bookingCardType}
+          setBookingCardType={setBookingCardType}
+        />
       </Drawer>
-    </>
+    </div>
   )
 }
-
-// <button onClick={openDrawer} className={styles['button']}>
-//   {children}
-// </button>
 
 const Tag = ({ children }) => {
   return (

@@ -1,57 +1,86 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './BookingCard.module.css'
 import { Tag } from '../Carousel/Carousel'
 import { TimePicker, ConfigProvider, Button } from 'antd'
 import BookingCalendar from '../BookingCalendar/BookingCalendar'
 import dayjs from 'dayjs'
+import { Calendar, Timer, Clock } from 'iconsax-react'
+import { style } from '@mui/system'
+import { DatePicker } from '@mui/lab'
 
-const style = {
-  backgroundColor: 'rgb(240, 240, 240)',
-  height: '100%',
-  borderRadius: '2rem',
-  padding: '2rem'
-}
+const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) => {
+  if (bookingCardType === 'schedule') {
+    const nextPage = 'summary'
+    return (
+      <div className={`${styles.bookingCard} ${styles.schedule}`}>
+        <BookingArtistProfile />
+        <h3 className={styles.chooseWhen}>Choose When 👇</h3>
+        <section className={styles.bookingCalendarSection}>
+          <BookingCalendar />
+        </section>
+        <section className={styles.bookingTimeSection}>
+          <h3>What Time?</h3>
+          <div className={styles.timeChooserContainer}>
+            <TimeChooser label={'Get-In-Time'} />
+            <div className={styles.timeChooserDivider}></div>
+            <TimeChooser label={'Start-Time'} />
+            <div className={styles.timeChooserDivider}></div>
 
-const BookingCard = () => {
-  return (
-    <div style={style} className={styles.bookingCard}>
-      <h2>Artist Name</h2>
-      <section className={styles['tagSection']}>
-        <Tag genre={'Rock'} />
-        <Tag genre={'Rock'} />
-      </section>
-      <h3 className={styles.chooseWhen}>Choose When 👇</h3>
-      <section className={styles.bookingCalendarSection}>
-        <BookingCalendar />
-      </section>
-      <section className={style.bookingTimeSection}>
-        <h3>What Time?</h3>
-        <div className={styles.timeChooserContainer}>
-          <TimeChooser label={'Get-In-Time'} />
-          <div className={styles.timeChooserDivider}></div>
-          <TimeChooser label={'Start-Time'} />
-          <div className={styles.timeChooserDivider}></div>
-
-          <TimeChooser label={'End-Time'} />
-        </div>
-      </section>
-      <div className={styles.bookingActionSection}>
-        <Button>👈 Cancel</Button>
-        <div className={styles.actionLevelContainer}>
-          <div className={styles.actionLevel}></div>
-          <div className={styles.actionLevel}></div>
-          <div className={styles.actionLevel}></div>
-        </div>
-        <Button>Next 👉</Button>
+            <TimeChooser label={'End-Time'} />
+          </div>
+        </section>
+        <BookingAction
+          rightButtonMsg={'Next'}
+          leftButtonMsg={'Cancel'}
+          setBookingCardType={setBookingCardType}
+          nextPage={nextPage}
+          bookingCardType={bookingCardType}
+          onClose={onClose}
+          setOpen={setOpen}
+        />
       </div>
-    </div>
-  )
+    )
+  } else if (bookingCardType === 'summary') {
+    const nextPage = 'confirmation'
+    const previousPage = 'schedule'
+
+    return (
+      <div className={`${styles.bookingCard} ${styles.summary}`}>
+        <BookingArtistProfile />
+        <div>
+          <h3>Summary</h3>
+          <SummaryDetails icon={<Calendar />} schedule={'Date'} value={'21-03-2024'} />
+          <SummaryDetails icon={<Clock />} schedule={'Time'} value={'18:00 GMT'} />
+          <h3 style={{ marginBottom: '14.5rem' }}>Your Details</h3>
+        </div>
+
+        <BookingAction
+          leftButtonMsg={'Back'}
+          rightButtonMsg={'Book Now'}
+          setBookingCardType={setBookingCardType}
+          nextPage={nextPage}
+          previousPage={previousPage}
+        />
+      </div>
+    )
+  } else if (bookingCardType === 'confirmation') {
+    const nextPage = '/'
+
+    return <div className={`${styles.bookingCard} ${styles.confirmation}`}>Confirmed!</div>
+  } else {
+    return (
+      <div className={styles.errorMessage}>
+        Error in booking card type. Select for type either "schedule", "summary" or "confirmation
+      </div>
+    )
+  }
 }
 
 export default BookingCard
 
 export const TimeChooser = ({ label }) => {
   const format = 'HH:mm'
+
   return (
     <div className={styles.timeChooser}>
       <label htmlFor='time'>{label}</label> <br />
@@ -63,8 +92,66 @@ export const TimeChooser = ({ label }) => {
           }
         }}
       >
-        <TimePicker variant={'borderless'} defaultValue={dayjs('12:08', format)} format={format} />
+        <TimePicker variant={'borderless'} defaultValue={dayjs('19:00', format)} format={format} />
       </ConfigProvider>
+    </div>
+  )
+}
+
+export const BookingArtistProfile = () => {
+  return (
+    <section className={styles.BookingArtistProfile}>
+      <h2>Artist Name</h2>
+      <section className={styles['tagSection']}>
+        <Tag genre={'Rock'} />
+        <Tag genre={'Rock'} />
+      </section>
+    </section>
+  )
+}
+
+export const BookingAction = ({
+  onClose,
+  setOpen,
+  rightButtonMsg,
+  leftButtonMsg,
+  bookingCardType,
+  setBookingCardType,
+  nextPage,
+  previousPage
+}) => {
+  function handleClick() {
+    if (onClose) {
+      setOpen(false)
+      setBookingCardType('schedule')
+    }
+    setBookingCardType(previousPage)
+  }
+  return (
+    <section className={styles.bookingActionSection}>
+      <Button onClose={onClose} onClick={handleClick} className={styles.bookingButton}>
+        👈 {leftButtonMsg}
+      </Button>
+      <div className={styles.actionLevelContainer}>
+        <div className={styles.actionLevel}></div>
+        <div className={styles.actionLevel}></div>
+        <div className={styles.actionLevel}></div>
+      </div>
+      <Button className={styles.bookingButton} onClick={() => setBookingCardType(nextPage)}>
+        {rightButtonMsg} 👉
+      </Button>
+    </section>
+  )
+}
+
+const SummaryDetails = ({ icon, schedule, value }) => {
+  return (
+    <div className={styles.summaryDetails}>
+      <div>{icon}</div>
+      <div>
+        <div>{schedule}</div>
+        <h4 style={{ margin: '0' }}>{value} </h4>
+      </div>
     </div>
   )
 }

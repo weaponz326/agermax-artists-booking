@@ -1,4 +1,12 @@
-.bookingCard * {
+.bookingCard {
+  background-color: rgb(240, 240, 240);
+  height: 100%;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .tagSection {
@@ -12,8 +20,14 @@
   margin-top: 1rem;
 }
 
+.bookingTimeSection * {
+  padding: 0;
+  margin: 0;
+}
 .bookingTimeSection {
+  margin-top: 1rem;
   display: flex;
+  flex-direction: column;
 }
 
 .timeChooserContainer {
@@ -32,6 +46,7 @@
 }
 
 .bookingActionSection {
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,4 +68,42 @@
 
 .actionLevel:first-of-type {
   background-color: var(--button-color);
+}
+
+.bookingActionSection {
+  justify-self: flex-end;
+}
+
+.bookingButton {
+  background-color: var(--button-color);
+  display: flex;
+  font-size: 0.875rem;
+  border: none;
+  color: #4b627f;
+  font-weight: bold;
+}
+
+.bookingButton:first-of-type {
+  background-color: #d5dfec;
+}
+
+.bookingButton *:hover {
+  /* color: black; */
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  padding-bottom: 6rem;
+  flex: 1;
+}
+
+.summaryDetails {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid grey;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
 }
