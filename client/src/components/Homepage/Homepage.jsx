@@ -16,7 +16,9 @@ const HomePage = () => {
   const [artistsList, setArtistsList] = useState([])
   useEffect(() => {
     const fetchData = async () => {
-      const { artistsData, artistsPhotos } = await getArtistsData()
+      const data = await getArtistsData()
+      if (!data) return
+      const { artistsData, artistsPhotos } = data
       setArtistsList(artistsData)
       setImgList(artistsPhotos)
     }

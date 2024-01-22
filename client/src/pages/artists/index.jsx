@@ -4,6 +4,8 @@ import styles from './artists.module.css'
 import getArtistsData from 'src/services/artist'
 import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer/HeaderCarouselContainer'
 import Button from 'src/components/Button/Button'
+import CustomPagination from 'src/components/CustomPagination/CustomPagination'
+
 const ArtistsPage = () => {
   const [artistsPerPage, setArtistsPerPage] = useState(8)
   const [currentPage, setCurrentPage] = useState(1)
@@ -15,7 +17,9 @@ const ArtistsPage = () => {
     const firstIndexOfList = lastIndexOfList - artistsPerPage
 
     const fetchArtistsLists = async () => {
-      const { artistsData } = await getArtistsData()
+      const data = await getArtistsData()
+      if (!data) return
+      const { artistsData } = data
       setArtistDataList(artistsData)
       setCurrentArtistsData(artistsData.slice(firstIndexOfList, lastIndexOfList))
       // console.log(artistsData)
@@ -26,10 +30,11 @@ const ArtistsPage = () => {
   return (
     <CustomPagesLayout>
       <main className={styles['main']}>
-        <Pagination
+        <CustomPagination
           artistsPerPage={artistsPerPage}
           artistsDataList={artistsDataList}
           currentArtistsData={currentArtistsData}
+          setCurrentArtistsData={setCurrentArtistsData}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
         />
@@ -38,13 +43,21 @@ const ArtistsPage = () => {
           layout={styles['artists-page-layout']}
           currentArtistsData={currentArtistsData}
         />
-        <Pagination
+        <CustomPagination
+          artistsPerPage={artistsPerPage}
+          artistsDataList={artistsDataList}
+          currentArtistsData={currentArtistsData}
+          setCurrentArtistsData={setCurrentArtistsData}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
+        {/* <Pagination
           artistsPerPage={artistsPerPage}
           artistsDataList={artistsDataList}
           currentArtistsData={currentArtistsData}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
-        />
+        /> */}
       </main>
     </CustomPagesLayout>
   )

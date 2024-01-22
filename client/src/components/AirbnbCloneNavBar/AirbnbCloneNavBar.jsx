@@ -21,7 +21,6 @@ const AirbnbCloneNavBar = () => {
   useEffect(() => {
     const handleScroll = _ => {
       const newValue = window.scrollY > 0
-      console.log('Scroll Y ', window.scrollY)
 
       // toggleHideMiddleForm(newValue)
       setShouldStick(oldValue => {

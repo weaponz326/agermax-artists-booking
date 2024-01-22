@@ -13,26 +13,34 @@ export async function getArtistById(id) {
 }
 
 export const getRandomArtistsPhotos = async () => {
-  const { data } = await Unsplash.get('/search/photos', {
-    params: {
-      query: 'Music Artists',
-      per_page: 50,
-      page: Math.floor(Math.random() * 20) + 1
-    }
-  })
-  return data.results
+  try {
+    const { data } = await Unsplash.get('/search/photos', {
+      params: {
+        query: 'Music Artists',
+        per_page: 50,
+        page: Math.floor(Math.random() * 20) + 1
+      }
+    })
+    return data.results
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export default async function getArtistsData() {
-  const artistsPhotos = await getRandomArtistsPhotos()
-  // const artistsList = await getAllArtists()
-  const artistsList = await getAllArtists()
-  const randomImage = () => artistsPhotos[Math.floor(Math.random() * 20)].urls.regular
+  try {
+    const artistsPhotos = await getRandomArtistsPhotos()
+    // const artistsList = await getAllArtists()
+    const artistsList = await getAllArtists()
+    const randomImage = () => artistsPhotos[Math.floor(Math.random() * 20)].urls.regular
+    const artistsData = []
+    for (let i = 0; i < artistsList.length; i++) {
+      artistsData.push({ ...artistsList[i], artistImg: randomImage() })
+    }
+    return { artistsPhotos, artistsData }
+  } catch (error) {
+    console.log(error)
+  }
 
   // Merge one phone to into every artist object
-  const artistsData = []
-  for (let i = 0; i < artistsList.length; i++) {
-    artistsData.push({ ...artistsList[i], artistImg: randomImage() })
-  }
-  return { artistsPhotos, artistsData }
 }

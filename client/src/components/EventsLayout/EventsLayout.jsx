@@ -5,21 +5,49 @@ import { Fragment } from 'react'
 import Router from 'next/router'
 import styles from './events-layout.module.css'
 import Image from 'next/image'
+import { Avatar, Card, Skeleton, Switch } from 'antd'
+const { Meta } = Card
 export default function EventsLayout({ imgList }) {
-  return (
-    <div className={styles['main-events']}>
-      <span className={`${styles['events-nav']} ${styles['see-all']}`}>
-        <Link href='#'>See all</Link>
-      </span>
-      <div className={styles['events-preview']}>
-        {imgList.map((img, index) => (
-          <Fragment key={index}>
-            <EventCard imgUrl={img.urls.regular} />
-          </Fragment>
-        ))}
+  if (imgList.length <= 0) {
+    console.log('sth')
+    return (
+      <div className={styles['main-events']}>
+        //{' '}
+        <span className={`${styles['events-nav']} ${styles['see-all']}`}>
+          <Link href='#'>See all</Link>
+          //{' '}
+        </span>
+        <div className={styles['events-preview']}>
+          {Array.from({ length: 9 }).map((img, index) => (
+            <Fragment key={index}>
+              <Card style={{ backgroundColor: 'grey' }} className={styles['events-preview-container']} loading={true}>
+                <Meta
+                  avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />}
+                  title='Card title'
+                  description='This is the description'
+                />
+              </Card>
+            </Fragment>
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className={styles['main-events']}>
+        <span className={`${styles['events-nav']} ${styles['see-all']}`}>
+          <Link href='#'>See all</Link>
+        </span>
+        <div className={styles['events-preview']}>
+          {imgList.map((img, index) => (
+            <Fragment key={index}>
+              <EventCard imgUrl={img.urls.regular} />
+            </Fragment>
+          ))}
+        </div>
+      </div>
+    )
+  }
 }
 
 const EventCard = ({ imgUrl }) => {
