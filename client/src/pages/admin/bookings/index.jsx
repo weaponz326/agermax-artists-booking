@@ -84,7 +84,6 @@ const BookingPage = () => {
             <TabButton className={styles.filterTab}>
               <div className={styles.filterTabContent}>
                 <GridFilterAltIcon />
-
                 <span>Filter</span>
               </div>
             </TabButton>

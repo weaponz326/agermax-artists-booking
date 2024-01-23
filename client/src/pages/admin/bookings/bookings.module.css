@@ -11,7 +11,7 @@
   --events-panel-backgroundColor: #f2f5f6;
   /* --events-panel-backgroundColor: #2983a1; */
 
-  margin: 1.5rem;
+  margin: 0 1.5rem;
 }
 
 .bookingsPage * {
@@ -22,8 +22,8 @@
 /*Navigation Panel Section*/
 .navigationPanel {
   display: flex;
+  /* flex-wrap: wrap; */
 }
-
 .dateFilter {
   display: flex;
   align-items: center;
@@ -31,18 +31,24 @@
 }
 
 .selectMonth {
+  padding: 0.3rem 1.3rem;
   /* padding-inline: 2px; */
+}
+.filterTab {
+  padding: 0.3rem 1.3rem;
 }
 
 .filterTabContent {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 .calendarViewTabs {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .viewStylesTabs * {
@@ -63,6 +69,7 @@
   /* border: var(--tabs-container-border); */
   border-radius: var(--tabs-border-radius);
   background-color: var(--tabs-container-color);
+  display: flex;
 }
 
 .threeDViewTab {
@@ -98,6 +105,7 @@
 .bookingStatusAllButton {
   background-color: #4328f21c;
   border: 1px solid #4428f2;
+  color: #4428f2;
 }
 .statusCount {
   background-color: var(--primary-color);

@@ -16,11 +16,12 @@
   align-items: center;
   border-radius: var(--tabs-border-radius);
   border: var(--search-container-border);
+  max-width: 12rem;
 }
 
 .searchInputField {
   border: none;
   outline: none;
-  /* font-size: 0.75rem; */
   padding: auto;
+  width: 100%;
 }
