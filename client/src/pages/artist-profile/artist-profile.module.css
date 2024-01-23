@@ -138,25 +138,25 @@
   padding: 0 1.5rem;
 }
 
-.side {
-  /* right: 500px; */
+.aside {
 }
 /* Button */
 .side-drawer-button {
-  margin: 0;
-  padding: 0;
-  border: none;
-  list-style: none;
-  position: relative;
-  width: 100%;
-  padding: 1rem;
-  color: rgb(255, 255, 255);
-  border-radius: 1rem;
-  font-size: var(--medium-size);
   background-color: var(--button-color);
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  font-size: 1rem;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 4rem;
+  margin: 6rem 0 2rem 0;
+  padding: 1rem;
+}
+.side-drawer-button:hover {
+  cursor: pointer;
+  background-color: #f07a4b;
 }
 
 .side-drawer {

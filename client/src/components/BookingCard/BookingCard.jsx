@@ -4,9 +4,10 @@ import { Tag } from '../Carousel/Carousel'
 import { TimePicker, ConfigProvider, Button } from 'antd'
 import BookingCalendar from '../BookingCalendar/BookingCalendar'
 import dayjs from 'dayjs'
-import { Calendar, Timer, Clock } from 'iconsax-react'
-import { style } from '@mui/system'
-import { DatePicker } from '@mui/lab'
+import { Calendar, Timer, Clock, Check } from 'iconsax-react'
+// import Button from '../Button/Button'
+import { MdCheckCircle } from 'react-icons/md'
+import Link from 'next/link'
 
 const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) => {
   if (bookingCardType === 'schedule') {
@@ -65,8 +66,34 @@ const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) 
     )
   } else if (bookingCardType === 'confirmation') {
     const nextPage = '/'
-
-    return <div className={`${styles.bookingCard} ${styles.confirmation}`}>Confirmed!</div>
+    function handleConfirmBtnClick() {
+      setOpen(false)
+      setBookingCardType('schedule')
+    }
+    return (
+      <div className={`${styles.bookingCard} ${styles.confirmation}`}>
+        <h1>Thank you!</h1>
+        <p className={styles.confirmationMessage}>
+          Your booking is now pending moderation. We will get back to you with further details
+        </p>
+        <div>
+          <MdCheckCircle
+            size='200'
+            color='#7cdb94'
+            className={styles.checkmarkIcon}
+            style={{ fontSize: 200, color: '#32ED7D', borderRadius: '50%' }}
+          />
+        </div>
+        <button onClick={handleConfirmBtnClick} className={styles.bookingConfirmButton}>
+          View Booking
+        </button>
+        <div>
+          <Link href={'/'}>
+            <span>Back to Home!</span>
+          </Link>
+        </div>
+      </div>
+    )
   } else {
     return (
       <div className={styles.errorMessage}>
@@ -115,27 +142,28 @@ export const BookingAction = ({
   setOpen,
   rightButtonMsg,
   leftButtonMsg,
-  bookingCardType,
   setBookingCardType,
+  bookingCardType,
   nextPage,
   previousPage
 }) => {
-  function handleClick() {
-    if (onClose) {
-      setOpen(false)
-      setBookingCardType('schedule')
+  function handleLeftClick() {
+    if (bookingCardType === 'schedule') {
+      return setOpen(false)
     }
-    setBookingCardType(previousPage)
+    return setBookingCardType(previousPage)
   }
+
+  const checkFirstLevel = nextPage === 'confirmation' ? styles.activeActionLevel : styles.actionLevel
   return (
     <section className={styles.bookingActionSection}>
-      <Button onClose={onClose} onClick={handleClick} className={styles.bookingButton}>
+      <Button onClose={onClose} onClick={handleLeftClick} className={styles.bookingButton}>
         👈 {leftButtonMsg}
       </Button>
       <div className={styles.actionLevelContainer}>
-        <div className={styles.actionLevel}></div>
-        <div className={styles.actionLevel}></div>
-        <div className={styles.actionLevel}></div>
+        <div className={styles.activeActionLevel}></div>
+        <div className={checkFirstLevel}></div>
+        <div className={`${styles.actionLevel} ${styles.actionLevel}`}></div>
       </div>
       <Button className={styles.bookingButton} onClick={() => setBookingCardType(nextPage)}>
         {rightButtonMsg} 👉

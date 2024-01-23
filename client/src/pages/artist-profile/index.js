@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
@@ -9,14 +9,21 @@ import BookingCard from 'src/components/BookingCard/BookingCard'
 
 function ArtistProfile() {
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
-  const openDrawer = () => {
-    setOpenSideDrawer(!openSideDrawer)
+  const [openDrawer, setOpenDrawer] = useState(false)
+  function drawerState(value) {
+    setOpenDrawer(value)
+    console.log({ openDrawer })
   }
   return (
     <CustomPagesLayout>
       <main>
         <div className={styles['page-layout']}>
-          <ArtisteProfileSection openDrawer={openDrawer} />
+          <ArtisteProfileSection
+            openDrawer={openDrawer}
+            openSideDrawer={openSideDrawer}
+            setOpenSideDrawer={setOpenSideDrawer}
+            drawerState={drawerState}
+          />
           <EventsSection />
         </div>
       </main>
@@ -80,7 +87,7 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = ({ openDrawer }) => {
+const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, drawerState }) => {
   return (
     <section>
       <Card className={styles['profile-card']}>
@@ -93,7 +100,9 @@ const ArtisteProfileSection = ({ openDrawer }) => {
           <Tag>Trubadur</Tag>
         </div>
         <div className={styles['button-container']}>
-          <SideDrawerButton openDrawer={openDrawer} />
+          <button onClick={() => drawerState(true)} className={styles['side-drawer-button']}>
+            Book Now
+          </button>
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
@@ -103,6 +112,15 @@ const ArtisteProfileSection = ({ openDrawer }) => {
           </p>
         </div>
       </Card>
+
+      <div className={styles.aside}>
+        <SideDrawerButton
+          drawerState={drawerState}
+          openSideDrawer={openSideDrawer}
+          openDrawer={openDrawer}
+          setOpenSideDrawer={setOpenSideDrawer}
+        />
+      </div>
     </section>
   )
 }
@@ -144,29 +162,40 @@ const Card = ({ children, className }) => {
   return <div className={`${styles['card']} ${className}`}>{children}</div>
 }
 
-export const SideDrawerButton = () => {
+export const SideDrawerButton = ({ openSideDrawer, openDrawer, setOpenSideDrawer, drawerState }) => {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (openDrawer) {
+      setOpen(true)
+      drawerState(false)
+    }
+    // setOpenSideDrawer(openDrawer)
+  })
+
   const [bookingCardType, setBookingCardType] = useState('schedule')
   const showDrawer = () => {
     setOpen(true)
   }
   const onClose = () => {
+    setBookingCardType('schedule')
     setOpen(false)
   }
 
   const style = {
     backgroundColor: 'transparent',
     position: 'relative',
+    top: '5rem',
     padding: '0',
-    paddingTop: '5rem',
+    // paddingTop: '5rem',
     right: '3rem',
-    display: 'flex'
+    display: 'flex',
+    width: '100%',
+    height: '85%',
+    borderRadius: '2rem'
   }
   return (
     <div className={styles.side}>
-      <Button onClick={showDrawer} className={styles['side-drawer-button']}>
-        Book Now
-      </Button>
       <Drawer
         onClose={onClose}
         style={style}
@@ -179,7 +208,7 @@ export const SideDrawerButton = () => {
       >
         <BookingCard
           setOpen={setOpen}
-          onClose={onClose}
+          // onClose={onClose}
           bookingCardType={bookingCardType}
           setBookingCardType={setBookingCardType}
         />
