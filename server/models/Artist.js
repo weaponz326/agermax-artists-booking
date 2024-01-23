@@ -25,11 +25,11 @@ const artistSchema = new mongoose.Schema({
   },
   contactPhone: { 
     type: String,
-    required: true 
+    // required: true 
   },
   address: { 
     type: String,
-    required: true 
+    // required: true 
   },
   organizationNumber: { 
     type: String 

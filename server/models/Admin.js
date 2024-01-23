@@ -16,11 +16,11 @@ const adminSchema = new mongoose.Schema({
   },
   contactPhone: { 
     type: String,
-    required: true 
+    // required: true 
   },
   address: { 
     type: String,
-    required: true 
+    // required: true 
   },
   role: { 
     type: String,
