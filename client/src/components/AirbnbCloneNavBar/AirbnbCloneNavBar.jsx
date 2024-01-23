@@ -24,7 +24,7 @@ const AirbnbCloneNavBar = () => {
 
       // toggleHideMiddleForm(newValue)
       setShouldStick(oldValue => {
-        if (oldValue != newValue) toggleHideMiddleForm(newValue)
+        if (newValue === true) toggleHideMiddleForm(newValue)
         return newValue
       })
 

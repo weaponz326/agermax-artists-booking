@@ -195,7 +195,7 @@ export const SideDrawerButton = ({ openSideDrawer, openDrawer, setOpenSideDrawer
     borderRadius: '2rem'
   }
   return (
-    <div className={styles.side}>
+    <div>
       <Drawer
         onClose={onClose}
         style={style}

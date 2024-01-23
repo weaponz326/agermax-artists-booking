@@ -1,0 +1,111 @@
+/* Global Styles */
+.bookingsPage {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  /* --events-panel-backgroundColor: #f2f5f6; */
+  --events-panel-backgroundColor: #2983a1;
+}
+
+.bookingsPage * {
+  box-sizing: border-box;
+}
+
+/*Navigation Panel Section*/
+.navigationPanel {
+  display: flex;
+}
+.calendarViewTabs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewStylesTabs * {
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  background-color: var(--regular-tab-background);
+}
+
+.viewStylesTabs *:hover {
+  border-radius: inherit;
+  background-color: var(--tabs-hover-color);
+}
+
+.viewStylesTabs {
+  padding: var(--tabs-container-padding);
+  border: var(--tabs-container-border);
+  border-radius: var(--tabs-border-radius);
+  background-color: var(--tabs-container-color);
+}
+
+.threeDViewTab {
+  border-radius: var(--tabs-border-radius) 0 0 var(--tabs-border-radius);
+}
+
+.listViewTab {
+  border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
+}
+
+.activeTab {
+  border-radius: inherit;
+  background-color: var(--selected-tab-background);
+  color: black;
+  font-weight: bold;
+}
+
+/*Booking Status Section*/
+.bookingStatus {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.bookingStatus * {
+  background-color: var(--regular-tab-background);
+  /* border-radius: inherit; */
+}
+
+.bookingStatus *:hover {
+  background-color: var(--tabs-hover-color);
+}
+
+.monthlyLookaheadSection {
+  margin-top: 3rem;
+}
+
+.allMonthEvents {
+}
+
+.monthEventListItem {
+  background-color: var(--events-panel-backgroundColor);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.statusInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.statusIcon {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+}
+
+.calendarIcon {
+  width: 20px;
+  height: 20px;
+  background-color: rebeccapurple;
+}
