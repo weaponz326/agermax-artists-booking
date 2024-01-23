@@ -22,7 +22,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  height: 140 // Adjust the height as per your design
+  height: 140, // Adjust the height as per your design
+  marginBottom: 12,
 }))
 
 const ChartCard = styled(StyledCard)(({ theme }) => ({

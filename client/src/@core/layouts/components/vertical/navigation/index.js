@@ -6,6 +6,7 @@ import { Button, List } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Link from 'next/link' // Import Link from Next.js
 import Icon from 'src/@core/components/icon'
@@ -24,41 +25,76 @@ const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(1),
   marginBottom: theme.spacing(1),
   color: theme.palette.grey[900],
-  backgroundColor: theme.palette.grey[300],
+  backgroundColor: '#fff',
+  width: '100%',
   '&:hover': {
     backgroundColor: theme.palette.grey[300]
   }
 }))
 
+const DateBox = styled(Box)(({ theme }) => ({
+  border: '1px solid #d0d0d0',
+  borderRadius: theme.shape.borderRadius,
+  float: 'left',
+  marginRight: theme.spacing(2),
+  padding: 0,
+  '& .month': {
+    color: 'white',
+    backgroundColor: 'red',
+  },
+  '& .day': {
+    backgroundColor: 'white',
+  },
+}));
+
 const CalendarComponent = () => {
   return (
     <Box sx={{
-    bgcolor: '#fff', // Here's where you set the background color
-    p: 2, // You can add padding
+    // bgcolor: '#fff', // Here's where you set the background color
+    // p: 2, // You can add padding
+    m: 2,
     borderRadius: 'borderRadius',
   }}>
 
       <EventCard       sx={{
-        bgcolor: '#fff' // Here's where you set the background color
+        bgcolor: '#eaeaea', // Here's where you set the background color
+        border: '1px solid #d0d0d0'
       }}>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant='subtitle2' component='p'>
+        {/* <Box sx={{ mb: 2 }}>
+          <Typography variant='h5' component='p'>
             JAN
           </Typography>
           <Typography variant='h5' component='p' sx={{ fontWeight: 'bold' }}>
             21
           </Typography>
         </Box>
-        <Typography variant='body1' component='p' sx={{ fontWeight: 'bold' }}>
+        <Typography variant='body1' component='p'>
           Stockholm music festival
         </Typography>
-        <Typography variant='body2' component='p'>
+        <Typography variant='body2' component='p' sx={{ fontWeight: 'bold' }}>
           John Doe
+        </Typography> */}
+        <DateBox>
+          <Typography variant='h5' component='p' className="month">
+            JAN
+          </Typography>
+          <Typography variant='h5' component='p' className="day" sx={{ fontWeight: 'bold' }}>
+            21
+          </Typography>
+        </DateBox>
+        <Box sx={{ float: 'left', width: 'calc(100% - 60px)' }}>
+          <Typography variant='body1' component='p' sx={{ textAlign: 'left' }}>
+            Stockholm music festival
+          </Typography>
+          <Typography variant='body1' component='p' sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+            John Doe
+          </Typography>
+        </Box>
+        <Divider sx={{ width: '100%' }} />
+        <Typography variant='h3' component='p' sx={{ my: 2 }}>
+          21:00 to 01:00
         </Typography>
-        <Typography variant='body2' component='p' sx={{ my: 2 }}>
-          21:00 "to" 01:00
-        </Typography>
-        <StyledButton size='small'>Bookings</StyledButton>
+        <StyledButton size='small'>Details</StyledButton>
 
       </EventCard>
     </Box>
@@ -76,8 +112,12 @@ const QuickLinksContainer = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[2], // Add shadow to the icons
+    backgroundColor: '#fff',
+    border: '1px solid #c0c0c0',
     '&:hover': {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
+      color: '#4428F2',
+      border: '1px solid #4428F2',
     },
     '& .icon': {
       fontSize: '1.75rem' // Slightly increase the icon size

@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const organizerSchema = new mongoose.Schema({
-  organizerID: { 
-    type: String, 
-    required: true, 
-    unique: true 
-  },
   firstName: { 
     type: String, 
     required: true 
@@ -23,11 +19,11 @@ const organizerSchema = new mongoose.Schema({
   },
   contactPhone: { 
     type: String,
-    required: true 
+    // required: true 
   },
   address: { 
     type: String,
-    required: true 
+    // required: true 
   },
   organizationNumber: { 
     type: String 
@@ -37,6 +33,8 @@ const organizerSchema = new mongoose.Schema({
   },
 });
 
-const Organizer = mongoose.model('EventOrganizer', organizerSchema);
+organizerSchema.plugin(AutoIncrement, {inc_field: 'organizerID'});
 
-module.exports = Organizer;
+const EventOrganizer = mongoose.model('EventOrganizer', organizerSchema);
+
+module.exports = EventOrganizer;

@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const adminSchema = new mongoose.Schema({
-  adminID: { 
-    type: String, 
-    required: true, 
-    unique: true 
-  },
   firstName: { 
     type: String, 
     required: true 
@@ -20,17 +16,19 @@ const adminSchema = new mongoose.Schema({
   },
   contactPhone: { 
     type: String,
-    required: true 
+    // required: true 
   },
   address: { 
     type: String,
-    required: true 
+    // required: true 
   },
   role: { 
     type: String,
     required: true 
   }
 });
+
+adminSchema.plugin(AutoIncrement, {inc_field: 'adminID'});
 
 const Admin = mongoose.model('Admin', adminSchema);
 
