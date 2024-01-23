@@ -8,17 +8,36 @@
   --selected-tab-background: white;
   --tabs-container-color: #efefef;
   --tabs-hover-color: rgb(252, 142, 94);
-  /* --events-panel-backgroundColor: #f2f5f6; */
-  --events-panel-backgroundColor: #2983a1;
+  --events-panel-backgroundColor: #f2f5f6;
+  /* --events-panel-backgroundColor: #2983a1; */
+
+  margin: 1.5rem;
 }
 
 .bookingsPage * {
   box-sizing: border-box;
+  position: relative;
 }
 
 /*Navigation Panel Section*/
 .navigationPanel {
   display: flex;
+}
+
+.dateFilter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectMonth {
+  /* padding-inline: 2px; */
+}
+
+.filterTabContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .calendarViewTabs {
   display: flex;
@@ -31,6 +50,7 @@
   border-radius: 0;
   border: 0;
   background-color: var(--regular-tab-background);
+  padding: 0.3rem 1.3rem;
 }
 
 .viewStylesTabs *:hover {
@@ -40,7 +60,7 @@
 
 .viewStylesTabs {
   padding: var(--tabs-container-padding);
-  border: var(--tabs-container-border);
+  /* border: var(--tabs-container-border); */
   border-radius: var(--tabs-border-radius);
   background-color: var(--tabs-container-color);
 }
@@ -75,12 +95,39 @@
 .bookingStatus *:hover {
   background-color: var(--tabs-hover-color);
 }
+.bookingStatusAllButton {
+  background-color: #4328f21c;
+  border: 1px solid #4428f2;
+}
+.statusCount {
+  background-color: var(--primary-color);
+  width: 1rem;
+  color: white;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: absolute;
+  right: -0.5rem;
+  top: -0.5rem;
+  font-size: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .monthlyLookaheadSection {
   margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 40rem;
+  /* gap: 2rem; */
 }
 
-.allMonthEvents {
+.allEventsInMonth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .monthEventListItem {
@@ -99,9 +146,14 @@
 }
 .statusIcon {
   border-radius: 50%;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  aspect-ratio: 1;
   background-color: green;
+}
+
+.eventArtist {
+  color: black;
+  font-weight: bold;
 }
 
 .calendarIcon {

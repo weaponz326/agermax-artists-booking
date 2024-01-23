@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react'
 
 //**Import Components */
-import Tab from 'src/components/AdminPagesSharedComponents/ViewTab/Tab'
-import Search from 'src/components/AdminPagesSharedComponents/Search/Search'
+import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
+import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
+import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 
 //**Import Custom Styles */
 import styles from './bookings.module.css'
@@ -34,6 +35,9 @@ import {
   handleAllCalendars,
   handleCalendarsUpdate
 } from 'src/store/apps/calendar'
+import { GridFilterAltIcon } from '@mui/x-data-grid'
+import { DatePicker } from 'antd'
+import { ListItemIcon } from '@material-ui/core'
 
 // ** CalendarColors
 const calendarsColor = {
@@ -66,61 +70,97 @@ const BookingPage = () => {
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
   const handleAddEventSidebarToggle = () => setAddEventSidebarOpen(!addEventSidebarOpen)
 
+  const listOfEvents = []
   return (
     <main className={styles.bookingsPage}>
       <nav className={styles.navigationPanel}>
         <div className={styles.calendarViewTabs}>
           <div className={styles.dateFilter}>
-            <Tab className={styles.selectMonth}>
-              <p>21 Mar</p>
-            </Tab>
-            <Tab className={styles.filterTab}>
-              <p>Filter</p>
-            </Tab>
+            <TabButton className={styles.selectMonth}>
+              <div className={styles.selectMonthContent}>
+                <DatePicker style={{ border: 'none' }} />
+              </div>
+            </TabButton>
+            <TabButton className={styles.filterTab}>
+              <div className={styles.filterTabContent}>
+                <GridFilterAltIcon />
+
+                <span>Filter</span>
+              </div>
+            </TabButton>
           </div>
           <div className={styles.viewStylesTabs}>
-            <Tab className={styles.threeDViewTab}>3D</Tab>
-            <Tab className={styles.weekViewTab}>M</Tab>
-            <Tab className={styles.weekViewTab}>W</Tab>
-            <Tab className={`${styles.listViewTab} ${styles.activeTab}`}>List</Tab>
+            <TabButton className={styles.threeDViewTab}>3D</TabButton>
+            <TabButton className={styles.weekViewTab}>M</TabButton>
+            <TabButton className={styles.weekViewTab}>W</TabButton>
+            <TabButton className={`${styles.listViewTab} ${styles.activeTab}`}>List</TabButton>
           </div>
           <div className={styles.searchBar}>
-            <Search />
+            <SearchBar />
           </div>
         </div>
       </nav>
       <section className={styles.bookingStatusSection}>
         <div className={styles.bookingStatus}>
-          <Tab>All</Tab>
-          <Tab>Pending</Tab>
-          <Tab>Approved</Tab>
-          <Tab>Canceled</Tab>
+          <TabButton className={styles.bookingStatusAllButton}>All</TabButton>
+          <TabButton>
+            Pending <div className={styles.statusCount}>6</div>
+          </TabButton>
+          <TabButton>Approved</TabButton>
+          <TabButton>Canceled</TabButton>
         </div>
       </section>
       <section className={styles.monthlyLookaheadSection}>
-        <div className={styles.monthLabel}>December</div>
-        <div className={styles.allMonthEvents}>
-          <div className={styles.monthEventListItem}>
-            <div className={styles.statusInfo}>
-              <div className={styles.statusIcon}></div>
-              <div className={styles.calendarIcon}></div>
-              <div className={styles.event}>
-                <div className={styles.eventTitle}>Stockholm Music Festival</div>
-                <div className={styles.eventArtist}>John Doe</div>
-              </div>
-            </div>
-
-            <div className={styles.eventStatusButton}>
-              <Tab>Details</Tab>
-            </div>
-          </div>
-        </div>
+        <EventsList month={'December'} listOfEvents={listOfEvents} />
+        <EventsList month={'January'} listOfEvents={listOfEvents} />
+        <EventsList month={'February'} listOfEvents={listOfEvents} />
+        <EventsList month={'March'} listOfEvents={listOfEvents} />
       </section>
     </main>
   )
 }
 
 export default BookingPage
+
+export const EventsList = ({ month, listOfEvents }) => {
+  return (
+    <>
+      <div className={styles.monthLabel}>{month}</div>
+      <div className={styles.allEventsInMonth}>
+        <EventsListItem />
+        <EventsListItem />
+        <EventsListItem approvalStatus={'pending'} />
+      </div>
+    </>
+  )
+}
+
+export const EventsListItem = ({ approvalStatus }) => {
+  const eventStatus = {
+    buttonStyle: {
+      background: approvalStatus === 'pending' ? 'Black' : 'White',
+      color: approvalStatus === 'pending' ? 'White' : 'Black',
+      fontSize: '0.81rem'
+    },
+    buttonText: approvalStatus === 'pending' ? 'Approve' : 'Details'
+  }
+  return (
+    <div className={styles.monthEventListItem}>
+      <div className={styles.statusInfo}>
+        <div className={styles.statusIcon}></div>
+        <CalendarIcon />
+        <div className={styles.event}>
+          <div className={styles.eventTitle}>Stockholm Music Festival</div>
+          <div className={styles.eventArtist}>John Doe</div>
+        </div>
+      </div>
+
+      <div className={styles.eventStatusButton}>
+        <TabButton buttonStyle={eventStatus.buttonStyle}>{eventStatus.buttonText}</TabButton>
+      </div>
+    </div>
+  )
+}
 
 // <CalendarWrapper
 //   className='app-calendar'

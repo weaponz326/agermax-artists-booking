@@ -151,8 +151,6 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   )
 }
 
-export const SearchItem = () => {}
-
 export const Backdrop = ({ handleModalEffect }) => {
   return <div className={styles['backdrop']} onClick={() => handleModalEffect()}></div>
 }

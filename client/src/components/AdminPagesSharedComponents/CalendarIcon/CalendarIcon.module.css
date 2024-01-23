@@ -1,0 +1,29 @@
+.calendar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.calendar-icon {
+  background-color: white;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  align-items: center;
+  text-align: center;
+  margin-right: 5px;
+  padding: 1px;
+  align-self: flex-end;
+}
+
+.calendar-icon-ins-con {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, #ff1e46 50%, #ecf0f1 50%);
+}
+
+.calendar-month {
+  width: 100%;
+  font-size: 0.75rem;
+}

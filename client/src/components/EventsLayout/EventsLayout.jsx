@@ -60,9 +60,9 @@ const EventCard = ({ imgUrl }) => {
   )
 }
 
-const CalendarIcon = () => {
+export const CalendarIcon = ({ style }) => {
   return (
-    <div className={styles['calendar-icon']}>
+    <div style={style} className={styles['calendar-icon']}>
       <div className={styles['calendar-icon-ins-con']}>
         <span className={styles['calender-date calendar-month']}>Dec</span>
         <span className={styles['calendar-date calendar-day']}>28</span>

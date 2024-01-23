@@ -1,0 +1,26 @@
+.searchBar {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --search-container-border: 1px solid #e6e6e6;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  --events-panel-backgroundColor: #f2f5f6;
+
+  padding: var(--tabs-container-padding);
+  color: black;
+  display: flex;
+  align-items: center;
+  border-radius: var(--tabs-border-radius);
+  border: var(--search-container-border);
+}
+
+.searchInputField {
+  border: none;
+  outline: none;
+  /* font-size: 0.75rem; */
+  padding: auto;
+}
