@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const artistSchema = new mongoose.Schema({
-  artistID: { 
-    type: String, 
-    required: true, 
-    unique: true 
-  },
   firstName: { 
     type: String, 
     required: true 
@@ -48,6 +44,8 @@ const artistSchema = new mongoose.Schema({
     type: [String] 
   },
 });
+
+artistSchema.plugin(AutoIncrement, {inc_field: 'artistID'});
 
 const Artist = mongoose.model('Artist', artistSchema);
 
