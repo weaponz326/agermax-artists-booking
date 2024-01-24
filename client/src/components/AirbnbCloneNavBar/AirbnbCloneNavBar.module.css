@@ -6,8 +6,8 @@
 }
 
 .header {
-  background-color: #fff;
-  --z-index: 9999;
+  background-color: #e2e8ed;
+  --z-index: 9;
   --middle-form-height: 60px;
 }
 
