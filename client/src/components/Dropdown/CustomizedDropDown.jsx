@@ -12,7 +12,7 @@ const isNotLoggedInItems = [
   },
   {
     key: '2',
-    label: <a href='#'>Sign Up</a>
+    label: <a href='/signup'>Sign Up</a>
   },
   {
     key: '3',
@@ -20,6 +20,10 @@ const isNotLoggedInItems = [
   },
   {
     key: '4',
+    label: <a href='/about'>About Agermax</a>
+  },
+  {
+    key: '5',
     label: <a href='#'>Help Center</a>
   }
 ]
@@ -27,11 +31,11 @@ const isNotLoggedInItems = [
 const isLoggedInItems = [
   {
     key: '1',
-    label: <a href='#'>Book Artists</a>
+    label: <a href='/artists'>Book Artists</a>
   },
   {
     key: '2',
-    label: <a href='#'>Account</a>
+    label: <a href='/admin/bookings'>Account</a>
   },
   {
     key: '3',
@@ -54,7 +58,10 @@ const buttonStyle = {
   padding: '1.5rem 0.7rem',
   borderRadius: '1.5rem',
   justifyContent: 'space-between',
-  zIndex: '1000'
+  zIndex: '1000',
+  width: 'max-content',
+  color: '#183d4c',
+  border: '0.5px solid #183d4c'
 }
 
 const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
@@ -76,7 +83,7 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
             pointAtCenter: true
           }}
         >
-          <Button style={buttonStyle}>
+          <Button style={buttonStyle} className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
               <img className={styles.userImage} src='/images/ellipse-121.png' alt='' />

@@ -1,3 +1,7 @@
+.userMenuButton {
+  color: red;
+}
+
 .userImageContainer {
   height: 2.5rem;
   aspect-ratio: 1;
