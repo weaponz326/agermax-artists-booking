@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
-  background: linear-gradient(to bottom, #ff1e46 50%, #ecf0f1 50%);
+  background: linear-gradient(to bottom, #ff1e46 50%, #ffffff 50%);
 }
 
 .calendar-month {
