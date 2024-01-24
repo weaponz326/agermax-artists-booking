@@ -95,7 +95,8 @@
   display: flex;
   position: absolute;
   justify-content: center;
-  margin-top: 1rem;
+  width: 50%;
+  margin: 1rem auto 0 auto;
 }
 
 .middleWrapperInner {

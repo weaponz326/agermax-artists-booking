@@ -4,11 +4,16 @@ import { formItems } from '../../configs/headerFormConfig'
 import { useHeaderContext } from '../../providers/headerProvider'
 import { Global, HambergerMenu, ProfileCircle, SearchNormal1 } from 'iconsax-react'
 import { DropdownController } from '../Dropdown/DropDown'
+import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 
 const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
-  const [shouldStick, setShouldStick] = useState(false)
-  const { toggleHideMiddleForm, hideMiddleForm, setSelectedFormItem } = useHeaderContext()
+  const [shouldStick, setShouldStick] = useState(true)
+  const { toggleHideMiddleForm, hideMiddleForm, setHideMiddleForm, setSelectedFormItem } = useHeaderContext()
+  const [initialScroll, setInitialScroll] = useState(-1)
+  const [newScroll, setNewScroll] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const profileMenuItems = [
     { label: 'Sign Up', href: '/' },
@@ -18,22 +23,7 @@ const AirbnbCloneNavBar = () => {
     { label: 'Help center', href: '/' }
   ]
 
-  useEffect(() => {
-    const handleScroll = _ => {
-      const newValue = window.scrollY > 0
-
-      // toggleHideMiddleForm(newValue)
-      setShouldStick(oldValue => {
-        if (newValue === true) toggleHideMiddleForm(newValue)
-        return true
-      })
-
-      if (newValue === true) setSelectedFormItem(null)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <header
@@ -51,20 +41,11 @@ const AirbnbCloneNavBar = () => {
               <img src='/images/logo.png' alt='Agermax-logo' />
             </a>
           </div>
-          <MiddleContainer />
+          <MiddleContainer setHideMiddleForm={setHideMiddleForm} />
           <div className={styles.rightSide}>
             <div className={styles.links}>
-              <a href='#'>Agermax, Artists Home </a>
-              <a href='#'>
-                <Global style={{ fontSize: '1.2rem' }} />
-              </a>
+              <CustomizedDropdown isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             </div>
-            <DropdownController items={profileMenuItems}>
-              <div className={styles.hamberger}>
-                <HambergerMenu size='25' />
-                <ProfileCircle size='32' />
-              </div>
-            </DropdownController>
           </div>
         </div>
       </div>
@@ -72,13 +53,27 @@ const AirbnbCloneNavBar = () => {
   )
 }
 
-const MiddleContainer = () => {
+const MiddleContainer = ({ setHideMiddleForm }) => {
   const { hideMiddleForm } = useHeaderContext()
   const [selectedFormItems, setSelectedFormItems] = useState(formItems.stays)
-  console.log(hideMiddleForm)
+  // console.log(hideMiddleForm)
+  useEffect(() => {
+    const handleOutsideClick = event => {
+      if (navSearchBarRef.current && !navSearchBarRef.current.contains(event.target)) {
+        setHideMiddleForm(true)
+      } else {
+        setHideMiddleForm(false)
+      }
+    }
+    document.addEventListener('click', handleOutsideClick)
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [])
+  const navSearchBarRef = useRef()
   return (
     <div className={`${styles.middleWrapper} ${hideMiddleForm ? styles.hideForm : ''}`}>
-      <div className={styles.middleWrapperInner}>
+      <div ref={navSearchBarRef} className={styles.middleWrapperInner}>
         <div className={styles.links}>
           <a href='#' onClick={() => setSelectedFormItems(formItems.stays)}>
             Stays
@@ -90,14 +85,14 @@ const MiddleContainer = () => {
         </div>
         <div id='middle-form' className={styles.formWrapper}>
           <MiddleForm formItems={selectedFormItems} />
-          <MiddleFormMini />
+          <MiddleFormMini setHideMiddleForm={setHideMiddleForm} />
         </div>
       </div>
     </div>
   )
 }
 
-const MiddleFormMini = () => {
+const MiddleFormMini = ({ setHideMiddleForm }) => {
   const { toggleHideMiddleForm, setSelectedFormItem } = useHeaderContext()
 
   const formItems = [
@@ -116,7 +111,7 @@ const MiddleFormMini = () => {
   ]
 
   const handleToggleForm = pointer => {
-    toggleHideMiddleForm(false)
+    setHideMiddleForm(false)
     setSelectedFormItem(pointer)
   }
 

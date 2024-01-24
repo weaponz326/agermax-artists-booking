@@ -1,0 +1,22 @@
+.userImageContainer {
+  height: 2.5rem;
+  aspect-ratio: 1;
+  position: relative;
+  border-radius: 50%;
+}
+
+.userImage {
+  height: 100%;
+}
+
+.userOnlineIndicator {
+  width: 0.9rem;
+  height: 0.9rem;
+  background-color: #4cd964;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 1px solid white;
+  z-index: 1000;
+}

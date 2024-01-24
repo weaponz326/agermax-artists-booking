@@ -8,15 +8,16 @@ export default function HeaderContextProvider({ children }) {
   const [hideMiddleForm, setHideMiddleForm] = useState(true)
   const [selectedFormItem, setSelectedFormItem] = useState(null)
 
-  const toggleHideMiddleForm = value => setHideMiddleForm(value ?? !hideMiddleForm)
+  // const toggleHideMiddleForm = value => setHideMiddleForm(value ?? !hideMiddleForm)
 
   return (
     <context.Provider
       value={{
         hideMiddleForm,
+        setHideMiddleForm,
         selectedFormItem,
-        setSelectedFormItem,
-        toggleHideMiddleForm
+        setSelectedFormItem
+        // toggleHideMiddleForm
       }}
     >
       {children}
