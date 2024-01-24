@@ -22,7 +22,7 @@ const HeaderCarouselContainer = ({ artistsList, currentArtistsData, className, l
           {Array.from({ length: 12 }).map((_, index) => (
             <Fragment key={index}>
               <Card
-                style={{ backgroundColor: 'grey', minHeight: '280px' }}
+                style={{ backgroundColor: 'grey', minHeight: '290px' }}
                 className={styles['carousel-container']}
                 loading={true}
               >
