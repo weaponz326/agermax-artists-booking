@@ -9,7 +9,6 @@ import { Avatar, Card, Skeleton, Switch } from 'antd'
 const { Meta } = Card
 export default function EventsLayout({ imgList }) {
   if (imgList.length <= 0) {
-    console.log('sth')
     return (
       <div className={styles['main-events']}>
         //{' '}

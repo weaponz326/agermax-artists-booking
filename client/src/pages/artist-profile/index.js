@@ -4,7 +4,6 @@ import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
 import { Button, Drawer, ConfigProvider } from 'antd'
 
-import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 
 function ArtistProfile() {
@@ -170,7 +169,6 @@ export const SideDrawerButton = ({ openSideDrawer, openDrawer, setOpenSideDrawer
       setOpen(true)
       drawerState(false)
     }
-    // setOpenSideDrawer(openDrawer)
   })
 
   const [bookingCardType, setBookingCardType] = useState('schedule')

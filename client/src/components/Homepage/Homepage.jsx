@@ -20,7 +20,7 @@ const HomePage = () => {
       if (!data) return
       const { artistsData, artistsPhotos } = data
       setArtistsList(artistsData)
-      setImgList(artistsPhotos)
+      setImgList(artistsPhotos.slice(0, 9))
     }
 
     fetchData()
