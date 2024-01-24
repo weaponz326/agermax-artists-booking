@@ -61,7 +61,7 @@ const registerUser = async (req, res) => {
                 lastName: user.lastName,
                 email: user.email,
                 role: user.role,
-                token: generateToken(user._id),
+                accessToken: generateToken(user._id),
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
@@ -79,19 +79,47 @@ const loginUser = async (req, res) => {
 
     if (user && (await user.matchPassword(password))) {
         res.json({
+          userData: {
             _id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             role: user.role,
-            token: generateToken(user._id),
+            accessToken: generateToken(user._id),
+          },
         });
-    } else {
+      } else {
         res.status(401).json({ message: 'Invalid email or password' });
+    }
+};
+
+const getUserProfile = async (req, res) => {
+    try {
+        // User is already attached to the request in the `protect` middleware
+        if (req.user) {
+            const { _id, firstName, lastName, email, role } = req.user;
+
+            res.json({
+                userData: {
+                  _id,
+                  firstName,
+                  lastName,
+                  email,
+                  role,
+                  accessToken: generateToken(_id), // Or pass the existing token
+                },
+              });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
 module.exports = {
     registerUser,
     loginUser,
+    getUserProfile,
 };

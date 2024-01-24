@@ -36,13 +36,14 @@ const AuthProvider = ({ children }) => {
         await axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: storedToken
+              Authorization: `Bearer ${storedToken}`
             }
           })
           .then(async response => {
             setLoading(false)
-            setUser({ ...response.data.userData })
-          })
+            setUser({ ...response.data.userData });
+            console.log(response.data.userData); // Add this line
+                      })
           .catch(() => {
             localStorage.removeItem('userData')
             localStorage.removeItem('refreshToken')
