@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Link from 'next/link' // Import Link from Next.js
 import Icon from 'src/@core/components/icon'
+import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 
 import Paper from '@mui/material/Paper'
 
@@ -33,58 +34,42 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }))
 
 const DateBox = styled(Box)(({ theme }) => ({
-  border: '1px solid #d0d0d0',
-  borderRadius: theme.shape.borderRadius,
+  // border: '1px solid #d0d0d0',
+  // borderRadius: theme.shape.borderRadius,
   float: 'left',
   marginRight: theme.spacing(2),
   padding: 0,
   '& .month': {
     color: 'white',
-    backgroundColor: 'red',
+    backgroundColor: 'red'
   },
   '& .day': {
-    backgroundColor: 'white',
-  },
-}));
+    backgroundColor: 'white'
+  }
+}))
 
 const CalendarComponent = () => {
   return (
-    <Box sx={{
-    // bgcolor: '#fff', // Here's where you set the background color
-    // p: 2, // You can add padding
-    m: 2,
-    borderRadius: 'borderRadius',
-  }}>
-
-      <EventCard       sx={{
-        bgcolor: '#eaeaea', // Here's where you set the background color
-        border: '1px solid #d0d0d0'
-      }}>
-        {/* <Box sx={{ mb: 2 }}>
-          <Typography variant='h5' component='p'>
-            JAN
-          </Typography>
-          <Typography variant='h5' component='p' sx={{ fontWeight: 'bold' }}>
-            21
-          </Typography>
-        </Box>
-        <Typography variant='body1' component='p'>
-          Stockholm music festival
-        </Typography>
-        <Typography variant='body2' component='p' sx={{ fontWeight: 'bold' }}>
-          John Doe
-        </Typography> */}
+    <Box
+      sx={{
+        // bgcolor: '#fff', // Here's where you set the background color
+        // p: 2, // You can add padding
+        m: 2,
+        borderRadius: 'borderRadius'
+      }}
+    >
+      <EventCard
+        sx={{
+          bgcolor: '#eaeaea', // Here's where you set the background color
+          border: '1px solid #d0d0d0'
+        }}
+      >
         <DateBox>
-          <Typography variant='h5' component='p' className="month">
-            JAN
-          </Typography>
-          <Typography variant='h5' component='p' className="day" sx={{ fontWeight: 'bold' }}>
-            21
-          </Typography>
+          <CalendarIcon />
         </DateBox>
         <Box sx={{ float: 'left', width: 'calc(100% - 60px)' }}>
           <Typography variant='body1' component='p' sx={{ textAlign: 'left' }}>
-            Stockholm music festival
+            Stockholm music fes..
           </Typography>
           <Typography variant='body1' component='p' sx={{ fontWeight: 'bold', textAlign: 'left' }}>
             John Doe
@@ -95,7 +80,6 @@ const CalendarComponent = () => {
           21:00 to 01:00
         </Typography>
         <StyledButton size='small'>Details</StyledButton>
-
       </EventCard>
     </Box>
   )
@@ -117,7 +101,7 @@ const QuickLinksContainer = styled(Box)(({ theme }) => ({
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
       color: '#4428F2',
-      border: '1px solid #4428F2',
+      border: '1px solid #4428F2'
     },
     '& .icon': {
       fontSize: '1.75rem' // Slightly increase the icon size
