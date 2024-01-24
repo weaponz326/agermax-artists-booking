@@ -27,6 +27,7 @@ const AirbnbCloneNavBar = () => {
     //set hideMiddleForm to true when there is a scroll on the window
     const handleScroll = () => {
       setHideMiddleForm(true)
+      console.log('eveent happened!')
     }
     window.addEventListener('scroll', handleScroll)
 

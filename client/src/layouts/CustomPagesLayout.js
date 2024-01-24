@@ -8,7 +8,7 @@ import { DropdownBubble } from 'src/components/Dropdown/DropDown'
 const CustomPagesLayout = ({ children }) => {
   return (
     <DropdownContextProvider>
-      <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto' }}>
+      <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '4rem' }}>
         <HeaderContextProvider>
           <AirbnbCloneNavBar />
         </HeaderContextProvider>
