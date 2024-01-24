@@ -18,7 +18,7 @@
   top: 0;
   right: 0;
   left: 0;
-  position: sticky;
+  position: fixed;
   z-index: var(--z-index);
 }
 

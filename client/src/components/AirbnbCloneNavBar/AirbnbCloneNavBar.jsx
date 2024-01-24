@@ -23,7 +23,17 @@ const AirbnbCloneNavBar = () => {
     { label: 'Help center', href: '/' }
   ]
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    //set hideMiddleForm to true when there is a scroll on the window
+    const handleScroll = () => {
+      setHideMiddleForm(true)
+    }
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [hideMiddleForm])
 
   return (
     <header
