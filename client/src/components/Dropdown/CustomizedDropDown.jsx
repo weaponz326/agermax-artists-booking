@@ -4,6 +4,7 @@ import UserIcon from 'src/layouts/components/UserIcon'
 import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 
 const isNotLoggedInItems = [
   {
@@ -102,7 +103,7 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
     }
     return (
       <>
-        <Dropdown
+        {/* <Dropdown
           menu={{
             items: isNotLoggedInItems,
             onClick
@@ -116,7 +117,17 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
             <HambergerMenu size={'35'} />
             <User />
           </Button>
-        </Dropdown>
+        </Dropdown> */}
+        <TabButton
+          buttonStyle={{ color: 'white', backgroundColor: 'black' }}
+          className={styles.userMenuSignInButton}
+          onClick={() => setIsLoggedIn(true)}
+        >
+          Sign In
+        </TabButton>
+        <Link href={'/signup'}>
+          <TabButton buttonStyle={{ color: 'white', backgroundColor: 'black' }}>Sign Up</TabButton>
+        </Link>
       </>
     )
   }

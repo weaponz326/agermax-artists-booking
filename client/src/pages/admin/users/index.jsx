@@ -8,6 +8,7 @@ import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/Searc
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import styles from './users.module.css'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
+import SidebarAddUser from './AddUserDrawer'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -22,6 +23,7 @@ const UsersListPage = () => {
         <TabButton className={styles.usersListPageNavBarAddUsersBtn}>Add Users</TabButton>
       </nav>
       <UsersListTable className={styles.usersListPageListTable} setOpenModal={setOpenModal} />
+      <SidebarAddUser />
       <SlideInModal openModal={openModal} />
     </div>
   )
@@ -36,4 +38,4 @@ UsersListPage.acl = {
   subject: 'all' // Adjust the permissions as per your application's ACL configuration
 }
 
-UsersListPage.getLayout = page => <div>{page}</div>
+// UsersListPage.getLayout = page => <div>{page}</div>

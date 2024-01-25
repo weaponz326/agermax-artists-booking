@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import styles from './SlideInModal.module.css'
 
-const SlideInModal = ({ openModal }) => {
+const SlideInModal = ({ openModal, setOpenModal, handleEdit }) => {
   const [showModal, setShowModal] = useState(openModal)
-  useEffect(() => {
-    console.log('Modal state changed!')
-  }, [showModal])
 
   function closeModal() {
     setShowModal(false)
-    console.log('clossed!')
+    setOpenModal(false)
+    console.log('closed!')
   }
+
+  // Use useEffect to update the local state when openModal changes
+  useEffect(() => {
+    setShowModal(openModal)
+  }, [openModal])
 
   if (showModal) {
     return (
       <>
-        <div className={styles.modalCardContent}></div>
+        <div className={styles.modalCardContent}>
+          {/* Add your modal content here */}
+          <p>Modal Content</p>
+          <button onClick={handleEdit}>Edit</button>
+        </div>
         <div onClick={closeModal} className={styles.modalBackdrop}></div>
       </>
     )
   }
+
+  return null
 }
 
 export default SlideInModal

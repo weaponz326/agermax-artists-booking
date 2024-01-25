@@ -1,10 +1,13 @@
 import { Table, Button, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SlideInModal from '../SlidingModal/SlideInModal'
 
-const UsersListTable = ({ setOpenModal }) => {
-  const [showDrawer, setShowerDrawer] = useState(false)
+const UsersListTable = () => {
+  const [openModal, setOpenModal] = useState(false)
+  useEffect(() => {
+    console.log('Open Modal Changed')
+  }, [openModal])
   // Sample user data with profile pictures
   const data = [
     {
@@ -98,7 +101,7 @@ const UsersListTable = ({ setOpenModal }) => {
   return (
     <div>
       <Table dataSource={data} columns={columns} />
-      <SlideInModal OnOpen={showDrawer} />
+      <SlideInModal openModal={openModal} setOpenModal={setOpenModal} handleEdit={handleEdit} />
     </div>
   )
 }

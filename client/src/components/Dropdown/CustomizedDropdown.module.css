@@ -24,3 +24,14 @@
   border: 1px solid white;
   z-index: 1000;
 }
+
+.userMenuSignInButton {
+  background-color: black;
+  color: white;
+}
+
+.userMenuSignUpButton {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
