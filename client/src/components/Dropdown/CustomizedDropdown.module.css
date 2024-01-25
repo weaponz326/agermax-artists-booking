@@ -29,9 +29,15 @@
   background-color: black;
   color: white;
 }
+.userMenuSignInButton:hover {
+  transform: scale(1.02);
+}
 
 .userMenuSignUpButton {
   background-color: black;
   color: white;
   border: 1px solid white;
+}
+.userMenuSignUpButton:hover {
+  transform: scale(1.02);
 }

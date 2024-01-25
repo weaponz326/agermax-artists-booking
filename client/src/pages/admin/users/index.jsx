@@ -23,7 +23,6 @@ const UsersListPage = () => {
         <TabButton className={styles.usersListPageNavBarAddUsersBtn}>Add Users</TabButton>
       </nav>
       <UsersListTable className={styles.usersListPageListTable} setOpenModal={setOpenModal} />
-      <SidebarAddUser />
       <SlideInModal openModal={openModal} />
     </div>
   )

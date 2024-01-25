@@ -119,14 +119,19 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
           </Button>
         </Dropdown> */}
         <TabButton
-          buttonStyle={{ color: 'white', backgroundColor: 'black' }}
+          buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
           className={styles.userMenuSignInButton}
           onClick={() => setIsLoggedIn(true)}
         >
           Sign In
         </TabButton>
         <Link href={'/signup'}>
-          <TabButton buttonStyle={{ color: 'white', backgroundColor: 'black' }}>Sign Up</TabButton>
+          <TabButton
+            buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
+            className={styles.userMenuSignUpButton}
+          >
+            Sign Up
+          </TabButton>
         </Link>
       </>
     )
