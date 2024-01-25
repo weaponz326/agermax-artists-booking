@@ -1,0 +1,88 @@
+.navigationPanel,
+.viewStylesTabs {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  --events-panel-backgroundColor: #f2f5f6;
+  /* --events-panel-backgroundColor: #2983a1; */
+}
+
+.navigationPanel {
+  display: flex;
+  margin-bottom: 2rem;
+  background-color: teal;
+  /* flex-wrap: wrap; */
+}
+.dateFilter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectMonth {
+  padding: 0.3rem 1.3rem;
+  /* padding-inline: 2px; */
+}
+.filterTab {
+  padding: 0.3rem 1.3rem;
+}
+
+.filterTabContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.calendarViewTabs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.viewStylesTabs * {
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  background-color: var(--regular-tab-background);
+  padding: 0.3rem 1.3rem;
+}
+
+.viewStylesTabs *:hover {
+  border-radius: inherit;
+  background-color: var(--tabs-hover-color);
+}
+
+.viewStylesTabs {
+  padding: var(--tabs-container-padding);
+  /* border: var(--tabs-container-border); */
+  border-radius: var(--tabs-border-radius);
+  background-color: var(--tabs-container-color);
+  display: flex;
+}
+
+.threeDViewTab {
+  border-radius: var(--tabs-border-radius) 0 0 var(--tabs-border-radius);
+}
+
+.listViewTab {
+  border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
+}
+
+.activeTab {
+  border-radius: inherit;
+  background-color: var(--selected-tab-background);
+  color: black;
+  font-weight: bold;
+}
+
+/* .tabButtonDivider {
+  background-color: rebeccapurple;
+  height: 2px;
+  width: 1px;
+} */

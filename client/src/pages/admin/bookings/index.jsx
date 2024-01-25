@@ -16,11 +16,6 @@ import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBook
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
 
 const BookingPage = () => {
-  // const [calendarApi, setCalendarApi] = useState(null)
-  // const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
-  // const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false)
-
-  // States for pages Navigation Hooks
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
 
   if (activeEventsView === 'ListView') {
