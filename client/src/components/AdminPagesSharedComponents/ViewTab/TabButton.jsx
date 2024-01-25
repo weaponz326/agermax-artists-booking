@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './TabButton.module.css'
 
-const TabButton = ({ children, className, buttonStyle }) => {
+const TabButton = ({ children, className, buttonStyle, onClick, id }) => {
   return (
-    <button style={buttonStyle} className={`${styles.tab} ${className}`}>
+    <button id={id} onClick={onClick} style={buttonStyle} className={`${styles.tab} ${className}`}>
       {children}
     </button>
   )

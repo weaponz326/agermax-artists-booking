@@ -1,0 +1,58 @@
+.calendarBookingCard {
+  /* width: 4rem;
+  height: 6rem; */
+  display: flex;
+  border-radius: 1rem;
+  border: 1px solid #b7c0c5;
+  flex-direction: column;
+  padding: 0.75rem;
+  justify-content: space-between;
+  max-width: 21rem;
+  aspect-ratio: 1;
+}
+.statusIcon {
+  border-radius: 50%;
+  width: 12px;
+  aspect-ratio: 1;
+  background-color: green;
+  text-align: center;
+  margin-left: 0.4rem;
+}
+.calendarBookingCardDetailsTitle {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: stretch;
+  color: black;
+}
+
+.calendarBookingCardDetailsOptionsIcon {
+  align-items: flex-end;
+  flex: 1;
+  text-align: right;
+}
+
+.calendarBookingCardDetailsSchedule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.calendarBookingCardButton {
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.calendarBookingCardDetailsArtistProfile {
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+  gap: 1rem;
+  color: black;
+}
+
+.calendarBookingCardDetailsArtistImg {
+  width: 2rem;
+}
