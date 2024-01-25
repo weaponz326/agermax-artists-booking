@@ -35,7 +35,7 @@ Home.authGuard = false
 Home.guestGuard = false
 Home.acl = {
   action: 'manage',
-  subject: 'all' // Adjust the permissions as per your application's ACL configuration
+  subject: 'all'
 }
 
 // Set a custom layout for the Home page that doesn't include the AppBar and TopBar
