@@ -54,21 +54,26 @@ export default BookingPage
 export const ThreeDView = () => {
   return (
     <div className={styles.threeDCalendar}>
-      <CustomFullCalendar />
+      <CustomFullCalendar view={'timeGridDay'} />
     </div>
   )
 }
 
 export const MonthView = () => {
   return (
-    <div>
-      <CalendarBookingCard />
+    <div className={styles.threeDCalendar}>
+      {/* <CalendarBookingCard /> */}
+      <CustomFullCalendar view={'dayGridMonth'} />
     </div>
   )
 }
 
 export const WeekView = () => {
-  return <div>Week View Nkoaaaa</div>
+  return (
+    <div className={styles.threeDCalendar}>
+      <CustomFullCalendar view={'dayGridWeek'} />
+    </div>
+  )
 }
 
 export const EventsListView = () => {

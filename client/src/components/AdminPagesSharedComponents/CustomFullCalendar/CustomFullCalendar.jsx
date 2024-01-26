@@ -5,7 +5,7 @@ import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction
 import timeGridPlugin from '@fullcalendar/timegrid'
 import styles from './CustomFullCalendar.module.css'
 
-const CustomFullCalendar = () => {
+const CustomFullCalendar = ({view}) => {
   const [events, setEvents] = useState([
     { title: 'Event 1', id: '1', date: '2024-25-01' },
     { title: 'Event 2', id: '2' },
@@ -19,12 +19,12 @@ const CustomFullCalendar = () => {
     <div>
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
-        initialView='dayGridMonth'
-        headerToolbar={{
-          left: 'prev, next, today',
-          center: 'title',
-          right: 'resourceTimelineWork, dayGridMonth, dayGridWeek'
-        }}
+        initialView={view}
+        // headerToolbar={{
+        //   left: 'prev, next, today',
+        //   center: 'title',
+        //   right: 'resourceTimelineWork, dayGridMonth, dayGridWeek'
+        // }}
         events={{}}
         nowIndicator
         selectable
