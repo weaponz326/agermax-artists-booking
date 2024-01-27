@@ -2,15 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styles from './SlideInModal.module.css'
 import TabButton from '../ViewTab/TabButton'
 import { Camera } from 'iconsax-react'
+import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 
-const SlideInModal = ({ openModal, setOpenModal, handleEdit }) => {
+const SlideInModal = ({ openModal, unhideModal, hideModal }) => {
   const [showModal, setShowModal] = useState(openModal)
-
-  function closeModal() {
-    setShowModal(false)
-    setOpenModal(false)
-    console.log('closed!')
-  }
 
   // Use useEffect to update the local state when openModal changes
   useEffect(() => {
@@ -21,9 +16,12 @@ const SlideInModal = ({ openModal, setOpenModal, handleEdit }) => {
     return (
       <>
         <div className={styles.modalCardContent}>
-          <TabButton className={styles.modalCardContentCloseButton}>X</TabButton>
+          <TabButton onClick={hideModal} className={styles.modalCardContentCloseButton}>
+            x
+          </TabButton>
           <div className={styles.modalCardContentPictureInput}>
-            <Camera />
+            {/* <Camera /> */}
+            <ImageUpload />
           </div>
           <div className={styles.modalCardContentUserDetails}>
             <input
@@ -77,12 +75,13 @@ const SlideInModal = ({ openModal, setOpenModal, handleEdit }) => {
           <TabButton
             buttonStyle={{ color: 'white', background: '#4428F4', padding: '0.5rem', marginTop: 'auto' }}
             className={styles.modalCardContentSaveButton}
+            onClick={hideModal}
           >
             Save
           </TabButton>
           {/* Add your modal content here */}
         </div>
-        <div onClick={closeModal} className={styles.modalBackdrop}></div>
+        <div onClick={hideModal} className={styles.modalBackdrop}></div>
       </>
     )
   }

@@ -3,12 +3,7 @@ import { EllipsisOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import SlideInModal from '../SlidingModal/SlideInModal'
 
-const UsersListTable = () => {
-  const [openModal, setOpenModal] = useState(false)
-  useEffect(() => {
-    console.log('Open Modal Changed')
-  }, [openModal])
-  // Sample user data with profile pictures
+const UsersListTable = ({ hideModal, unhideModal }) => {
   const data = [
     {
       key: '1',
@@ -76,9 +71,8 @@ const UsersListTable = () => {
 
   // Handlers for edit and delete actions
   const handleEdit = userId => {
-    // Implement edit logic here
     console.log(`Edit user with ID ${userId}`)
-    setOpenModal(true)
+    unhideModal(true)
   }
 
   const handleDelete = userId => {
@@ -101,7 +95,6 @@ const UsersListTable = () => {
   return (
     <div>
       <Table dataSource={data} columns={columns} />
-      <SlideInModal openModal={openModal} setOpenModal={setOpenModal} handleEdit={handleEdit} />
     </div>
   )
 }

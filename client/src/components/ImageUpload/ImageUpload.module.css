@@ -79,7 +79,7 @@
 
 .dropZoonIcon {
   display: flex;
-  font-size: 25px;
+  font-size: 1rem;
   color: var(--clr-blue);
   align-items: center;
   transition: opacity 300ms ease-in-out;
@@ -101,7 +101,7 @@
 
 .uploadBtn {
   background: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: row;
   justify-content: center;

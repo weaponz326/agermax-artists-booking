@@ -429,3 +429,12 @@ const TabAccount = () => {
 }
 
 export default TabAccount
+
+TabAccount.authGuard = false
+TabAccount.guestGuard = false
+TabAccount.acl = {
+  action: 'manage',
+  subject: 'all' // Adjust the permissions as per your application's ACL configuration
+}
+
+// TabAccount.getLayout = page => <div>{page}</div>
