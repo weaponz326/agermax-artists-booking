@@ -1,0 +1,75 @@
+.artistListWrapper {
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.artistList {
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.artistList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.artistListItem {
+  display: flex;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.artistListItem:hover {
+  background-color: #eee;
+}
+
+.artistListItemImg {
+  width: 40px;
+  aspect-ratio: 1;
+}
+
+.artistListItemImg img {
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+}
+
+.artistListItemInfo {
+  flex: 1;
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.artistListItemName {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+}
+
+.artistListItemGenreWrapper {
+  display: flex;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.artistListItemGenre {
+  font-size: 0.55rem;
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  background-color: #ddd;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.empty {
+  color: #aaa;
+  text-align: center;
+}

@@ -1,0 +1,9 @@
+.middleFormItemDropdown {
+  padding: 0.4rem 0.5rem;
+  min-width: 100%;
+  position: absolute;
+  top: calc(100% + 1rem);
+  background-color: #fff;
+  border-radius: 2rem;
+  box-shadow: var(--box-shadow);
+}

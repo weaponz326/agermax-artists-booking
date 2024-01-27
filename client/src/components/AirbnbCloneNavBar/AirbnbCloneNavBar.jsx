@@ -1,33 +1,19 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import styles from './AirbnbCloneNavBar.module.css'
-import { formItems } from '../../configs/headerFormConfig'
+import { formItems } from './config/headerFormConfig'
 import { useHeaderContext } from '../../providers/headerProvider'
-import { Global, HambergerMenu, ProfileCircle, SearchNormal1 } from 'iconsax-react'
-import { DropdownController } from '../Dropdown/DropDown'
+import { SearchNormal1 } from 'iconsax-react'
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 
 const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
   const [shouldStick, setShouldStick] = useState(true)
-  const { toggleHideMiddleForm, hideMiddleForm, setHideMiddleForm, setSelectedFormItem } = useHeaderContext()
-  const [initialScroll, setInitialScroll] = useState(-1)
-  const [newScroll, setNewScroll] = useState(0)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const { hideMiddleForm, setHideMiddleForm } = useHeaderContext()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const profileMenuItems = [
-    { label: 'Sign Up', href: '/' },
-    { label: 'Log In', href: '/' },
-    { label: 'Gift Cards', href: '/' },
-    { label: 'Agermax, Artists home', href: '/' },
-    { label: 'Help center', href: '/' }
-  ]
-
   useEffect(() => {
-    //set hideMiddleForm to true when there is a scroll on the window
     const handleScroll = () => {
       setHideMiddleForm(true)
-      console.log('eveent happened!')
     }
     window.addEventListener('scroll', handleScroll)
 
@@ -54,9 +40,7 @@ const AirbnbCloneNavBar = () => {
           </div>
           <MiddleContainer setHideMiddleForm={setHideMiddleForm} />
           <div className={styles.rightSide}>
-            <div className={styles.links}>
-              <CustomizedDropdown isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-            </div>
+            <CustomizedDropdown isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </div>
         </div>
       </div>
@@ -67,7 +51,7 @@ const AirbnbCloneNavBar = () => {
 const MiddleContainer = ({ setHideMiddleForm }) => {
   const { hideMiddleForm } = useHeaderContext()
   const [selectedFormItems, setSelectedFormItems] = useState(formItems.stays)
-  // console.log(hideMiddleForm)
+
   useEffect(() => {
     const handleOutsideClick = event => {
       if (navSearchBarRef.current && !navSearchBarRef.current.contains(event.target)) {
@@ -186,6 +170,7 @@ const MiddleForm = ({ formItems }) => {
 }
 
 const MiddleFormItem = ({ pointer, config }) => {
+  const [filter, setFilter] = useState('')
   const { selectedFormItem, setSelectedFormItem } = useHeaderContext()
 
   const handleRenderItem = () => {
@@ -204,25 +189,34 @@ const MiddleFormItem = ({ pointer, config }) => {
       : selectedFormItem
 
     const focus = key === value
+    const DropdownContent = item.dropdownContent
 
     return (
-      <div
-        onClick={() => setSelectedFormItem(key)}
-        key={`middle-form-item-${item.label}`}
-        className={`
+      <Fragment key={`middle-form-item-${item.label}`}>
+        <div
+          onClick={() => setSelectedFormItem(key)}
+          className={`
         ${styles.middleFormItem}
-        ${focus ? styles.middleFormItemFoucs : ''}
+        ${focus ? styles.middleFormItemFocus : ''}
       `}
-      >
-        <div className={styles.middleFormItemInfo}>
-          <label>{item.label}</label>
-          {focus && item.isInput ? (
-            <input type='text' autoFocus={true} placeholder={item.placeholder} />
-          ) : (
-            <span>{item.placeholder}</span>
-          )}
+        >
+          <div className={styles.middleFormItemInfo}>
+            <label>{item.label}</label>
+            {focus && item.isInput ? (
+              <input
+                value={filter}
+                type='text'
+                autoFocus={true}
+                placeholder={item.placeholder}
+                onChange={({ target: { value } }) => setFilter(value)}
+              />
+            ) : (
+              <span>{item.placeholder}</span>
+            )}
+          </div>
         </div>
-      </div>
+        {focus && <DropdownContent filter={filter} />}
+      </Fragment>
     )
   }
 

@@ -65,7 +65,7 @@ const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList })
       key: 'action',
       render: (text, record) => (
         <Space size='middle'>
-          <Dropdown menu={getMenu(record)}>
+          <Dropdown overlay={getMenu(record)}>
             <EllipsisOutlined style={{ fontSize: 20, cursor: 'pointer' }} />
           </Dropdown>
         </Space>
