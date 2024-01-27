@@ -41,6 +41,8 @@ export const AdminUsersPageViewStyleTabs = () => {
 
   function handleTabSelection(e) {
     setActiveView(e.target.id)
+
+    //Wire to filter by a property
   }
   return (
     <div className={styles.viewStylesTabs}>

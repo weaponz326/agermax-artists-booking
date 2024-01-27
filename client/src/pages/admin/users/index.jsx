@@ -10,11 +10,13 @@ import styles from './users.module.css'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
 import SidebarAddUser from './AddUserDrawer'
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
+import axios from 'axios'
+import MusicArtistData from './Music Artists Data'
 
 const UsersListPage = () => {
   // ** State for storing users data
   const [openModal, setOpenModal] = useState(false)
-  const [users, setUsers] = useState([])
+  const [artistsList, setArtistsList] = useState(MusicArtistData)
 
   function unhideModal() {
     setOpenModal(true)
@@ -39,6 +41,8 @@ const UsersListPage = () => {
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
+        artistsList={artistsList}
+        setArtistsList={setArtistsList}
       />
       <SlideInModal openModal={openModal} unhideModal={unhideModal} hideModal={hideModal} />
     </div>

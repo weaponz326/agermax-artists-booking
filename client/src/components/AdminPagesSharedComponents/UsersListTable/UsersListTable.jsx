@@ -3,51 +3,55 @@ import { EllipsisOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import SlideInModal from '../SlidingModal/SlideInModal'
 
-const UsersListTable = ({ hideModal, unhideModal }) => {
-  const data = [
-    {
-      key: '1',
-      name: 'John Doe',
-      phone: '123-456-7890',
-      email: 'john@example.com',
-      type: 'Artist',
-      profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
-    },
-    {
-      key: '2',
-      name: 'Jane Smith',
-      phone: '987-654-3210',
-      email: 'jane@example.com',
-      type: 'Customer',
-      profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
-    }
-    // Add more users as needed
-  ]
+const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList }) => {
+  // const data = [
+  //   {
+  //     key: '1',
+  //     name: 'John Doe',
+  //     phone: '123-456-7890',
+  //     email: 'john@example.com',
+  //     type: 'Artist',
+  //     profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
+  //   },
+  //   {
+  //     key: '2',
+  //     name: 'Jane Smith',
+  //     phone: '987-654-3210',
+  //     email: 'jane@example.com',
+  //     type: 'Customer',
+  //     profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
+  //   }
+  //   // Add more users as needed
+  // ]
 
   // Define columns for the table
+  const data = artistsList
+
   const columns = [
     {
       title: 'Profile',
-      dataIndex: 'profilePic',
-      key: 'profilePic',
+      dataIndex: 'picture',
+      key: 'picture',
       render: text => <Avatar src={text} size={40} />
     },
     {
       title: 'Name',
-      dataIndex: 'name',
+      dataIndex: 'firstName',
       key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name)
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      render: (text, record) => `${record.firstName} ${record.lastName}`
     },
+
     {
       title: 'Phone',
-      dataIndex: 'phone',
+      dataIndex: 'contactPhone',
       key: 'phone',
       sorter: (a, b) => a.phone.localeCompare(b.phone)
     },
     {
       title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'contactEmail',
+      key: 'contactEmail',
       sorter: (a, b) => a.email.localeCompare(b.email)
     },
     {
@@ -61,7 +65,7 @@ const UsersListTable = ({ hideModal, unhideModal }) => {
       key: 'action',
       render: (text, record) => (
         <Space size='middle'>
-          <Dropdown overlay={getMenu(record)}>
+          <Dropdown menu={getMenu(record)}>
             <EllipsisOutlined style={{ fontSize: 20, cursor: 'pointer' }} />
           </Dropdown>
         </Space>
@@ -94,7 +98,7 @@ const UsersListTable = ({ hideModal, unhideModal }) => {
 
   return (
     <div>
-      <Table dataSource={data} columns={columns} />
+      <Table dataSource={artistsList} columns={columns} />
     </div>
   )
 }
