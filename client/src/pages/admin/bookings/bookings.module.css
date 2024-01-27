@@ -73,13 +73,13 @@
   display: flex;
 }
 
-.threeDViewTab {
+/* .threeDViewTab {
   border-radius: var(--tabs-border-radius) 0 0 var(--tabs-border-radius);
-}
+} */
 
-.listViewTab {
+/* .listViewTab {
   border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
-}
+} */
 
 .activeTab {
   border-radius: inherit;

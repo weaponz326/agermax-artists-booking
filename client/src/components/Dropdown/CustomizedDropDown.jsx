@@ -103,23 +103,8 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
     }
     return (
       <>
-        {/* <Dropdown
-          menu={{
-            items: isNotLoggedInItems,
-            onClick
-          }}
-          placement='topRight'
-          arrow={{
-            pointAtCenter: true
-          }}
-        >
-          <Button style={buttonStyle}>
-            <HambergerMenu size={'35'} />
-            <User />
-          </Button>
-        </Dropdown> */}
         <TabButton
-          buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
+          // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
           className={styles.userMenuSignInButton}
           onClick={() => setIsLoggedIn(true)}
         >
@@ -127,7 +112,7 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
         </TabButton>
         <Link href={'/signup'}>
           <TabButton
-            buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
+            // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
             className={styles.userMenuSignUpButton}
           >
             Sign Up

@@ -3,7 +3,7 @@ import styles from './TabButton.module.css'
 import classNames from 'classnames'
 
 const TabButton = ({ children, className, buttonStyle, onClick, id }) => {
-  const combinedClassNames = classNames(className, styles.tab) // Reversed order
+  const combinedClassNames = classNames(styles.tab, className) // Reversed order
 
   return (
     <button id={id} onClick={onClick} style={buttonStyle} className={combinedClassNames}>
