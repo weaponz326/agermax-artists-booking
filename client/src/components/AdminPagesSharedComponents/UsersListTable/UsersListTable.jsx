@@ -3,7 +3,7 @@ import { EllipsisOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import SlideInModal from '../SlidingModal/SlideInModal'
 
-const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList }) => {
+const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => {
   // const data = [
   //   {
   //     key: '1',
@@ -25,7 +25,7 @@ const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList })
   // ]
 
   // Define columns for the table
-  const data = artistsList
+  const data = usersList
 
   const columns = [
     {
@@ -38,7 +38,7 @@ const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList })
       title: 'Name',
       dataIndex: 'firstName',
       key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
+      sorter: (a, b) => b.firstName.localeCompare(a.firstName),
       render: (text, record) => `${record.firstName} ${record.lastName}`
     },
 
@@ -46,13 +46,13 @@ const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList })
       title: 'Phone',
       dataIndex: 'contactPhone',
       key: 'phone',
-      sorter: (a, b) => a.phone.localeCompare(b.phone)
+      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
     },
     {
       title: 'Email',
       dataIndex: 'contactEmail',
       key: 'contactEmail',
-      sorter: (a, b) => a.email.localeCompare(b.email)
+      sorter: (a, b) => a.contactEmail.localeCompare(b.contactEmail)
     },
     {
       title: 'Type',
@@ -98,7 +98,7 @@ const UsersListTable = ({ hideModal, unhideModal, artistsList, setArtistsList })
 
   return (
     <div>
-      <Table dataSource={artistsList} columns={columns} />
+      <Table dataSource={usersList} columns={columns} />
     </div>
   )
 }

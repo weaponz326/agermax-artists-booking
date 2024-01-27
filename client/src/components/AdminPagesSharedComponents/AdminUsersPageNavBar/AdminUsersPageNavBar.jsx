@@ -36,13 +36,17 @@ const AdminUsersPageNavBar = ({ setActiveEventsView, activeEventsView }) => {
 
 export default AdminUsersPageNavBar
 
-export const AdminUsersPageViewStyleTabs = () => {
+export const AdminUsersPageViewStyleTabs = ({ usersData, usersList, setUsersList, query, setQuery }) => {
   const [activeView, setActiveView] = useState('1')
 
   function handleTabSelection(e) {
     setActiveView(e.target.id)
+    setQuery('')
 
-    //Wire to filter by a property
+    e.target.id === '1' && setUsersList(usersData)
+    e.target.id === '2' && setUsersList(usersData.filter(users => users.type === 'Artist'))
+    e.target.id === '3' && setUsersList(usersData.filter(users => users.type === 'Organizer'))
+    e.target.id === '4' && setUsersList(usersData.filter(users => users.type === 'Staff'))
   }
   return (
     <div className={styles.viewStylesTabs}>

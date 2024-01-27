@@ -11,16 +11,16 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import SidebarAddUser from './AddUserDrawer'
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import axios from 'axios'
-import MusicArtistData from './Music Artists Data'
+import usersData from './Music Artists Data'
 
 const UsersListPage = () => {
   // ** State for storing users data
   const [openModal, setOpenModal] = useState(false)
-  const [artistsList, setArtistsList] = useState(MusicArtistData)
+  const [usersList, setUsersList] = useState(usersData)
+  const [query, setQuery] = useState('')
 
   function unhideModal() {
     setOpenModal(true)
-    console.log('unhide')
   }
 
   function hideModal() {
@@ -30,8 +30,20 @@ const UsersListPage = () => {
   return (
     <div className={styles.usersListPage}>
       <nav className={styles.usersListPageNavBar}>
-        <SearchBar />
-        <AdminUsersPageViewStyleTabs />
+        <SearchBar
+          usersList={usersList}
+          setUsersList={setUsersList}
+          usersData={usersData}
+          query={query}
+          setQuery={setQuery}
+        />
+        <AdminUsersPageViewStyleTabs
+          usersData={usersData}
+          usersList={usersList}
+          setUsersList={setUsersList}
+          query={query}
+          setQuery={setQuery}
+        />
         <TabButton onClick={unhideModal} className={styles.usersListPageNavBarAddUsersBtn}>
           Add Users
         </TabButton>
@@ -41,8 +53,8 @@ const UsersListPage = () => {
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        artistsList={artistsList}
-        setArtistsList={setArtistsList}
+        usersList={usersList}
+        setUsersList={setUsersList}
       />
       <SlideInModal openModal={openModal} unhideModal={unhideModal} hideModal={hideModal} />
     </div>
