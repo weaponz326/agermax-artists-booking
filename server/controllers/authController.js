@@ -174,6 +174,7 @@ const getUserProfile = async (req, res) => {
           availableDates,
           gallery,
           eventsHosted,
+          accessToken: generateToken(_id)
         },
       });
     } else {

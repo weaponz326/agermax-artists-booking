@@ -1,440 +1,203 @@
-// ** React Imports
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
-import Dialog from '@mui/material/Dialog'
-import Divider from '@mui/material/Divider'
-import { styled } from '@mui/material/styles'
-import Checkbox from '@mui/material/Checkbox'
-import MenuItem from '@mui/material/MenuItem'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import FormControl from '@mui/material/FormControl'
-import CardContent from '@mui/material/CardContent'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import FormHelperText from '@mui/material/FormHelperText'
-import InputAdornment from '@mui/material/InputAdornment'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
-import ImageUpload from 'src/components/ImageUpload/ImageUpload'
+import Button from '@mui/material/Button'
+import Alert from '@mui/material/Alert'
+import ImageUpload from 'src/components/ImageUpload/ImageUpload' // Ensure this path is correct
 
-// ** Third Party Imports
-import { useForm, Controller } from 'react-hook-form'
-
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
-const initialData = {
-  state: '',
-  number: '',
-  address: '',
-  zipCode: '',
-  lastName: 'Doe',
-  currency: 'usd',
-  firstName: 'John',
-  language: 'arabic',
-  timezone: 'gmt-12',
-  country: 'australia',
-  organization: 'Agermax',
-  email: 'john.doe@example.com'
-}
-
-const ImgStyled = styled('img')(({ theme }) => ({
-  width: 100,
-  height: 100,
-  marginRight: theme.spacing(6),
-  borderRadius: theme.shape.borderRadius
-}))
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center'
-  }
-}))
-
-const ResetButtonStyled = styled(Button)(({ theme }) => ({
-  marginLeft: theme.spacing(4),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(2)
-  }
-}))
+// ** Custom Hooks
+import { useAuth } from 'src/hooks/useAuth'
+import authConfig from 'src/configs/auth'
 
 const TabAccount = () => {
-  // ** State
-  const [open, setOpen] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const [userInput, setUserInput] = useState('yes')
-  const [formData, setFormData] = useState(initialData)
-  const [imgSrc, setImgSrc] = useState('/images/avatars/15.png')
-  const [secondDialogOpen, setSecondDialogOpen] = useState(false)
+  const { user } = useAuth() // Access user context
+  const [formData, setFormData] = useState({
+    _id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: '',
+    phone: '',
+    address: '',
+    nickName: '',
+    genre: '',
+    bio: '',
+    companyName: '',
+    organizationNumber: '',
+    socialMediaLinks: [],
+    availableDates: [],
+    gallery: [],
+    eventsHosted: []
+  })
+  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
-  // ** Hooks
-  const {
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues: { checkbox: false } })
-  const handleClose = () => setOpen(false)
-  const handleSecondDialogClose = () => setSecondDialogOpen(false)
-  const onSubmit = () => setOpen(true)
-
-  const handleConfirmation = value => {
-    handleClose()
-    setUserInput(value)
-    setSecondDialogOpen(true)
-  }
-
-  const handleInputImageChange = file => {
-    const reader = new FileReader()
-    const { files } = file.target
-    if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result)
-      reader.readAsDataURL(files[0])
-      if (reader.result !== null) {
-        setInputValue(reader.result)
+  useEffect(() => {
+    if (user) {
+      const config = {
+        headers: { Authorization: `Bearer ${user.accessToken}` }
       }
-    }
-  }
 
-  const handleInputImageReset = () => {
-    setInputValue('')
-    setImgSrc('/images/avatars/15.png')
-  }
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, config)
+        .then(response => {
+          setFormData(response.data.userData)
+        })
+        .catch(error => console.error('Error fetching user data:', error))
+    }
+  }, [user])
 
   const handleFormChange = (field, value) => {
     setFormData({ ...formData, [field]: value })
   }
 
+  const handleGalleryChange = files => {
+    setFormData({ ...formData, gallery: files[0] })
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    setSuccessMessage('')
+    setErrorMessage('')
+
+    axios
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formData, {
+        headers: { Authorization: `Bearer ${user.accessToken}` }
+      })
+      .then(response => {
+        setSuccessMessage('Profile updated successfully.')
+      })
+      .catch(error => {
+        console.error('Error updating profile:', error)
+        setErrorMessage('Error updating profile.')
+      })
+  }
+
+  const renderRoleSpecificFields = () => {
+    switch (formData.role) {
+      case 'artist':
+        return (
+          <>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Nickname'
+                value={formData.nickName}
+                onChange={e => handleFormChange('nickName', e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Genre'
+                value={formData.genre}
+                onChange={e => handleFormChange('genre', e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Bio'
+                value={formData.bio}
+                onChange={e => handleFormChange('bio', e.target.value)}
+              />
+            </Grid>
+            {/* Add additional fields for artist */}
+          </>
+        )
+      case 'organizer':
+        return (
+          <>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Company Name'
+                value={formData.companyName}
+                onChange={e => handleFormChange('companyName', e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Organization Number'
+                value={formData.organizationNumber}
+                onChange={e => handleFormChange('organizationNumber', e.target.value)}
+              />
+            </Grid>
+            {/* Add additional fields for organizer */}
+          </>
+        )
+      case 'admin':
+        // Add any admin-specific fields here
+        return null
+      default:
+        return null
+    }
+  }
+
   return (
-    <Grid container spacing={6}>
-      {/* Account Details Card */}
-      <Grid item xs={12}>
-        <Card>
-          <CardHeader title='Profile Details' />
-          <form>
-            <CardContent sx={{ pt: 0 }}>
-              <ImageUpload />
-            </CardContent>
-            <Divider />
-            <CardContent>
-              <Grid container spacing={5}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label='First Name'
-                    placeholder='John'
-                    value={formData.firstName}
-                    onChange={e => handleFormChange('firstName', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label='Last Name'
-                    placeholder='Doe'
-                    value={formData.lastName}
-                    onChange={e => handleFormChange('lastName', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type='email'
-                    label='Email'
-                    value={formData.email}
-                    placeholder='john.doe@example.com'
-                    onChange={e => handleFormChange('email', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label='Organization'
-                    placeholder='Pixinvent'
-                    value={formData.organization}
-                    onChange={e => handleFormChange('organization', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type='number'
-                    label='Phone Number'
-                    value={formData.number}
-                    placeholder='202 555 0111'
-                    onChange={e => handleFormChange('number', e.target.value)}
-                    InputProps={{ startAdornment: <InputAdornment position='start'>US (+1)</InputAdornment> }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label='Address'
-                    placeholder='Address'
-                    value={formData.address}
-                    onChange={e => handleFormChange('address', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label='State'
-                    placeholder='California'
-                    value={formData.state}
-                    onChange={e => handleFormChange('state', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    type='number'
-                    label='Zip Code'
-                    placeholder='231465'
-                    value={formData.zipCode}
-                    onChange={e => handleFormChange('zipCode', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    defaultValue=''
-                    label='Country'
-                    SelectProps={{
-                      value: formData.country,
-                      onChange: e => handleFormChange('country', e.target.value)
-                    }}
-                  >
-                    <MenuItem value='australia'>Australia</MenuItem>
-                    <MenuItem value='canada'>Canada</MenuItem>
-                    <MenuItem value='france'>France</MenuItem>
-                    <MenuItem value='united-kingdom'>United Kingdom</MenuItem>
-                    <MenuItem value='united-states'>United States</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    defaultValue=''
-                    label='Language'
-                    SelectProps={{
-                      value: formData.language,
-                      onChange: e => handleFormChange('language', e.target.value)
-                    }}
-                  >
-                    <MenuItem value='arabic'>Arabic</MenuItem>
-                    <MenuItem value='english'>English</MenuItem>
-                    <MenuItem value='french'>French</MenuItem>
-                    <MenuItem value='german'>German</MenuItem>
-                    <MenuItem value='portuguese'>Portuguese</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    defaultValue=''
-                    label='Timezone'
-                    SelectProps={{
-                      value: formData.timezone,
-                      onChange: e => handleFormChange('timezone', e.target.value)
-                    }}
-                  >
-                    <MenuItem value='gmt-12'>(GMT-12:00) International Date Line West</MenuItem>
-                    <MenuItem value='gmt-11'>(GMT-11:00) Midway Island, Samoa</MenuItem>
-                    <MenuItem value='gmt-10'>(GMT-10:00) Hawaii</MenuItem>
-                    <MenuItem value='gmt-09'>(GMT-09:00) Alaska</MenuItem>
-                    <MenuItem value='gmt-08'>(GMT-08:00) Pacific Time (US & Canada)</MenuItem>
-                    <MenuItem value='gmt-08-baja'>(GMT-08:00) Tijuana, Baja California</MenuItem>
-                    <MenuItem value='gmt-07'>(GMT-07:00) Chihuahua, La Paz, Mazatlan</MenuItem>
-                    <MenuItem value='gmt-07-mt'>(GMT-07:00) Mountain Time (US & Canada)</MenuItem>
-                    <MenuItem value='gmt-06'>(GMT-06:00) Central America</MenuItem>
-                    <MenuItem value='gmt-06-ct'>(GMT-06:00) Central Time (US & Canada)</MenuItem>
-                    <MenuItem value='gmt-06-mc'>(GMT-06:00) Guadalajara, Mexico City, Monterrey</MenuItem>
-                    <MenuItem value='gmt-06-sk'>(GMT-06:00) Saskatchewan</MenuItem>
-                    <MenuItem value='gmt-05'>(GMT-05:00) Bogota, Lima, Quito, Rio Branco</MenuItem>
-                    <MenuItem value='gmt-05-et'>(GMT-05:00) Eastern Time (US & Canada)</MenuItem>
-                    <MenuItem value='gmt-05-ind'>(GMT-05:00) Indiana (East)</MenuItem>
-                    <MenuItem value='gmt-04'>(GMT-04:00) Atlantic Time (Canada)</MenuItem>
-                    <MenuItem value='gmt-04-clp'>(GMT-04:00) Caracas, La Paz</MenuItem>
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    defaultValue=''
-                    label='Currency'
-                    SelectProps={{
-                      value: formData.currency,
-                      onChange: e => handleFormChange('currency', e.target.value)
-                    }}
-                  >
-                    <MenuItem value='usd'>USD</MenuItem>
-                    <MenuItem value='eur'>EUR</MenuItem>
-                    <MenuItem value='pound'>Pound</MenuItem>
-                    <MenuItem value='bitcoin'>Bitcoin</MenuItem>
-                  </TextField>
-                </Grid>
-
-                <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(6.5)} !important` }}>
-                  <Button variant='contained' sx={{ mr: 4 }}>
-                    Save Changes
-                  </Button>
-                  <Button type='reset' variant='tonal' color='secondary' onClick={() => setFormData(initialData)}>
-                    Reset
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </form>
-        </Card>
+    <form onSubmit={handleSubmit}>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <ImageUpload image={formData.gallery} handleImageChange={handleGalleryChange} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label='First Name'
+            value={formData.firstName}
+            onChange={e => handleFormChange('firstName', e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label='Last Name'
+            value={formData.lastName}
+            onChange={e => handleFormChange('lastName', e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            type='email'
+            label='Email'
+            value={formData.email}
+            onChange={e => handleFormChange('email', e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label='Phone'
+            value={formData.phone}
+            onChange={e => handleFormChange('phone', e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label='Address'
+            value={formData.address}
+            onChange={e => handleFormChange('address', e.target.value)}
+          />
+        </Grid>
+        {/* Render role-specific fields */}
+        {renderRoleSpecificFields()}
+        <Grid item xs={12}>
+          {successMessage && <Alert severity='success'>{successMessage}</Alert>}
+          {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
+          <Button type='submit' variant='contained'>
+            Save Changes
+          </Button>
+        </Grid>
       </Grid>
-
-      {/* Delete Account Card */}
-      <Grid item xs={12}>
-        <Card>
-          <CardHeader title='Delete Account' />
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Box sx={{ mb: 4 }}>
-                <FormControl>
-                  <Controller
-                    name='checkbox'
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <FormControlLabel
-                        label='I confirm my account deactivation'
-                        sx={{ '& .MuiTypography-root': { color: errors.checkbox ? 'error.main' : 'text.secondary' } }}
-                        control={
-                          <Checkbox
-                            {...field}
-                            size='small'
-                            name='validation-basic-checkbox'
-                            sx={errors.checkbox ? { color: 'error.main' } : null}
-                          />
-                        }
-                      />
-                    )}
-                  />
-                  {errors.checkbox && (
-                    <FormHelperText
-                      id='validation-basic-checkbox'
-                      sx={{ mx: 0, color: 'error.main', fontSize: theme => theme.typography.body2.fontSize }}
-                    >
-                      Please confirm you want to delete account
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Box>
-              <Button variant='contained' color='error' type='submit' disabled={errors.checkbox !== undefined}>
-                Deactivate Account
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Deactivate Account Dialogs */}
-      <Dialog fullWidth maxWidth='xs' open={open} onClose={handleClose}>
-        <DialogContent
-          sx={{
-            pb: theme => `${theme.spacing(6)} !important`,
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              textAlign: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              '& svg': { mb: 6, color: 'warning.main' }
-            }}
-          >
-            <Icon icon='tabler:alert-circle' fontSize='5.5rem' />
-            <Typography>Are you sure you would like to cancel your subscription?</Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button variant='contained' sx={{ mr: 2 }} onClick={() => handleConfirmation('yes')}>
-            Yes
-          </Button>
-          <Button variant='tonal' color='secondary' onClick={() => handleConfirmation('cancel')}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog fullWidth maxWidth='xs' open={secondDialogOpen} onClose={handleSecondDialogClose}>
-        <DialogContent
-          sx={{
-            pb: theme => `${theme.spacing(6)} !important`,
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-              '& svg': {
-                mb: 8,
-                color: userInput === 'yes' ? 'success.main' : 'error.main'
-              }
-            }}
-          >
-            <Icon fontSize='5.5rem' icon={userInput === 'yes' ? 'tabler:circle-check' : 'tabler:circle-x'} />
-            <Typography variant='h4' sx={{ mb: 5 }}>
-              {userInput === 'yes' ? 'Deleted!' : 'Cancelled'}
-            </Typography>
-            <Typography>
-              {userInput === 'yes' ? 'Your subscription cancelled successfully.' : 'Unsubscription Cancelled!!'}
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button variant='contained' color='success' onClick={handleSecondDialogClose}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>
+    </form>
   )
 }
 
 export default TabAccount
-
-TabAccount.authGuard = false
-TabAccount.guestGuard = false
-TabAccount.acl = {
-  action: 'manage',
-  subject: 'all' // Adjust the permissions as per your application's ACL configuration
-}
-
-// TabAccount.getLayout = page => <div>{page}</div>
