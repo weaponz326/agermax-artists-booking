@@ -24,8 +24,38 @@ const userSchema = mongoose.Schema({
     required: true,
     enum: ["admin", "artist", "organizer"],
   },
-  // Additional fields specific to each role can be added here
-});
+  contactPhone: { 
+    type: String,
+    // required: true 
+  },
+  address: { 
+    type: String,
+    // required: true 
+  },
+  nickName: { 
+    type: String 
+  },
+  genre: { 
+    type: String 
+  },
+  bio: { 
+    type: String 
+  },
+  organizationNumber: { 
+    type: String 
+  },
+  eventsHosted: { 
+    type: [String] 
+  },
+  socialMediaLinks: { 
+    type: [String] 
+  },
+  availableDates: { 
+    type: [Date] 
+  },
+  gallery: { 
+    type: [String] 
+  },});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
