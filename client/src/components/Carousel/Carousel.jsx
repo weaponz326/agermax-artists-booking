@@ -7,10 +7,10 @@ export default function Carousel({ artist }) {
   return (
     <div className={styles['carousel-container']}>
       <div className={styles['carousel-img']}>
-        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.artistImg} fill loading='eager' />
+        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.picture} fill loading='eager' />
       </div>
       <Link href={`/artist-profile`} className={styles['carousel-title-text']}>
-        {artist.first_name} {artist.last_name}
+        {artist.firstName} {artist.lastName}
       </Link>
 
       {/* A good place to map your tags from Api calls */}

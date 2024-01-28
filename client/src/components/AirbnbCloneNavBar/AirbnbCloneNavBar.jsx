@@ -92,7 +92,7 @@ const MiddleFormMini = ({ setHideMiddleForm }) => {
   const formItems = [
     {
       label: 'Anywhere',
-      pointer: 'desitnation'
+      pointer: 'destination'
     },
     {
       label: 'Any week',

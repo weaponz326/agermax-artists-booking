@@ -31,6 +31,7 @@
   background-color: #62afe8;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
+  cursor: pointer;
   border: none;
 }
 .userMenuSignInButton:hover {
@@ -43,6 +44,7 @@
   background-color: #62afe8;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
+  cursor: pointer;
   border: none;
 }
 .userMenuSignUpButton:hover {
@@ -52,6 +54,7 @@
 .userActionsButtons {
   padding: 0;
   display: flex;
+  cursor: pointer;
   flex-direction: row;
   gap: 0.2rem;
 }
