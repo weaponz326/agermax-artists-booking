@@ -27,16 +27,27 @@
 }
 .dateFilter {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
 }
 
 .selectMonth {
-  padding: 0.3rem 1.3rem;
-  /* padding-inline: 2px; */
+  background-color: none;
+  color: black;
+  padding: 0;
+  border: none;
+  border-radius: 0.5rem;
 }
+
+.selectMonth * {
+  /* color: black; */
+  background-color: #efefef;
+}
+
 .filterTab {
   padding: 0.3rem 1.3rem;
+  border-radius: 0.5rem;
+  border: none;
 }
 
 .filterTabContent {

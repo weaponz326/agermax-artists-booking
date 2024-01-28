@@ -26,6 +26,10 @@
 .usersListPageNavBarAddUsersBtn {
   background-color: #4428f2;
   color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
 .usersListPageListTable {

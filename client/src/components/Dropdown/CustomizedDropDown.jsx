@@ -102,23 +102,14 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
       }
     }
     return (
-      <>
-        <TabButton
-          // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
-          className={styles.userMenuSignInButton}
-          onClick={() => setIsLoggedIn(true)}
-        >
+      <div className={styles.userActionsButtons}>
+        <TabButton className={styles.userMenuSignInButton} onClick={() => setIsLoggedIn(true)}>
           Sign In
         </TabButton>
-        <Link href={'/signup'}>
-          <TabButton
-            // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
-            className={styles.userMenuSignUpButton}
-          >
-            Sign Up
-          </TabButton>
+        <Link href={'/register'}>
+          <TabButton className={styles.userMenuSignUpButton}>Sign Up</TabButton>
         </Link>
-      </>
+      </div>
     )
   }
 }

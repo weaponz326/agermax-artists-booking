@@ -5,11 +5,10 @@ import { useHeaderContext } from '../../providers/headerProvider'
 import { SearchNormal1 } from 'iconsax-react'
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 
-const AirbnbCloneNavBar = () => {
+const AirbnbCloneNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
   const headerRef = useRef()
   const [shouldStick, setShouldStick] = useState(true)
   const { hideMiddleForm, setHideMiddleForm } = useHeaderContext()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {

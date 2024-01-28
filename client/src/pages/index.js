@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import BlankLayoutWithAppBar from '../@core/layouts/BlankLayoutWithAppBar' // Adjust the import path as necessary
 import HomePage from 'src/components/Homepage/Homepage'
+import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
+import { useState } from 'react'
 
 // Your styled component for the content
 const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
@@ -23,10 +25,12 @@ const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
   Additional content goes here */
 /* </LandingPageContentWrapper> */
 const Home = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
   return (
-    <>
-      <HomePage />
-    </>
+    <CustomPagesLayout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}>
+      <HomePage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+    </CustomPagesLayout>
   )
 }
 

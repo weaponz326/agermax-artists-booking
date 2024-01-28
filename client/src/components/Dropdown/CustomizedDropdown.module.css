@@ -26,18 +26,36 @@
 }
 
 .userMenuSignInButton {
-  background-color: black;
   color: white;
+  border: 1px solid black;
+  background-color: #62afe8;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
 }
 .userMenuSignInButton:hover {
   transform: scale(1.02);
 }
 
 .userMenuSignUpButton {
-  background-color: black;
   color: white;
-  border: 1px solid white;
+  border: 1px solid black;
+  background-color: #62afe8;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
 }
 .userMenuSignUpButton:hover {
   transform: scale(1.02);
+}
+
+.userActionsButtons {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+}
+
+.userActionsButtons a {
+  padding: 0;
 }
