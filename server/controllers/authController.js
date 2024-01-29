@@ -143,7 +143,7 @@ const getUserProfile = async (req, res) => {
         lastName,
         email,
         role,
-        phone = "", // Set default values if field is not present
+        contactPhone = "", // Set default values if field is not present
         address = "",
         nickName = "",
         genre = "",
@@ -163,7 +163,7 @@ const getUserProfile = async (req, res) => {
           lastName,
           email,
           role,
-          phone,
+          contactPhone,
           address,
           nickName,
           genre,
@@ -187,56 +187,72 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUserDetails = async (req, res) => {
-  const userId = req.user._id; // Fetched from the auth middleware
-  const role = req.user.role; // Fetched from the auth middleware
-  const updateData = req.body; // Data to be updated
-
-  try {
-    // Update for the User model
-    const userUpdateFields = {
-      firstName: updateData.firstName,
-      lastName: updateData.lastName,
-      email: updateData.email, // Changed from contactEmail to email
-      contactPhone: updateData.contactPhone,
-      address: updateData.address,
-      // Add other User model fields here if necessary
-    };
-    await User.findByIdAndUpdate(userId, userUpdateFields);
-
-    // Common fields for role-specific models
-    const roleSpecificUpdateFields = {
-      contactEmail: updateData.email, // Updating contactEmail with new email
-      ...updateData, // Spread operator to include other update fields
-    };
-
-    switch (role) {
-      case "artist":
+    const userId = req.user._id; // Fetched from the auth middleware
+    const role = req.user.role; // Fetched from the auth middleware
+    const updateData = req.body; // Data to be updated
+  
+    try {
+      // Update for the User model
+      const userUpdateFields = {
+        firstName: updateData.firstName,
+        lastName: updateData.lastName,
+        email: updateData.email,
+        contactPhone: updateData.contactPhone,
+        address: updateData.address,
+        // Add other fields if necessary
+      };
+      await User.findByIdAndUpdate(userId, userUpdateFields);
+  
+      // Common fields for role-specific models
+      const roleSpecificUpdateFields = {
+        contactEmail: updateData.email,
+        contactPhone: updateData.contactPhone,
+        address: updateData.address,
+        // Include fields common to all role-specific models
+      };
+  
+      if (role === "artist") {
         await Artist.findOneAndUpdate(
           { contactEmail: req.user.email },
-          roleSpecificUpdateFields
+          {
+            ...roleSpecificUpdateFields,
+            nickName: updateData.nickName,
+            genre: updateData.genre,
+            bio: updateData.bio,
+            organizationNumber: updateData.organizationNumber,
+            socialMediaLinks: updateData.socialMediaLinks,
+            availableDates: updateData.availableDates,
+            gallery: updateData.gallery,
+            // Add other artist-specific fields
+          }
         );
-        break;
-      case "organizer":
+      } else if (role === "organizer") {
         await EventOrganizer.findOneAndUpdate(
           { contactEmail: req.user.email },
-          roleSpecificUpdateFields
+          {
+            ...roleSpecificUpdateFields,
+            companyName: updateData.companyName,
+            organizationNumber: updateData.organizationNumber,
+            eventsHosted: updateData.eventsHosted,
+            // Add other organizer-specific fields
+          }
         );
-        break;
-      case "admin":
+      } else if (role === "admin") {
         await Admin.findOneAndUpdate(
           { contactEmail: req.user.email },
-          roleSpecificUpdateFields
+          {
+            ...roleSpecificUpdateFields,
+            // Add other admin-specific fields if necessary
+          }
         );
-        break;
-      default:
-        throw new Error("Invalid user role");
+      }
+  
+      res.json({ message: "User details updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
     }
-
-    res.json({ message: "User details updated successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
+  };
+  
 
 module.exports = {
   registerUser,

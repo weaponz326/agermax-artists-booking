@@ -20,7 +20,7 @@ const TabAccount = () => {
     lastName: '',
     email: '',
     role: '',
-    phone: '',
+    contactPhone: '',
     address: '',
     nickName: '',
     genre: '',
@@ -174,8 +174,8 @@ const TabAccount = () => {
           <TextField
             fullWidth
             label='Phone'
-            value={formData.phone}
-            onChange={e => handleFormChange('phone', e.target.value)}
+            value={formData.contactPhone}
+            onChange={e => handleFormChange('contactPhone', e.target.value)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

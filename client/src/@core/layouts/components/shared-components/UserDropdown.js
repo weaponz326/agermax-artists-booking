@@ -36,29 +36,33 @@ const MenuItemStyled = styled(MenuItem)(({ theme }) => ({
 }))
 
 const UserDropdown = props => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
+  const { user, logout } = useAuth(); // Access user data from the auth context
+
+  const handleDropdownOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleDropdownClose = url => {
+    if (url) {
+      router.push(url);
+    }
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleDropdownClose();
+  };
+
   // ** Props
   const { settings } = props
 
-  // ** States
-  const [anchorEl, setAnchorEl] = useState(null)
-
-  // ** Hooks
-  const router = useRouter()
-  const { logout } = useAuth()
 
   // ** Vars
   const { direction } = settings
 
-  const handleDropdownOpen = event => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleDropdownClose = url => {
-    if (url) {
-      router.push(url)
-    }
-    setAnchorEl(null)
-  }
 
   const styles = {
     px: 4,
@@ -75,10 +79,6 @@ const UserDropdown = props => {
     }
   }
 
-  const handleLogout = () => {
-    logout()
-    handleDropdownClose()
-  }
 
   return (
     <Fragment>
@@ -108,22 +108,22 @@ const UserDropdown = props => {
         transformOrigin={{ vertical: 'top', horizontal: direction === 'ltr' ? 'right' : 'left' }}
       >
         <Box sx={{ py: 1.75, px: 6 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge
-              overlap='circular'
-              badgeContent={<BadgeContentSpan />}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
-            </Badge>
-            <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 500 }}>John Doe</Typography>
-              <Typography variant='body2'>Admin</Typography>
-            </Box>
-          </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Badge
+          overlap='circular'
+          badgeContent={<BadgeContentSpan />}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+        >
+          <Avatar alt={user?.firstName || 'User'} src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+        </Badge>
+        <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
+          <Typography sx={{ fontWeight: 500 }}>{user?.firstName} {user?.lastName}</Typography>
+          <Typography variant='body2'>{user?.role}</Typography>
+        </Box>
+      </Box>
         </Box>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
