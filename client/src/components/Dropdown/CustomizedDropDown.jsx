@@ -6,7 +6,6 @@ import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { useAuth } from 'src/providers/AuthProvider'
-
 const isNotLoggedInItems = [
   {
     key: '1',

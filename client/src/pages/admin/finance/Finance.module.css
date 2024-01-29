@@ -1,0 +1,14 @@
+.financePage {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  --events-panel-backgroundColor: #f2f5f6;
+
+  max-width: 48rem;
+  background-color: red;
+}

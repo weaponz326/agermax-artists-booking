@@ -4,7 +4,6 @@ import AirbnbCloneNavBar from 'src/components/AirbnbCloneNavBar/AirbnbCloneNavBa
 import HeaderContextProvider from 'src/providers/headerProvider'
 import DropdownContextProvider from 'src/providers/dropdownProvider'
 import { DropdownBubble } from 'src/components/Dropdown/DropDown'
-import { useContext, useState } from 'react'
 import { AuthProvider } from 'src/providers/AuthProvider'
 
 const CustomPagesLayout = ({ children }) => {
