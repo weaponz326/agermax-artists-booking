@@ -3,10 +3,10 @@ import SearchArtistDropdown from '../MiddleFormItemDropdown/SearchArtistsDropdow
 
 export const formItems = {
   stays: {
-    desitnation: {
+    destination: {
       isInput: true,
       label: 'Artists',
-      placeholder: 'Search artists',
+      placeholder: 'Search Artists',
       dropdownContent: SearchArtistDropdown
     },
     date: [
@@ -32,7 +32,7 @@ export const formItems = {
     }
   },
   experiences: {
-    desitnation: {
+    destination: {
       label: 'Where',
       isInput: true,
       placeholder: 'Search destinations',

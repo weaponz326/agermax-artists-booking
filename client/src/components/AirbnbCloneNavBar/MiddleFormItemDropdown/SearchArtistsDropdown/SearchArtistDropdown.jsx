@@ -2,40 +2,56 @@ import styles from './SearchArtistDropdown.module.css'
 import React, { useState, useEffect } from 'react'
 import { CircularProgress } from '@mui/material'
 import MiddleFormItemDropdown from '../MiddleFormItemDropdown'
+import usersData from './Music Artists Data'
+import Router, { useRouter } from 'next/router'
 
 const useFetchArtists = filter => {
   const [isLoading, setIsLoading] = useState(false)
-  const [artists, setArtists] = useState([])
+  const [artists, setArtists] = useState(usersData)
   const [error, setError] = useState(null)
   let debounceKey = null
 
   useEffect(() => {
-    const fetchArtists = async () => {
-      try {
-        setIsLoading(true)
-        // use [filter] in your search query
-        const result = await fetch(`https://api.mockaroo.com/api/7e49e110?count=100&key=15462290`)
+    // const fetchArtists = async () => {
+    //   try {
+    //     setIsLoading(true)
+    //     // use [filter] in your search query
+    //     const result = await fetch(`https://api.mockaroo.com/api/7e49e110?count=100&key=15462290`)
 
-        if (result.status === 200) {
-          const artistsData = await result.json()
-          setArtists(artistsData)
-          setError(null)
-        } else {
-          setError('Failed to get artists')
-        }
-      } catch (error) {
-        console.log(error)
-        setError('Something went wrongs')
-      }
+    //     if (result.status === 200) {
+    //       const artistsData = await result.json()
+    //       const filteredArtistsData = artistsData.filter(
+    //         artist =>
+    //           artist.firstName.toLowerCase().includes(filter.toLowerCase()) ||
+    //           artist.lastName.toLowerCase().includes(filter.toLowerCase())
+    //       )
 
-      setIsLoading(false)
-    }
+    //       setArtists(filteredArtistsData)
+    //       setError(null)
+    //     } else {
+    //       setError('Failed to get artists')
+    //     }
+    //   } catch (error) {
+    //     setError('Something went wrong')
+    //   }
 
-    if (debounceKey) clearTimeout(debounceKey)
+    //   setIsLoading(false)
+    // }
 
-    debounceKey = setTimeout(fetchArtists, 1000)
+    // if (debounceKey) clearTimeout(debounceKey)
+    // debounceKey = setTimeout(fetchArtists, 300)
 
-    return () => clearTimeout(debounceKey)
+    //Set up hardcoded userData
+    const filteredArtistsData = usersData.filter(
+      artist =>
+        artist.firstName.toLowerCase().includes(filter.toLowerCase()) ||
+        artist.lastName.toLowerCase().includes(filter.toLowerCase())
+    )
+
+    setArtists(filteredArtistsData)
+    //Hard Coded userData ends here!
+
+    // return () => clearTimeout(debounceKey)
   }, [filter])
 
   return [artists, isLoading, error]
@@ -88,9 +104,13 @@ const SearchArtistDropdown = ({ filter }) => {
 }
 
 const ArtistListItem = ({ artist }) => {
+  const router = useRouter()
   return (
     <div className={styles.artistListItemWrapper}>
-      <div className={styles.artistListItem}>
+      <div
+        className={styles.artistListItem}
+        onClick={() => router.push({ pathname: '/artist-profile', query: artist })}
+      >
         <div className={styles.artistListItemImg}>
           <img src={artist.picture} alt='' />
         </div>

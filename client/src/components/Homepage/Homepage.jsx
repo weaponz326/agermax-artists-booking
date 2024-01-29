@@ -1,7 +1,6 @@
 // pages/index.js
 import React, { useEffect, useState } from 'react'
 import Header from 'src/components/Header/Header'
-import { MdRefresh } from 'react-icons/md'
 import Link from 'next/link'
 import EventsLayout from 'src/components/EventsLayout/EventsLayout'
 import Image from 'next/image'
@@ -11,7 +10,7 @@ import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
 
-const HomePage = () => {
+const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
   const [imgList, setImgList] = useState([])
   const [artistsList, setArtistsList] = useState([])
   useEffect(() => {
@@ -26,15 +25,15 @@ const HomePage = () => {
     fetchData()
   }, [])
   return (
-    <CustomPagesLayout className='homepage'>
-      <Header artistsList={artistsList} />
+    <div className='homepage'>
+      <Header artistsList={artistsList} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <main>
         <EventsSection imgList={imgList} />
         <AboutSection />
         <FaqSection />
         <SubscriptionSection />
       </main>
-    </CustomPagesLayout>
+    </div>
   )
 }
 

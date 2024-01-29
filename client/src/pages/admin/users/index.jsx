@@ -19,6 +19,20 @@ const UsersListPage = () => {
   const [usersList, setUsersList] = useState(usersData)
   const [query, setQuery] = useState('')
 
+  // useEffect(() => {
+  //   //Fetch Users List Data with Axios
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const usersData = await axios.get('https://api.mockaroo.com/api/7e49e110?count=100&key=15462290')
+  //       setUsersList(usersData)
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+
+  //   fetchUsers()
+  // }, [])
+
   function unhideModal() {
     setOpenModal(true)
   }

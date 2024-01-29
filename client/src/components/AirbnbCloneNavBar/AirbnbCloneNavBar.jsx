@@ -9,7 +9,6 @@ const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
   const [shouldStick, setShouldStick] = useState(true)
   const { hideMiddleForm, setHideMiddleForm } = useHeaderContext()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +39,7 @@ const AirbnbCloneNavBar = () => {
           </div>
           <MiddleContainer setHideMiddleForm={setHideMiddleForm} />
           <div className={styles.rightSide}>
-            <CustomizedDropdown isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <CustomizedDropdown />
           </div>
         </div>
       </div>
@@ -93,7 +92,7 @@ const MiddleFormMini = ({ setHideMiddleForm }) => {
   const formItems = [
     {
       label: 'Anywhere',
-      pointer: 'desitnation'
+      pointer: 'destination'
     },
     {
       label: 'Any week',

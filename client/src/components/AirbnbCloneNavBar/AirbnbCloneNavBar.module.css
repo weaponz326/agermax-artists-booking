@@ -1,9 +1,6 @@
 .header * {
-  /* margin: 0; */
-  /* padding: 0; */
   position: relative;
-  /* box-sizing: border-box; */
-  --font-size: 1rem;
+  --font-size: 0.85rem;
 }
 
 .header {
@@ -35,7 +32,8 @@
   justify-content: space-between;
   transition: padding-bottom 0.2s linear;
   /* padding: 1rem; */
-  padding-bottom: calc(var(--middle-form-height));
+  /* padding-bottom: calc(var(--middle-form-height)); */
+  padding-bottom: 3rem;
 }
 
 .headerInner a {
@@ -136,7 +134,7 @@
 
 .middleForm {
   transition: all 0.2s linear;
-  height: var(--middle-form-height);
+  /* height: var(--middle-form-height); */
 }
 
 .middleFormHighlight {

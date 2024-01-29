@@ -5,6 +5,7 @@ import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import { useAuth } from 'src/providers/AuthProvider'
 
 const isNotLoggedInItems = [
   {
@@ -65,7 +66,8 @@ const buttonStyle = {
   border: '0.5px solid #183d4c'
 }
 
-const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
+const CustomizedDropdown = () => {
+  const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
   if (isLoggedIn) {
     const onClick = ({ key }) => {
       if (key === '5') {
@@ -102,23 +104,14 @@ const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
       }
     }
     return (
-      <>
-        <TabButton
-          // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
-          className={styles.userMenuSignInButton}
-          onClick={() => setIsLoggedIn(true)}
-        >
+      <div className={styles.userActionsButtons}>
+        <TabButton className={styles.userMenuSignInButton} onClick={() => setIsLoggedIn(true)}>
           Sign In
         </TabButton>
-        <Link href={'/signup'}>
-          <TabButton
-            // buttonStyle={{ color: 'white', backgroundColor: '#183d4c', boxShadow: '1px 1px 1px #183d4c' }}
-            className={styles.userMenuSignUpButton}
-          >
-            Sign Up
-          </TabButton>
+        <Link href={'/register'}>
+          <TabButton className={styles.userMenuSignUpButton}>Sign Up</TabButton>
         </Link>
-      </>
+      </div>
     )
   }
 }

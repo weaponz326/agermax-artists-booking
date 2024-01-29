@@ -6,7 +6,7 @@ const TabButton = ({ children, className, buttonStyle, onClick, id }) => {
   const combinedClassNames = classNames(styles.tab, className) // Reversed order
 
   return (
-    <button id={id} onClick={onClick} style={buttonStyle} className={combinedClassNames}>
+    <button id={id} onClick={onClick} style={buttonStyle} className={className ? className : styles.tab}>
       {children}
     </button>
   )

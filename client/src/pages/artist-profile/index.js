@@ -3,10 +3,14 @@ import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
 import { Button, Drawer, ConfigProvider } from 'antd'
+import { useRouter } from 'next/router'
 
 import BookingCard from 'src/components/BookingCard/BookingCard'
 
 function ArtistProfile() {
+  const router = useRouter()
+  console.log(router.query)
+  const [artistDetails, setArtistsDetails] = useState(router.query)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   function drawerState(value) {
@@ -22,6 +26,7 @@ function ArtistProfile() {
             openSideDrawer={openSideDrawer}
             setOpenSideDrawer={setOpenSideDrawer}
             drawerState={drawerState}
+            artistDetails={artistDetails}
           />
           <EventsSection />
         </div>
@@ -86,14 +91,19 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, drawerState }) => {
+const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, drawerState, artistDetails }) => {
   return (
     <section>
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
-          <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='profile-image' />
+          <img
+            src={artistDetails ? artistDetails.picture : 'https://source.unsplash.com/3tYZjGSBwbk'}
+            alt='profile-image'
+          />
         </div>
-        <h5 id={styles['username']}>John Doe</h5>
+        <h5 id={styles['username']}>
+          {artistDetails ? `${artistDetails.firstName} ${artistDetails.lastName}` : 'John Doe'}
+        </h5>
         <div className={styles['tags-container']}>
           <Tag>Rock</Tag>
           <Tag>Trubadur</Tag>

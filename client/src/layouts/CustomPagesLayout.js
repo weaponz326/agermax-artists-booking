@@ -4,21 +4,25 @@ import AirbnbCloneNavBar from 'src/components/AirbnbCloneNavBar/AirbnbCloneNavBa
 import HeaderContextProvider from 'src/providers/headerProvider'
 import DropdownContextProvider from 'src/providers/dropdownProvider'
 import { DropdownBubble } from 'src/components/Dropdown/DropDown'
+import { useContext, useState } from 'react'
+import { AuthProvider } from 'src/providers/AuthProvider'
 
 const CustomPagesLayout = ({ children }) => {
   return (
-    <DropdownContextProvider>
-      <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '4rem' }}>
-        <HeaderContextProvider>
-          <AirbnbCloneNavBar />
-        </HeaderContextProvider>
-        <main style={{ minHeight: '100' }} className='page-layout-layout'>
-          {children}
-        </main>
-        <Footer />
-      </div>
-      <DropdownBubble />
-    </DropdownContextProvider>
+    <AuthProvider>
+      <DropdownContextProvider>
+        <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '4rem' }}>
+          <HeaderContextProvider>
+            <AirbnbCloneNavBar />
+          </HeaderContextProvider>
+          <main style={{ minHeight: '100' }} className='page-layout-layout'>
+            {children}
+          </main>
+          <Footer />
+        </div>
+        <DropdownBubble />
+      </DropdownContextProvider>
+    </AuthProvider>
   )
 }
 

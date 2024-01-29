@@ -2,16 +2,21 @@ import Link from 'next/link'
 import Button from '../Button/Button'
 import styles from './carousel.module.css'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 export default function Carousel({ artist }) {
+  const router = useRouter()
   return (
     <div className={styles['carousel-container']}>
       <div className={styles['carousel-img']}>
-        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.artistImg} fill loading='eager' />
+        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.picture} fill loading='eager' />
       </div>
-      <Link href={`/artist-profile`} className={styles['carousel-title-text']}>
-        {artist.first_name} {artist.last_name}
-      </Link>
+      <div
+        onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}
+        className={styles['carousel-title-text']}
+      >
+        {artist.firstName} {artist.lastName}
+      </div>
 
       {/* A good place to map your tags from Api calls */}
 

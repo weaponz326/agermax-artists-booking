@@ -1,11 +1,15 @@
 import axios from 'axios'
 import Unsplash from 'src/components/mock-data-apis/Unsplash'
-import JSONData from './MOCK_DATA.json'
+import usersData from './Music Artists Data.json'
 
-const baseUrl = 'https://jsonplaceholder.typicode.com/users'
+const baseUrl = 'https://api.mockaroo.com/api/7e49e110?count=100&key=15462290'
 export async function getAllArtists() {
-  // const { data: artists } = await axios.get(baseUrl)
-  return JSONData
+  // const { data } = await axios.get(baseUrl)
+  // return data
+
+  //Set Up hardcoded Users Data
+  return usersData
+  // Hardcoded users ends here!
 }
 
 export async function getArtistById(id) {
@@ -30,14 +34,13 @@ export const getRandomArtistsPhotos = async () => {
 export default async function getArtistsData() {
   try {
     const artistsPhotos = await getRandomArtistsPhotos()
-    // const artistsList = await getAllArtists()
-    const artistsList = await getAllArtists()
-    const randomImage = () => artistsPhotos[Math.floor(Math.random() * 20)].urls.regular
-    const artistsData = []
-    for (let i = 0; i < artistsList.length; i++) {
-      artistsData.push({ ...artistsList[i], artistImg: randomImage() })
-    }
-    return { artistsPhotos, artistsData }
+    const artistsData = await getAllArtists()
+    // const randomImage = () => artistsPhotos[Math.floor(Math.random() * 20)].urls.regular
+    // const artistsData = []
+    // for (let i = 0; i < artistsList.length; i++) {
+    //   artistsData.push({ ...artistsList[i], artistImg: randomImage() })
+    // }
+    return { artistsData, artistsPhotos }
   } catch (error) {
     console.log(error)
   }

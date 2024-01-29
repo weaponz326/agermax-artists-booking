@@ -14,8 +14,8 @@ const SearchBar = ({ usersList, setUsersList, usersData, query, setQuery }) => {
     } else {
       const filteredList = usersData.filter(
         users =>
-          users.firstName.toLowerCase().includes(query.toLocaleLowerCase()) ||
-          users.lastName.toLowerCase().includes(query.toLocaleLowerCase())
+          users.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          users.lastName.toLowerCase().includes(query.toLowerCase())
       )
       setUsersList(filteredList)
     }
