@@ -7,17 +7,17 @@ import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import { useState } from 'react'
 
 // Your styled component for the content
-const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
-  textAlign: 'center',
-  '& h1': {
-    margin: theme.spacing(4, 0),
-    color: theme.palette.text.primary
-  },
-  '& p': {
-    margin: theme.spacing(2, 0),
-    color: theme.palette.text.secondary
-  }
-}))
+// const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
+//   textAlign: 'center',
+//   '& h1': {
+//     margin: theme.spacing(4, 0),
+//     color: theme.palette.text.primary
+//   },
+//   '& p': {
+//     margin: theme.spacing(2, 0),
+//     color: theme.palette.text.secondary
+//   }
+// }))
 
 // <LandingPageContentWrapper>
 /* <h1>Welcome to Our Artists Management Platform</h1>
@@ -25,11 +25,11 @@ const LandingPageContentWrapper = styled(Box)(({ theme }) => ({
   Additional content goes here */
 /* </LandingPageContentWrapper> */
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   return (
-    <CustomPagesLayout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}>
-      <HomePage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+    <CustomPagesLayout>
+      <HomePage />
     </CustomPagesLayout>
   )
 }

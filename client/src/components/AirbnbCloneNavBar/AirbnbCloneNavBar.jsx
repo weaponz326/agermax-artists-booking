@@ -5,7 +5,7 @@ import { useHeaderContext } from '../../providers/headerProvider'
 import { SearchNormal1 } from 'iconsax-react'
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 
-const AirbnbCloneNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
+const AirbnbCloneNavBar = () => {
   const headerRef = useRef()
   const [shouldStick, setShouldStick] = useState(true)
   const { hideMiddleForm, setHideMiddleForm } = useHeaderContext()
@@ -39,7 +39,7 @@ const AirbnbCloneNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
           </div>
           <MiddleContainer setHideMiddleForm={setHideMiddleForm} />
           <div className={styles.rightSide}>
-            <CustomizedDropdown isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <CustomizedDropdown />
           </div>
         </div>
       </div>

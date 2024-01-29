@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { CircularProgress } from '@mui/material'
 import MiddleFormItemDropdown from '../MiddleFormItemDropdown'
 import usersData from './Music Artists Data'
+import Router, { useRouter } from 'next/router'
 
 const useFetchArtists = filter => {
   const [isLoading, setIsLoading] = useState(false)
@@ -103,9 +104,13 @@ const SearchArtistDropdown = ({ filter }) => {
 }
 
 const ArtistListItem = ({ artist }) => {
+  const router = useRouter()
   return (
     <div className={styles.artistListItemWrapper}>
-      <div className={styles.artistListItem}>
+      <div
+        className={styles.artistListItem}
+        onClick={() => router.push({ pathname: '/artist-profile', query: artist })}
+      >
         <div className={styles.artistListItemImg}>
           <img src={artist.picture} alt='' />
         </div>

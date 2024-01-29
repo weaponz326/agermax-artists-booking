@@ -3,7 +3,10 @@ import HeaderCarouselContainer from '../HeaderCarouselContainer/HeaderCarouselCo
 import styles from './header.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import Link from 'next/link'
-export default function Header({ artistsList, isLoggedIn, setIsLoggedIn }) {
+import { useAuth } from 'src/providers/AuthProvider'
+export default function Header({ artistsList }) {
+  const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+
   const renderedItem = !isLoggedIn ? (
     <Link href='/register'>
       <TabButton className={styles.joinAgermaxButton}>Join Agermax Today</TabButton>

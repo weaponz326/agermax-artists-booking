@@ -5,6 +5,7 @@ import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import { useAuth } from 'src/providers/AuthProvider'
 
 const isNotLoggedInItems = [
   {
@@ -65,7 +66,8 @@ const buttonStyle = {
   border: '0.5px solid #183d4c'
 }
 
-const CustomizedDropdown = ({ isLoggedIn, setIsLoggedIn }) => {
+const CustomizedDropdown = () => {
+  const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
   if (isLoggedIn) {
     const onClick = ({ key }) => {
       if (key === '5') {
