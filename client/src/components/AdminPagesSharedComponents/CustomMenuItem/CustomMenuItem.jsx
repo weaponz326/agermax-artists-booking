@@ -1,6 +1,8 @@
+import { StylesProvider } from '@material-ui/core'
 import React, { useState } from 'react'
+import styles from './CustomMenuItem.module.css'
 
-const CustomMenuItem = ({ label, subMenuItems }) => {
+const CustomMenuItem = ({ label, subMenuItems, labelClassName, menuContainer }) => {
   const [isSubMenuVisible, setSubMenuVisible] = useState(false)
 
   const handleToggleSubMenu = () => {
@@ -8,16 +10,18 @@ const CustomMenuItem = ({ label, subMenuItems }) => {
   }
 
   return (
-    <div>
-      <div onClick={handleToggleSubMenu}>
-        <span>{label}</span>
+    <div className={styles.customMenuContainerWrapper}>
+      <div className={menuContainer} onClick={handleToggleSubMenu}>
+        <h3 className={labelClassName}>{label}</h3>
         <span>{isSubMenuVisible ? ' -' : ' +'}</span>
       </div>
 
       {isSubMenuVisible && (
-        <ul>
+        <ul className={styles.listItem}>
           {subMenuItems.map((item, index) => (
-            <li key={index}>{item}</li>
+            <li className={styles.listItem} key={index}>
+              {item}
+            </li>
           ))}
         </ul>
       )}
@@ -25,13 +29,4 @@ const CustomMenuItem = ({ label, subMenuItems }) => {
   )
 }
 
-const YourComponent = () => {
-  return (
-    <div>
-      <CustomMenuItem label='Item 1' subMenuItems={['Subitem 1', 'Subitem 2', 'Subitem 3']} />
-      <CustomMenuItem label='Item 2' subMenuItems={['Subitem 4', 'Subitem 5']} />
-    </div>
-  )
-}
-
-export default YourComponent
+export default CustomMenuItem
