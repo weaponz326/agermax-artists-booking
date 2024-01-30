@@ -21,6 +21,7 @@
 }
 .organizerDetails p {
   margin: 0;
+  color: red;
 }
 .sectionUnderLined {
   border-bottom: 2px solid var(--off-light-body-background);

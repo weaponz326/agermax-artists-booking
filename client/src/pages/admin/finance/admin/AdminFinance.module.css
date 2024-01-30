@@ -35,3 +35,7 @@
   text-align: center;
   border-bottom: 1px solid var(--off-light-body-background);
 }
+
+.paymentRow td {
+  font-size: 0.85rem;
+}

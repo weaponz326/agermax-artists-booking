@@ -3,7 +3,6 @@ import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artists.module.css'
 import getArtistsData from 'src/services/artist'
 import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer/HeaderCarouselContainer'
-import Button from 'src/components/Button/Button'
 import CustomPagination from 'src/components/CustomPagination/CustomPagination'
 
 const ArtistsPage = () => {
@@ -51,13 +50,6 @@ const ArtistsPage = () => {
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
         />
-        {/* <Pagination
-          artistsPerPage={artistsPerPage}
-          artistsDataList={artistsDataList}
-          currentArtistsData={currentArtistsData}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
-        /> */}
       </main>
     </CustomPagesLayout>
   )
