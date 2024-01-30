@@ -1,6 +1,7 @@
 import { StylesProvider } from '@material-ui/core'
 import React, { useState } from 'react'
 import styles from './CustomMenuItem.module.css'
+import { ExpandLess, ExpandLessRounded, ExpandMoreRounded } from '@material-ui/icons'
 
 const CustomMenuItem = ({ label, subMenuItems, labelClassName, menuContainer }) => {
   const [isSubMenuVisible, setSubMenuVisible] = useState(false)
@@ -13,7 +14,7 @@ const CustomMenuItem = ({ label, subMenuItems, labelClassName, menuContainer }) 
     <div className={styles.customMenuContainerWrapper}>
       <div className={menuContainer} onClick={handleToggleSubMenu}>
         <h3 className={labelClassName}>{label}</h3>
-        <span>{isSubMenuVisible ? ' -' : ' +'}</span>
+        <span>{isSubMenuVisible ? <ExpandLessRounded /> : <ExpandMoreRounded />}</span>
       </div>
 
       {isSubMenuVisible && (

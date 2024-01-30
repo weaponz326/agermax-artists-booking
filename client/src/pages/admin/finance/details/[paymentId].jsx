@@ -5,34 +5,49 @@ import styles from './FinancialDetails.module.css'
 import Dropdown from 'antd/es/dropdown/dropdown'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
+import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
+import { Calendar, Note } from 'iconsax-react'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
   const { paymentId } = router.query
+  console.log({ paymentId })
 
   return (
     <div className={styles.financialDetailsPage}>
       <div className={styles.financialDetailsPageInfo}>
         <div className={styles.organizerDetails}>
-          <h3>Event Organizer</h3>
+          <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
           <p>Organizer Name</p>
         </div>
         <div className={styles.paymentItemsDetails}>
-          <div className={styles.paymentItemsTitles}>
-            <h3 className={styles.item}>Items</h3>
-            <h3 className={styles.price}>Price</h3>
-          </div>
           <div className={styles.priceTotal}>
-            <div className={styles.priceTotalItemName}>Item Name</div>
-            <div className={styles.priceTotals}>
-              <div className={styles.priceSubTotals}>
-                <div className={styles.priceTotals}>Sub-Total</div>
-                <div className={styles.priceTotals}>Sub-Total</div>
-              </div>
-              <div className={styles.priceTotals}>Sub-Total</div>
-              <div className={styles.priceTotals}>Sub-Total</div>
-              <div className={styles.priceTotals}>Sub-Total</div>
-            </div>
+            <table className={styles.priceTotalTable}>
+              <thead>
+                <tr>
+                  <th className={styles.sectionUnderLined}>Item Name</th>
+                  <th className={styles.sectionUnderLined}></th>
+                  <th className={styles.sectionUnderLined}>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Item Name</td>
+                  <td className={styles.underlinedCell}>Sub-Total</td>
+                  <td className={styles.underlinedCell}>$0</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td className={styles.underlinedCell}>Add Discount</td>
+                  <td className={styles.underlinedCell}></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td className={styles.underlinedCell}>Add Tax</td>
+                  <td className={styles.underlinedCell}></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
         <div className={styles.menuOptions}>
@@ -113,14 +128,24 @@ export const PaymentSubItems = () => {
 
 export const AdvancedOptionsSubItems = () => {
   return (
-    <div>
+    <div className={styles.dateOfIssueAndMemoWrapper}>
       <div className={styles.dateOfIssue}>
-        <input type='checkbox' name='' id='' />
-        <span>Credit Card</span>
+        <div className={styles.calenderIcon}>
+          <Calendar />
+        </div>
+        <div className={styles.dateOfIssueText}>
+          <div>Date of Issue</div>
+          <div>21-03-2024</div>
+        </div>
       </div>
       <div className={styles.memo}>
-        <input type='checkbox' name='' id='' />
-        <span>Bank Transfer</span>
+        <div className={styles.memoIcon}>
+          <Note />
+        </div>
+        <div className={styles.memoText}>
+          <div>Memo</div>
+          <div>21-03-2024</div>
+        </div>
       </div>
     </div>
   )
@@ -140,21 +165,21 @@ export const InvoiceTable = () => {
       <tbody>
         <tr>
           <td></td>
-          <td>Subtotal</td>
-          <td></td>
-          <td>$0.00</td>
+          <td className={styles.underlinedCell}>Subtotal</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>$0.00</td>
         </tr>
         <tr>
           <td></td>
-          <td>Total</td>
-          <td></td>
-          <td>$0.00</td>
+          <td className={styles.underlinedCell}>Total</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>$0.00</td>
         </tr>
         <tr>
           <td></td>
-          <td>Amount due</td>
-          <td></td>
-          <td>$0.00</td>
+          <td className={styles.underlinedCell}>Amount due</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>$0.00</td>
         </tr>
       </tbody>
     </table>
