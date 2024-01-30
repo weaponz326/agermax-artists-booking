@@ -30,7 +30,7 @@ import { hasActiveChild, removeChildren } from 'src/@core/layouts/utils'
 import VerticalNavItems from './VerticalNavItems'
 import UserIcon from 'src/layouts/components/UserIcon'
 import Translations from 'src/layouts/components/Translations'
-import CanViewNavGroup from 'src/layouts/components/acl/CanViewNavGroup'
+// import CanViewNavGroup from 'src/layouts/components/acl/CanViewNavGroup'
 
 const MenuItemTextWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -153,7 +153,7 @@ const VerticalNavGroup = props => {
   const menuGroupCollapsedStyles = navCollapsed && !navHover ? { opacity: 0 } : { opacity: 1 }
 
   return (
-    <CanViewNavGroup navGroup={item}>
+    // <CanViewNavGroup navGroup={item}>
       <Fragment>
         <ListItem
           disablePadding
@@ -268,7 +268,7 @@ const VerticalNavGroup = props => {
           </Collapse>
         </ListItem>
       </Fragment>
-    </CanViewNavGroup>
+    // </CanViewNavGroup>
   )
 }
 

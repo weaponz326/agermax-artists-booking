@@ -2,14 +2,14 @@
 import { useContext } from 'react'
 
 // ** Component Imports
-import { AbilityContext } from 'src/layouts/components/acl/Can'
+// import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 const CanViewNavGroup = props => {
   // ** Props
   const { children, navGroup } = props
 
   // ** Hook
-  const ability = useContext(AbilityContext)
+  // const ability = useContext(AbilityContext)
 
   const checkForVisibleChild = arr => {
     return arr.some(i => {
@@ -21,14 +21,14 @@ const CanViewNavGroup = props => {
     })
   }
 
-  const canViewMenuGroup = item => {
+  // const canViewMenuGroup = item => {
     const hasAnyVisibleChild = item.children && checkForVisibleChild(item.children)
     if (!(item.action && item.subject)) {
       return hasAnyVisibleChild
     }
 
-    return ability && ability.can(item.action, item.subject) && hasAnyVisibleChild
-  }
+  //   return ability && ability.can(item.action, item.subject) && hasAnyVisibleChild
+  // }
   if (navGroup && navGroup.auth === false) {
     return <>{children}</>
   } else {

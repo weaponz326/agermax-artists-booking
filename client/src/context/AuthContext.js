@@ -36,14 +36,13 @@ const AuthProvider = ({ children }) => {
         await axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: `Bearer ${storedToken}`
+              Authorization: storedToken
             }
           })
           .then(async response => {
             setLoading(false)
-            setUser({ ...response.data.userData });
-            console.log(response.data.userData); // Add this line
-                      })
+            setUser({ ...response.data.userData })
+          })
           .catch(() => {
             localStorage.removeItem('userData')
             localStorage.removeItem('refreshToken')
@@ -72,7 +71,8 @@ const AuthProvider = ({ children }) => {
         const returnUrl = router.query.returnUrl
         setUser({ ...response.data.userData })
         params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/home'
         router.replace(redirectURL)
       })
       .catch(err => {
