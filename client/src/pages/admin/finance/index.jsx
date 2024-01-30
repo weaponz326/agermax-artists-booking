@@ -43,7 +43,13 @@ const PaymentRow = ({ payment }) => {
       <td>{payment.date}</td>
       <td>{payment.status}</td>
       <td>
-        <ViewDetailsAction id={payment.paymentId} />
+        <ViewDetailsAction
+          id={payment.paymentId}
+          payee={payment.payee}
+          amount={payment.amount}
+          date={payment.date}
+          status={payment.status}
+        />
       </td>
     </tr>
   )
@@ -71,11 +77,11 @@ export const PaymentTable = () => {
   )
 }
 
-export const ViewDetailsAction = ({ id }) => {
+export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   const router = useRouter()
   return (
     <div
-      onClick={() => router.push({ pathname: `/admin/finance/details/${id}` })}
+      onClick={() => router.push({ pathname: `/admin/finance/details/${id}`, query: { payee, amount, date, status } })}
       className={styles.viewDetailsActionWrapper}
     >
       View Details

@@ -10,15 +10,15 @@ import { Calendar, Note } from 'iconsax-react'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
-  const { paymentId } = router.query
-  console.log({ paymentId })
+  const { paymentId, payee, amount, date, status } = router.query
 
   return (
     <div className={styles.financialDetailsPage}>
       <div className={styles.financialDetailsPageInfo}>
         <div className={styles.organizerDetails}>
           <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
-          <p>Organizer Name</p>
+          <p>{payee}</p>
+          <p>Payment ID: {paymentId}</p>
         </div>
         <div className={styles.paymentItemsDetails}>
           <div className={styles.priceTotal}>
@@ -34,7 +34,7 @@ const FinancialDetailsPage = () => {
                 <tr>
                   <td>Item Name</td>
                   <td className={styles.underlinedCell}>Sub-Total</td>
-                  <td className={styles.underlinedCell}>$0</td>
+                  <td className={styles.underlinedCell}>{amount}</td>
                 </tr>
                 <tr>
                   <td></td>
