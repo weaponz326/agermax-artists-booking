@@ -8,7 +8,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Components Imports
 import Translations from 'src/layouts/components/Translations'
-import CanViewNavSectionTitle from 'src/layouts/components/acl/CanViewNavSectionTitle'
+// import CanViewNavSectionTitle from 'src/layouts/components/acl/CanViewNavSectionTitle'
 
 // ** Styled Components
 const ListSubheader = styled(props => <MuiListSubheader component='li' {...props} />)(({ theme }) => ({
@@ -30,7 +30,7 @@ const VerticalNavSectionTitle = props => {
   const { navCollapsed } = settings
 
   return (
-    <CanViewNavSectionTitle navTitle={item}>
+    // <CanViewNavSectionTitle navTitle={item}>
       <ListSubheader
         className='nav-section-title'
         sx={{
@@ -50,7 +50,7 @@ const VerticalNavSectionTitle = props => {
           </Typography>
         )}
       </ListSubheader>
-    </CanViewNavSectionTitle>
+    // </CanViewNavSectionTitle>
   )
 }
 

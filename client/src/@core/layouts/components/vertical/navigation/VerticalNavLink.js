@@ -17,7 +17,7 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Custom Components Imports
 import UserIcon from 'src/layouts/components/UserIcon'
 import Translations from 'src/layouts/components/Translations'
-import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
+// import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
 
 // ** Util Imports
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
@@ -81,7 +81,7 @@ const VerticalNavLink = ({
   }
 
   return (
-    <CanViewNavLink navLink={item}>
+    // <CanViewNavLink navLink={item}>
       <ListItem
         disablePadding
         className='nav-link'
@@ -149,9 +149,11 @@ const VerticalNavLink = ({
               />
             ) : null}
           </MenuItemTextMetaWrapper>
+          
         </MenuNavLink>
+
       </ListItem>
-    </CanViewNavLink>
+    // </CanViewNavLink>
   )
 }
 
