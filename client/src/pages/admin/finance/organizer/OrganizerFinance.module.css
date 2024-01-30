@@ -1,0 +1,41 @@
+.financePage {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  --events-panel-backgroundColor: #f2f5f6;
+
+  max-width: 48rem;
+}
+
+.viewDetailsActionWrapper {
+  color: blue;
+  cursor: pointer;
+}
+
+.viewDetailsActionWrapper:hover {
+  text-decoration: underline;
+}
+
+.paymentTable {
+  width: 100%;
+}
+.paymentTable th {
+  background-color: var(--off-light-body-background);
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+.paymentTable th,
+.paymentTable td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--off-light-body-background);
+}
+
+.paymentRow td {
+  font-size: 0.85rem;
+}

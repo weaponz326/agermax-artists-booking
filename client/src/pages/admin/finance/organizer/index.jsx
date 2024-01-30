@@ -1,9 +1,9 @@
-import styles from './ArtistFinance.module.css'
+import styles from './OrganizerFinance.module.css'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Avatar, Table, Space, Dropdown } from 'antd'
 
-const ArtistFinance = () => {
+const OrganizerFinance = () => {
   const initialData = [
     {
       paymentId: 'P001',
@@ -75,7 +75,7 @@ const ArtistFinance = () => {
   )
 }
 
-export default ArtistFinance
+export default OrganizerFinance
 
 export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   const router = useRouter()
@@ -91,9 +91,9 @@ export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   )
 }
 
-ArtistFinance.authGuard = false
-ArtistFinance.guestGuard = false
-ArtistFinance.acl = {
+OrganizerFinance.authGuard = false
+OrganizerFinance.guestGuard = false
+OrganizerFinance.acl = {
   action: 'manage',
   subject: 'all' // Adjust the permissions as per your application's ACL configuration
 }

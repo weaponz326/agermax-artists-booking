@@ -1,0 +1,176 @@
+.financialDetailsPage {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
+  color: var(--main-heading-color);
+  background-color: var(--off-light-body-background);
+}
+
+.financialDetailsPageInfo,
+.financialDetailsPagePreview {
+  flex: 1;
+  background-color: white;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.organizerDetails {
+  margin-bottom: 2.5rem;
+}
+.organizerDetails p {
+  margin: 0;
+  color: red;
+}
+.sectionUnderLined {
+  border-bottom: 2px solid var(--off-light-body-background);
+}
+.menuOptions {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.customMenuItemContainer {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 2px solid var(--off-light-body-background);
+}
+.dateOfIssueAndMemoWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.dateOfIssue,
+.memo {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.organizerDetails h3,
+.customMenuItemLabel {
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.paymentItemsDetails {
+}
+.financialDetailsPagePreview {
+  flex: 1;
+  height: 100%;
+}
+.paymentItemsDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.financialDetailsPageInfo p {
+  margin: 1rem 0;
+}
+
+.paymentItemsTitles {
+  display: flex;
+  border-bottom: 1px solid var(--off-light-body-background);
+  flex: 1;
+}
+
+.item {
+  flex: 1;
+}
+
+.price {
+  flex: 1;
+  text-align: right;
+}
+
+.priceTotal {
+  display: flex;
+}
+
+.priceTotals {
+  width: 100%;
+}
+.priceTotalTable {
+  flex: 1;
+  text-align: left;
+}
+.priceTotalTable th {
+  font-size: 1.17em;
+}
+
+.priceTotalItemName {
+  width: 50%;
+}
+.priceSubTotals {
+  display: flex;
+}
+
+.underlinedCell {
+  border-bottom: 1px solid var(--off-light-body-background);
+}
+.financialDetailsPagePreview h2,
+.financialDetailsPagePreview p,
+.financialDetailsPagePreview h4 {
+  margin: 0;
+}
+.invoiceTable {
+  width: 100%;
+  text-align: left;
+}
+.financialDetailsPagePreview h3 {
+  margin: 0.2rem;
+}
+.previewHeader {
+  background-color: var(--main-heading-color);
+  padding: 1rem;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: white;
+}
+.invoiceDetails {
+  display: flex;
+}
+
+.previewHeaderInvoiceTitle {
+  width: 100%;
+}
+
+.previewDate {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.previewSummary {
+  /* background-color: white; */
+  color: var(--main-heading-color);
+  padding: 2rem 1rem;
+}
+.previewSummary h3 {
+  width: 100%;
+}
+
+.bill {
+  display: flex;
+  margin: 2.5rem 0;
+}
+
+.billFrom,
+.billTo {
+  flex: 1;
+}
+.billFrom h3,
+.billTo h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+.billFrom p {
+  font-size: 0.75rem;
+  margin: 0;
+}
