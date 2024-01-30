@@ -1,7 +1,7 @@
 import styles from './AdminFinance.module.css'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Avatar, Table, Space, Dropdown } from 'antd'
+import { Table, Space } from 'antd'
 import { FinanceProvider, useFinanceContext } from './FinanceContext'
 
 const initialData = [

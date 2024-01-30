@@ -2,13 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from './FinancialDetails.module.css'
-import Dropdown from 'antd/es/dropdown/dropdown'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
-import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import { Calendar, Note } from 'iconsax-react'
 import { FinanceProvider, useFinanceContext } from '../FinanceContext'
-import { current } from '@reduxjs/toolkit'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
@@ -228,8 +225,11 @@ export const EditSubItems = ({ paymentId }) => {
 
     console.log(newData)
     // Do something with the extracted data (e.g., update state or send to a server)
-    // console.log('Payment Details:', paymentDetails)
     setData(newData)
+  }
+
+  const handleChange = e => {
+    const name = e.target.name
   }
 
   return (
@@ -241,7 +241,7 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          defaultValue={paymentDetails.payeeFirstName}
+          // defaultValue={paymentDetails.payeeFirstName}
           id='payeeFirstName'
           name='payeeFirstName'
         />
@@ -253,9 +253,10 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          defaultValue={paymentDetails.payeeLastName}
+          // value={paymentDetails.payeeLastName}
           id='payeeLastName'
           name='payeeLastName'
+          onChange={e => handleChange(e)}
         />
       </div>
       <div className={styles.formInput}>
@@ -265,7 +266,7 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          defaultValue={paymentDetails.amount}
+          // defaultValue={paymentDetails.amount}
           id='amount'
           name='amount'
         />
@@ -274,15 +275,22 @@ export const EditSubItems = ({ paymentId }) => {
         <label htmlFor='date' className={styles.formInputLabel}>
           Date:{' '}
         </label>
-        <input className={styles.editInputField} type='date' defaultValue={paymentDetails.date} id='date' name='date' />
+        <input
+          className={styles.editInputField}
+          type='date'
+          //  defaultValue={paymentDetails.date}
+          id='date'
+          name='date'
+        />
       </div>
       <div className={styles.formInput}>
         <label htmlFor='status' className={styles.formInputLabel}>
           Status:{' '}
         </label>
         <select className={styles.editInputField} name='status' id='status'>
-          <option selected value={paymentDetails.status}>
-            {paymentDetails.status}
+          <option value='Pending'>
+            Pending
+            {/* {paymentDetails.status} */}
           </option>
           <option value='Paid'>Paid</option>
         </select>

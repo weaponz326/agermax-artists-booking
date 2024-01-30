@@ -115,6 +115,7 @@ const QuickLinksContainer = styled(Box)(({ theme }) => ({
 
 // Define the QuickActions component
 const QuickActions = () => {
+  const router = useRouter()
   const quickLinks = [
     { title: 'Invoice', icon: 'tabler:receipt', path: '/admin/invoice' },
     { title: 'Profile', icon: 'tabler:user', path: '/admin/account' },
@@ -124,7 +125,8 @@ const QuickActions = () => {
   return (
     <QuickLinksContainer>
       {quickLinks.map((link, index) => (
-        <Link key={index} href={link.path} passHref>
+        //Replace the Link tag with div, which we can use useRouter to push to new Links
+        <div key={index} href={link.path} onClick={() => router.push(`${link.path}`)}>
           <Tooltip title={link.title} arrow>
             <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto' }}>
               <Icon icon={link.icon} className='icon' />
@@ -133,7 +135,7 @@ const QuickActions = () => {
               </Typography>
             </IconButton>
           </Tooltip>
-        </Link>
+        </div>
       ))}
     </QuickLinksContainer>
   )
@@ -157,6 +159,7 @@ import themeOptions from 'src/@core/theme/ThemeOptions'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import { useRouter } from 'next/router'
 
 const StyledBoxForShadow = styled(Box)(({ theme }) => ({
   top: 60,

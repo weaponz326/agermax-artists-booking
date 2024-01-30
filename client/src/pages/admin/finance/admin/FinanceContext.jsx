@@ -26,7 +26,6 @@ const initialData = [
 
 const FinanceProvider = ({ children }) => {
   const [data, setData] = useState(initialData)
-  // console.log(data)
 
   const updateData = newData => {
     setData(newData)
