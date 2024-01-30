@@ -2,29 +2,44 @@ import styles from './AdminFinance.module.css'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Avatar, Table, Space, Dropdown } from 'antd'
+import { FinanceProvider, useFinanceContext } from './FinanceContext'
 
-const AdminFinance = () => {
-  const initialData = [
-    {
-      paymentId: 'P001',
-      payeeFirstName: 'Kofi',
-      payeeLastName: 'Fosu',
-      payeeContact: '+233 544803023',
-      amount: '1500',
-      date: '2024-01-30',
-      status: 'Paid'
-    },
-    {
-      paymentId: 'P002',
-      payeeFirstName: 'Kojo ',
-      payeeLastName: 'Appiah',
-      payeeContact: '+233 48235694',
-      amount: '700',
-      date: '2024-01-30',
-      status: 'Pending'
-    }
-    // add more payment objects here
-  ]
+const initialData = [
+  {
+    paymentId: 'P001',
+    payeeFirstName: 'Kofi',
+    payeeLastName: 'Fosu',
+    payeeContact: '+233 544803023',
+    amount: '1500',
+    date: '2024-01-30',
+    status: 'Paid'
+  },
+  {
+    paymentId: 'P002',
+    payeeFirstName: 'Kojo ',
+    payeeLastName: 'Appiah',
+    payeeContact: '+233 482356946',
+    amount: '700',
+    date: '2024-01-30',
+    status: 'Pending'
+  }
+  // add more payment objects here
+]
+
+const Finance = () => {
+  return (
+    <FinanceProvider>
+      <AdminFinance />
+    </FinanceProvider>
+  )
+}
+
+export default Finance
+
+export const AdminFinance = () => {
+  // const [data, setData] = useState(initialData)
+  const { data, updateData } = useFinanceContext()
+
   const columns = [
     {
       title: 'Payee',
@@ -70,30 +85,33 @@ const AdminFinance = () => {
 
   return (
     <div className={styles.financePage}>
-      <Table columns={columns} dataSource={initialData} />
+      <Table columns={columns} dataSource={data} />
     </div>
   )
 }
-
-export default AdminFinance
 
 export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   const router = useRouter()
   return (
-    <div
-      onClick={() =>
-        router.push({ pathname: `/admin/finance/admin/details/${id}`, query: { payee, amount, date, status } })
-      }
-      className={styles.viewDetailsActionWrapper}
-    >
-      View Details
-    </div>
+    <FinanceProvider>
+      <div
+        onClick={() =>
+          router.push({
+            pathname: `/admin/finance/admin/details/${id}`,
+            query: { payee, amount, date, status }
+          })
+        }
+        className={styles.viewDetailsActionWrapper}
+      >
+        View Details
+      </div>
+    </FinanceProvider>
   )
 }
 
-AdminFinance.authGuard = false
-AdminFinance.guestGuard = false
-AdminFinance.acl = {
+Finance.authGuard = false
+Finance.guestGuard = false
+Finance.acl = {
   action: 'manage',
   subject: 'all' // Adjust the permissions as per your application's ACL configuration
 }

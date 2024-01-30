@@ -120,6 +120,7 @@
 .invoiceTable {
   width: 100%;
   text-align: left;
+  margin-bottom: 1rem;
 }
 .financialDetailsPagePreview h3 {
   margin: 0.2rem;
@@ -173,4 +174,39 @@
 .billFrom p {
   font-size: 0.75rem;
   margin: 0;
+}
+
+.formInput {
+  width: 100%;
+  display: flex;
+}
+.editInputField {
+  text-align: left;
+  padding: 0.5rem;
+  width: 50%;
+  background-color: #f2f4f8;
+  color: black;
+  border-radius: 0.7rem;
+  border: 1px solid white;
+  outline-color: #4428f2;
+  flex: 2.5;
+}
+
+.formInputLabel {
+  padding: 0.5rem;
+  flex: 1;
+}
+
+.submitButton {
+  background-color: var(--main-heading-color);
+  color: white;
+  padding: 0.65rem;
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+  float: right;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  transform: scale(1.02);
 }
