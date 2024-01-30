@@ -4,7 +4,7 @@ import styles from './CustomMenuItem.module.css'
 import { ExpandLess, ExpandLessRounded, ExpandMoreRounded } from '@material-ui/icons'
 
 const CustomMenuItem = ({ label, subMenuItems, labelClassName, menuContainer }) => {
-  const [isSubMenuVisible, setSubMenuVisible] = useState(false)
+  const [isSubMenuVisible, setSubMenuVisible] = useState(true)
 
   const handleToggleSubMenu = () => {
     setSubMenuVisible(!isSubMenuVisible)

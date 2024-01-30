@@ -2,7 +2,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import styles from './FinancialDetails.module.css'
-import Dropdown from 'antd/es/dropdown/dropdown'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
@@ -55,7 +54,9 @@ const FinancialDetailsPage = () => {
             menuContainer={styles.customMenuItemContainer}
             labelClassName={styles.customMenuItemLabel}
             label='Payment Details'
-            subMenuItems={[<PaymentSubItems />]}
+            subMenuItems={[
+              <PaymentSubItems amount={amount} date={date} status={status} paymentId={paymentId} payee={payee} />
+            ]}
           />
           <CustomMenuItem
             menuContainer={styles.customMenuItemContainer}
@@ -108,20 +109,31 @@ const FinancialDetailsPage = () => {
     </div>
   )
 }
-export const PaymentSubItems = () => {
+export const PaymentSubItems = ({ paymentId, payee, amount, date, status }) => {
+  const router = useRouter()
+
   return (
     <div>
       <p>Due In</p>
-      <TabButton>In 14 days</TabButton>
+      <TabButton>In 20 days</TabButton>
       <h4>Payment Gateways</h4>
       <div className={styles.paymentGateway}>
-        <input type='checkbox' name='' id='' />
-        <span>Credit Card</span>
+        <span
+          onClick={() =>
+            router.push({
+              pathname: `/admin/finance/organizer/details/stripe-payment/${paymentId}`,
+              query: { payee, paymentId, amount, date, status }
+            })
+          }
+          className={styles.stripePaymentGateway}
+        >
+          Stripe Payment
+        </span>
       </div>
-      <div className={styles.paymentGateway}>
+      {/* <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Bank Transfer</span>
-      </div>
+      </div> */}
     </div>
   )
 }

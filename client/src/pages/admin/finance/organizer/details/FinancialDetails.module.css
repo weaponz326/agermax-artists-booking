@@ -58,6 +58,11 @@
 
 .paymentItemsDetails {
 }
+.stripePaymentGateway {
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
 .financialDetailsPagePreview {
   flex: 1;
   height: 100%;

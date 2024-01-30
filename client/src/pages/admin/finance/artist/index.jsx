@@ -7,7 +7,7 @@ const ArtistFinance = () => {
   const initialData = [
     {
       paymentId: 'P001',
-      payeeFirstName: 'Kwame',
+      payeeFirstName: 'Kwame Layla',
       payeeLastName: 'Owusu',
       payeeContact: '+233 544803023',
       amount: '1500',
@@ -82,7 +82,7 @@ export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   return (
     <div
       onClick={() =>
-        router.push({ pathname: `/admin/finance/admin/details/${id}`, query: { payee, amount, date, status } })
+        router.push({ pathname: `/admin/finance/artist/details/${id}`, query: { payee, amount, date, status } })
       }
       className={styles.viewDetailsActionWrapper}
     >

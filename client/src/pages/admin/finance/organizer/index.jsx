@@ -7,8 +7,8 @@ const OrganizerFinance = () => {
   const initialData = [
     {
       paymentId: 'P001',
-      payeeFirstName: 'Kwame',
-      payeeLastName: 'Owusu',
+      payeeFirstName: 'Aka',
+      payeeLastName: 'Ebenezer',
       payeeContact: '+233 544803023',
       amount: '1500',
       date: '2024-01-30',
@@ -82,7 +82,7 @@ export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   return (
     <div
       onClick={() =>
-        router.push({ pathname: `/admin/finance/admin/details/${id}`, query: { payee, amount, date, status } })
+        router.push({ pathname: `/admin/finance/organizer/details/${id}`, query: { payee, amount, date, status } })
       }
       className={styles.viewDetailsActionWrapper}
     >
