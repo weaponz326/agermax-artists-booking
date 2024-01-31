@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import { useAuth } from 'src/hooks/useAuth'; 
+import { useAuth } from 'src/hooks/useAuth';
 import { useRouter } from 'next/router';
-import { Button, TextField, Box, Card, Typography } from '@mui/material';
+import { Button, TextField, Box, Card, Typography, Snackbar } from '@mui/material';
 
 const cardElementOptions = {
   style: {
@@ -23,19 +23,31 @@ const cardElementOptions = {
   }
 };
 
+
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const { accessToken } = useAuth();
+  // const accessToken = useAuth();
+  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc";
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [amount, setAmount] = useState('');
+  const [paymentSuccess, setPaymentSuccess] = useState(false); // State to track payment success
 
   useEffect(() => {
     const query = router.query;
     setAmount(query.amount || '');
   }, [router.query]);
+
+  useEffect(() => {
+    if (paymentSuccess) {
+      // Redirect after showing success message
+      setTimeout(() => {
+        router.push('/admin/finance');
+      }, 3000); // 3 seconds delay
+    }
+  }, [paymentSuccess, router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,14 +69,19 @@ const CheckoutForm = () => {
       return;
     }
 
+    // Test mode code
+    const testSource = 'tok_visa';
+
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment/process-payment`, {
-        amount: amount * 100, // Convert amount to cents
-        source: paymentMethod.id,
+        amount: amount * 100,
+        // source: paymentMethod.id,
+        source: testSource,
         receipt_email: email,
       }, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      setPaymentSuccess(true); // Indicate payment success
 
       // Handle successful payment here (e.g., show confirmation message)
     } catch (err) {
@@ -104,8 +121,15 @@ const CheckoutForm = () => {
       >
         Pay ${amount}
       </Button>
+      <Snackbar
+        open={paymentSuccess}
+        autoHideDuration={3000}
+        onClose={() => setPaymentSuccess(false)}
+        message="Payment successful! Redirecting..."
+      />
     </Box>
   );
 };
+
 
 export default CheckoutForm;
