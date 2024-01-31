@@ -6,7 +6,7 @@ const navigation = () => {
   const navItems = [
     {
       title: 'Home',
-      path: '/admin/home',
+      path: '/admin/home/admin',
       icon: 'tabler:smart-home'
     },
     {
