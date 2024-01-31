@@ -174,7 +174,7 @@ const getUserProfile = async (req, res) => {
           availableDates,
           gallery,
           eventsHosted,
-          accessToken: generateToken(_id)
+          accessToken: generateToken(_id),
         },
       });
     } else {
@@ -187,72 +187,50 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUserDetails = async (req, res) => {
-    const userId = req.user._id; // Fetched from the auth middleware
-    const role = req.user.role; // Fetched from the auth middleware
-    const updateData = req.body; // Data to be updated
-  
-    try {
-      // Update for the User model
-      const userUpdateFields = {
-        firstName: updateData.firstName,
-        lastName: updateData.lastName,
-        email: updateData.email,
-        contactPhone: updateData.contactPhone,
-        address: updateData.address,
-        // Add other fields if necessary
-      };
-      await User.findByIdAndUpdate(userId, userUpdateFields);
-  
-      // Common fields for role-specific models
-      const roleSpecificUpdateFields = {
-        contactEmail: updateData.email,
-        contactPhone: updateData.contactPhone,
-        address: updateData.address,
-        // Include fields common to all role-specific models
-      };
-  
-      if (role === "artist") {
-        await Artist.findOneAndUpdate(
-          { contactEmail: req.user.email },
-          {
-            ...roleSpecificUpdateFields,
-            nickName: updateData.nickName,
-            genre: updateData.genre,
-            bio: updateData.bio,
-            organizationNumber: updateData.organizationNumber,
-            socialMediaLinks: updateData.socialMediaLinks,
-            availableDates: updateData.availableDates,
-            gallery: updateData.gallery,
-            // Add other artist-specific fields
-          }
-        );
-      } else if (role === "organizer") {
-        await EventOrganizer.findOneAndUpdate(
-          { contactEmail: req.user.email },
-          {
-            ...roleSpecificUpdateFields,
-            companyName: updateData.companyName,
-            organizationNumber: updateData.organizationNumber,
-            eventsHosted: updateData.eventsHosted,
-            // Add other organizer-specific fields
-          }
-        );
-      } else if (role === "admin") {
-        await Admin.findOneAndUpdate(
-          { contactEmail: req.user.email },
-          {
-            ...roleSpecificUpdateFields,
-            // Add other admin-specific fields if necessary
-          }
-        );
-      }
-  
-      res.json({ message: "User details updated successfully" });
-    } catch (error) {
-      res.status(500).json({ message: "Server error", error: error.message });
+  const userId = req.user._id; // Fetched from the auth middleware
+  const role = req.user.role; // Fetched from the auth middleware
+  const updateData = req.body; // Data to be updated
+
+  try {
+    // Dynamically construct update fields based on role
+    let userUpdateFields = {
+      firstName: updateData.firstName,
+      lastName: updateData.lastName,
+      email: updateData.email,
+      contactPhone: updateData.contactPhone,
+      address: updateData.address,
+      // Include other common fields
+    };
+
+    // Extend userUpdateFields with role-specific fields
+    if (role === "artist") {
+      Object.assign(userUpdateFields, {
+        nickName: updateData.nickName,
+        genre: updateData.genre,
+        bio: updateData.bio,
+        organizationNumber: updateData.organizationNumber,
+        socialMediaLinks: updateData.socialMediaLinks,
+        availableDates: updateData.availableDates,
+        gallery: updateData.gallery,
+        // Add other artist-specific fields here
+      });
+    } else if (role === "organizer") {
+      Object.assign(userUpdateFields, {
+        companyName: updateData.companyName,
+        organizationNumber: updateData.organizationNumber,
+        eventsHosted: updateData.eventsHosted,
+        // Add other organizer-specific fields here
+      });
+    } else if (role === "admin") {
+      Object.assign(userUpdateFields, {});
     }
-  };
-  
+
+    await User.findByIdAndUpdate(userId, userUpdateFields, { new: true });
+    res.json({ message: "User details updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
