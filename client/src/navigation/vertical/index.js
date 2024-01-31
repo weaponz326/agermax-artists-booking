@@ -31,7 +31,7 @@ const navigation = () => {
       : []),
     {
       title: 'Finance',
-      path: '/admin/finance',
+      path: '/admin/finance/admin',
       icon: 'tabler:report-money'
     },
     {
