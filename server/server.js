@@ -1,15 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./configs/db');
+dotenv.config();
+connectDB();
+
 const userRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const artistRoutes = require('./routes/artistRoutes');
 const organizerRoutes = require('./routes/eventOrganizerRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const cors = require('cors'); // Import CORS
+const paymentRoutes = require('./routes/paymentRoutes');
+const cors = require('cors');
 
-dotenv.config();
-connectDB();
+
 
 const app = express();
 
@@ -25,6 +28,7 @@ app.use('/api', adminRoutes);
 app.use('/api', artistRoutes);
 app.use('/api', organizerRoutes);
 app.use('/api', bookingRoutes);
+app.use('/api/payment', paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
