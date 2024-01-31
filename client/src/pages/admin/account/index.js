@@ -1,18 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { useAuth } from 'src/hooks/useAuth'
-import axios from 'axios'
-import { Box, Button, Card, CardContent, Grid, Step, Stepper, StepLabel, TextField, Typography } from '@mui/material'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import authConfig from 'src/configs/auth';
 
-// ** Custom Hooks
-import authConfig from 'src/configs/auth'
-import ImageUpload from 'src/components/ImageUpload/ImageUpload'
+// ** MUI Imports
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Step from '@mui/material/Step';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Stepper from '@mui/material/Stepper';
+import StepLabel from '@mui/material/StepLabel';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
 
-const steps = ['Basic Information', 'Additional Information']
+// ** Custom Hooks and Components
+import { useAuth } from 'src/hooks/useAuth';
+import ImageUpload from 'src/components/ImageUpload/ImageUpload';
+
+const steps = ['Basic Information', 'Additional Information'];
 
 const TabAccount = () => {
-  const { user } = useAuth()
-  const accessToken = window.localStorage.getItem('accessToken')
-  const [activeStep, setActiveStep] = useState(0)
+  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const { user} = useAuth(); // Assume useAuth provides accessToken directly
+  const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     _id: '',
     firstName: '',
@@ -30,7 +41,7 @@ const TabAccount = () => {
     availableDates: [],
     gallery: [],
     eventsHosted: []
-  })
+  });
 
   useEffect(() => {
     // Fetch and set user data
@@ -39,92 +50,91 @@ const TabAccount = () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
             headers: { Authorization: `Bearer ${accessToken}` }
-          })
-          setFormData(response.data.userData)
-          console.log('Fetched user data: ', response.data.userData) // Debug user data
+          });
+          setFormData(response.data.userData);
         } catch (error) {
-          console.error('Error fetching user data:', error)
+          console.error('Error fetching user data:', error);
         }
-      }
+      };
 
-      fetchUserData()
+      fetchUserData();
     }
-  }, [user, accessToken])
+  }, [user, accessToken]);
 
   const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-  }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
   const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-  }
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-  const handleFormChange = useCallback((field, value) => {
-    setFormData(prevFormData => ({ ...prevFormData, [field]: value }))
-  }, [])
+  const handleFormChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+  };
 
-  const handleSubmit = async e => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // Submit form data
     try {
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formData, {
         headers: { Authorization: `Bearer ${accessToken}` }
-      })
-      alert('Profile updated successfully.')
+      });
+      alert('Profile updated successfully.');
     } catch (error) {
-      console.error('Error updating profile:', error)
-      alert('Error updating profile.')
+      console.error('Error updating profile:', error);
+      alert('Error updating profile.');
     }
-  }
+  };
 
   const BasicInformationForm = () => (
     <>
       <Grid item xs={12}>
-        <ImageUpload />
+        <ImageUpload/>
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label='First Name'
+          label="First Name"
           value={formData.firstName}
-          onChange={e => setFormData({ ...formData, firstName: e.target.value })}
+          onChange={(e) => handleFormChange('firstName', e.target.value)}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label='Last Name'
+          label="Last Name"
           value={formData.lastName}
-          onChange={e => handleFormChange('lastName', e.target.value)}
+          onChange={(e) => handleFormChange('lastName', e.target.value)}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          type='email'
-          label='Email'
+          type="email"
+          label="Email"
           value={formData.email}
-          onChange={e => handleFormChange('email', e.target.value)}
+          onChange={(e) => handleFormChange('email', e.target.value)}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label='Phone'
+          label="Phone"
           value={formData.contactPhone}
-          onChange={e => handleFormChange('contactPhone', e.target.value)}
+          onChange={(e) => handleFormChange('contactPhone', e.target.value)}
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12}>
         <TextField
           fullWidth
-          label='Address'
+          label="Address"
           value={formData.address}
-          onChange={e => handleFormChange('address', e.target.value)}
+          onChange={(e) => handleFormChange('address', e.target.value)}
         />
       </Grid>
     </>
-  )
+  );
 
   const AdditionalInformationForm = () => (
     <>
@@ -133,27 +143,27 @@ const TabAccount = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label='Nickname'
+              label="Nickname"
               value={formData.nickName}
-              onChange={e => handleFormChange('nickName', e.target.value)}
+              onChange={(e) => handleFormChange('nickName', e.target.value)}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label='Genre'
+              label="Genre"
               value={formData.genre}
-              onChange={e => handleFormChange('genre', e.target.value)}
+              onChange={(e) => handleFormChange('genre', e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label='Bio'
+              label="Bio"
               multiline
               rows={4}
               value={formData.bio}
-              onChange={e => handleFormChange('bio', e.target.value)}
+              onChange={(e) => handleFormChange('bio', e.target.value)}
             />
           </Grid>
         </>
@@ -163,30 +173,30 @@ const TabAccount = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label='Company Name'
+              label="Company Name"
               value={formData.companyName}
-              onChange={e => handleFormChange('companyName', e.target.value)}
+              onChange={(e) => handleFormChange('companyName', e.target.value)}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label='Organization Number'
+              label="Organization Number"
               value={formData.organizationNumber}
-              onChange={e => handleFormChange('organizationNumber', e.target.value)}
+              onChange={(e) => handleFormChange('organizationNumber', e.target.value)}
             />
           </Grid>
         </>
       )}
       {/* You can add admin-specific fields here if needed */}
     </>
-  )
+  );
 
   return (
     <Card>
       <CardContent>
         <Stepper activeStep={activeStep}>
-          {steps.map(label => (
+          {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
             </Step>
@@ -198,24 +208,25 @@ const TabAccount = () => {
             {activeStep === 1 && <AdditionalInformationForm />}
           </Grid>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop: 2 }}>
-            <Button color='inherit' disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
               Back
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             {activeStep === steps.length - 1 ? (
-              <Button onClick={handleSubmit} variant='contained'>
-                Submit
-              </Button>
+              <Button onClick={handleSubmit} variant="contained">Submit</Button>
             ) : (
-              <Button onClick={handleNext} variant='contained'>
-                Next
-              </Button>
+              <Button onClick={handleNext} variant="contained">Next</Button>
             )}
           </Box>
         </form>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default TabAccount
+export default TabAccount;
