@@ -201,7 +201,6 @@ export const EditSubItems = ({ paymentId }) => {
   useEffect(() => {
     const requiredData = data.find(paymentItem => paymentItem.paymentId === paymentId)
     setPaymentDetails(requiredData)
-    console.log(paymentDetails)
   }, [])
 
   const handleFormSubmission = e => {

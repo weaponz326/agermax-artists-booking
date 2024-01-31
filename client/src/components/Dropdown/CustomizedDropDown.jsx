@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, Dropdown } from 'antd'
-import UserIcon from 'src/layouts/components/UserIcon'
 import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { useAuth } from 'src/providers/AuthProvider'
+
 const isNotLoggedInItems = [
   {
     key: '1',
@@ -67,6 +67,11 @@ const buttonStyle = {
 
 const CustomizedDropdown = () => {
   const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+  if (typeof window === 'undefined') {
+    // Running on the server side during SSR
+    return null // or any other server-side representation
+  }
+
   if (isLoggedIn) {
     const onClick = ({ key }) => {
       if (key === '5') {
@@ -74,7 +79,7 @@ const CustomizedDropdown = () => {
       }
     }
     return (
-      <>
+      <div>
         <Dropdown
           menu={{
             items: isLoggedInItems,
@@ -88,12 +93,12 @@ const CustomizedDropdown = () => {
           <Button style={buttonStyle} className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
-              <img className={styles.userImage} src='/images/ellipse-121.png' alt='' />
+              <img className={styles.userImage} src='/images/ellipse-121.png' alt='user-image' />
             </div>
             <HambergerMenu size={'35'} />
           </Button>
         </Dropdown>
-      </>
+      </div>
     )
   } else {
     const onClick = ({ key }) => {

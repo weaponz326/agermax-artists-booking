@@ -6,7 +6,7 @@ const navigation = () => {
   const navItems = [
     {
       title: 'Home',
-      path: '/admin/home',
+      path: '/admin/home/admin',
       icon: 'tabler:smart-home'
     },
     {
@@ -31,7 +31,7 @@ const navigation = () => {
       : []),
     {
       title: 'Finance',
-      path: '/admin/finance',
+      path: '/admin/finance/admin',
       icon: 'tabler:report-money'
     },
     {
