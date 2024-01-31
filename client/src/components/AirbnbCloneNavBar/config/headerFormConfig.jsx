@@ -1,5 +1,6 @@
 import DateCalendarPicker from '../MiddleFormItemDropdown/DateCalendarPicker/DateCalendarPicker'
 import SearchArtistDropdown from '../MiddleFormItemDropdown/SearchArtistsDropdown/SearchArtistDropdown'
+import RangeDatePicker from 'src/components/RangeDatePicker/RangeDatePicker'
 
 export const formItems = {
   stays: {
@@ -11,13 +12,13 @@ export const formItems = {
     },
     date: [
       {
-        label: 'Check in',
+        label: 'Start Date',
         placeholder: 'Add dates',
         isInput: false,
         dropdownContent: DateCalendarPicker
       },
       {
-        label: 'Check out',
+        label: 'End Date',
         placeholder: 'Add dates',
         isInput: false,
         dropdownContent: DateCalendarPicker

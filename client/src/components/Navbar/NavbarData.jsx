@@ -1,5 +1,7 @@
 import styles from './navbar.module.css'
 import { useState, useRef, useEffect } from 'react'
+import RangeDatePicker from '../RangeDatePicker/RangeDatePicker'
+import { DatePicker } from 'antd'
 
 export default function HandleMenu(e) {
   const [isActive, setIsActive] = useState(true)
@@ -13,16 +15,16 @@ export default function HandleMenu(e) {
 export const menuConfig = [
   {
     config: (
-      <form>
+      <div>
         <label htmlFor='search-artist'>Who</label>
         <input
           className={styles['search-artist']}
           type='text'
-          name='search-artist'
+          name='search-artists'
           placeholder='Search Artists'
-          id='search-artist'
+          id='search-artists'
         />
-      </form>
+      </div>
     ),
 
     altConfig: (
@@ -33,16 +35,17 @@ export const menuConfig = [
   },
   {
     config: (
-      <form>
-        <p>Where</p>
+      <div style={{ width: '100%' }}>
+        <DatePicker placeholder='Select Start Date' />
+        {/* <label>Start Date</label>
         <input
           className={styles['search-venue']}
-          type='text'
-          name='search-venue'
-          placeholder='Search Venue'
-          id='search-venue'
-        />
-      </form>
+          type='date'
+          name='start-date'
+          placeholder='Choose Start Date'
+          id='start-date'
+        /> */}
+      </div>
     ),
 
     altConfig: (
@@ -53,16 +56,17 @@ export const menuConfig = [
   },
   {
     config: (
-      <form>
-        <p>When</p>
+      <div>
+        <DatePicker placeholder='Select End Date' />
+        {/* <p>End Date</p>
         <input
           className={styles['search-date']}
           type='date'
-          name='search-date'
-          placeholder='Search Date'
-          id='search-date'
-        />
-      </form>
+          name='end-date'
+          placeholder='Choose End Date'
+          id='end-date'
+        /> */}
+      </div>
     ),
 
     altConfig: (
@@ -73,16 +77,10 @@ export const menuConfig = [
   },
   {
     config: (
-      <form>
-        <p>Special</p>
-        <input
-          className={styles['search-guests']}
-          type='text'
-          name='search-guests'
-          placeholder='Search Guests'
-          id='search-guests'
-        />
-      </form>
+      <div>
+        <p>Booker</p>
+        <input className={styles['search-guests']} type='text' name='booker' placeholder='Your info' id='booker' />
+      </div>
     ),
 
     altConfig: (

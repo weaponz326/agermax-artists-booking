@@ -12,7 +12,8 @@ const CustomPagesLayout = ({ children }) => {
       <DropdownContextProvider>
         <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '4rem' }}>
           <HeaderContextProvider>
-            <AirbnbCloneNavBar />
+            {/* <AirbnbCloneNavBar /> */}
+            <Navbar />
           </HeaderContextProvider>
           <main style={{ minHeight: '100' }} className='page-layout-layout'>
             {children}

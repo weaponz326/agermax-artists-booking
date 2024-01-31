@@ -117,17 +117,17 @@
 .search-bar {
   width: 85%;
   /* max-width: 30rem; */
-  border: 1px solid red;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   outline: none;
   text-align: left;
   position: relative;
   margin: 0 auto;
   display: flex;
-  justify-content: stretch;
-  align-items: stretch;
+  justify-content: space-between;
+  align-items: center;
   z-index: 2;
   border-radius: 2rem;
-  padding: 0;
+  padding: 0.2rem;
   font-size: 0.75rem;
 }
 
@@ -183,12 +183,13 @@
 .search-item-detail {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   justify-content: center;
   color: var(--text-color);
   font-size: var(--smaller-size);
   flex: 1;
   padding: 0 4%;
+  color: black;
   /* border: 1px solid royalblue; */
   /* background-color: burlywood; */
   border-radius: 5rem;
@@ -201,6 +202,59 @@
   width: 100%;
 }
 
+.searchWrapper {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding-inline-start: 0.5rem;
+}
+
+.rangePicker {
+  background-color: transparent;
+  border: none;
+}
+
+.rangePicker:hover,
+.rangePicker:focus {
+  background-color: transparent;
+}
+
+.rangePicker::placeholder {
+  color: black;
+}
+.searchInputField {
+  /* padding: 0.5rem; */
+  color: black;
+  border-radius: inherit;
+  /* background-color: red; */
+  max-width: none;
+  /* flex: 1; */
+  font-size: 0.85rem;
+  border: none;
+  outline: none;
+  /* width: 3rem; */
+}
+
+.searchInputField input {
+  background-color: blue;
+}
+
+.artistsListPreview {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.searchInputFieldPictureContainer {
+  border-radius: 50%;
+  height: 100%;
+  aspect-ratio: 1;
+}
+.searchInputFieldPicture {
+  border-radius: inherit;
+  height: 100%;
+}
 .search-item-detail span {
   width: 100%;
 }
@@ -232,17 +286,30 @@
   /* opacity: 0; */
 }
 
-.search-btn {
-  /* width: 6rem; */
+.bookNowButton {
+  width: 6rem;
   background-color: #ff385c;
   color: white;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: inherit;
   border: none;
   cursor: pointer;
+}
+.bookerDetailsButton {
+  background-color: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.5);
+  outline: none;
+  padding: 0.35rem 0;
+}
+.bookerDetailsButton:focus {
+  border-bottom: 1px solid steelblue;
+}
+.bookNowButton:hover {
+  filter: brightness(95%);
 }
 
 /* .search-bar input::placeholder {

@@ -6,6 +6,7 @@ import FaqAccordion from 'src/components/FaqAccordion/FaqAccordion'
 import { faqData } from 'src/components/mock-data-apis/mock-data'
 import TestimonialCarousel from 'src/components/TestimonialCarousel/TestimonialCarousel'
 import ContactForm from 'src/components/ContactForm/ContactForm'
+import RangeDatePicker from 'src/components/RangeDatePicker/RangeDatePicker'
 
 const AboutPage = () => {
   return (
@@ -82,6 +83,7 @@ const AboutPage = () => {
           </section>
         </div>
       </div>
+      <RangeDatePicker />
     </CustomPagesLayout>
   )
 }

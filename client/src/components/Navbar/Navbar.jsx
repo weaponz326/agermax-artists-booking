@@ -1,14 +1,22 @@
-import { FaSearch } from 'react-icons/fa'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
 import { CSSTransition } from 'react-transition-group'
 import { menuConfig } from './NavbarData'
+import { Dropdown, Menu, Form, Input, Button, Date, DatePicker, Space, Dow, AutoComplete, ConfigProvider } from 'antd'
+import { DownOutlined } from '@ant-design/icons'
+
+import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
+const { RangePicker } = DatePicker
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import usersData from './Music Artists Data'
+
 export default function Navbar() {
   const [navItemsOpen, setNavItemsOpen] = useState(false)
   const [selectNavItem, setSelectNavItem] = useState('')
   const [navItemsDetails, setNavItemsDetails] = useState(null)
   const navBarRef = useRef()
+  const [form] = Form.useForm()
 
   return (
     <nav className={styles['header-navbar']} ref={navBarRef}>
@@ -19,9 +27,7 @@ export default function Navbar() {
           </div>
         </Link>
         <Search />
-        <div className={`${styles['logo']} ${styles['last-img']}`}>
-          <img className={styles['logo-img ']} alt='Ellipse' src='/images/ellipse-121.png' />
-        </div>
+        <CustomizedDropdown />
       </nav>
       {navItemsDetails}
     </nav>
@@ -90,62 +96,39 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     >
       <nav className={styles['main-nav-search-bar']}>
         {showNavMenu}
-        <div style={menuSetting} className={styles['search-bar']}>
-          <div
-            className={`${styles['search-item']} ${styles['first-item']} `}
-            // onClick={e => setActiveItem('searchItemInput')}
-          >
-            <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? (
-                <form>
-                  <label htmlFor='search-artist'>
-                    Who
-                    <input
-                      className={styles['search-artist']}
-                      type='text'
-                      name='search-artist'
-                      placeholder='Search Artists'
-                      id='search-artist'
-                    />
-                  </label>
-                </form>
-              ) : (
-                <span>
-                  <p>Hot Artists</p>
-                </span>
-              )}
-            </div>
-          </div>
-          <div className={styles['search-item-divider']}></div>
-          <div className={`${styles['search-item']} ${styles['second-item']}`}>
-            <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? menuConfig[1].config : menuConfig[1].altConfig}
-            </div>
-          </div>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorTextPlaceholder: 'rgb(0, 0, 0, 0.5)'
+            }
+          }}
+        >
+          <form className={styles['search-bar']} onSubmit={e => e.preventDefault()}>
+            <NavBarSearchBar
+              placeholder={'Search Artist'}
+              wrapperClassName={styles.searchWrapper}
+              usersData={usersData}
+            />
+            <div className={styles['search-item-divider']}></div>
 
-          <div className={styles['search-item-divider']}></div>
-          <div className={`${styles['search-item']} ${styles['third-item']}`}>
-            <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? menuConfig[2].config : menuConfig[2].altConfig}
-            </div>
-          </div>
+            <RangePicker
+              variant='borderless'
+              className={styles.rangePicker}
+              showTime={{
+                format: 'HH:mm'
+              }}
+              format='YYYY-MM-DD HH:mm'
+              // onChange={onChange}
+              // onOk={onOk}
+            />
+            <div className={styles['search-item-divider']}></div>
 
-          <div className={styles['search-item-divider']}></div>
-          <div className={`${styles['search-item']} ${styles['fourth-item']}`}>
-            <div className={styles['search-item-detail']}>
-              {isMenuItemActive ? menuConfig[3].config : menuConfig[3].altConfig}
-            </div>
-          </div>
-          <div className={`${styles['search-item']} ${styles['fifth-item']}`}>
-            <div className={styles['search-item-detail']}>
-              <button className={styles['search-btn']} type='submit'>
-                <span>
-                  <FaSearch />
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
+            <CustomDropdown />
+            <div className={styles['search-item-divider']}></div>
+
+            <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
+          </form>
+        </ConfigProvider>
       </nav>
     </CSSTransition>
   )
@@ -153,4 +136,120 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 
 export const Backdrop = ({ handleModalEffect }) => {
   return <div className={styles['backdrop']} onClick={() => handleModalEffect()}></div>
+}
+
+export const CustomDropdown = () => {
+  const items = [
+    {
+      label: <input type='text' value='' placeholder='Your First Name' onClick={e => e.stopPropagation()} />,
+      key: '0'
+    },
+    {
+      label: <input type='text' value='' placeholder='Your Last Name' onClick={e => e.stopPropagation()} />,
+      key: '1'
+    },
+    // {
+    //   type: 'divider'
+    // },
+    {
+      label: <input type='text' value='' placeholder='Your Contact' onClick={e => e.stopPropagation()} />,
+      key: '3'
+    },
+    {
+      type: 'divider'
+    },
+    {
+      label: <TabButton>Okay?</TabButton>,
+      key: '4'
+    }
+  ]
+  return (
+    <Dropdown
+      menu={{
+        items
+      }}
+      trigger={['click']}
+    >
+      <Space>
+        <TabButton className={styles.bookerDetailsButton}>Booker Details</TabButton>
+        <DownOutlined />
+      </Space>
+    </Dropdown>
+  )
+}
+
+export const NavBarSearchBar = ({ usersData, className, placeholder, wrapperClassName, onSelect }) => {
+  const [query, setQuery] = useState('')
+  const [artistsList, setArtistsList] = useState([])
+  const [filteredArtistsList, setFilteredArtistsList] = useState([])
+  const [options, setOptions] = useState([])
+
+  useEffect(() => {
+    const filteredArtistsList = usersData.filter(user => user.type === 'Artist')
+    setArtistsList(filteredArtistsList)
+    setFilteredArtistsList(filteredArtistsList)
+  }, [usersData])
+
+  useEffect(() => {
+    const newOptions = filteredArtistsList.map(artist => ({
+      value: `${artist.firstName} ${artist.lastName}`,
+      label: (
+        <div className={styles.artistsListPreview}>
+          <div className={styles.searchInputFieldPictureContainer}>
+            <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
+          </div>
+          <div>
+            <span>{artist.firstName}</span> <span>{artist.lastName}</span>
+            <div>{artist.genre}</div>
+          </div>
+        </div>
+      )
+    }))
+
+    setOptions(newOptions)
+  }, [filteredArtistsList])
+
+  const handleQueryChange = value => {
+    setQuery(value)
+
+    const filteredList = artistsList.filter(
+      artist =>
+        artist.firstName.toLowerCase().includes(value.toLowerCase()) ||
+        artist.lastName.toLowerCase().includes(value.toLowerCase())
+    )
+
+    setFilteredArtistsList(filteredList)
+
+    if (onSelect) {
+      const selectedArtist = filteredList.find(
+        artist => `${artist.firstName} ${artist.lastName}`.toLowerCase() === value.toLowerCase()
+      )
+      onSelect(selectedArtist)
+    }
+  }
+
+  return (
+    <div className={wrapperClassName ? wrapperClassName : styles.wrapperClass}>
+      <AutoComplete
+        options={options}
+        autoFocus
+        // notFoundContent='Sorry, Artist not found!'
+        onSelect={handleQueryChange}
+        onSearch={handleQueryChange}
+        onChange={handleQueryChange} // Add onChange to handle controlled input
+        // className={`${styles.searchInputField} ${className}`}
+        className={styles.searchInputField}
+        placeholder={placeholder ? placeholder : 'Search Artist'}
+        value={query}
+        variant='borderless'
+        style={{
+          width: 250,
+          height: 50
+          // borderRadius: 'inherit',
+          // border: '2px solid #a0a0a0'
+        }}
+        // rootClassName={styles.searchInputField}
+      />
+    </div>
+  )
 }

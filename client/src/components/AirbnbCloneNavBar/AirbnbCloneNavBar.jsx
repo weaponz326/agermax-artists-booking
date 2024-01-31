@@ -160,8 +160,7 @@ const MiddleForm = ({ formItems }) => {
       `}
       >
         <div className={styles.searchButtonInner}>
-          <SearchNormal1 size={20} />
-          <span>Search</span>
+          <span>Book Now</span>
         </div>
       </button>
     </div>

@@ -1,4 +1,4 @@
-import { Calendar, theme } from 'antd'
+import { Calendar, theme, DatePicker } from 'antd'
 import React from 'react'
 import MiddleFormItemDropdown from '../MiddleFormItemDropdown'
 
@@ -10,6 +10,7 @@ const DateCalendarPicker = () => {
   return (
     <MiddleFormItemDropdown>
       <div>
+        {/* <DatePicker defaultOpen /> */}
         <Calendar fullscreen={false} onPanelChange={onPanelChange} />
       </div>
     </MiddleFormItemDropdown>
