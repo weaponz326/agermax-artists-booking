@@ -1,8 +1,8 @@
-import axios from 'axios'
+// import axios from 'axios'
 import Unsplash from 'src/components/mock-data-apis/Unsplash'
 import usersData from './Music Artists Data.json'
 
-const baseUrl = 'https://api.mockaroo.com/api/7e49e110?count=100&key=15462290'
+// const baseUrl = 'https://api.mockaroo.com/api/7e49e110?count=100&key=15462290'
 export async function getAllArtists() {
   // const { data } = await axios.get(baseUrl)
   // return data
