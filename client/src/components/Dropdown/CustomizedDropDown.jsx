@@ -6,29 +6,6 @@ import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { useAuth } from 'src/providers/AuthProvider'
 
-const isNotLoggedInItems = [
-  {
-    key: '1',
-    label: <a href='#'>Log In</a>
-  },
-  {
-    key: '2',
-    label: <a href='/signup'>Sign Up</a>
-  },
-  {
-    key: '3',
-    label: <a href='#'>Gift Cards</a>
-  },
-  {
-    key: '4',
-    label: <a href='/about'>About Agermax</a>
-  },
-  {
-    key: '5',
-    label: <a href='#'>Help Center</a>
-  }
-]
-
 const isLoggedInItems = [
   {
     key: '1',
@@ -36,7 +13,7 @@ const isLoggedInItems = [
   },
   {
     key: '2',
-    label: <a href='/admin/bookings'>Account</a>
+    label: <a href='/admin/account'>Account</a>
   },
   {
     key: '3',
@@ -87,7 +64,7 @@ const CustomizedDropdown = ({ className }) => {
           }}
           placement='topRight'
           arrow={{
-            pointAtCenter: true
+            pointAtCenter: false
           }}
         >
           <Button style={buttonStyle} className={styles.userMenuButton}>

@@ -42,4 +42,4 @@ const useFinanceContext = () => {
   return context
 }
 
-export { FinanceProvider, useFinanceContext }
+export default { FinanceProvider, useFinanceContext }

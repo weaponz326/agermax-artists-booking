@@ -37,7 +37,9 @@ export default function Navbar() {
 const Search = ({ displayNavItems, navItemsOpen }) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [hideMenuItems, setHideMenuItems] = useState(false)
-  const [currentItem, setCurrentItem] = useState(null)
+  const [activeTab, setActiveTab] = useState(null)
+  const dateInputRef = useRef()
+  const bookerInputRef = useRef()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +56,8 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   }
 
   function setActiveItem(item) {
-    setCurrentItem(item)
+    console.log(item)
+    setActiveTab(item)
   }
 
   const showNavMenu = hideMenuItems ? null : (
@@ -73,6 +76,8 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 
   const menuSetting = !hideMenuItems ? { width: '60%', textAlign: 'center' } : null
   const activeItem = styles['active-search-item']
+  const checkDateActiveClass = activeTab === dateInputRef.current ? styles.activeTab : null
+  const checkBookerActiveClass = activeTab === bookerInputRef.current ? styles.activeTab : null
 
   return (
     //Apply transition effect to the Nav search bar
@@ -103,22 +108,37 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
               placeholder={'Search Artist'}
               wrapperClassName={styles.searchWrapper}
               usersData={usersData}
+              dateInputRef={dateInputRef.current}
+              setActiveItem={setActiveItem}
+              activeTab={activeTab}
             />
             <div className={styles['search-item-divider']}></div>
-
-            <RangePicker
-              variant='borderless'
-              className={styles.rangePicker}
-              showTime={{
-                format: 'HH:mm'
-              }}
-              format='YYYY-MM-DD HH:mm'
-              // onChange={onChange}
-              // onOk={onOk}
-            />
+            <div
+              className={`${styles.searchWrapper} ${checkDateActiveClass}`}
+              onClick={e => setActiveItem(dateInputRef.current)}
+              onFocus={e => setActiveItem(dateInputRef.current)}
+              ref={dateInputRef}
+            >
+              <RangePicker
+                variant='borderless'
+                className={styles.rangePicker}
+                showTime={{
+                  format: 'HH:mm'
+                }}
+                format='YYYY-MM-DD HH:mm'
+                // onChange={onChange}
+                // onOk={onOk}
+              />
+            </div>
             <div className={styles['search-item-divider']}></div>
-
-            <CustomDropdown />
+            <div
+              className={`${styles.searchWrapper} ${checkBookerActiveClass}`}
+              onClick={e => setActiveItem(bookerInputRef.current)}
+              onFocus={e => setActiveItem(bookerInputRef.current)}
+              ref={bookerInputRef}
+            >
+              <CustomDropdown />
+            </div>
             <div className={styles['search-item-divider']}></div>
 
             <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
@@ -197,11 +217,20 @@ export const CustomDropdown = () => {
   )
 }
 
-export const NavBarSearchBar = ({ usersData, className, placeholder, wrapperClassName, onSelect }) => {
+export const NavBarSearchBar = ({
+  usersData,
+  className,
+  placeholder,
+  wrapperClassName,
+  dateInputRef,
+  setActiveItem,
+  activeTab
+}) => {
   const [query, setQuery] = useState('')
   const [artistsList, setArtistsList] = useState([])
   const [filteredArtistsList, setFilteredArtistsList] = useState([])
   const [options, setOptions] = useState([])
+  const searchInputRef = useRef()
 
   useEffect(() => {
     const filteredArtistsList = usersData.filter(user => user.type === 'Artist')
@@ -239,22 +268,41 @@ export const NavBarSearchBar = ({ usersData, className, placeholder, wrapperClas
 
     setFilteredArtistsList(filteredList)
 
-    if (onSelect) {
-      const selectedArtist = filteredList.find(
-        artist => `${artist.firstName} ${artist.lastName}`.toLowerCase() === value.toLowerCase()
-      )
-      onSelect(selectedArtist)
-    }
+    // if (onSelect) {
+    //   const selectedArtist = filteredList.find(
+    //     artist => `${artist.firstName} ${artist.lastName}`.toLowerCase() === value.toLowerCase()
+    //   )
+    //   onSelect(selectedArtist)
+    // }
   }
 
+  const handleSelectQuery = e => {
+    console.log(activeTab)
+    const filteredList = artistsList.filter(
+      artist =>
+        artist.firstName.toLowerCase().includes(query.toLowerCase()) ||
+        artist.lastName.toLowerCase().includes(query.toLowerCase())
+    )
+
+    setFilteredArtistsList(filteredList)
+  }
+
+  const checkSearchActiveClass = activeTab === searchInputRef.current ? styles.activeTab : null
+
   return (
-    <div className={wrapperClassName ? wrapperClassName : styles.wrapperClass}>
+    <div
+      onClick={e => setActiveItem(searchInputRef.current)}
+      onFocus={e => setActiveItem(searchInputRef.current)}
+      ref={searchInputRef}
+      className={`${styles.searchWrapper} ${checkSearchActiveClass}`}
+      // className={`${styles.wrapperClass} ${checkActiveClass}`}
+    >
       <AutoComplete
         options={options}
-        autoFocus
+        autoClearSearchValue={true}
         popupMatchSelectWidth={false}
         // notFoundContent='Sorry, Artist not found!'
-        onSelect={handleQueryChange}
+        onSelect={e => handleSelectQuery(e)}
         onSearch={handleQueryChange}
         onChange={handleQueryChange} // Add onChange to handle controlled input
         className={styles.searchInputField}
