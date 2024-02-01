@@ -56,7 +56,7 @@ const CustomizedDropdown = ({ className }) => {
       }
     }
     return (
-      <div style={{ width: '15%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+      <div style={{ width: '15%', display: 'flex', justifyContent: 'flex-end' }}>
         <Dropdown
           menu={{
             items: isLoggedInItems,

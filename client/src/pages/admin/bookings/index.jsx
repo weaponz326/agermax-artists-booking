@@ -12,7 +12,7 @@ import styles from './bookings.module.css'
 
 import { GridFilterAltIcon } from '@mui/x-data-grid'
 import { DatePicker } from 'antd'
-import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
+// import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
 
 const BookingPage = () => {
