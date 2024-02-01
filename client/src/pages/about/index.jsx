@@ -1,12 +1,12 @@
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './about.module.css'
 import { FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa'
-import Image from 'next/image'
+// import Image from 'next/image'
 import FaqAccordion from 'src/components/FaqAccordion/FaqAccordion'
 import { faqData } from 'src/components/mock-data-apis/mock-data'
 import TestimonialCarousel from 'src/components/TestimonialCarousel/TestimonialCarousel'
-import ContactForm from 'src/components/ContactForm/ContactForm'
-import RangeDatePicker from 'src/components/RangeDatePicker/RangeDatePicker'
+// import ContactForm from 'src/components/ContactForm/ContactForm'
+// import RangeDatePicker from 'src/components/RangeDatePicker/RangeDatePicker'
 
 const AboutPage = () => {
   return (
