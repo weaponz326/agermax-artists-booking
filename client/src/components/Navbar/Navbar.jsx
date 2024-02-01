@@ -37,7 +37,6 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   const bookerInputRef = useRef()
 
   useEffect(() => {
-    console.log(activeTab)
     const handleScroll = () => {
       setHideMenuItems(true)
       setActiveTab(null)
@@ -52,7 +51,18 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   useEffect(() => {
     //Listen to a click event outside the searchBarContainer ref and set activeTab to null
     const handleClickOutsideSearch = event => {
-      if (!menuBarWrapper.current.contains(event.target)) {
+      event.stopPropagation()
+      const menuWrapper = event.target.closest('.menu-bar-wrapper')
+      const antDropdown = event.target.closest('.ant-select-dropdown')
+      const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
+      const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
+
+      console.log(menuWrapper)
+      if (antDropdown) return
+      if (antDropdownMenu) return
+      if (antDropdownPicker) return
+      if (menuWrapper == null) {
+        console.log('collapse now!')
         setActiveTab(null)
         setHideMenuItems(true)
       }
@@ -61,7 +71,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     return () => {
       document.removeEventListener('click', handleClickOutsideSearch)
     }
-  })
+  }, [])
 
   function setActiveItem(item) {
     setActiveTab(item)
@@ -118,7 +128,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
       }}
       in={hideMenuItems}
     >
-      <nav className={styles['main-nav-search-bar']} ref={menuBarWrapper}>
+      <nav className={`${styles['main-nav-search-bar']} menu-bar-wrapper`} ref={menuBarWrapper}>
         {navMenu}
         <ConfigProvider
           theme={{
@@ -329,7 +339,6 @@ export const NavBarSearchBar = ({
   }
 
   const handleSelectQuery = e => {
-    console.log(activeTab)
     const filteredList = artistsList.filter(
       artist =>
         artist.firstName.toLowerCase().includes(query.toLowerCase()) ||
@@ -350,9 +359,11 @@ export const NavBarSearchBar = ({
       // className={`${styles.wrapperClass} ${checkActiveClass}`}
     >
       <AutoComplete
+        // open={true}
         options={options}
         autoClearSearchValue={true}
         popupMatchSelectWidth={false}
+        popupClassName='popup'
         // notFoundContent='Sorry, Artist not found!'
         onSelect={e => handleSelectQuery(e)}
         onSearch={handleQueryChange}

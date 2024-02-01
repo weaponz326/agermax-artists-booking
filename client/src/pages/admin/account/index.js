@@ -43,23 +43,23 @@ const TabAccount = () => {
     eventsHosted: []
   })
 
-  useEffect(() => {
-    // Fetch and set user data
-    if (user && accessToken) {
-      const fetchUserData = async () => {
-        try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          })
-          setFormData(response.data.userData)
-        } catch (error) {
-          console.error('Error fetching user data:', error)
-        }
-      }
+  // useEffect(() => {
+  //   // Fetch and set user data
+  //   if (user && accessToken) {
+  //     const fetchUserData = async () => {
+  //       try {
+  //         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
+  //           headers: { Authorization: `Bearer ${accessToken}` }
+  //         })
+  //         setFormData(response.data.userData)
+  //       } catch (error) {
+  //         console.error('Error fetching user data:', error)
+  //       }
+  //     }
 
-      fetchUserData()
-    }
-  }, [user, accessToken])
+  //     fetchUserData()
+  //   }
+  // }, [user, accessToken])
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
