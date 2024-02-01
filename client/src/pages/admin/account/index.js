@@ -17,11 +17,13 @@ import CardContent from '@mui/material/CardContent'
 // ** Custom Hooks and Components
 import { useAuth } from 'src/hooks/useAuth'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
+import FileUploaderMultiple from 'src/components/FileUploader/FileUploader'
 
 const steps = ['Basic Information', 'Additional Information']
 
 const TabAccount = () => {
-  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const accessToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc'
   const { user } = useAuth() // Assume useAuth provides accessToken directly
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState({
@@ -60,6 +62,16 @@ const TabAccount = () => {
       fetchUserData()
     }
   }, [user, accessToken])
+
+  const handleGalleryUpdate = (newFiles) => {
+    const updatedGallery = newFiles.map(file => ({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        preview: file.preview // Or any other file information your backend needs
+    }));
+    setFormData({ ...formData, gallery: updatedGallery });
+};
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
@@ -125,7 +137,7 @@ const TabAccount = () => {
           onChange={e => handleFormChange('contactPhone', e.target.value)}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
           label='Address'
@@ -165,6 +177,9 @@ const TabAccount = () => {
               value={formData.bio}
               onChange={e => handleFormChange('bio', e.target.value)}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <FileUploaderMultiple onUpdate={handleGalleryUpdate} />
           </Grid>
         </>
       )}
