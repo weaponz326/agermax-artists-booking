@@ -11,6 +11,7 @@ const StripePayment = () => {
   return (
     <Elements stripe={stripePromise}>
       <Box
+
         justifyContent="center"
         alignItems="center"
         minHeight="100vh"         sx={{
