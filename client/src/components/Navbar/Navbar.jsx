@@ -55,7 +55,6 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
 
   function setActiveItem(item) {
     setCurrentItem(item)
-    console.log(currentItem)
   }
 
   const showNavMenu = hideMenuItems ? null : (
@@ -88,7 +87,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
         exitActive: styles['fade-exit-active'],
         exitDone: styles['fade-exit-done']
       }}
-      in={isScrolled}
+      in={hideMenuItems}
     >
       <nav className={styles['main-nav-search-bar']}>
         {showNavMenu}

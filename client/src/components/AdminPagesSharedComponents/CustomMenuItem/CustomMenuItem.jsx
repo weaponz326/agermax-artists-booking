@@ -1,7 +1,6 @@
-import { StylesProvider } from '@material-ui/core'
 import React, { useState } from 'react'
 import styles from './CustomMenuItem.module.css'
-import { ExpandLess, ExpandLessRounded, ExpandMoreRounded } from '@material-ui/icons'
+import { ExpandLessRounded, ExpandMoreRounded } from '@material-ui/icons'
 
 const CustomMenuItem = ({ label, subMenuItems, labelClassName, menuContainer }) => {
   const [isSubMenuVisible, setSubMenuVisible] = useState(false)
