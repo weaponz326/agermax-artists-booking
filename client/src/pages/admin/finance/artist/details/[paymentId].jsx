@@ -2,10 +2,8 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import styles from './FinancialDetails.module.css'
-import Dropdown from 'antd/es/dropdown/dropdown'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
-import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import { Calendar, Note } from 'iconsax-react'
 
 const FinancialDetailsPage = () => {
