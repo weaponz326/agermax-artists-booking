@@ -3862,7 +3862,7 @@ pathe@^1.0.0, pathe@^1.1.0:
   resolved "https://registry.npmjs.org/pathe/-/pathe-1.1.1.tgz"
   integrity sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==
 
-payment@^2.3.0, payment@2.4.6:
+payment@^2.3.0, payment@^2.4.6:
   version "2.4.6"
   resolved "https://registry.npmjs.org/payment/-/payment-2.4.6.tgz"
   integrity sha512-QSCAa1yQSkqbe4Ghac3sSA5SQ+Cxc3e4xwCxxun5NT6hUSWsNXXlN8KCCY0kAFFXBP9C7DrfyXP4REB7nPJa8g==
@@ -4382,7 +4382,7 @@ react-chartjs-2@5.2.0:
   resolved "https://registry.npmjs.org/react-chartjs-2/-/react-chartjs-2-5.2.0.tgz"
   integrity sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==
 
-react-credit-cards@0.8.3:
+react-credit-cards@^0.8.3:
   version "0.8.3"
   resolved "https://registry.npmjs.org/react-credit-cards/-/react-credit-cards-0.8.3.tgz"
   integrity sha512-88XJErkkdDjeFevOxfWYV2dUs4ddNNXJMIgutqTlUH2pYfcaDeFv9MXNGCcJKvBv4+6GEnxbCToymNRNbEt/uw==

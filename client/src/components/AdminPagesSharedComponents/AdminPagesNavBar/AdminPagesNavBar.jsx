@@ -43,18 +43,8 @@ export const ViewStyleTabs = ({ activeEventsView, setActiveEventsView }) => {
         onClick={e => handleTabSelection(e)}
         className={activeEventsView === 'ThreeDView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
       >
-        3D
-      </TabButton>
-
-      <TabButtonDivider />
-      <TabButton
-        id={'MonthView'}
-        onClick={e => handleTabSelection(e)}
-        className={activeEventsView === 'MonthView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
-      >
-        M
-      </TabButton>
-      <TabButtonDivider />
+        D
+      </TabButton>      
 
       <TabButton
         id={'WeekView'}
@@ -65,6 +55,16 @@ export const ViewStyleTabs = ({ activeEventsView, setActiveEventsView }) => {
       </TabButton>
       <TabButtonDivider />
 
+      <TabButtonDivider />
+      <TabButton
+        id={'MonthView'}
+        onClick={e => handleTabSelection(e)}
+        className={activeEventsView === 'MonthView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
+      >
+        M
+      </TabButton>
+      <TabButtonDivider />
+      
       <TabButton
         id={'ListView'}
         onClick={e => handleTabSelection(e)}

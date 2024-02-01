@@ -1,38 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import axios from 'axios';
-import { useAuth } from 'src/hooks/useAuth';
 import { useRouter } from 'next/router';
-import { Button, TextField, Box, Card, Typography, Snackbar } from '@mui/material';
 
-const cardElementOptions = {
-  style: {
-    base: {
-      color: "#32325d",
-      fontFamily: 'Arial, sans-serif',
-      fontSmoothing: "antialiased",
-      fontSize: "16px",
-      "::placeholder": {
-        color: "#aab7c4"
-      }
-    },
-    invalid: {
-      color: "#fa755a",
-      iconColor: "#fa755a"
-    }
-  }
-};
 
+// import { useStripe } from '@stripe/react-stripe-js';
+import {
+  PaymentElement,
+  LinkAuthenticationElement
+} from '@stripe/react-stripe-js'
+// import {useState} from 'react'
+import {useStripe, useElements} from '@stripe/react-stripe-js';
+
+import axios from 'axios';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Cards from 'react-credit-cards';
+import CustomTextField from 'src/@core/components/mui/text-field';
+import Payment from 'payment';
+
+// Utilities for formatting
+import { formatCVC, formatExpirationDate, formatCreditCardNumber } from 'src/@core/utils/format';
+
+// This component wraps the Cards component for styling
+import CardWrapper from 'src/@core/styles/libs/react-credit-cards';
+
+// Import necessary styles
+import 'react-credit-cards/es/styles-compiled.css';
 
 const CheckoutForm = () => {
   const stripe = useStripe();
-  const elements = useElements();
-  // const accessToken = useAuth();
-  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc";
-  const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [cvc, setCvc] = useState('');
+  const [name, setName] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [email, setEmail] = useState(''); // Assuming you have an email field for receipt
   const [error, setError] = useState('');
   const [amount, setAmount] = useState('');
+  const router = useRouter();
   const [paymentSuccess, setPaymentSuccess] = useState(false); // State to track payment success
 
   useEffect(() => {
@@ -40,34 +43,60 @@ const CheckoutForm = () => {
     setAmount(query.amount || '');
   }, [router.query]);
 
-  useEffect(() => {
-    if (paymentSuccess) {
-      // Redirect after showing success message
-      setTimeout(() => {
-        router.push('/admin/finance');
-      }, 3000); // 3 seconds delay
+  const handleInputChange = ({ target }) => {
+    switch (target.name) {
+      case 'number':
+        setCardNumber(formatCreditCardNumber(target.value, Payment));
+        break;
+      case 'expiry':
+        setExpiry(formatExpirationDate(target.value, ));
+        break;
+      case 'cvc':
+        setCvc(formatCVC(target.value,cardNumber, Payment));
+        break;
+      case 'name':
+        setName(target.value);
+        break;
+      default:
+        break;
     }
-  }, [paymentSuccess, router]);
+  };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
-
-    if (!stripe || !elements) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe) {
+      console.log('Stripe.js has not loaded yet.');
       return;
     }
+    setError('');
 
-    const card = elements.getElement(CardElement);
+    // Convert expiry date to month and year
+    const exp_month = expiry.split('/')[0];
+    const exp_year = `20${expiry.split('/')[1]}`;
+
+    // Use the card details to create a payment method
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
-      card,
-      billing_details: { email },
+      card: {
+        number: cardNumber,
+        exp_month,
+        exp_year,
+        cvc,
+      },
+      billing_details: {
+        name,
+        email, // Optional: include other billing details
+      },
     });
 
     if (error) {
       setError(error.message);
+      console.error(error);
       return;
     }
+
+    const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc";
+
 
     // Test mode code
     const testSource = 'tok_visa';
@@ -87,49 +116,58 @@ const CheckoutForm = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Payment failed.');
     }
+
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-      <Card variant="outlined" sx={{ p: 2, mb: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Payment Information
-        </Typography>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
-          Card Details
-        </Typography>
-        <CardElement options={cardElementOptions} />
-        {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
-      </Card>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        disabled={!stripe}
-      >
-        Pay ${amount}
+    <form onSubmit={handleSubmit}>
+      <div>
+        <Cards cvc={cvc} expiry={expiry} focused={name} name={name} number={cardNumber} />
+      </div>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <CustomTextField
+            fullWidth
+            name="number"
+            label="Card Number"
+            value={cardNumber}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <CustomTextField
+            fullWidth
+            name="expiry"
+            label="Expiry Date"
+            value={expiry}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <CustomTextField
+            fullWidth
+            name="cvc"
+            label="CVC"
+            value={cvc}
+            onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <CustomTextField
+            fullWidth
+            name="name"
+            label="Name on Card"
+            value={name}
+            onChange={handleInputChange}
+          />
+        </Grid>
+      </Grid>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <Button type="submit" variant="contained" color="primary">
+      Pay ${amount}
       </Button>
-      <Snackbar
-        open={paymentSuccess}
-        autoHideDuration={3000}
-        onClose={() => setPaymentSuccess(false)}
-        message="Payment successful! Redirecting..."
-      />
-    </Box>
+    </form>
   );
 };
-
 
 export default CheckoutForm;

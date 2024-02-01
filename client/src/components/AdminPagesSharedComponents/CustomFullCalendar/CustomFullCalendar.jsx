@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import styles from './CustomFullCalendar.module.css'
+// import styles from './CustomFullCalendar.module.css'
 
 const CustomFullCalendar = ({view}) => {
   const [events, setEvents] = useState([
