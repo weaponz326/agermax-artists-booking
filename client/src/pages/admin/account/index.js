@@ -69,10 +69,8 @@ const TabAccount = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-  const handleFormChange = (e, field, value) => {
-    // setFormData
-    // setFormData({ ...formData, [field]: value });
-    console.log(e.target.value)
+  const handleFormChange = (field, value) => {
+    setFormData({ ...formData, [field]: value })
   }
 
   const handleSubmit = async e => {
@@ -95,7 +93,12 @@ const TabAccount = () => {
         <ImageUpload />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='First Name' value={formData.firstName} onChange={e => handleFormChange(e)} />
+        <TextField
+          fullWidth
+          label='First Name'
+          value={formData.firstName}
+          onChange={e => handleFormChange('firstName', e.target.value)}
+        />
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField
