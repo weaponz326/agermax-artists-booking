@@ -34,6 +34,8 @@ const FinanceProvider = ({ children }) => {
   return <FinanceContext.Provider value={{ data, updateData, setData }}>{children}</FinanceContext.Provider>
 }
 
+export default FinanceProvider
+
 const useFinanceContext = () => {
   const context = useContext(FinanceContext)
   if (!context) {
@@ -42,4 +44,4 @@ const useFinanceContext = () => {
   return context
 }
 
-export default { FinanceProvider, useFinanceContext }
+export { FinanceProvider, useFinanceContext }

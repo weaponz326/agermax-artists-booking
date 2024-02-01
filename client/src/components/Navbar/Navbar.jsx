@@ -38,12 +38,14 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [hideMenuItems, setHideMenuItems] = useState(false)
   const [activeTab, setActiveTab] = useState(null)
+  const searchBarContainerRef = useRef()
   const dateInputRef = useRef()
   const bookerInputRef = useRef()
 
   useEffect(() => {
     const handleScroll = () => {
       setHideMenuItems(true)
+      setActiveTab(null)
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
@@ -51,102 +53,123 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     }
   }, [isScrolled, hideMenuItems])
 
-  function handleClick() {
-    displayNavItems()
-  }
+  useEffect(() => {
+    //Listen to a click event outside the searchBarContainer ref and set activeTab to null
+    const handleClickOutsideSearch = event => {
+      if (!hideMenuItems) {
+        if (!searchBarContainerRef.current.contains(event.target)) {
+          setActiveTab(null)
+          setHideMenuItems(true)
+        }
+      }
+    }
+    document.addEventListener('click', handleClickOutsideSearch)
+    return () => {
+      document.removeEventListener('click', handleClickOutsideSearch)
+    }
+  }, [activeTab])
 
   function setActiveItem(item) {
-    console.log(item)
     setActiveTab(item)
   }
 
-  const showNavMenu = hideMenuItems ? null : (
-    <ul className={styles['nav-menu-bar']}>
+  const navMenu = (
+    <ul className={styles['nav-menu-bar']} onClick={() => setHideMenuItems(false)}>
       <li className={styles['nav-menu-bar-item']}>
         <span>Artists</span>
       </li>
+      <div className={styles['search-item-divider']}></div>
+
       <li className={styles['nav-menu-bar-item']}>
-        <span>Events</span>
+        <span>Anywhere</span>
       </li>
+      <div className={styles['search-item-divider']}></div>
+
       <li className={styles['nav-menu-bar-item']}>
-        <span>Articles</span>
+        <span>Anytime</span>
       </li>
     </ul>
   )
 
-  const menuSetting = !hideMenuItems ? { width: '60%', textAlign: 'center' } : null
-  const activeItem = styles['active-search-item']
+  const showNavMenu = hideMenuItems ? null : navMenu
+
+  ///Set Conditional Classes
   const checkDateActiveClass = activeTab === dateInputRef.current ? styles.activeTab : null
   const checkBookerActiveClass = activeTab === bookerInputRef.current ? styles.activeTab : null
+  const checkSearchBarActiveClass = activeTab === searchBarContainerRef.current ? styles.activeTab : null
 
-  return (
-    //Apply transition effect to the Nav search bar
-    <CSSTransition
-      timeout={40}
-      classNames={{
-        enter: styles['fade-enter'],
-        enterActive: styles['fade-enter-active'],
-        enterDone: styles['fade-enter-done'],
+  if (hideMenuItems) {
+    return <>{navMenu}</>
+  } else {
+    return (
+      //Apply transition effect to the Nav search bar
+      <CSSTransition
+        timeout={40}
+        classNames={{
+          enter: styles['fade-enter'],
+          enterActive: styles['fade-enter-active'],
+          enterDone: styles['fade-enter-done'],
 
-        exit: styles['fade-exit'],
-        exitActive: styles['fade-exit-active'],
-        exitDone: styles['fade-exit-done']
-      }}
-      in={hideMenuItems}
-    >
-      <nav className={styles['main-nav-search-bar']}>
-        {showNavMenu}
-        <ConfigProvider
-          theme={{
-            token: {
-              colorTextPlaceholder: 'rgb(0, 0, 0, 0.5)'
-            }
-          }}
-        >
-          <form className={styles['search-bar']} onSubmit={e => e.preventDefault()}>
-            <NavBarSearchBar
-              placeholder={'Search Artist'}
-              wrapperClassName={styles.searchWrapper}
-              usersData={usersData}
-              dateInputRef={dateInputRef.current}
-              setActiveItem={setActiveItem}
-              activeTab={activeTab}
-            />
-            <div className={styles['search-item-divider']}></div>
-            <div
-              className={`${styles.searchWrapper} ${checkDateActiveClass}`}
-              onClick={e => setActiveItem(dateInputRef.current)}
-              onFocus={e => setActiveItem(dateInputRef.current)}
-              ref={dateInputRef}
-            >
-              <RangePicker
-                variant='borderless'
-                className={styles.rangePicker}
-                showTime={{
-                  format: 'HH:mm'
-                }}
-                format='YYYY-MM-DD HH:mm'
-                // onChange={onChange}
-                // onOk={onOk}
+          exit: styles['fade-exit'],
+          exitActive: styles['fade-exit-active'],
+          exitDone: styles['fade-exit-done']
+        }}
+        in={hideMenuItems}
+      >
+        <nav className={styles['main-nav-search-bar']}>
+          {showNavMenu}
+          <ConfigProvider
+            theme={{
+              token: {
+                colorTextPlaceholder: 'rgb(0, 0, 0, 0.5)'
+              }
+            }}
+          >
+            <form className={styles['search-bar']} onSubmit={e => e.preventDefault()} ref={searchBarContainerRef}>
+              <NavBarSearchBar
+                placeholder={'Search Artist'}
+                wrapperClassName={styles.searchWrapper}
+                usersData={usersData}
+                dateInputRef={dateInputRef.current}
+                setActiveItem={setActiveItem}
+                activeTab={activeTab}
               />
-            </div>
-            <div className={styles['search-item-divider']}></div>
-            <div
-              className={`${styles.searchWrapper} ${checkBookerActiveClass}`}
-              onClick={e => setActiveItem(bookerInputRef.current)}
-              onFocus={e => setActiveItem(bookerInputRef.current)}
-              ref={bookerInputRef}
-            >
-              <CustomDropdown />
-            </div>
-            <div className={styles['search-item-divider']}></div>
+              <div className={styles['search-item-divider']}></div>
+              <div
+                className={`${styles.searchWrapper} ${checkDateActiveClass}`}
+                onClick={e => setActiveItem(dateInputRef.current)}
+                onFocus={e => setActiveItem(dateInputRef.current)}
+                ref={dateInputRef}
+              >
+                <RangePicker
+                  variant='borderless'
+                  className={styles.rangePicker}
+                  showTime={{
+                    format: 'HH:mm'
+                  }}
+                  format='YYYY-MM-DD HH:mm'
+                  // onChange={onChange}
+                  // onOk={onOk}
+                />
+              </div>
+              <div className={styles['search-item-divider']}></div>
+              <div
+                className={`${styles.searchWrapper} ${checkBookerActiveClass}`}
+                onClick={e => setActiveItem(bookerInputRef.current)}
+                onFocus={e => setActiveItem(bookerInputRef.current)}
+                ref={bookerInputRef}
+              >
+                <CustomDropdown />
+              </div>
+              <div className={styles['search-item-divider']}></div>
 
-            <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
-          </form>
-        </ConfigProvider>
-      </nav>
-    </CSSTransition>
-  )
+              <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
+            </form>
+          </ConfigProvider>
+        </nav>
+      </CSSTransition>
+    )
+  }
 }
 
 export const Backdrop = ({ handleModalEffect }) => {
