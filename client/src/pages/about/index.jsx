@@ -83,7 +83,6 @@ const AboutPage = () => {
           </section>
         </div>
       </div>
-      <RangeDatePicker />
     </CustomPagesLayout>
   )
 }

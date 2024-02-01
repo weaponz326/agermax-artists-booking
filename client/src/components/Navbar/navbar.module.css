@@ -81,25 +81,17 @@
   z-index: 2;
 }
 
-/* .search-bar input {
-  font-size: 0.9rem;
-  padding: 0.8rem 1rem 0.8rem 2.7rem;
-  width: 100%;
-  border-radius: 1rem;
-  background-color: #58707a;
-  position: relative;
-  color: white;
-  border: none;
-} */
 .main-nav-search-bar {
-  width: 100%;
+  width: 70%;
   /* border: 1px solid brown; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   /* transition: all 5s ease-in-out; */
+  flex: 7;
 }
+
 .nav-menu-bar {
   list-style: none;
   padding: 0;
@@ -115,7 +107,7 @@
 }
 
 .search-bar {
-  width: 85%;
+  width: 100%;
   /* max-width: 30rem; */
   border: 1px solid rgba(0, 0, 0, 0.1);
   outline: none;
@@ -140,26 +132,6 @@
   /* justify-content: stretch; */
 }
 
-.search-item.first-item {
-  color: black;
-  /* background-color: burlywood; */
-}
-
-.search-item.second-item {
-  /* background-color: rgb(151, 135, 222); */
-}
-
-.search-item.third-item {
-  /* background-color: rgb(78, 214, 185); */
-}
-
-.search-item.fourth-item {
-  /* background-color: rgb(199, 12, 12); */
-}
-
-.search-item.fourth-item:hover {
-  border-radius: 5rem 0 0 5rem;
-}
 .search-item.fifth-item {
   /* background-color: rgb(199, 12, 12); */
   flex: 0.05;
@@ -271,21 +243,26 @@
   outline: none;
 }
 
-.search-artist::placeholder {
-  /* color: rgb(0, 25, 245); */
-}
-
 .search-item-divider {
   margin: auto 0;
   height: 3em;
   width: 1px;
   background-color: rgba(128, 128, 128, 0.24);
 }
-
-.search-item-divider:hover {
-  /* opacity: 0; */
+.dropdownInput {
+  border: none;
+  padding: 0.5rem;
+  outline-color: rgba(0, 0, 0, 0.1);
 }
-
+.dropdownInputButton {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background-color: #ff385c;
+  color: white;
+}
 .bookNowButton {
   width: 6rem;
   background-color: #ff385c;
@@ -311,10 +288,6 @@
 .bookNowButton:hover {
   filter: brightness(95%);
 }
-
-/* .search-bar input::placeholder {
-  color: rgba(255, 255, 255, 0.349);
-} */
 
 .search-icon {
   position: absolute;
@@ -346,8 +319,16 @@
 .top-bar {
   display: flex;
   justify-content: space-between;
-  gap: 0.85rem;
+  gap: 0rem;
   z-index: 2;
+}
+
+.top-bar * {
+  cursor: pointer;
+}
+
+.top-bar input:hover {
+  cursor: pointer;
 }
 
 .header .logo,
@@ -355,6 +336,16 @@
   height: 50px;
   width: 50px;
   object-fit: cover;
+}
+.agermaxLogoContainer {
+  /* flex: 1; */
+  display: flex;
+  width: 15%;
+}
+.userActionsButtons {
+  width: 15%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .last-img {

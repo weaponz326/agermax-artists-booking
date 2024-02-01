@@ -65,7 +65,7 @@ const buttonStyle = {
   border: '0.5px solid #183d4c'
 }
 
-const CustomizedDropdown = () => {
+const CustomizedDropdown = ({ className }) => {
   const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
   if (typeof window === 'undefined') {
     // Running on the server side during SSR
@@ -79,7 +79,7 @@ const CustomizedDropdown = () => {
       }
     }
     return (
-      <div>
+      <div style={{ width: '15%', display: 'flex', justifyContent: 'flex-end' }}>
         <Dropdown
           menu={{
             items: isLoggedInItems,
@@ -108,7 +108,7 @@ const CustomizedDropdown = () => {
       }
     }
     return (
-      <div className={styles.userActionsButtons}>
+      <div className={`${styles.userActionsButtons} ${className}`}>
         <TabButton className={styles.userMenuSignInButton} onClick={() => setIsLoggedIn(true)}>
           Sign In
         </TabButton>

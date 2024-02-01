@@ -21,13 +21,13 @@ export default function Navbar() {
   return (
     <nav className={styles['header-navbar']} ref={navBarRef}>
       <nav className={`${styles['top-bar']} ${styles['nav-bar']}`}>
-        <Link href='/'>
-          <div className={`${styles['logo']} ${styles['first-img']}`}>
+        <div className={styles.agermaxLogoContainer}>
+          <Link href='/'>
             <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
-          </div>
-        </Link>
+          </Link>
+        </div>
         <Search />
-        <CustomizedDropdown />
+        <CustomizedDropdown className={styles.userActionsButtons} />
       </nav>
       {navItemsDetails}
     </nav>
@@ -36,22 +36,18 @@ export default function Navbar() {
 
 const Search = ({ displayNavItems, navItemsOpen }) => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMenuItemActive, setIsMenuItemActive] = useState(true)
+  const [hideMenuItems, setHideMenuItems] = useState(false)
   const [currentItem, setCurrentItem] = useState(null)
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      const scrolledDown = currentScrollY > 0
-      const isAtTop = currentScrollY === 0
-      setIsScrolled(scrolledDown && !isAtTop)
-      setIsMenuItemActive(isAtTop)
+      setHideMenuItems(true)
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [isScrolled, isMenuItemActive])
+  }, [isScrolled, hideMenuItems])
 
   function handleClick() {
     displayNavItems()
@@ -62,7 +58,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     console.log(currentItem)
   }
 
-  const showNavMenu = isScrolled ? null : (
+  const showNavMenu = hideMenuItems ? null : (
     <ul className={styles['nav-menu-bar']}>
       <li className={styles['nav-menu-bar-item']}>
         <span>Artists</span>
@@ -76,7 +72,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
     </ul>
   )
 
-  const menuSetting = !isMenuItemActive ? { width: '60%', textAlign: 'center' } : null
+  const menuSetting = !hideMenuItems ? { width: '60%', textAlign: 'center' } : null
   const activeItem = styles['active-search-item']
 
   return (
@@ -141,25 +137,49 @@ export const Backdrop = ({ handleModalEffect }) => {
 export const CustomDropdown = () => {
   const items = [
     {
-      label: <input type='text' value='' placeholder='Your First Name' onClick={e => e.stopPropagation()} />,
+      label: (
+        <input
+          className={styles.dropdownInput}
+          type='text'
+          value=''
+          placeholder='Your First Name'
+          onClick={e => e.stopPropagation()}
+        />
+      ),
       key: '0'
     },
     {
-      label: <input type='text' value='' placeholder='Your Last Name' onClick={e => e.stopPropagation()} />,
+      label: (
+        <input
+          className={styles.dropdownInput}
+          type='text'
+          value=''
+          placeholder='Your Last Name'
+          onClick={e => e.stopPropagation()}
+        />
+      ),
       key: '1'
     },
     // {
     //   type: 'divider'
     // },
     {
-      label: <input type='text' value='' placeholder='Your Contact' onClick={e => e.stopPropagation()} />,
+      label: (
+        <input
+          className={styles.dropdownInput}
+          type='text'
+          value=''
+          placeholder='Your Contact'
+          onClick={e => e.stopPropagation()}
+        />
+      ),
       key: '3'
     },
     {
       type: 'divider'
     },
     {
-      label: <TabButton>Okay?</TabButton>,
+      label: <TabButton className={styles.dropdownInputButton}>Okay?</TabButton>,
       key: '4'
     }
   ]
@@ -233,22 +253,19 @@ export const NavBarSearchBar = ({ usersData, className, placeholder, wrapperClas
       <AutoComplete
         options={options}
         autoFocus
+        popupMatchSelectWidth={false}
         // notFoundContent='Sorry, Artist not found!'
         onSelect={handleQueryChange}
         onSearch={handleQueryChange}
         onChange={handleQueryChange} // Add onChange to handle controlled input
-        // className={`${styles.searchInputField} ${className}`}
         className={styles.searchInputField}
         placeholder={placeholder ? placeholder : 'Search Artist'}
         value={query}
         variant='borderless'
         style={{
-          width: 250,
+          width: 160,
           height: 50
-          // borderRadius: 'inherit',
-          // border: '2px solid #a0a0a0'
         }}
-        // rootClassName={styles.searchInputField}
       />
     </div>
   )

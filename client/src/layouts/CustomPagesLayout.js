@@ -10,7 +10,7 @@ const CustomPagesLayout = ({ children }) => {
   return (
     <AuthProvider>
       <DropdownContextProvider>
-        <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '4rem' }}>
+        <div style={{ minHeight: '100%', maxWidth: '1600px', marginInline: 'auto', paddingTop: '5rem' }}>
           <HeaderContextProvider>
             {/* <AirbnbCloneNavBar /> */}
             <Navbar />
