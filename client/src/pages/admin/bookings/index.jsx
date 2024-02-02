@@ -6,6 +6,7 @@ import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButt
 import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
 import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import React from 'react'
+import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
 
 //**Import Custom Styles */
 import styles from './bookings.module.css'
@@ -96,8 +97,17 @@ export const EventsListView = () => {
   )
 }
 export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
+  const [openModal, setOpenModal] = useState(false)
+
+  function unhideModal() {
+    setOpenModal(true)
+  }
+
+  function hideModal() {
+    setOpenModal(false)
+  }
+
   function handleTabSelection(e) {
-    console.log(e.target.id)
     setActiveEventsView(e.target.id)
   }
   return (
@@ -157,6 +167,16 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
         <div className={styles.searchBar}>
           <SearchBar />
         </div>
+        <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
+          Add Bookings
+        </TabButton>
+        <SlideInModal
+          openModal={openModal}
+          unhideModal={unhideModal}
+          hideModal={hideModal}
+          modalContent={<BookingsModalContent />}
+          saveButtonText={'Book Now'}
+        />
       </div>
     </nav>
   )
@@ -204,6 +224,70 @@ export const EventsListItem = ({ approvalStatus }) => {
 
 export const EventStatusIcon = ({ style, className }) => {
   return <div style={style} className={className}></div>
+}
+
+export const BookingsModalContent = () => {
+  return (
+    <div className={styles.modalCardContentUserDetails}>
+      <h3>Booker Details</h3>
+      <input
+        placeholder='First Name'
+        className={styles.modalCardContentInputField}
+        type='text'
+        name='first-name'
+        id='first-name'
+        required
+      />
+      <input
+        placeholder='Last Name'
+        className={styles.modalCardContentInputField}
+        type='text'
+        name='last-name'
+        id='last-name'
+        required
+      />
+      <input
+        placeholder='Contact'
+        className={styles.modalCardContentInputField}
+        type='text'
+        name='contact'
+        id='contact'
+        required
+      />
+      <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+
+      <select
+        placeholder='Last Name'
+        className={styles.modalCardContentInputField}
+        type='text'
+        name='last-name'
+        id='last-name'
+        required
+      >
+        <option value=''>Select Artist</option>
+        <option value='1'>Artist One</option>
+        <option value='2'>Artist Two</option>
+      </select>
+      <DatePicker
+        showTime={{
+          format: 'HH:mm'
+        }}
+        format='YYYY-MM-DD HH:mm'
+        placeholder='Select Start Date & Time'
+        className={styles.modalCardContentInputField}
+        showNow={false}
+      />
+      <DatePicker
+        showTime={{
+          format: 'HH:mm'
+        }}
+        format='YYYY-MM-DD HH:mm'
+        placeholder='Select End Date & Time'
+        className={styles.modalCardContentInputField}
+        showNow={false}
+      />
+    </div>
+  )
 }
 
 BookingPage.authGuard = false

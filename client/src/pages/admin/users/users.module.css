@@ -12,11 +12,6 @@
   max-width: 48rem;
 }
 
-.usersListPage * {
-  /* position: relative; */
-  margin: 0;
-}
-
 .usersListPageNavBar {
   display: flex;
   margin-bottom: 1.5rem;
@@ -34,4 +29,34 @@
 
 .usersListPageListTable {
   flex-direction: column;
+}
+
+.modalCardContentPictureInput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  border-radius: 50%;
+  width: 7rem;
+  aspect-ratio: 1;
+  /* background-color: red; */
+  margin: 1rem auto;
+}
+
+.modalCardContentUserDetails,
+.modalCardContentUserProfile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 2rem !important;
+}
+.modalCardContentInputField {
+  text-align: left;
+  padding: 0.75rem;
+  width: 100%;
+  background-color: #f2f4f8;
+  color: black;
+  border-radius: 0.7rem;
+  border: none;
+  outline-color: #4428f2;
 }

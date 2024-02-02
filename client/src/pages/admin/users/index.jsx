@@ -12,6 +12,7 @@ import SidebarAddUser from './AddUserDrawer'
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import axios from 'axios'
 import usersData from './Music Artists Data'
+import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -70,8 +71,55 @@ const UsersListPage = () => {
         usersList={usersList}
         setUsersList={setUsersList}
       />
-      <SlideInModal openModal={openModal} unhideModal={unhideModal} hideModal={hideModal} />
+      <SlideInModal
+        openModal={openModal}
+        unhideModal={unhideModal}
+        hideModal={hideModal}
+        modalContent={<UserListPageModalContent />}
+      />
     </div>
+  )
+}
+
+export const UserListPageModalContent = () => {
+  return (
+    <>
+      <div className={styles.modalCardContentPictureInput}>
+        {/* <Camera /> */}
+        <ImageUpload />
+      </div>
+      <div className={styles.modalCardContentUserDetails}>
+        <input
+          placeholder='Organization Number'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name=''
+          id=''
+        />
+        <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input placeholder='Company Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input
+          placeholder='Organization Number'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name=''
+          id=''
+        />
+        <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input placeholder='Billing Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+      </div>
+      <div className={styles.modalCardContentUserProfile}>
+        <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
+        <select className={styles.modalCardContentInputField} name='' id=''>
+          <option>Member Type</option>
+          <option>Organizer</option>
+          <option>Artist</option>
+          <option>Sponsor </option>
+        </select>
+
+        <input placeholder='Display Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
+      </div>
+    </>
   )
 }
 

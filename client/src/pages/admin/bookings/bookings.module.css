@@ -14,11 +14,6 @@
   margin: 0 1.5rem;
 }
 
-.bookingsPage * {
-  box-sizing: border-box;
-  position: relative;
-}
-
 /*Navigation Panel Section*/
 .navigationPanel {
   display: flex;
@@ -82,6 +77,15 @@
   border-radius: var(--tabs-border-radius);
   background-color: var(--tabs-container-color);
   display: flex;
+}
+
+.addBookingsButton {
+  background-color: #4428f2;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
 /* .threeDViewTab {
@@ -179,4 +183,22 @@
   width: 20px;
   height: 20px;
   background-color: rebeccapurple;
+}
+
+.modalCardContentUserDetails,
+.modalCardContentUserProfile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modalCardContentInputField {
+  text-align: left;
+  padding: 0.75rem;
+  width: 100%;
+  background-color: #f2f4f8;
+  color: black;
+  border-radius: 0.7rem;
+  border: none;
+  outline-color: #4428f2;
 }

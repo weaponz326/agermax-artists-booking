@@ -33,50 +33,34 @@
 
 .modalCardContentCloseButton {
   align-self: flex-end;
-  background-color: rgb(221, 221, 235) !important;
-  border-radius: 50% !important;
-  width: 1rem !important;
-  aspect-ratio: 1 !important;
-  color: black !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.modalCardContentPictureInput {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
+  background-color: rgb(221, 221, 235);
   border-radius: 50%;
-  width: 7rem;
+  width: 2rem;
   aspect-ratio: 1;
-  /* background-color: red; */
-  margin: 1rem auto;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
 }
 
-.modalCardContentUserDetails,
-.modalCardContentUserProfile {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-top: 2rem !important;
-}
-.modalCardContentInputField {
-  text-align: left;
-  padding: 0.75rem;
-  width: 100%;
-  background-color: #f2f4f8;
-  color: black;
-  border-radius: 0.7rem;
-  border: none;
-  outline-color: #4428f2;
+.modalCardContentCloseButton:hover {
+  filter: brightness(90%);
 }
 
 .modalCardContentSaveButton {
   background-color: #4428f2;
   color: white;
   padding: 0.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
   margin-top: auto;
+}
+
+.modalCardContentSaveButton:hover {
+  filter: brightness(90%);
+  transform: scale(1.01);
 }
 
 .modalCardContentUserProfileTitle {

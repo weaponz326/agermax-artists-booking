@@ -85,6 +85,8 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   }
   function switchToBookerDetails() {
     console.log('switched')
+    console.log(bookerInputRef.current)
+    // dateRangePickerRef.current.blur()
     bookerInputRef.current.focus()
   }
 
@@ -173,7 +175,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
                 }}
                 format='YYYY-MM-DD HH:mm'
                 // onChange={onChange}
-                onPanelChange={switchToBookerDetails}
+                onOk={switchToBookerDetails}
               />
             </div>
             <div className={styles['search-item-divider']}></div>
