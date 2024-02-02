@@ -22,6 +22,9 @@ const adminSchema = new mongoose.Schema({
     type: String,
     // required: true 
   },
+  profilePhoto: { 
+    type: String,
+  },
   role: { 
     type: String,
     required: true 
