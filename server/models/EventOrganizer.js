@@ -25,6 +25,9 @@ const organizerSchema = new mongoose.Schema({
     type: String,
     // required: true 
   },
+  profilePhoto: { 
+    type: String,
+  },
   organizationNumber: { 
     type: String 
   },
