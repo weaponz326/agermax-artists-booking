@@ -34,6 +34,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   const menuBarWrapper = useRef()
   const searchBarContainerRef = useRef()
   const dateInputRef = useRef()
+  const dateRangePickerRef = useRef()
   const bookerInputRef = useRef()
 
   useEffect(() => {
@@ -57,12 +58,10 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
       const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
       const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
 
-      console.log(menuWrapper)
       if (antDropdown) return
       if (antDropdownMenu) return
       if (antDropdownPicker) return
       if (menuWrapper == null) {
-        console.log('collapse now!')
         setActiveTab(null)
         setHideMenuItems(true)
       }
@@ -80,7 +79,13 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
   function handleMenuClick() {
     setActiveTab(null)
     setHideMenuItems(false)
-    console.log(activeTab)
+  }
+  function switchToDatePicker() {
+    dateRangePickerRef.current.focus()
+  }
+  function switchToBookerDetails() {
+    console.log('switched')
+    bookerInputRef.current.focus()
   }
 
   const navMenu = (
@@ -147,6 +152,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
               placeholder={'Search Artist'}
               wrapperClassName={styles.searchWrapper}
               usersData={usersData}
+              switchToDatePicker={switchToDatePicker}
               // dateInputRef={dateInputRef.current}
               setActiveItem={setActiveItem}
               activeTab={activeTab}
@@ -159,14 +165,15 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
               ref={dateInputRef}
             >
               <RangePicker
+                ref={dateRangePickerRef}
                 variant='borderless'
-                className={styles.rangePicker}
+                className={`${styles.rangePicker} dateRangePicker`}
                 showTime={{
                   format: 'HH:mm'
                 }}
                 format='YYYY-MM-DD HH:mm'
                 // onChange={onChange}
-                // onOk={onOk}
+                onPanelChange={switchToBookerDetails}
               />
             </div>
             <div className={styles['search-item-divider']}></div>
@@ -176,7 +183,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
               onFocus={e => setActiveItem(bookerInputRef.current)}
               ref={bookerInputRef}
             >
-              <CustomDropdown hideMenuItems={hideMenuItems} />
+              <CustomDropdown hideMenuItems={hideMenuItems} re />
             </div>
             <div className={styles['search-item-divider']}></div>
 
@@ -286,15 +293,7 @@ export const CustomDropdown = ({ hideMenuItems }) => {
   )
 }
 
-export const NavBarSearchBar = ({
-  usersData,
-  className,
-  placeholder,
-  wrapperClassName,
-  dateInputRef,
-  setActiveItem,
-  activeTab
-}) => {
+export const NavBarSearchBar = ({ usersData, switchToDatePicker, placeholder, setActiveItem, activeTab }) => {
   const [query, setQuery] = useState('')
   const [artistsList, setArtistsList] = useState([])
   const [filteredArtistsList, setFilteredArtistsList] = useState([])
@@ -339,6 +338,7 @@ export const NavBarSearchBar = ({
   }
 
   const handleSelectQuery = e => {
+    switchToDatePicker()
     const filteredList = artistsList.filter(
       artist =>
         artist.firstName.toLowerCase().includes(query.toLowerCase()) ||
@@ -361,7 +361,6 @@ export const NavBarSearchBar = ({
       <AutoComplete
         // open={true}
         options={options}
-        autoClearSearchValue={true}
         popupMatchSelectWidth={false}
         popupClassName='popup'
         // notFoundContent='Sorry, Artist not found!'

@@ -444,6 +444,7 @@ header .greetings-message {
     border-radius: 1.5rem;
     width: 100%;
     max-width: 25rem;
+    transition: all 5s ease-in-out;
   }
 
   header .greetings {
