@@ -11,6 +11,17 @@ const generateToken = (id) => {
   });
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    // Exclude the password field from the results
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 const registerUser = async (req, res) => {
   const {
     firstName,
@@ -18,18 +29,18 @@ const registerUser = async (req, res) => {
     email, // This is the incoming email field for User
     password,
     role,
-    profilePhoto,
-    contactPhone,
-    address,
-    organizationNumber,
+    profilePhoto= "",
+    contactPhone= "",
+    address= "",
+    organizationNumber= "",
     socialMediaLinks,
     availableDates,
     gallery,
     eventsHosted,
-    nickName,
+    nickName= "",
     genre,
-    bio,
-    companyName,
+    bio= "",
+    companyName= "",
   } = req.body;
 
   try {
@@ -241,6 +252,7 @@ const updateUserDetails = async (req, res) => {
 };
 
 module.exports = {
+  getAllUsers,
   registerUser,
   loginUser,
   getUserProfile,
