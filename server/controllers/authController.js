@@ -18,6 +18,7 @@ const registerUser = async (req, res) => {
     email, // This is the incoming email field for User
     password,
     role,
+    profilePhoto,
     contactPhone,
     address,
     organizationNumber,
@@ -45,6 +46,7 @@ const registerUser = async (req, res) => {
       email, // Use as email in User model
       password,
       role,
+      profilePhoto,
       contactPhone,
       address,
       organizationNumber,
@@ -65,6 +67,7 @@ const registerUser = async (req, res) => {
         contactEmail: email,
         contactPhone,
         address,
+        profilePhoto,
       };
 
       // Use switch-case for role handling
@@ -103,6 +106,7 @@ const registerUser = async (req, res) => {
         lastName: user.lastName,
         email,
         role: user.role,
+        profilePhoto: user.profilePhoto,
         accessToken: generateToken(user._id),
       });
     } else {
@@ -126,6 +130,7 @@ const loginUser = async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
+        profilePhoto: user.profilePhoto,
         accessToken: generateToken(user._id),
       },
     });
@@ -143,6 +148,7 @@ const getUserProfile = async (req, res) => {
         lastName,
         email,
         role,
+        profilePhoto = "",
         contactPhone = "", // Set default values if field is not present
         address = "",
         nickName = "",
@@ -163,6 +169,7 @@ const getUserProfile = async (req, res) => {
           lastName,
           email,
           role,
+          profilePhoto,
           contactPhone,
           address,
           nickName,
@@ -199,6 +206,7 @@ const updateUserDetails = async (req, res) => {
       email: updateData.email,
       contactPhone: updateData.contactPhone,
       address: updateData.address,
+      profilePhoto: updateData.profilePhoto,
       // Include other common fields
     };
 

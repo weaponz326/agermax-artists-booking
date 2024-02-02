@@ -24,6 +24,9 @@ const userSchema = mongoose.Schema({
     required: true,
     enum: ["admin", "artist", "organizer"],
   },
+  profilePhoto: {
+    type: String
+  },
   contactPhone: { 
     type: String,
     // required: true 
