@@ -1,30 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import authConfig from 'src/configs/auth'
-
-// ** MUI Imports
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Step from '@mui/material/Step'
-import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
-import Stepper from '@mui/material/Stepper'
-import StepLabel from '@mui/material/StepLabel'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-
-// ** Custom Hooks and Components
 import { useAuth } from 'src/hooks/useAuth'
+import authConfig from 'src/configs/auth'
+import { Box, Card, Step, Grid, Button, Stepper, StepLabel, TextField, Typography, CardContent } from '@mui/material'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import FileUploaderMultiple from 'src/components/FileUploader/FileUploader'
+import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 const steps = ['Basic Information', 'Additional Information']
 
 const TabAccount = () => {
   const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc'
-  const { user } = useAuth() // Assume useAuth provides accessToken directly
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmNlYmZjZDYwNzhkMWNlZDNjOWU1NCIsImlhdCI6MTcwNjg3OTk5NiwiZXhwIjoxNzA5NDcxOTk2fQ.kR0rJg73UmA8nT7hNgB12xD5yIEK9PjGOPtSXwFc2mo'
+  const { user } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState({
     _id: '',
@@ -35,7 +23,7 @@ const TabAccount = () => {
     contactPhone: '',
     address: '',
     nickName: '',
-    genre: '',
+    genre: [],
     bio: '',
     companyName: '',
     organizationNumber: '',
@@ -45,33 +33,24 @@ const TabAccount = () => {
     eventsHosted: []
   })
 
-  // useEffect(() => {
-  //   // Fetch and set user data
-  //   if (user && accessToken) {
-  //     const fetchUserData = async () => {
-  //       try {
-  //         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
-  //           headers: { Authorization: `Bearer ${accessToken}` }
-  //         })
-  //         setFormData(response.data.userData)
-  //       } catch (error) {
-  //         console.error('Error fetching user data:', error)
-  //       }
-  //     }
+  useEffect(() => {
+    // Fetch and set user data
+    if (user && accessToken) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+          })
+          setFormData(response.data.userData)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
+      }
 
-  //     fetchUserData()
-  //   }
-  // }, [user, accessToken])
+      fetchUserData()
+    }
+  }, [user, accessToken])
 
-  const handleGalleryUpdate = (newFiles) => {
-    const updatedGallery = newFiles.map(file => ({
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        preview: file.preview // Or any other file information your backend needs
-    }));
-    setFormData({ ...formData, gallery: updatedGallery });
-};
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
@@ -178,8 +157,28 @@ const TabAccount = () => {
               onChange={e => handleFormChange('bio', e.target.value)}
             />
           </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label='Social Media Links'
+              multiline
+              rows={4}
+              value={formData.socialMediaLinks}
+              onChange={e => handleFormChange('socialMediaLinks', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label='Available Dates'
+              multiline
+              rows={4}
+              value={formData.availableDates}
+              onChange={e => handleFormChange('availableDates', e.target.value)}
+            />
+          </Grid>
           <Grid item xs={12}>
-            <FileUploaderMultiple onUpdate={handleGalleryUpdate} />
+            <FileUploaderMultiple />
           </Grid>
         </>
       )}
@@ -201,9 +200,16 @@ const TabAccount = () => {
               onChange={e => handleFormChange('organizationNumber', e.target.value)}
             />
           </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label='Events Hosted'
+              value={formData.eventsHosted}
+              onChange={e => handleFormChange('eventsHosted', e.target.value)}
+            />
+          </Grid>
         </>
       )}
-      {/* You can add admin-specific fields here if needed */}
     </>
   )
 
