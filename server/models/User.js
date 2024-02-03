@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema({
     type: String 
   },
   genre: { 
-    type: String 
+    type: [String] 
   },
   bio: { 
     type: String 
