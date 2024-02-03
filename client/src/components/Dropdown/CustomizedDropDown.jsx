@@ -36,18 +36,12 @@ const buttonStyle = {
   padding: '1.5rem 0.7rem',
   borderRadius: '1.5rem',
   justifyContent: 'space-between',
-  zIndex: '1000',
-  width: 'max-content',
   color: '#183d4c',
   border: '0.5px solid #183d4c'
 }
 
 const CustomizedDropdown = ({ className }) => {
   const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
-  if (typeof window === 'undefined') {
-    // Running on the server side during SSR
-    return null // or any other server-side representation
-  }
 
   if (isLoggedIn) {
     const onClick = ({ key }) => {
@@ -56,7 +50,7 @@ const CustomizedDropdown = ({ className }) => {
       }
     }
     return (
-      <div style={{ width: '15%', display: 'flex', justifyContent: 'flex-end' }}>
+      <div>
         <Dropdown
           menu={{
             items: isLoggedInItems,
@@ -78,12 +72,6 @@ const CustomizedDropdown = ({ className }) => {
       </div>
     )
   } else {
-    const onClick = ({ key }) => {
-      console.log({ key })
-      if (key === '1') {
-        setIsLoggedIn(true)
-      }
-    }
     return (
       <div className={`${styles.userActionsButtons} ${className}`}>
         <TabButton className={styles.userMenuSignInButton} onClick={() => setIsLoggedIn(true)}>

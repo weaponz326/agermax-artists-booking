@@ -1,9 +1,7 @@
 // ** React Imports
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import UsersListTable from 'src/components/AdminPagesSharedComponents/UsersListTable/UsersListTable'
-import AdminPagesNavBar, {
-  ViewStyleTabs
-} from 'src/components/AdminPagesSharedComponents/AdminPagesNavBar/AdminPagesNavBar'
+
 import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import styles from './users.module.css'

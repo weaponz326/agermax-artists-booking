@@ -72,6 +72,7 @@
 
 .listViewTab {
   border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
+  cursor: pointer;
 }
 
 .activeTab {
@@ -79,6 +80,7 @@
   background-color: var(--selected-tab-background);
   color: black;
   font-weight: bold;
+  cursor: pointer;
 }
 
 /* .tabButtonDivider {

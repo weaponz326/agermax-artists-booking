@@ -202,3 +202,17 @@
   border: none;
   outline-color: #4428f2;
 }
+
+.optionsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.optionsPicture {
+  border-radius: 50%;
+  width: 30px;
+  aspect-ratio: 1;
+}
+
+.selectOptions {
+}

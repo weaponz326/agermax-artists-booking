@@ -2,20 +2,17 @@ import { useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
-import { Button, Drawer, ConfigProvider } from 'antd'
+import { Drawer, ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
-
 import BookingCard from 'src/components/BookingCard/BookingCard'
 
 function ArtistProfile() {
   const router = useRouter()
-  console.log(router.query)
   const [artistDetails, setArtistsDetails] = useState(router.query)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   function drawerState(value) {
     setOpenDrawer(value)
-    console.log({ openDrawer })
   }
   return (
     <CustomPagesLayout>
@@ -190,37 +187,20 @@ export const SideDrawerButton = ({ openSideDrawer, openDrawer, setOpenSideDrawer
     setOpen(false)
   }
 
-  const style = {
-    backgroundColor: 'transparent',
-    position: 'relative',
-    top: '5rem',
-    padding: '0',
-    // paddingTop: '5rem',
-    right: '3rem',
-    display: 'flex',
-    width: '100%',
-    height: '85%',
-    borderRadius: '2rem'
-  }
   return (
     <div>
-      <Drawer
-        onClose={onClose}
-        style={style}
-        width={550}
-        className={styles['side-drawer']}
-        open={open}
-        autoFocus
-        closable={false}
-        title={null}
+      <ConfigProvider
+        theme={{
+          token: {
+            paddingLG: '0',
+            padding: 0
+          }
+        }}
       >
-        <BookingCard
-          setOpen={setOpen}
-          // onClose={onClose}
-          bookingCardType={bookingCardType}
-          setBookingCardType={setBookingCardType}
-        />
-      </Drawer>
+        <Drawer onClose={onClose} width={450} open={open} autoFocus closable={false} title={null}>
+          <BookingCard setOpen={setOpen} bookingCardType={bookingCardType} setBookingCardType={setBookingCardType} />
+        </Drawer>
+      </ConfigProvider>
     </div>
   )
 }

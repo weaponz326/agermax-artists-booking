@@ -137,6 +137,17 @@
   font-size: 1rem;
 }
 
+.checkMarkContainer {
+  border-radius: 100%;
+  width: 200px;
+  aspect-ratio: 1;
+  background-color: azure;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .checkMarkIcon {
   display: flex;
   align-items: center;

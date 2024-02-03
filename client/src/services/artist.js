@@ -3,7 +3,7 @@ import Unsplash from 'src/components/mock-data-apis/Unsplash'
 import usersData from './Music Artists Data.json'
 
 // const baseUrl = 'https://api.mockaroo.com/api/7e49e110?count=100&key=15462290'
-export async function getAllArtists() {
+export async function getAllUsers() {
   // const { data } = await axios.get(baseUrl)
   // return data
 
@@ -34,7 +34,7 @@ export const getRandomArtistsPhotos = async () => {
 export default async function getArtistsData() {
   try {
     const artistsPhotos = await getRandomArtistsPhotos()
-    const artistsData = await getAllArtists()
+    const artistsData = await getAllUsers()
     // const randomImage = () => artistsPhotos[Math.floor(Math.random() * 20)].urls.regular
     // const artistsData = []
     // for (let i = 0; i < artistsList.length; i++) {
@@ -46,4 +46,14 @@ export default async function getArtistsData() {
   }
 
   // Merge one phone to into every artist object
+}
+
+export async function getOnlyArtistsList() {
+  try {
+    const usersData = await getAllUsers()
+    const artistsList = usersData.filter(user => user.type === 'Artist')
+    return artistsList
+  } catch (error) {
+    console.log(error)
+  }
 }

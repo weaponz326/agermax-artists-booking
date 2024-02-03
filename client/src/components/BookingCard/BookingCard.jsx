@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
 import styles from './BookingCard.module.css'
 import { Tag } from '../Carousel/Carousel'
 import { TimePicker, ConfigProvider, Button } from 'antd'
 import BookingCalendar from '../BookingCalendar/BookingCalendar'
 import dayjs from 'dayjs'
 import { Calendar, Clock } from 'iconsax-react'
-// import Button from '../Button/Button'
 import { MdCheckCircle } from 'react-icons/md'
 import Link from 'next/link'
 
@@ -26,7 +25,6 @@ const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) 
             <div className={styles.timeChooserDivider}></div>
             <TimeChooser label={'Start-Time'} />
             <div className={styles.timeChooserDivider}></div>
-
             <TimeChooser label={'End-Time'} />
           </div>
         </section>
@@ -65,7 +63,6 @@ const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) 
       </div>
     )
   } else if (bookingCardType === 'confirmation') {
-    const nextPage = '/'
     function handleConfirmBtnClick() {
       setOpen(false)
       setBookingCardType('schedule')
@@ -76,7 +73,7 @@ const BookingCard = ({ onClose, setBookingCardType, bookingCardType, setOpen }) 
         <p className={styles.confirmationMessage}>
           Your booking is now pending moderation. We will get back to you with further details
         </p>
-        <div>
+        <div className={styles.checkMarkContainer}>
           <MdCheckCircle
             size='200'
             color='#7cdb94'

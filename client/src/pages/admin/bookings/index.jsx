@@ -12,9 +12,10 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import styles from './bookings.module.css'
 
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { DatePicker } from 'antd'
+import { DatePicker, Select, ConfigProvider } from 'antd'
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
+import { getOnlyArtistsList } from 'src/services/artist'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
@@ -227,6 +228,46 @@ export const EventStatusIcon = ({ style, className }) => {
 }
 
 export const BookingsModalContent = () => {
+  const [options, setOptions] = useState([])
+  const [artistsOptions, setArtistsOptions] = useState([])
+  useEffect(() => {
+    const fetchArtists = async () => {
+      const artists = await getOnlyArtistsList()
+      setArtistsOptions(artists)
+
+      const newOptions = artists.map(artist => {
+        const artistPicture = <img className={styles.optionsPicture} src={artist.picture} alt={artist.firstName} />
+        return {
+          label: (
+            <div className={styles.optionsContainer}>
+              {artistPicture}
+              <span>
+                {artist.firstName} {artist.lastName}
+              </span>
+            </div>
+          ),
+          value: `${artist.firstName}-${artist.lastName}`
+        }
+      })
+      setOptions(newOptions)
+    }
+    fetchArtists()
+  }, [])
+
+  // const onSearch = value => {
+  //   const newOptions = options.filter(artist => {
+  //     if (artist.value.toLowerCase().includes(value)) {
+  //       setOptions(artist)
+  //     } else {
+  //       return options
+  //     }
+  //   })
+  // }
+
+  const onChange = value => {
+    // console.log(`selected ${value}`)
+  }
+
   return (
     <div className={styles.modalCardContentUserDetails}>
       <h3>Booker Details</h3>
@@ -255,19 +296,39 @@ export const BookingsModalContent = () => {
         required
       />
       <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-
-      <select
-        placeholder='Last Name'
-        className={styles.modalCardContentInputField}
-        type='text'
-        name='last-name'
-        id='last-name'
-        required
+      <ConfigProvider
+        theme={{
+          token: {
+            controlPaddingHorizontalSM: '3rem'
+          }
+        }}
       >
-        <option value=''>Select Artist</option>
-        <option value='1'>Artist One</option>
-        <option value='2'>Artist Two</option>
-      </select>
+        <ConfigProvider
+          theme={{
+            components: {
+              Select: {
+                selectorBg: '#f2f4f8',
+                optionPadding: '0.5rem',
+                dropdownBg: '#fff',
+                // paddingSM: '3rem',
+                paddingXS: '3rem'
+              }
+            }
+          }}
+        >
+          <Select
+            // showSearch
+            className={styles.selectOptions}
+            placeholder='Select An Artist'
+            options={options}
+            optionFilterProp='children'
+            // onSearch={onSearch}
+            onChange={onChange}
+            allowClear
+          />
+        </ConfigProvider>
+      </ConfigProvider>
+
       <DatePicker
         showTime={{
           format: 'HH:mm'

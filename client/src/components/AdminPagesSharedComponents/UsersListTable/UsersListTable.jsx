@@ -1,7 +1,5 @@
-import { Table, Button, Space, Dropdown, Menu, Avatar } from 'antd'
+import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
-import React, { useEffect, useState } from 'react'
-import SlideInModal from '../SlidingModal/SlideInModal'
 
 const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => {
   // const data = [
