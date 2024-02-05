@@ -55,6 +55,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import ArtistsProvider from 'src/providers/ArtistsProvider'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -97,38 +98,37 @@ const App = props => {
 
   return (
     <Provider store={store}>
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
-        <meta
-          name='description'
-          content={`${themeConfig.templateName} –Artist Booking Platform`}
-        />
-        <meta name='keywords' content='' />
-        <meta name='viewport' content='initial-scale=1, width=device-width' />
-      </Head>
+      <ArtistsProvider>
+        <CacheProvider value={emotionCache}>
+          <Head>
+            <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
+            <meta name='description' content={`${themeConfig.templateName} –Artist Booking Platform`} />
+            <meta name='keywords' content='' />
+            <meta name='viewport' content='initial-scale=1, width=device-width' />
+          </Head>
 
-      <AuthProvider>
-        <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-          <SettingsConsumer>
-            {({ settings }) => {
-              return (
-                <ThemeComponent settings={settings}>
-                 <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                   {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
-                      {getLayout(<Component {...pageProps} />)}
-                    {/* </AclGuard> */}
-                  </Guard>
-                  <ReactHotToast>
-                    <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                  </ReactHotToast>
-                </ThemeComponent>
-              )
-            }}
-          </SettingsConsumer>
-        </SettingsProvider>
-      </AuthProvider>
-    </CacheProvider>
+          <AuthProvider>
+            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                        {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                        {getLayout(<Component {...pageProps} />)}
+                        {/* </AclGuard> */}
+                      </Guard>
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </ThemeComponent>
+                  )
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </AuthProvider>
+        </CacheProvider>
+      </ArtistsProvider>
     </Provider>
   )
 }

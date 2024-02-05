@@ -1,6 +1,13 @@
 // import { faqData } from '../mock-data-apis/Mock-data'
 import styles from './faqAccordion.module.css'
 import { useState } from 'react'
+import Accordion from '@mui/material/Accordion'
+import AccordionActions from '@mui/material/AccordionActions'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import Button from '@mui/material/Button'
+import { ExpandLess, ExpandMore } from '@material-ui/icons'
 // import { CSSTransition } from 'react-transition-group'
 
 const FaqAccordion = ({ faqTitle, faqData }) => {
@@ -13,25 +20,17 @@ const FaqAccordion = ({ faqTitle, faqData }) => {
   return (
     <div className={styles['faq-questions']}>
       {faqData.map((faq, index) => (
-        <div key={index} className={styles['faq-question']}>
-          <div className={styles['question-element']}>
-            <div
-              className={`${styles['question']} ${openIndex === index ? styles['open'] : ''}`}
-              onClick={() => handleToggle(index)}
-            >
-              {faq.question}
-            </div>
-            <button className={styles['faq-accordion-btn']} onClick={() => handleToggle(index)}>
-              {openIndex === index ? (
-                <div className={styles['faq-collapse-icon']}>-</div>
-              ) : (
-                <div className={styles['faq-collapse-icon']}>+</div>
-              )}
-            </button>
-          </div>
-          {openIndex === index && <div className={styles['answer']}>{faq.answer}</div>}
-          <div className={styles['faq-divider']}></div>
-        </div>
+        <Accordion key={index}>
+          <AccordionSummary
+            className={styles['question-element']}
+            expandIcon={<ExpandMore />}
+            aria-controls='panel1-content'
+            id='panel1-header'
+          >
+            {faq.question}
+          </AccordionSummary>
+          <AccordionDetails className={styles['answer']}>{faq.answer}</AccordionDetails>
+        </Accordion>
       ))}
     </div>
   )

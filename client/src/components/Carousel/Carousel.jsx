@@ -37,7 +37,6 @@ export default function Carousel({ artist }) {
           <Tag genre={'Gospel'} />
           <Tag genre={'R&B'} />
           <Tag genre={'Afrobeat'} />
-          <Tag genre={'Cools'} />
         </div>
         <Link href={'/artist-profile'} style={{ width: '100%' }}>
           <Button buttonText={'Book Now'} />
@@ -46,40 +45,9 @@ export default function Carousel({ artist }) {
     )
   } else {
     return (
-      <div className={styles['carousel-skeleton-container']}>
-        <div className={styles['carousel-img']}>
-          <Skeleton animation='wave' variant='rounded' height='100%' sx={{ borderRadius: 'inherit' }} />
-        </div>
-        <div className={styles['skeleton-carousel-title-text']}>
-          <Skeleton height={32} width='60%' variant='text' />
-        </div>
-        <div className={styles['skeleton-carousel-genre']}>
-          <Skeleton height={32}>
-            <Tag genre={'Rock'} />
-          </Skeleton>
-          <Skeleton height={32}>
-            <Tag genre={'Gospel'} />
-          </Skeleton>
-          <Skeleton height={32}>
-            <Tag genre={'R&B'} />
-          </Skeleton>
-          <Skeleton height={32}>
-            <Tag genre={'Afrobeat'} />
-          </Skeleton>
-          <Skeleton height={32}>
-            <Tag genre={'Cools'} />
-          </Skeleton>
-        </div>
-        <div className={styles.skeletonButtonContainer}>
-          <Skeleton
-            width='100%'
-            height='2rem'
-            sx={{ borderRadius: 'inherit' }}
-            variant='rounded'
-            className={styles.skeletonButton}
-          />
-        </div>
-      </div>
+      <>
+        <SkeletonCarousel />
+      </>
     )
   }
 }
@@ -91,6 +59,42 @@ export const Tag = ({ genre }) => {
       <Link href='#'>
         <span className={styles['carousel-genre-text']}>{genre}</span>
       </Link>
+    </div>
+  )
+}
+
+export const SkeletonCarousel = () => {
+  return (
+    <div className={styles['carousel-skeleton-container']}>
+      <div className={styles['carousel-img']}>
+        <Skeleton animation='wave' variant='rounded' height='100%' sx={{ borderRadius: 'inherit' }} />
+      </div>
+      <div className={styles['skeleton-carousel-title-text']}>
+        <Skeleton animation='wave' height={32} width='60%' variant='text' />
+      </div>
+      <div className={styles['skeleton-carousel-genre']}>
+        <Skeleton animation='wave' height={32}>
+          <Tag genre={'Rock'} />
+        </Skeleton>
+        <Skeleton animation='wave' height={32}>
+          <Tag genre={'Gospel'} />
+        </Skeleton>
+        <Skeleton animation='wave' height={32}>
+          <Tag genre={'R&B'} />
+        </Skeleton>
+        <Skeleton animation='wave' height={32}>
+          <Tag genre={'Afrobeat'} />
+        </Skeleton>
+      </div>
+      <div className={styles.skeletonButtonContainer}>
+        <Skeleton
+          width='100%'
+          height='2rem'
+          sx={{ borderRadius: 'inherit' }}
+          variant='rounded'
+          className={styles.skeletonButton}
+        />
+      </div>
     </div>
   )
 }
