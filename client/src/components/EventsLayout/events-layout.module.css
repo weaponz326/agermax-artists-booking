@@ -81,6 +81,24 @@
   padding: 1rem;
   position: relative;
 }
+
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 274px;
+  border-radius: 1.1rem;
+  padding: 1rem;
+  position: relative;
+  background-color: #dbdbdb;
+}
+.skeletonCalendarIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  justify-content: flex-end;
+  align-self: flex-end;
+}
 .evt-img {
   position: absolute;
   top: 0;
@@ -99,7 +117,8 @@
   justify-content: flex-end;
 }
 
-.calendar-icon {
+.calendar-icon,
+.ske {
   background-color: white;
   width: 2.5rem;
   aspect-ratio: 1;
@@ -138,6 +157,7 @@
 .event-preview-schedule {
   display: flex;
   align-items: center;
+  gap: 0.4rem;
 }
 
 .events-refresh-icon {

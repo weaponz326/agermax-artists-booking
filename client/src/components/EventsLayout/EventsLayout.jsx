@@ -1,31 +1,43 @@
-import { IconsansBoldClock3 } from '../IconsansBoldClock3'
-import { IconsansBoldArrowRight } from '../IconsansBoldArrowRight'
 import Link from 'next/link'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Router from 'next/router'
 import styles from './events-layout.module.css'
 import Image from 'next/image'
-import { Avatar, Card, Skeleton, Switch } from 'antd'
-const { Meta } = Card
+import Skeleton from '@mui/material/Skeleton'
+import { Clock } from 'iconsax-react'
+import { MdArrowForward } from 'react-icons/md'
+import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
+
 export default function EventsLayout({ imgList }) {
-  if (imgList.length <= 0) {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!imgList || imgList.length < 1) {
+      setLoading(true)
+    } else {
+      setLoading(false)
+    }
+  }, [imgList])
+
+  if (loading) {
     return (
       <div className={styles['main-events']}>
-        //{' '}
         <span className={`${styles['events-nav']} ${styles['see-all']}`}>
           <Link href='#'>See all</Link>
-          //{' '}
         </span>
         <div className={styles['events-preview']}>
           {Array.from({ length: 9 }).map((img, index) => (
             <Fragment key={index}>
-              <Card style={{ backgroundColor: 'grey' }} className={styles['events-preview-container']} loading={true}>
-                <Meta
-                  avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />}
-                  title='Card title'
-                  description='This is the description'
-                />
-              </Card>
+              <div className={styles['skeleton-container']}>
+                <div className={styles.skeletonCalendarIcon}>
+                  <Skeleton animation='wave' variant='rounded' width={40} height={40} />
+                </div>
+                <div>
+                  <Skeleton variant='text' width='40%' height={25} />
+                  <Skeleton variant='text' width='55%' height={25} />
+                  <Skeleton variant='text' width='45%' height={25} />
+                </div>
+              </div>
             </Fragment>
           ))}
         </div>
@@ -59,16 +71,16 @@ const EventCard = ({ imgUrl }) => {
   )
 }
 
-export const CalendarIcon = ({ style }) => {
-  return (
-    <div style={style} className={styles['calendar-icon']}>
-      <div className={styles['calendar-icon-ins-con']}>
-        <span className={styles['calender-date calendar-month']}>Dec</span>
-        <span className={styles['calendar-date calendar-day']}>28</span>
-      </div>
-    </div>
-  )
-}
+// export const CalendarIcon = ({ style }) => {
+//   return (
+//     <div style={style} className={styles['calendar-icon']}>
+//       <div className={styles['calendar-icon-ins-con']}>
+//         <span className={styles['calender-date calendar-month']}>Dec</span>
+//         <span className={styles['calendar-date calendar-day']}>28</span>
+//       </div>
+//     </div>
+//   )
+// }
 
 const EventsDetails = () => {
   return (
@@ -76,9 +88,9 @@ const EventsDetails = () => {
       <div className={styles['event-prev-detail']}>Jimi Hendrix</div>
       <div className={styles['event-prev-detail']}>Stockholm Music Arena</div>
       <div className={styles['event-preview-schedule']}>
-        <IconsansBoldClock3 className={styles['iconsans-bold-clock']} />
-        <div className='event-prev-detail'>20:00</div>
-        <IconsansBoldArrowRight className={styles['iconsans-bold-arrow']} />
+        <Clock color='orange' fill='orange' className={styles['iconsans-bold-clock']} />
+        <div className={styles['event-prev-detail']}>20:00</div>
+        <MdArrowForward color='white' />
         <div className={styles['event-prev-detail']}>01:00</div>
       </div>
     </div>

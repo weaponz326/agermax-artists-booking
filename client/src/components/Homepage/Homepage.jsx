@@ -7,7 +7,6 @@ import Image from 'next/image'
 import Button from 'src/components/Button/Button'
 import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
-import { useQuery } from 'react-query'
 import { getOnlyArtistsList, getEventsPhotos } from 'src/services/FetchData'
 
 const HomePage = () => {
@@ -19,7 +18,9 @@ const HomePage = () => {
       const eventsPhotos = await getEventsPhotos()
       const artists = await getOnlyArtistsList()
       setArtistsList(artists)
-      setImgList(eventsPhotos.slice(0, 9))
+      if (eventsPhotos) {
+        setImgList(eventsPhotos.slice(0, 9))
+      }
     }
 
     fetchData()
@@ -45,18 +46,6 @@ const HomePage = () => {
   )
 }
 export default HomePage
-
-export async function getServerSideProps() {
-  const eventsPhotos = await getEventsPhotos()
-  const artists = await getOnlyArtistsList()
-
-  return {
-    props: {
-      imgList: eventsPhotos.slice(0, 9),
-      artistsList: artists
-    }
-  }
-}
 
 export const EventsSection = ({ imgList }) => {
   return (

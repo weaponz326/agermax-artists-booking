@@ -35,20 +35,25 @@
   display: none;
 }
 
-.carousel-container {
+.carousel-container,
+.carousel-skeleton-container {
   min-width: 15.6rem;
   width: 15.625rem;
   max-width: 20rem;
   width: 100%;
   min-height: 292px;
   flex: 1;
-  padding: 0.24rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   background-color: white;
   border-radius: 1.5rem;
   align-items: center;
   box-shadow: 1px 1px 1px #183d4c49, -1px -1px 1px #183d4c49;
+}
+
+.carousel-skeleton-container {
+  background-color: #dbdbdb;
 }
 
 .carousel-img {
@@ -58,7 +63,8 @@
   border-radius: inherit;
 }
 
-.carousel-title-text {
+.carousel-title-text,
+.skeleton-carousel-title-text {
   color: #183d4c;
   font-family: 'Inter', Helvetica;
   font-size: 1rem;
@@ -67,16 +73,25 @@
   margin-bottom: 0.9rem;
   cursor: pointer;
 }
+.skeleton-carousel-title-text {
+  width: 100%;
+  margin-bottom: 0;
+}
 
 .carousel-title-text:hover {
   text-decoration: underline;
 }
 
-.carousel-genre {
+.carousel-genre,
+.skeleton-carousel-genre {
   display: flex;
   gap: 0.2rem;
   align-self: flex-start;
   flex-wrap: wrap;
+  justify-content: space-between;
+}
+.skeleton-carousel-genre {
+  width: 100%;
 }
 
 .carousel-genre-text {
@@ -124,6 +139,15 @@
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.281), 1px -1px -1px rgba(0, 0, 0, 0.281);
 }
 
+.skeletonButtonContainer {
+  border-radius: inherit;
+  margin-top: auto;
+  width: 100%;
+}
+.skeletonButton {
+  height: 2rem;
+  justify-self: flex-end;
+}
 .fab {
   font-size: 1.5rem;
 }
