@@ -3,35 +3,85 @@ import Button from '../Button/Button'
 import styles from './carousel.module.css'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import Skeleton from '@mui/material/Skeleton'
 
 export default function Carousel({ artist }) {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!artist || artist.length < 1) {
+      setLoading(true)
+    } else {
+      setLoading(false)
+    }
+  }, [artist])
   const router = useRouter()
-  return (
-    <div className={styles['carousel-container']}>
-      <div className={styles['carousel-img']}>
-        <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.picture} fill loading='eager' />
-      </div>
-      <div
-        onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}
-        className={styles['carousel-title-text']}
-      >
-        {artist.firstName} {artist.lastName}
-      </div>
+  if (!loading) {
+    return (
+      <div className={styles['carousel-container']}>
+        <div className={styles['carousel-img']}>
+          <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.picture} fill loading='eager' />
+        </div>
+        <div
+          onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}
+          className={styles['carousel-title-text']}
+        >
+          {artist.firstName} {artist.lastName}
+        </div>
 
-      {/* A good place to map your tags from Api calls */}
+        {/* A good place to map your tags from Api calls */}
 
-      <div className={styles['carousel-genre']}>
-        <Tag genre={'Rock'} />
-        <Tag genre={'Gospel'} />
-        <Tag genre={'R&B'} />
-        <Tag genre={'Afrobeat'} />
-        <Tag genre={'Cools'} />
+        <div className={styles['carousel-genre']}>
+          <Tag genre={'Rock'} />
+          <Tag genre={'Gospel'} />
+          <Tag genre={'R&B'} />
+          <Tag genre={'Afrobeat'} />
+          <Tag genre={'Cools'} />
+        </div>
+        <Link href={'/artist-profile'} style={{ width: '100%' }}>
+          <Button buttonText={'Book Now'} />
+        </Link>
       </div>
-      <Link href={'/artist-profile'} style={{ width: '100%' }}>
-        <Button buttonText={'Book Now'} />
-      </Link>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className={styles['carousel-skeleton-container']}>
+        <div className={styles['carousel-img']}>
+          <Skeleton animation='wave' variant='rounded' height='100%' sx={{ borderRadius: 'inherit' }} />
+        </div>
+        <div className={styles['skeleton-carousel-title-text']}>
+          <Skeleton height={32} width='60%' variant='text' />
+        </div>
+        <div className={styles['skeleton-carousel-genre']}>
+          <Skeleton height={32}>
+            <Tag genre={'Rock'} />
+          </Skeleton>
+          <Skeleton height={32}>
+            <Tag genre={'Gospel'} />
+          </Skeleton>
+          <Skeleton height={32}>
+            <Tag genre={'R&B'} />
+          </Skeleton>
+          <Skeleton height={32}>
+            <Tag genre={'Afrobeat'} />
+          </Skeleton>
+          <Skeleton height={32}>
+            <Tag genre={'Cools'} />
+          </Skeleton>
+        </div>
+        <div className={styles.skeletonButtonContainer}>
+          <Skeleton
+            width='100%'
+            height='2rem'
+            sx={{ borderRadius: 'inherit' }}
+            variant='rounded'
+            className={styles.skeletonButton}
+          />
+        </div>
+      </div>
+    )
+  }
 }
 
 //Tag Component
