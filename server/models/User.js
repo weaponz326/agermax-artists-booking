@@ -17,7 +17,13 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.isOAuth;
+    },
+  },
+  isOAuth: {
+    type: Boolean,
+    default: false,
   },
   role: {
     type: String,

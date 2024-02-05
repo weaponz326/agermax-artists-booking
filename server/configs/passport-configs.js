@@ -22,6 +22,8 @@ passport.use(
           lastName: profile.name.familyName,
           email,
           facebookId: profile.id,
+          isOAuth: true, 
+          role: "artist",
           // Set other fields as necessary
         });
         await user.save();
@@ -31,15 +33,6 @@ passport.use(
     }
   )
 );
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
-});
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
@@ -60,8 +53,9 @@ passport.use(
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           email,
-          oauthId: profile.id, // Consider using a generic field name for OAuth ID
-          // Additional fields as necessary
+          oauthId: profile.id, 
+          isOAuth: true, 
+          role: "artist",
         });
         await user.save();
       }
@@ -70,7 +64,6 @@ passport.use(
     }
   )
 );
-
 
 const TwitterStrategy = require("passport-twitter").Strategy;
 
@@ -92,8 +85,9 @@ passport.use(
           firstName: profile.displayName, // Twitter does not provide separate first and last names
           lastName: "", // You might not get this from Twitter
           email,
-          oauthId: profile.id,
-          // Set other fields as necessary
+          oauthId: profile.id, 
+          isOAuth: true, 
+          role: "artist",
         });
         await user.save();
       }
@@ -102,3 +96,16 @@ passport.use(
     }
   )
 );
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
