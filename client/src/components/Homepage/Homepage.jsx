@@ -5,28 +5,36 @@ import Link from 'next/link'
 import EventsLayout from 'src/components/EventsLayout/EventsLayout'
 import Image from 'next/image'
 import Button from 'src/components/Button/Button'
-import getArtistsData from 'src/services/artist'
-import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
+import { useQuery } from 'react-query'
+import { getOnlyArtistsList, getEventsPhotos } from 'src/services/FetchData'
 
-const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
+const HomePage = () => {
   const [imgList, setImgList] = useState([])
   const [artistsList, setArtistsList] = useState([])
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getArtistsData()
-      if (!data) return
-      const { artistsData, artistsPhotos } = data
-      setArtistsList(artistsData)
-      setImgList(artistsPhotos.slice(0, 9))
+      const eventsPhotos = await getEventsPhotos()
+      const artists = await getOnlyArtistsList()
+      setArtistsList(artists)
+      setImgList(eventsPhotos.slice(0, 9))
     }
 
     fetchData()
+    const isServer = typeof window === 'undefined'
+
+    if (isServer) {
+      console.log('Running on the server side')
+    } else {
+      console.log('Running on the client side')
+    }
   }, [])
+
   return (
     <div className='homepage'>
-      <Header artistsList={artistsList} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Header artistsList={artistsList} />
       <main>
         <EventsSection imgList={imgList} />
         <AboutSection />
@@ -35,6 +43,19 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
       </main>
     </div>
   )
+}
+export default HomePage
+
+export async function getServerSideProps() {
+  const eventsPhotos = await getEventsPhotos()
+  const artists = await getOnlyArtistsList()
+
+  return {
+    props: {
+      imgList: eventsPhotos.slice(0, 9),
+      artistsList: artists
+    }
+  }
 }
 
 export const EventsSection = ({ imgList }) => {
@@ -140,5 +161,3 @@ export const faqData = [
   }
   // Add more FAQ items as needed
 ]
-
-export default HomePage

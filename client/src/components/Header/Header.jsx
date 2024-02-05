@@ -1,4 +1,3 @@
-import Navbar from '../Navbar/Navbar'
 import HeaderCarouselContainer from '../HeaderCarouselContainer/HeaderCarouselContainer'
 import styles from './header.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'

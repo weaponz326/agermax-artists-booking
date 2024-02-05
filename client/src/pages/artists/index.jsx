@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artists.module.css'
-import getArtistsData from 'src/services/artist'
+import getArtistsData from 'src/services/FetchData'
 import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer/HeaderCarouselContainer'
 import CustomPagination from 'src/components/CustomPagination/CustomPagination'
 

@@ -1,4 +1,4 @@
-import { getAllUsers, getArtistById } from '../../services/artist'
+import { getAllUsers, getArtistById } from '../../services/FetchData'
 import Carousel from '../Carousel/Carousel'
 import Link from 'next/link'
 import { Fragment } from 'react'

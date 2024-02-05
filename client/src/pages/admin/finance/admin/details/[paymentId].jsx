@@ -10,7 +10,6 @@ import { FinanceProvider, useFinanceContext } from '../FinanceContext'
 const FinancialDetailsPage = () => {
   const router = useRouter()
   const { paymentId, payee, amount, date, status } = router.query
-
   return (
     <FinanceProvider>
       <div className={styles.financialDetailsPage}>
@@ -240,7 +239,7 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          // defaultValue={paymentDetails.payeeFirstName}
+          defaultValue={paymentDetails.payeeFirstName}
           id='payeeFirstName'
           name='payeeFirstName'
         />
@@ -252,7 +251,7 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          // value={paymentDetails.payeeLastName}
+          value={paymentDetails.payeeLastName}
           id='payeeLastName'
           name='payeeLastName'
           onChange={e => handleChange(e)}
@@ -265,7 +264,7 @@ export const EditSubItems = ({ paymentId }) => {
         <input
           className={styles.editInputField}
           type='text'
-          // defaultValue={paymentDetails.amount}
+          defaultValue={paymentDetails.amount}
           id='amount'
           name='amount'
         />
@@ -274,23 +273,16 @@ export const EditSubItems = ({ paymentId }) => {
         <label htmlFor='date' className={styles.formInputLabel}>
           Date:{' '}
         </label>
-        <input
-          className={styles.editInputField}
-          type='date'
-          //  defaultValue={paymentDetails.date}
-          id='date'
-          name='date'
-        />
+        <input className={styles.editInputField} type='date' defaultValue={paymentDetails.date} id='date' name='date' />
       </div>
       <div className={styles.formInput}>
         <label htmlFor='status' className={styles.formInputLabel}>
           Status:{' '}
         </label>
         <select className={styles.editInputField} name='status' id='status'>
-          <option value='Pending'>
-            Pending
-            {/* {paymentDetails.status} */}
-          </option>
+          <option value=''>-- Select --</option>
+          {/* defaultValue={paymentDetails.status} */}
+          <option value='Pending'>Pending</option>
           <option value='Paid'>Paid</option>
         </select>
       </div>
