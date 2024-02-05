@@ -25,40 +25,47 @@ const userSchema = mongoose.Schema({
     enum: ["admin", "artist", "organizer"],
   },
   profilePhoto: {
-    type: String
-  },
-  contactPhone: { 
     type: String,
-    // required: true 
   },
-  address: { 
+  contactPhone: {
     type: String,
-    // required: true 
   },
-  nickName: { 
-    type: String 
+  address: {
+    type: String,
   },
-  genre: { 
-    type: [String] 
+  nickName: {
+    type: String,
   },
-  bio: { 
-    type: String 
+  genre: {
+    type: [String],
   },
-  organizationNumber: { 
-    type: String 
+  bio: {
+    type: String,
   },
-  eventsHosted: { 
-    type: [String] 
+  organizationNumber: {
+    type: String,
   },
-  socialMediaLinks: { 
-    type: [String] 
+  eventsHosted: {
+    type: [String],
   },
-  availableDates: { 
-    type: [Date] 
+  socialMediaLinks: {
+    type: [String],
   },
-  gallery: { 
-    type: [String] 
-  },});
+  availableDates: {
+    type: [Date],
+  },
+  gallery: {
+    type: [String],
+  },
+  facebookId: {
+    type: String,
+    required: false,
+  },
+  oauthId: {
+    type: String,
+    required: false,
+  },
+});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

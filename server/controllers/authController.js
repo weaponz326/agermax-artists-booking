@@ -14,13 +14,12 @@ const generateToken = (id) => {
 const getAllUsers = async (req, res) => {
   try {
     // Exclude the password field from the results
-    const users = await User.find().select('-password');
+    const users = await User.find().select("-password");
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const registerUser = async (req, res) => {
   const {
@@ -29,18 +28,18 @@ const registerUser = async (req, res) => {
     email, // This is the incoming email field for User
     password,
     role,
-    profilePhoto= "",
-    contactPhone= "",
-    address= "",
-    organizationNumber= "",
+    profilePhoto = "",
+    contactPhone = "",
+    address = "",
+    organizationNumber = "",
     socialMediaLinks,
     availableDates,
     gallery,
     eventsHosted,
-    nickName= "",
+    nickName = "",
     genre,
-    bio= "",
-    companyName= "",
+    bio = "",
+    companyName = "",
   } = req.body;
 
   try {
@@ -135,6 +134,7 @@ const loginUser = async (req, res) => {
 
   if (user && (await user.matchPassword(password))) {
     res.json({
+      accessToken: generateToken(user._id),
       userData: {
         _id: user.id,
         firstName: user.firstName,
@@ -142,7 +142,17 @@ const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         profilePhoto: user.profilePhoto,
-        accessToken: generateToken(user._id),
+        contactPhone: user.contactPhone,
+        address: user.address,
+        nickName: user.nickName,
+        genre: user.genre,
+        bio: user.bio,
+        companyName: user.companyName,
+        organizationNumber: user.organizationNumber,
+        socialMediaLinks: user.socialMediaLinks,
+        availableDates: user.availableDates,
+        gallery: user.gallery,
+        eventsHosted: user.eventsHosted,
       },
     });
   } else {
