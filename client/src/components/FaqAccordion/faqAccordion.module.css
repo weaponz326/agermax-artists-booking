@@ -12,6 +12,7 @@
   padding: 0;
   max-width: 65rem;
   width: 100%;
+  font-size: 1rem;
   /* margin: 0 auto; */
 }
 .faq-question {
@@ -34,7 +35,7 @@
 .question-element {
   display: flex;
   justify-content: space-between;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 .faq-question-no {

@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import styles from './AirbnbCloneNavBar.module.css'
 import { formItems } from './config/headerFormConfig'
 import { useHeaderContext } from '../../providers/headerProvider'
-// import { SearchNormal1 } from 'iconsax-react'
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 
 const AirbnbCloneNavBar = () => {

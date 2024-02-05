@@ -40,7 +40,7 @@ export async function getOnlyArtistsList() {
   try {
     const usersData = await getAllUsers()
     const artistsList = usersData.filter(user => user.type === 'Artist')
-    console.log(artistsList)
+    // console.log(artistsList)
     return artistsList
   } catch (error) {
     console.log(error)

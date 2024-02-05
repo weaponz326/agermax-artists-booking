@@ -1,54 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
+import Carousel from 'src/components/Carousel/Carousel'
 import styles from './artists.module.css'
-import getArtistsData from 'src/services/FetchData'
-import HeaderCarouselContainer from 'src/components/HeaderCarouselContainer/HeaderCarouselContainer'
 import CustomPagination from 'src/components/CustomPagination/CustomPagination'
+import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
+import React, { Fragment, useEffect, useState } from 'react'
+import { useArtists } from 'src/providers/ArtistsProvider'
 
 const ArtistsPage = () => {
-  const [artistsPerPage, setArtistsPerPage] = useState(8)
+  const [artistsPerPage, setArtistsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [currentArtistsData, setCurrentArtistsData] = useState([])
+  const { artists, setArtists } = useArtists()
 
-  const [artistsDataList, setArtistDataList] = useState([])
   useEffect(() => {
     const lastIndexOfList = currentPage * artistsPerPage
     const firstIndexOfList = lastIndexOfList - artistsPerPage
-
-    const fetchArtistsLists = async () => {
-      const data = await getArtistsData()
-      if (!data) return
-      const { artistsData } = data
-      setArtistDataList(artistsData)
-      setCurrentArtistsData(artistsData.slice(firstIndexOfList, lastIndexOfList))
-      // console.log(artistsData)
-    }
-    fetchArtistsLists()
+    setCurrentArtistsData(artists.slice(firstIndexOfList, lastIndexOfList))
   }, [currentPage])
 
   return (
     <CustomPagesLayout>
       <main className={styles['main']}>
+        <div className={styles['artists-page-layout']}>
+          {!currentArtistsData || currentArtistsData.length < 1
+            ? Array.from({ length: artistsPerPage }).map((artist, index) => (
+                <Fragment key={index}>
+                  <Carousel />
+                </Fragment>
+              ))
+            : currentArtistsData.map((artist, index) => (
+                <Fragment key={index}>
+                  <Carousel artist={artist} />
+                </Fragment>
+              ))}
+        </div>
         <CustomPagination
           artistsPerPage={artistsPerPage}
-          artistsDataList={artistsDataList}
           currentArtistsData={currentArtistsData}
           setCurrentArtistsData={setCurrentArtistsData}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
-        />
-        <HeaderCarouselContainer
-          className={styles['artists-page']}
-          layout={styles['artists-page-layout']}
-          currentArtistsData={currentArtistsData}
-        />
-        <CustomPagination
-          artistsPerPage={artistsPerPage}
-          artistsDataList={artistsDataList}
-          currentArtistsData={currentArtistsData}
-          setCurrentArtistsData={setCurrentArtistsData}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
+          artists={artists}
         />
       </main>
     </CustomPagesLayout>

@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { Pagination } from 'antd'
 
-const CustomPagination = ({ artistsPerPage, artistsDataList, currentPage, setCurrentPage, setCurrentArtistsData }) => {
+const CustomPagination = ({ artistsPerPage, artists, currentPage, setCurrentPage }) => {
   const [current, setCurrent] = useState(1)
   const onChange = page => {
-    console.log(page)
     setCurrentPage(page)
   }
   return (
@@ -12,9 +11,10 @@ const CustomPagination = ({ artistsPerPage, artistsDataList, currentPage, setCur
       <Pagination
         current={currentPage}
         onChange={onChange}
-        total={artistsDataList.length}
+        total={artists.length}
         pageSize={artistsPerPage}
         showPrevNextJumpers={true}
+        responsive
       />
     </div>
   )
