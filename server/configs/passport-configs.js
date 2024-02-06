@@ -12,34 +12,27 @@ passport.use(
       profileFields: ["id", "emails", "name"], // Adjust according to the data you need
     },
     async (accessToken, refreshToken, profile, cb) => {
-      // Find or create user in your database
+      // Find or create userData in your database
       const email = profile.emails[0].value;
-      let user = await User.findOne({ email });
+      let userData = await User.findOne({ email });
 
-      if (!user) {
-        user = new User({
+      if (!userData) {
+        userData = new User({
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           email,
           facebookId: profile.id,
+          isOAuth: true,
+          role: "artist",
           // Set other fields as necessary
         });
-        await user.save();
+        await userData.save();
       }
 
-      return cb(null, user);
+      return cb(null, userData);
     }
   )
 );
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
-});
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
@@ -51,26 +44,26 @@ passport.use(
       callbackURL: "http://localhost:5000/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      // Find or create user in your database
+      // Find or create userData in your database
       const email = profile.emails[0].value;
-      let user = await User.findOne({ email });
+      let userData = await User.findOne({ email });
 
-      if (!user) {
-        user = new User({
+      if (!userData) {
+        userData = new User({
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           email,
-          oauthId: profile.id, // Consider using a generic field name for OAuth ID
-          // Additional fields as necessary
+          oauthId: profile.id,
+          isOAuth: true,
+          role: "artist",
         });
-        await user.save();
+        await userData.save();
       }
 
-      return cb(null, user);
+      return cb(null, userData);
     }
   )
 );
-
 
 const TwitterStrategy = require("passport-twitter").Strategy;
 
@@ -83,22 +76,36 @@ passport.use(
       includeEmail: true, // To include the email in the profile, if available
     },
     async (token, tokenSecret, profile, cb) => {
-      // Find or create user in your database
+      // Find or create userData in your database
       const email = profile.emails ? profile.emails[0].value : null;
-      let user = await User.findOne({ email: email });
+      let userData = await User.findOne({ email: email });
 
-      if (!user) {
-        user = new User({
+      if (!userData) {
+        userData = new User({
           firstName: profile.displayName, // Twitter does not provide separate first and last names
           lastName: "", // You might not get this from Twitter
           email,
           oauthId: profile.id,
-          // Set other fields as necessary
+          isOAuth: true,
+          role: "artist",
         });
-        await user.save();
+        await userData.save();
       }
 
-      return cb(null, user);
+      return cb(null, userData);
     }
   )
 );
+
+passport.serializeUser((userData, done) => {
+  done(null, userData.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const userData = await User.findById(id).lean();
+    done(null, userData);
+  } catch (error) {
+    done(error, null);
+  }
+});

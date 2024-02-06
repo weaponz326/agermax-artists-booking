@@ -69,39 +69,45 @@ const defaultValues = {
 }
 
 const LoginPage = () => {
-  const [rememberMe, setRememberMe] = useState(true)
-  const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // ** Hooks
-  const auth = useAuth()
-  const theme = useTheme()
-  const bgColors = useBgColor()
-  const { settings } = useSettings()
-  const hidden = useMediaQuery(theme.breakpoints.down('md'))
+  // ** Use the useAuth hook
+  const auth = useAuth();
+  const theme = useTheme();
+  const { settings } = useSettings();
+  const hidden = useMediaQuery(theme.breakpoints.down('md'));
 
   // ** Vars
-  const { skin } = settings
+  const { skin } = settings;
 
   const {
     control,
     setError,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues,
     mode: 'onBlur',
-    resolver: yupResolver(schema)
-  })
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit = data => {
-    const { email, password } = data
+    const { email, password } = data;
     auth.login({ email, password, rememberMe }, () => {
       setError('email', {
         type: 'manual',
-        message: 'Email or Password is invalid'
-      })
-    })
-  }
+        message: 'Email or Password is invalid',
+      });
+    });
+  };
+
+  // ** Function to handle OAuth login
+  const handleOAuthLogin = (provider) => {
+    // Assuming `initiateOAuth` is a method provided by your `useAuth` hook
+    auth.initiateOAuth(provider);
+  };
+
 
   return (
     <Box className='content-center'>
@@ -210,13 +216,14 @@ const LoginPage = () => {
               or
             </Divider>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
+              {/* Updated OAuth buttons */}
+              <IconButton sx={{ color: '#497ce2' }} onClick={() => handleOAuthLogin('facebook')}>
                 <Icon icon='mdi:facebook' />
               </IconButton>
-              <IconButton href='/' component={Link} sx={{ color: '#1da1f2' }} onClick={e => e.preventDefault()}>
+              <IconButton sx={{ color: '#1da1f2' }} onClick={() => handleOAuthLogin('twitter')}>
                 <Icon icon='mdi:twitter' />
               </IconButton>
-              <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
+              <IconButton sx={{ color: '#db4437' }} onClick={() => handleOAuthLogin('google')}>
                 <Icon icon='mdi:google' />
               </IconButton>
             </Box>
