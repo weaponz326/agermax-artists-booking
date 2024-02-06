@@ -15,15 +15,17 @@ export default function Navbar() {
 
   return (
     <nav className={styles['header-navbar']} ref={navBarRef}>
-      <nav className={`${styles['top-bar']} ${styles['nav-bar']}`}>
-        <div className={styles.agermaxLogoContainer}>
-          <Link href='/'>
-            <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
-          </Link>
+      <div className={styles.navBarContainer}>
+        <div className={`${styles['top-bar']} ${styles['nav-bar']}`}>
+          <div className={styles.agermaxLogoContainer}>
+            <Link href='/'>
+              <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
+            </Link>
+          </div>
+          <Search />
+          <CustomizedDropdown className={styles.userActionsButtons} />
         </div>
-        <Search />
-        <CustomizedDropdown className={styles.userActionsButtons} />
-      </nav>
+      </div>
     </nav>
   )
 }

@@ -1,4 +1,3 @@
-import { getAllUsers, getArtistById } from '../../services/FetchData'
 import Carousel, { SkeletonCarousel } from '../Carousel/Carousel'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -33,12 +32,14 @@ const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
             <p>See all</p>
           </Link>
         </div>
-        <div className={layout}>
-          {artistsList.map(artist => (
-            <Fragment key={artist.id}>
-              <Carousel artist={artist} />
-            </Fragment>
-          ))}
+        <div className={styles.carouselWrapper}>
+          <div className={layout}>
+            {artistsList.map(artist => (
+              <Fragment key={artist.id}>
+                <Carousel artist={artist} />
+              </Fragment>
+            ))}
+          </div>
         </div>
       </div>
     )

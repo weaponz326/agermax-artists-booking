@@ -6,6 +6,7 @@
   background: rgb(237, 241, 244);
   max-width: 1920px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .fab {
@@ -46,7 +47,13 @@
 .events {
   padding: 0 4rem;
 }
-
+.eventsWrapper,
+.aboutWrapper,
+.faqWrapper,
+.subscriptionWrapper {
+  max-width: 1740px;
+  margin: 0 auto;
+}
 .events-genre-buttons {
   margin-top: 1rem;
   padding: 0;
@@ -60,9 +67,9 @@
   font-size: 0.75rem;
   font-weight: 500;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 50px;
   padding: 0.1rem 0.3rem;
-  box-shadow: 1px 1px rgba(0, 0, 0, 0.281), -1px 1px rgba(0, 0, 0, 0.281);
+  box-shadow: 0px 3px 10px rgba(24, 61, 76, 0.3);
   overflow: auto;
 }
 
@@ -196,9 +203,6 @@
   display: flex;
   justify-content: space-between;
   font-size: 24px;
-}
-
-.faq-collapse-icon {
 }
 
 .faq-accordion-btn {

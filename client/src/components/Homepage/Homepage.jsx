@@ -50,15 +50,17 @@ export default HomePage
 export const EventsSection = ({ imgList }) => {
   return (
     <section className={styles['events']}>
-      <div className={styles['upcoming-events']}>
-        <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
-      </div>
-      <EventsGenreButtons genreList={mockGenreList} />
-      <EventsLayout imgList={imgList} />
-      <div className={styles['events-load-more']}>
-        <Link href={'#'}>
-          <Button buttonText={'Load more ...'} customStyles={styles['events-load-more-btn']} />
-        </Link>
+      <div className={styles.eventsWrapper}>
+        <div className={styles['upcoming-events']}>
+          <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
+        </div>
+        <EventsGenreButtons genreList={mockGenreList} />
+        <EventsLayout imgList={imgList} />
+        <div className={styles['events-load-more']}>
+          <Link href={'#'}>
+            <Button buttonText={'Load more ...'} customStyles={styles['events-load-more-btn']} />
+          </Link>
+        </div>
       </div>
     </section>
   )
@@ -67,20 +69,22 @@ export const EventsSection = ({ imgList }) => {
 export const AboutSection = () => {
   return (
     <section className={styles['about']}>
-      <div className={styles['about-content']}>
-        <Image className={styles['about-content-img']} src={'/images/rectangle-22462.png'} width={350} height={350} />
-        <div className={styles['about-message']}>
-          <div className={styles['about-message-title']}>About</div>
-          <div className={styles['about-message-content']}>
-            Donec laoreet ante et nisi ultrices lacinia. Phasellus facilisis sapien ex. Vivamus ac nulla blandit ligula
-            vulputate convallis. Mauris ut felis sit amet lectus vehicula ullamcorper quis at est. Dictumst malesuada
-            nostra eget tincidunt curabitur aliquet viverra platea. Felis augue fusce platea in nostra. Vehicula
-            venenatis iaculis enim accumsan Link.......
-          </div>
-          <div className={styles['about-read-more']}>
-            <Link href='/about'>
-              <Button buttonText={`Read more`} />
-            </Link>
+      <div className={styles.aboutWrapper}>
+        <div className={styles['about-content']}>
+          <Image className={styles['about-content-img']} src={'/images/rectangle-22462.png'} width={350} height={350} />
+          <div className={styles['about-message']}>
+            <div className={styles['about-message-title']}>About</div>
+            <div className={styles['about-message-content']}>
+              Donec laoreet ante et nisi ultrices lacinia. Phasellus facilisis sapien ex. Vivamus ac nulla blandit
+              ligula vulputate convallis. Mauris ut felis sit amet lectus vehicula ullamcorper quis at est. Dictumst
+              malesuada nostra eget tincidunt curabitur aliquet viverra platea. Felis augue fusce platea in nostra.
+              Vehicula venenatis iaculis enim accumsan Link.......
+            </div>
+            <div className={styles['about-read-more']}>
+              <Link href='/about'>
+                <Button buttonText={`Read more`} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -91,9 +95,11 @@ export const AboutSection = () => {
 export const FaqSection = () => {
   return (
     <section className={styles['faq']}>
-      <div className={styles['faq-title']}>Frequently Asked Questions</div>
-      <div className={styles['faq-container']}>
-        <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+      <div className={styles.faqWrapper}>
+        <div className={styles['faq-title']}>Frequently Asked Questions</div>
+        <div className={styles['faq-container']}>
+          <FaqAccordion faqData={faqData} faqTitle={'Frequently Asked Questions'} />
+        </div>
       </div>
     </section>
   )
@@ -102,16 +108,18 @@ export const FaqSection = () => {
 export const SubscriptionSection = () => {
   return (
     <section className={styles['subscription']}>
-      <div className={styles['subscription-details']}>
-        <div className={styles['join-agermax']}>Haven’t joined Agermax yet?</div>
-        <div className={styles['get-started']}>Let’s get you started.</div>
-        <form className={styles['subscription-form']}>
-          <input className={styles['subscription-email']} type='email' placeholder='someone@example.com' required />
-          <Button buttonText={'Register'} type={'submit'} />
-        </form>
-        <div className={styles['subscribe']}>
-          <input type='checkbox' />
-          <p>Subscribe to receive event and promotion notifications.</p>
+      <div className={styles.subscriptionWrapper}>
+        <div className={styles['subscription-details']}>
+          <div className={styles['join-agermax']}>Haven’t joined Agermax yet?</div>
+          <div className={styles['get-started']}>Let’s get you started.</div>
+          <form className={styles['subscription-form']}>
+            <input className={styles['subscription-email']} type='email' placeholder='someone@example.com' required />
+            <Button buttonText={'Register'} type={'submit'} />
+          </form>
+          <div className={styles['subscribe']}>
+            <input type='checkbox' />
+            <p>Subscribe to receive event and promotion notifications.</p>
+          </div>
         </div>
       </div>
     </section>
