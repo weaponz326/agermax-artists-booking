@@ -1,5 +1,6 @@
 // routes/authRoutes.js
 const jwt = require('jsonwebtoken'); // Assuming you're using JWT
+const generateToken = require('../utils/generateToken'); // Adjust the path as necessary
 
 
 const express = require("express");
@@ -32,13 +33,6 @@ router
   );
 
 
-// Function to generate a token (assuming you have this somewhere in your utilities)
-const generateToken = (user) => {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '30d', // Adjust the expiresIn according to your needs
-  });
-};
-
 router.get(
   "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
@@ -56,16 +50,30 @@ router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
+// Google OAuth callback, modified to redirect with token and user data
+router.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  async (req, res) => {
     const token = generateToken(req.user);
-    // Successful authentication
-    res.cookie('accessToken', token, { httpOnly: true, secure: true, sameSite: 'None' }); // Modify according to your needs
-    res.redirect(`${process.env.FRONTEND_URL}/admin/home`);
+    const user = req.user;
+
+    // Serialize user data into a query string
+    // It's important to only include non-sensitive data
+    // For more data or sensitive information, consider only sending the token and then fetching user details in a separate secure call
+    const userData = encodeURIComponent(JSON.stringify({
+      _id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role
+      // Add other non-sensitive fields as needed
+    }));
+
+    // Redirect to the frontend with the token and userData as query parameters
+    res.redirect(`${process.env.FRONTEND_URL}/admin/home?accessToken=${token}&userData=${userData}`);
   }
 );
+
 
 // Twitter OAuth routes
 router.get("/auth/twitter", passport.authenticate("twitter"));

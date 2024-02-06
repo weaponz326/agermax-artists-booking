@@ -32,27 +32,32 @@ const AuthProvider = ({ children }) => {
 
   const router = useRouter();
 
+
   useEffect(() => {
     const fetchUser = async () => {
-      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName);
-      if (storedToken) {
-        setLoading(true);
-        try {
-          const { data } = await axios.get(authConfig.meEndpoint, {
+      setLoading(true);
+      try {
+        const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName);
+        if (storedToken) {
+          // Make sure axios requests include credentials (cookies) if needed
+          axios.defaults.withCredentials = true;
+          const response = await axios.get(authConfig.meEndpoint, {
             headers: { Authorization: `Bearer ${storedToken}` },
           });
-          setUser(data.userData);
-        } catch (err) {
-          console.error("Error fetching user:", err);
-          setUser(null);
-          window.localStorage.removeItem(authConfig.storageTokenKeyName);
-        } finally {
-          setLoading(false);
+
+          console.log('OAuth Response:', response.data); // Log the OAuth response
+
+          setUser(response.data.userData);
         }
-      } else {
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        setUser(null);
+        window.localStorage.removeItem(authConfig.storageTokenKeyName);
+      } finally {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, []);
 
