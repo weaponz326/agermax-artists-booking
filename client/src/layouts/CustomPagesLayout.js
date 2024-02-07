@@ -15,7 +15,7 @@ const CustomPagesLayout = ({ children }) => {
         }}
       >
         <Navbar />
-        <main style={{ flex: '1', paddingTop: '5rem' }} className='page-layout-layout'>
+        <main style={{ flex: '1', paddingTop: '5rem', background: '#EDF1F4' }} className='page-layout-layout'>
           {children}
         </main>
         <Footer />

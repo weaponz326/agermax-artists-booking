@@ -67,6 +67,7 @@ const EventCard = ({ imgUrl }) => {
       <Image className={styles['evt-img']} src={imgUrl} alt='Alt Text' loading='eager' fill />
       <CalendarIcon />
       <EventsDetails />
+      <div className={styles.gradientOverlay}></div>
     </div>
   )
 }
@@ -84,11 +85,11 @@ const EventCard = ({ imgUrl }) => {
 
 const EventsDetails = () => {
   return (
-    <div>
+    <div className={styles.eventDetailsWrapper}>
       <div className={styles['event-prev-detail']}>Jimi Hendrix</div>
       <div className={styles['event-prev-detail']}>Stockholm Music Arena</div>
       <div className={styles['event-preview-schedule']}>
-        <Clock color='orange' fill='orange' className={styles['iconsans-bold-clock']} />
+        <Clock color='orange' fill='orange' variant='Bold' className={styles['iconsans-bold-clock']} />
         <div className={styles['event-prev-detail']}>20:00</div>
         <MdArrowForward color='white' />
         <div className={styles['event-prev-detail']}>01:00</div>

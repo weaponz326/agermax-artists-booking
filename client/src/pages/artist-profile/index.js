@@ -5,6 +5,7 @@ import styles from './artist-profile.module.css'
 import { Drawer, ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
+import Link from 'next/link'
 
 function ArtistProfile() {
   const router = useRouter()
@@ -45,22 +46,24 @@ const EventsSection = () => {
       <Card className={styles['events-card']}>
         <TabView config={tabConfig} />
       </Card>
+      <div className={styles.moreBtn}>More</div>
       <div className={styles['divider']}></div>
       <div className={styles['videos-block']}>
-        <div className={styles['video-item']}>
-          <PlayCircle size={80} className={styles['play-icon']} color='white' />
-          <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
-        </div>
-        <div className={styles['video-item']}>
-          <PlayCircle size={80} className={styles['play-icon']} color='white' />
-          <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
-        </div>
-        <div className={styles['video-item']}>
-          <PlayCircle size={80} className={styles['play-icon']} color='white' />
-          <img src='https://source.unsplash.com/3tYZjGSBwbk' height={350} width={'100%'} alt='profile-image' />
-        </div>
+        <VideoItem />
+        <VideoItem />
+        <VideoItem />
+        <VideoItem />
       </div>
     </section>
+  )
+}
+
+export const VideoItem = () => {
+  return (
+    <div className={styles['video-item']}>
+      <PlayCircle size={80} className={styles['play-icon']} color='white' />
+      <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='event-video' className={styles.videoImage} />
+    </div>
   )
 }
 
@@ -113,8 +116,8 @@ const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, 
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
           <p className={styles['body']}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque obcaecati, minima nisi consectetur ipsa
-            voluptate amet cumque nihil ab ipsum modi illum.
+            As John Doe, I'm a passionate and versatile artist, weaving tales through the strings of my guitar and the
+            depth of my vocals.
           </p>
         </div>
       </Card>
@@ -148,14 +151,14 @@ const EventsTable = ({}) => {
             <p className={styles['location-name']}>Stockholm Music Stadium</p>
           </div>
           <div className={styles['event-location']}>
-            <a href='#'>
+            <Link href='#' className={styles.openMap}>
               Open Map <ExportSquare size={13} />
-            </a>
+            </Link>
             <p className={styles['event-text']}>
-              Street address 18 <Location size={12} />
+              Street address 18 <Location variant='Bold' size={12} />
             </p>
             <p className={styles['event-text']}>
-              20:00 - 01:00 <Clock size={12} />
+              20:00 - 01:00 <Clock size={12} variant='Bold' />
             </p>
           </div>
         </div>

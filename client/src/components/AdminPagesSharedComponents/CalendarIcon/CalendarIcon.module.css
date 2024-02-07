@@ -4,6 +4,7 @@
 }
 
 .calendar-icon {
+  z-index: 1;
   background-color: white;
   width: 2.5rem;
   aspect-ratio: 1;
