@@ -7,13 +7,13 @@ const baseUrl = 'https://api.mockaroo.com/api/7e49e110?count=100&key=15462290'
 export async function getAllUsers() {
   try {
     const { data } = await axios.get(baseUrl)
-    //Add Downloaded Dummy Data Conditionally
-    if (!data) return usersData
+    //Added Downloaded Dummy Data Conditionally, just in case
+    // if (!data) return usersData
     return data
   } catch (error) {
     console.log('Error: ', error)
     // throw new Error(`An error occurred while fetching the user list`)
-    return usersData
+    // return usersData
   }
 }
 
@@ -49,7 +49,7 @@ export async function getOnlyArtistsList() {
 
 export default async function getArtistsData() {
   try {
-    const artistsPhotos = await getRandomArtistsPhotos()
+    const artistsPhotos = await getEventsPhotos()
     const artistsList = await getOnlyArtistsList()
     return { artistsList, artistsPhotos }
   } catch (error) {

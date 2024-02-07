@@ -20,11 +20,12 @@
   max-width: 1804px;
   margin: 0 auto;
   padding: 0 4rem;
-  width: 100vw;
+  width: 100%;
 }
 
 .hot-artists-nav p {
   margin: 0;
+  flex: 1;
 }
 
 /* .header-carousel p {

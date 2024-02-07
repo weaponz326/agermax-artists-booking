@@ -78,7 +78,8 @@
   place-items: center;
 }
 
-.profile-card .avatar-container img {
+.profile-card .avatar-container img,
+.skeletonImg {
   margin: 0;
   padding: 0;
   border: none;
@@ -275,6 +276,8 @@
 }
 .moreBtn {
   margin: 0 auto;
+  position: absolute;
+  bottom: -48px;
   display: grid;
   place-items: center;
   color: #4b627f;
@@ -446,7 +449,8 @@
   z-index: 1;
   transform: translate(-50%, -50%);
 }
-.events-section .videos-block .video-item img {
+.events-section .videos-block .video-item img,
+.videoImage {
   margin: 0;
   padding: 0;
   border: none;
