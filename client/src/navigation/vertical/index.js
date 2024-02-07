@@ -36,7 +36,7 @@ const navigation = () => {
               // Check the user's role and change the path accordingly
               path: user.role === 'admin' ? '/admin/finance/admin' :
                     user.role === 'organizer' ? '/admin/finance/organizer' :
-                    user.role === 'artist' ? '/admin/finance/artist' : '/admin/finance', 
+                    user.role === 'artist' ? '/admin/finance/artist' : '/admin/finance',
               icon: 'tabler:report-money'
             }
           ]
@@ -46,6 +46,11 @@ const navigation = () => {
       path: '/admin/account',
       title: 'Account',
       icon: 'tabler:user-circle'
+    },
+    {
+      path: '/',
+      title: 'Homepage',
+      icon: 'tabler:arrow-back'
     }
   ]
 
