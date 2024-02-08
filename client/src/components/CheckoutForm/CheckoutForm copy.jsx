@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { useAuth } from 'src/hooks/useAuth';
+import  authConfig  from 'src/configs/auth';
 import { useRouter } from 'next/router';
 import { Button, TextField, Box, Card, Typography, Snackbar } from '@mui/material';
+
 
 const cardElementOptions = {
   style: {
@@ -27,8 +29,7 @@ const cardElementOptions = {
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  // const accessToken = useAuth();
-  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YWZhNTI3MmI1ZDJhZDQzMzBlMDI2NSIsImlhdCI6MTcwNjAwOTg5NSwiZXhwIjoxNzA4NjAxODk1fQ.JQE4OzgIT0DxK-2_ddlkzsB4WasvD99GgNK0DMSrLGc";
+  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');

@@ -10,9 +10,8 @@ import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 const steps = ['Basic Information', 'Additional Information']
 
 const TabAccount = () => {
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmNlYmZjZDYwNzhkMWNlZDNjOWU1NCIsImlhdCI6MTcwNjg3OTk5NiwiZXhwIjoxNzA5NDcxOTk2fQ.kR0rJg73UmA8nT7hNgB12xD5yIEK9PjGOPtSXwFc2mo'
-  const { user } = useAuth()
+   const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+   const { user } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState({
     _id: '',
