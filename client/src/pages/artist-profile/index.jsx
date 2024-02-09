@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
@@ -6,8 +6,9 @@ import { Drawer, ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
-import getArtistsData, { getEventsPhotos } from 'src/services/FetchData'
+import { getEventsPhotos } from 'src/services/FetchData'
 import Skeleton from '@mui/material/Skeleton'
+import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 
 function ArtistProfile() {
   const router = useRouter()
@@ -87,9 +88,6 @@ const EventsSection = ({ artistDetails }) => {
 
       <div className={styles['divider']}></div>
       <div className={styles['videos-block']}>
-        <VideoItem />
-        <VideoItem />
-        <VideoItem />
         <VideoItem />
       </div>
     </section>
@@ -172,7 +170,7 @@ const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, 
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
           {artistDetails.length ? (
-            <img src={artistDetails.picture} alt='profile-image'></img>
+            <img src={artistDetails.picture} alt='profile-image' />
           ) : (
             <Skeleton
               animation='wave'
@@ -191,27 +189,20 @@ const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, 
           <Tag>Trubadur</Tag>
         </div>
         <div className={styles['button-container']}>
-          <button onClick={() => drawerState(true)} className={styles['side-drawer-button']}>
-            Book Now
-          </button>
+          <TransitionsModal
+            btnClassName={styles['side-drawer-button']}
+            drawerState={drawerState}
+            openSideDrawer={openSideDrawer}
+            openDrawer={openDrawer}
+            setOpenSideDrawer={setOpenSideDrawer}
+            modalContent={<BookingCard />}
+          />
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>
-            As John Doe, I'm a passionate and versatile artist, weaving tales through the strings of my guitar and the
-            depth of my vocals.
-          </p>
+          <p className={styles['body']}>{artistDetails.bio}</p>
         </div>
       </Card>
-
-      <div className={styles.aside}>
-        <SideDrawerButton
-          drawerState={drawerState}
-          openSideDrawer={openSideDrawer}
-          openDrawer={openDrawer}
-          setOpenSideDrawer={setOpenSideDrawer}
-        />
-      </div>
     </section>
   )
 }
@@ -346,7 +337,7 @@ export const SideDrawerButton = ({ openSideDrawer, openDrawer, setOpenSideDrawer
   )
 }
 
-const Tag = ({ children }) => {
+export const Tag = ({ children }) => {
   return (
     <div className={styles['tag']}>
       <span>{children}</span>
