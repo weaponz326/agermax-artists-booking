@@ -160,9 +160,13 @@
   gap: 12px;
   z-index: 1;
 }
-
 .event-prev-detail {
   color: white;
+}
+.event-prev-detail.artist-name {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .event-preview-schedule {

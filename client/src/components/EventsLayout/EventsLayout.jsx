@@ -86,7 +86,7 @@ const EventCard = ({ imgUrl }) => {
 const EventsDetails = () => {
   return (
     <div className={styles.eventDetailsWrapper}>
-      <div className={styles['event-prev-detail']}>Jimi Hendrix</div>
+      <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>Jimi Hendrix</div>
       <div className={styles['event-prev-detail']}>Stockholm Music Arena</div>
       <div className={styles['event-preview-schedule']}>
         <Clock color='orange' fill='orange' variant='Bold' className={styles['iconsans-bold-clock']} />
