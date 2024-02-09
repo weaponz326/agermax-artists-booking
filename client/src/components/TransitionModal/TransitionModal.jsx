@@ -2,11 +2,8 @@ import * as React from 'react'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
-import Fade from '@mui/material/Fade'
 import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
 import Slide from '@mui/material/Slide'
-import { borderRadius, minHeight } from '@mui/system'
 
 const style = {
   position: 'absolute',
@@ -17,14 +14,13 @@ const style = {
   bgcolor: 'white',
   border: 'none',
   borderRadius: '36px',
-  minHeight: '95%',
+  height: '95%',
   boxShadow: 24,
   boxShadow: '0px 10px 30px #183D4C',
   p: 5
 }
 
-export default function TransitionsModal({ modalContent, btnClassName }) {
-  const [open, setOpen] = React.useState(false)
+export default function TransitionsModal({ modalContent, btnClassName, open, setOpen }) {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
