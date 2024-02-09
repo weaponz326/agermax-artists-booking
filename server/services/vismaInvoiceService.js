@@ -1,6 +1,6 @@
 // utils/vismaInvoice.js
 const axios = require('axios');
-const getVismaToken = require('./vismaAuth');
+const getVismaToken = require('../utils/vismaAuth');
 
 const createVismaInvoice = async (bookingDetails) => {
   const token = await getVismaToken();

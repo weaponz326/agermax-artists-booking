@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
-const { createVismaInvoice } = require('../services/vismaInvoice');
+const { createVismaInvoice } = require('../services/vismaInvoiceService');
 
 // Route to handle booking approval and invoice creation
 router.post('/approveBooking/:bookingId', async (req, res) => {
