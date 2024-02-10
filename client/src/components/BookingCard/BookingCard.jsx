@@ -12,20 +12,20 @@ import {
   IconButton
 } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import CloseIcon from '@mui/icons-material/Close'
+// import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+// import CloseIcon from '@mui/icons-material/Close'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import { Tag } from 'src/pages/artist-profile'
-import { borderRadius, fontFamily } from '@mui/system'
+// import { borderRadius, fontFamily } from '@mui/system'
 import { Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
-import { TimeField } from '@mui/x-date-pickers/TimeField'
-import { CheckroomSharp } from '@mui/icons-material'
-import { CheckCircle } from '@material-ui/icons'
+// import { TimeField } from '@mui/x-date-pickers/TimeField'
+// import { CheckroomSharp } from '@mui/icons-material'
+import CheckCircle from '@material-ui/icons/CheckCircle'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
