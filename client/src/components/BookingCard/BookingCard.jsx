@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -20,8 +20,12 @@ import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import { Tag } from 'src/pages/artist-profile'
-import { borderRadius } from '@mui/system'
-import { Calendar } from 'iconsax-react'
+import { borderRadius, fontFamily } from '@mui/system'
+import { Calendar, Clock } from 'iconsax-react'
+import styles from './BookingCard.module.css'
+import { TimeField } from '@mui/x-date-pickers/TimeField'
+import { CheckroomSharp } from '@mui/icons-material'
+import { CheckCircle } from '@material-ui/icons'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -34,16 +38,62 @@ const customTheme = createTheme({
         root: {
           color: '#4B627F',
           padding: '0',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          fontFamily: 'inherit'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          border: 'none',
+          padding: '0',
+          fontFamily: 'inherit'
+        }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: '#183D4C',
+          fontSize: '19px',
+          fontWeight: '450',
+          border: 'none',
+          fontFamily: 'inherit'
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          borderRadius: '9px',
+          '&:hover': {
+            backgroundColor: '#FC8A5E'
+          }
         }
       }
     },
 
+    // MuiButton: {
+    //   styleOverrides: {
+    //     root: {
+    //       padding: '5px  16px',
+    //       borderRadius: '9px',
+    //       background: '#FC8A5E',
+    //       '&.Mui-selected': {
+    //         backgroundColor: '#f07a4b'
+    //       },
+    //       color: 'white',
+    //       fontFamily: 'inherit'
+    //     }
+    //   }
+    // },
     MuiCard: {
       styleOverrides: {
         root: {
           boxShadow: 'none',
-          padding: '24px'
+          padding: '24px',
+          fontFamily: 'inherit'
         }
       }
     },
@@ -51,7 +101,8 @@ const customTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: 'none',
-          padding: '0'
+          padding: '0',
+          fontFamily: 'inherit'
         }
       }
     },
@@ -59,7 +110,8 @@ const customTheme = createTheme({
     MuiMobileStepper: {
       styleOverrides: {
         root: {
-          fontSize: '16px'
+          fontSize: '16px',
+          fontFamily: 'inherit'
         }
       }
     },
@@ -67,6 +119,7 @@ const customTheme = createTheme({
       styleOverrides: {
         root: {
           color: '#4B627F',
+          fontFamily: 'inherit',
           padding: '0',
           fontSize: '16px',
           '&:hover': {
@@ -87,13 +140,21 @@ const customTheme = createTheme({
   }
 })
 
-function BookingCard() {
+function BookingCard({ open, setOpen }) {
   const [activeStep, setActiveStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
   const [getInTime, setGetInTime] = useState(null)
   const [startTime, setStartTime] = useState(null)
   const [endTime, setEndTime] = useState(null)
-  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [disableNext, setDisableNext] = useState(true)
+
+  useEffect(() => {
+    if (!startTime || !endTime || !selectedDate || !getInTime) {
+      setDisableNext(true)
+    } else {
+      setDisableNext(false)
+    }
+  }, [selectedDate, getInTime, startTime, endTime])
 
   const steps = ['Select Date', 'Select Times', 'Summary']
 
@@ -102,25 +163,32 @@ function BookingCard() {
   }
 
   const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
+    if (activeStep !== 0) setActiveStep(prevActiveStep => prevActiveStep - 1)
+    if (activeStep === 0) setOpen(false)
+    return
+  }
+
+  const handleDateChange = date => {
+    console.log(date.format('YYYY-MM-DD'))
+    setSelectedDate(date.format('YYYY-MM-DD'))
   }
 
   const handleSnackbarClose = () => {
-    setOpenSnackbar(false)
+    // setDisableNext(false)
   }
 
   const handleConfirmBooking = () => {
     // Logic to confirm booking
-    setOpenSnackbar(true)
+    setDisableNext(true)
   }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={customLocale}>
       <ThemeProvider theme={customTheme}>
-        <Card>
-          <CardContent>
+        <Card sx={{ height: '100%', paddingBottom: '0', fontFamily: 'var(--main-font-family)' }}>
+          <CardContent sx={{ height: '100%' }}>
             {activeStep === 0 && (
-              <Grid>
+              <Grid container flexDirection='column' height='100%' color='#183D4C'>
                 <Typography sx={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
                   John Doe
                 </Typography>
@@ -151,48 +219,127 @@ function BookingCard() {
                       }
                     }}
                     disablePast
+                    onChange={handleDateChange}
                   />
                 </Grid>
-                <Typography gutterBottom fontSize='17px' color='#183D4C'>
+                <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
                   What time?
                 </Typography>
                 <Grid container border='1px solid #CBD4DC' borderRadius='12px'>
-                  <Grid item xs={4} border='none'>
+                  <Grid item xs={4} padding={1.5}>
+                    <Typography color='#4B627F' fontSize='13px'>
+                      Get In Time{' '}
+                    </Typography>
                     <TimePicker
-                      label='Get In Time'
+                      defaultValue={new Date().getHours()}
+                      ampm={false}
+                      minutesStep={15}
                       value={getInTime}
                       onChange={time => setGetInTime(time)}
                       renderInput={params => <TextField {...params} />}
+                      sx={{
+                        '& .MuiTextField-root': {
+                          paddingRight: '12px'
+                        },
+                        '& .MuiOutlinedInput-input': {
+                          padding: '0',
+                          fontSize: '19px',
+                          color: '#183D4C',
+                          fontWeight: '600'
+                        },
+                        '& .MuiIconButton-root': {
+                          padding: '0'
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          padding: '0 10px 0 0'
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                        '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+                      }}
+                      format='HH:mm'
                     />
                   </Grid>
-                  <Grid item border='none' xs={4}>
+                  <Grid item xs={4} padding={1.5}>
+                    <Typography color='#4B627F' fontSize='13px'>
+                      Start Time
+                    </Typography>
                     <TimePicker
-                      label='Start Time'
+                      defaultValue={new Date().getHours()}
+                      ampm={false}
+                      minutesStep={15}
                       value={startTime}
                       onChange={time => setStartTime(time)}
                       renderInput={params => <TextField {...params} />}
+                      sx={{
+                        '& .MuiTextField-root': {
+                          paddingRight: '12px'
+                        },
+                        '& .MuiOutlinedInput-input': {
+                          padding: '0',
+                          fontSize: '19px',
+                          color: '#183D4C',
+                          fontWeight: '600'
+                        },
+                        '& .MuiIconButton-root': {
+                          padding: '0'
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          padding: '0 10px 0 0'
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                        '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+                      }}
+                      format='HH:mm'
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={4} padding={1.5}>
+                    <Typography color='#4B627F' fontSize='13px'>
+                      End Time
+                    </Typography>
                     <TimePicker
-                      label='End Time'
+                      defaultValue={new Date().getHours()}
+                      ampm={false}
+                      minutesStep={15}
                       value={endTime}
                       onChange={time => setEndTime(time)}
                       renderInput={params => <TextField {...params} />}
+                      sx={{
+                        '& .MuiTextField-root': {
+                          paddingRight: '12px'
+                        },
+                        '& .MuiOutlinedInput-input': {
+                          padding: '0',
+                          fontSize: '19px',
+                          color: '#183D4C',
+                          fontWeight: '600'
+                        },
+                        '& .MuiIconButton-root': {
+                          padding: '0'
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          padding: '0 10px 0 0'
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                        '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+                      }}
+                      format='HH:mm'
                     />
                   </Grid>
                 </Grid>
-                <NavMobileStepper
-                  activeStep={activeStep}
-                  setActiveStep={setActiveStep}
-                  handleBack={handleBack}
-                  handleNext={handleNext}
-                />
+                <Grid marginTop='auto'>
+                  <NavMobileStepper
+                    activeStep={activeStep}
+                    setActiveStep={setActiveStep}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                    disableNext={disableNext}
+                  />
+                </Grid>
               </Grid>
             )}
 
             {activeStep === 1 && (
-              <Grid container flexDirection='column'>
+              <Grid height='100%' container flexDirection='column'>
                 <Typography fontSize='24px' fontWeight='500' gutterBottom>
                   John Doe
                 </Typography>
@@ -200,50 +347,110 @@ function BookingCard() {
                   <Tag>Rock</Tag>
                   <Tag>Afrobeat</Tag>
                 </Grid>
-                <Grid container justifyContent='space-between'>
-                  <Typography fontSize='19px' color='#183D4C'>
+                <Grid container justifyContent='space-between' alignItems='center'>
+                  <Typography fontSize='19px' fontWeight='450'>
                     Summary
                   </Typography>
                   <Typography fontSize='15px' color='#62AFE8'>
                     Change
                   </Typography>
                 </Grid>
-                <Grid container>
+                <Grid container className={styles.summaryDetailsContainer}>
                   <Grid item>
                     <Calendar />
                   </Grid>
-                  <Grid container>
-                    <Typography>Date</Typography>
-                    <Typography>2024-01-24</Typography>
+                  <Grid item>
+                    <Typography fontSize='15px' color='#4B627F'>
+                      Date
+                    </Typography>
+                    <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
+                      {selectedDate ? selectedDate : '---'}
+                    </Typography>
                   </Grid>
                 </Grid>
-                <Typography>
-                  Date: {selectedDate ? selectedDate.toDateString() : 'Not selected'}
-                  <br />
-                  Get In Time: {getInTime ? getInTime.toLocaleTimeString() : 'Not selected'}
-                  <br />
-                  Start Time: {startTime ? startTime.toLocaleTimeString() : 'Not selected'}
-                  <br />
-                  End Time: {endTime ? endTime.toLocaleTimeString() : 'Not selected'}
-                </Typography>
-                <NavMobileStepper
-                  activeStep={activeStep}
-                  setActiveStep={setActiveStep}
-                  handleBack={handleBack}
-                  handleNext={handleNext}
-                />
+                <Grid container className={styles.summaryDetailsContainer}>
+                  <Grid item>
+                    <Clock />
+                  </Grid>
+                  <Grid display='flex' gap={8}>
+                    <Grid item textAlign='center'>
+                      <Typography fontSize='15px' color='#4B627F'>
+                        Get In
+                      </Typography>
+                      <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
+                        {getInTime ? getInTime.format('HH:mm') : '---'}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign='center'>
+                      <Typography fontSize='15px' color='#4B627F'>
+                        Start
+                      </Typography>
+                      <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
+                        {startTime ? startTime.format('HH:mm') : '---'}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign='center'>
+                      <Typography fontSize='15px' color='#4B627F'>
+                        End
+                      </Typography>
+                      <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
+                        {endTime ? endTime.format('HH:mm') : '---'}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid container gap={4} marginTop={3}>
+                  <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>Your Details</Typography>
+                </Grid>
+                <Grid marginTop='auto'>
+                  <NavMobileStepper
+                    activeStep={activeStep}
+                    setActiveStep={setActiveStep}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                  />
+                </Grid>
               </Grid>
             )}
             {activeStep === 2 && (
-              <Grid>
-                <Typography>
-                  Date: {selectedDate ? selectedDate.toDateString() : 'Not selected'}
-                  <br />
-                  Get In Time: {getInTime ? getInTime.toLocaleTimeString() : 'Not selected'}
-                  <br />
-                  Start Time: {startTime ? startTime.toLocaleTimeString() : 'Not selected'}
-                  <br />
-                  End Time: {endTime ? endTime.toLocaleTimeString() : 'Not selected'}
+              <Grid textAlign='center' color='#183D4C'>
+                <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
+                  Thank you!
+                </Typography>
+                <Typography fontSize='17px' fontWeight='400' marginTop='40px'>
+                  Your booking is now pending moderation. We will get back to you with further details.
+                </Typography>
+                <Grid marginTop={4}>
+                  <CheckCircle
+                    style={{
+                      color: '#32ED7D',
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '50%',
+                      padding: '0px',
+                      border: '2px solid red'
+                    }}
+                  />
+                </Grid>
+                <Button
+                  sx={{
+                    background: '#FC8A5E',
+                    width: '70%',
+                    fontSize: '19px',
+                    marginTop: '8rem',
+                    color: 'white',
+                    borderRadius: '50px',
+                    textTransform: 'none',
+                    boxShadow: '0px 8px 20px #fc8e5e40',
+                    ':hover': {
+                      background: '#f07a4b'
+                    }
+                  }}
+                >
+                  View Booking
+                </Button>
+                <Typography color='#62AFE8' marginTop={2}>
+                  Back to Home
                 </Typography>
               </Grid>
             )}
@@ -254,7 +461,7 @@ function BookingCard() {
   )
 }
 
-const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack }) => {
+const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext }) => {
   const theme = useTheme()
 
   return (
@@ -265,6 +472,9 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack })
         color: '#FC8A5E',
         '& .MuiMobileStepper-dotActive': {
           backgroundColor: '#f07a4b'
+        },
+        '.MuiMobileStepper-dots': {
+          gap: '15px'
         }
       }}
       steps={3}
@@ -273,9 +483,15 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack })
       nextButton={
         <Button
           size='small'
-          sx={{ background: '#FC8A5E', color: 'white', ':hover': { background: '#f07a4b' } }}
+          sx={{
+            background: '#FC8A5E',
+            color: 'white',
+            borderRadius: '9px',
+            padding: '8px 10px',
+            ':hover': { background: '#f07a4b' }
+          }}
           onClick={handleNext}
-          disabled={activeStep === 3}
+          disabled={disableNext}
         >
           Next
           {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
@@ -285,14 +501,67 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack })
         <Button
           size='small'
           onClick={handleBack}
-          disabled={activeStep === 0}
-          sx={{ background: '#D5DFEC', color: '#4B627F', ':hover': { background: '#f07a4b' } }}
+          sx={{
+            background: '#D5DFEC',
+            color: '#4B627F',
+            borderRadius: '9px',
+            padding: '8px 10px',
+            ':hover': { background: '#f07a4b' }
+          }}
         >
           {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-          Back
+          {activeStep === 0 ? 'Cancel' : 'Back'}
         </Button>
       }
     />
+  )
+}
+
+const BookingTimePicker = ({ getInTime, setGetInTime, startTime, setStartTime, endTime, setEndTime }) => {
+  const labelField = () => {
+    if (getInTime) return 'Get In Time'
+    if (startTime) return 'Start Time'
+    if (endTime) return 'End Time'
+  }
+
+  const onChangeTime = () => {
+    if (getInTime) {
+      return time => {
+        setGetInTime(time)
+      }
+    }
+    if (startTime) {
+      return time => {
+        setStartTime(time.format('HH:mm'))
+      }
+    }
+    if (endTime) {
+      return time => {
+        setEndTime(time)
+      }
+    }
+  }
+
+  return (
+    <Grid item xs={4} padding={1.5}>
+      <Typography>{labelField()}</Typography>
+      <TimePicker
+        ampm={false}
+        minutesStep={15}
+        value={getInTime}
+        onChange={onChangeTime}
+        renderInput={params => <TextField {...params} />}
+        sx={{
+          '& .MuiOutlinedInput-input': {
+            padding: '0',
+            textAlign: 'center',
+            fontSize: 'inherit'
+          },
+          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+        }}
+      />
+    </Grid>
   )
 }
 

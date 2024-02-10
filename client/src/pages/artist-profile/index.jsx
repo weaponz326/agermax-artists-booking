@@ -164,7 +164,9 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, drawerState, artistDetails }) => {
+const ArtisteProfileSection = ({ artistDetails }) => {
+  const [open, setOpen] = useState(false)
+
   return (
     <section>
       <Card className={styles['profile-card']}>
@@ -190,12 +192,10 @@ const ArtisteProfileSection = ({ openDrawer, setOpenSideDrawer, openSideDrawer, 
         </div>
         <div className={styles['button-container']}>
           <TransitionsModal
+            open={open}
+            setOpen={setOpen}
             btnClassName={styles['side-drawer-button']}
-            drawerState={drawerState}
-            openSideDrawer={openSideDrawer}
-            openDrawer={openDrawer}
-            setOpenSideDrawer={setOpenSideDrawer}
-            modalContent={<BookingCard />}
+            modalContent={<BookingCard open={open} setOpen={setOpen} />}
           />
         </div>
         <div className={styles['bio-container']}>
