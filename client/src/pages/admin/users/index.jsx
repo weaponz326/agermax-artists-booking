@@ -40,6 +40,20 @@ const UsersListPage = () => {
     setOpenModal(false)
   }
 
+  function handleQueryChange(e) {
+    setQuery(e.target.value)
+    if (query === '') {
+      setUsersList(usersData)
+    } else {
+      const filteredList = usersData.filter(
+        users =>
+          users.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          users.lastName.toLowerCase().includes(query.toLowerCase())
+      )
+      setUsersList(filteredList)
+    }
+  }
+
   return (
     <div className={styles.usersListPage}>
       <nav className={styles.usersListPageNavBar}>
@@ -49,6 +63,8 @@ const UsersListPage = () => {
           usersData={usersData}
           query={query}
           setQuery={setQuery}
+          onChange={handleQueryChange}
+          value={query}
         />
         <AdminUsersPageViewStyleTabs
           usersData={usersData}

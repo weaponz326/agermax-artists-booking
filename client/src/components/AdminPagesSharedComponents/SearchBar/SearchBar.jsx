@@ -2,45 +2,23 @@ import React, { useRef, useState } from 'react'
 import styles from './SearchBar.module.css'
 import { GridSearchIcon } from '@mui/x-data-grid'
 
-const SearchBar = ({
-  usersList,
-  setUsersList,
-  usersData,
-  query,
-  setQuery,
-  className,
-  placeholder,
-  wrapperClassName
-}) => {
+const SearchBar = ({ value, className, placeholder, wrapperClassName, onChange, onClick, style }) => {
   const searchInputRef = useRef()
 
   // Filter the list of users based on the query input by the user
 
-  function handleQueryChange(e) {
-    setQuery(e.target.value)
-    if (query === '') {
-      setUsersList(usersData)
-    } else {
-      const filteredList = usersData.filter(
-        users =>
-          users.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          users.lastName.toLowerCase().includes(query.toLowerCase())
-      )
-      setUsersList(filteredList)
-    }
-  }
-
   return (
-    <div className={wrapperClassName ? wrapperClassName : styles.searchBar}>
+    <div style={style} className={wrapperClassName ? wrapperClassName : styles.searchBar}>
       <GridSearchIcon />
       <input
-        onChange={handleQueryChange}
+        onChange={onChange}
         className={`${styles.searchInputField} ${className}`}
         type='search'
         name=''
         id=''
         placeholder={placeholder ? placeholder : 'Search User'}
-        value={query}
+        value={value}
+        onClick={onClick}
       />
     </div>
   )
