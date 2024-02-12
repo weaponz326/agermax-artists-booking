@@ -1,15 +1,9 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// controllers/authController.js
+const generateToken = require("../utils/generateToken");
 const User = require("../models/User");
 const Artist = require("../models/Artist");
 const EventOrganizer = require("../models/EventOrganizer");
 const Admin = require("../models/Admin");
-
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
-};
 
 const getAllUsers = async (req, res) => {
   try {
@@ -111,12 +105,15 @@ const registerUser = async (req, res) => {
       }
 
       res.status(201).json({
-        _id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email,
-        role: user.role,
-        profilePhoto: user.profilePhoto,
+        userData: {
+          _id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          fullName: user.firstName + " " + user.lastName,
+          email,
+          role: user.role,
+          profilePhoto: user.profilePhoto,
+        },
         accessToken: generateToken(user._id),
       });
     } else {
@@ -139,6 +136,7 @@ const loginUser = async (req, res) => {
         _id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
+        fullName: user.firstName + " " + user.lastName,
         email: user.email,
         role: user.role,
         profilePhoto: user.profilePhoto,
@@ -170,7 +168,7 @@ const getUserProfile = async (req, res) => {
         email,
         role,
         profilePhoto = "",
-        contactPhone = "", // Set default values if field is not present
+        contactPhone = "",
         address = "",
         nickName = "",
         genre = "",
@@ -188,6 +186,7 @@ const getUserProfile = async (req, res) => {
           _id,
           firstName,
           lastName,
+          fullName: user.firstName + " " + user.lastName,
           email,
           role,
           profilePhoto,
@@ -202,7 +201,6 @@ const getUserProfile = async (req, res) => {
           availableDates,
           gallery,
           eventsHosted,
-          // accessToken: generateToken(_id),
         },
       });
     } else {
@@ -215,9 +213,9 @@ const getUserProfile = async (req, res) => {
 };
 
 const updateUserDetails = async (req, res) => {
-  const userId = req.user._id; // Fetched from the auth middleware
-  const role = req.user.role; // Fetched from the auth middleware
-  const updateData = req.body; // Data to be updated
+  const userId = req.user._id;
+  const role = req.user.role;
+  const updateData = req.body;
 
   try {
     // Dynamically construct update fields based on role
@@ -228,7 +226,6 @@ const updateUserDetails = async (req, res) => {
       contactPhone: updateData.contactPhone,
       address: updateData.address,
       profilePhoto: updateData.profilePhoto,
-      // Include other common fields
     };
 
     // Extend userUpdateFields with role-specific fields
@@ -241,14 +238,12 @@ const updateUserDetails = async (req, res) => {
         socialMediaLinks: updateData.socialMediaLinks,
         availableDates: updateData.availableDates,
         gallery: updateData.gallery,
-        // Add other artist-specific fields here
       });
     } else if (role === "organizer") {
       Object.assign(userUpdateFields, {
         companyName: updateData.companyName,
         organizationNumber: updateData.organizationNumber,
         eventsHosted: updateData.eventsHosted,
-        // Add other organizer-specific fields here
       });
     } else if (role === "admin") {
       Object.assign(userUpdateFields, {});
