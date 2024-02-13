@@ -140,7 +140,7 @@ const customTheme = createTheme({
   }
 })
 
-function BookingCard({ open, setOpen }) {
+function BookingCard({ open, setOpen, artistDetails }) {
   const [activeStep, setActiveStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
   const [getInTime, setGetInTime] = useState(null)
@@ -190,7 +190,7 @@ function BookingCard({ open, setOpen }) {
             {activeStep === 0 && (
               <Grid container flexDirection='column' height='100%' color='#183D4C'>
                 <Typography sx={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
-                  John Doe
+                  {artistDetails.firstName} {artistDetails.lastName}
                 </Typography>
                 <Grid container gap={1} marginBottom={4}>
                   <Tag>Rock</Tag>

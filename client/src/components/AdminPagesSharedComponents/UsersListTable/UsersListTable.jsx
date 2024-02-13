@@ -2,27 +2,6 @@ import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 
 const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => {
-  // const data = [
-  //   {
-  //     key: '1',
-  //     name: 'John Doe',
-  //     phone: '123-456-7890',
-  //     email: 'john@example.com',
-  //     type: 'Artist',
-  //     profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
-  //   },
-  //   {
-  //     key: '2',
-  //     name: 'Jane Smith',
-  //     phone: '987-654-3210',
-  //     email: 'jane@example.com',
-  //     type: 'Customer',
-  //     profilePic: '/images/ellipse-121.png' // Replace with the actual URL of the profile picture
-  //   }
-  //   // Add more users as needed
-  // ]
-
-  // Define columns for the table
   const data = usersList
 
   const columns = [
@@ -48,15 +27,15 @@ const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => 
     },
     {
       title: 'Email',
-      dataIndex: 'contactEmail',
-      key: 'contactEmail',
-      sorter: (a, b) => a.contactEmail.localeCompare(b.contactEmail)
+      dataIndex: 'email',
+      key: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email)
     },
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-      sorter: (a, b) => a.type.localeCompare(b.type)
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+      sorter: (a, b) => a.role.localeCompare(b.role)
     },
     {
       title: 'Action',

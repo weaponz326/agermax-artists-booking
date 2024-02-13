@@ -8,8 +8,8 @@ import { DownOutlined } from '@ant-design/icons'
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
 const { RangePicker } = DatePicker
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
-import usersData from './Music Artists Data'
 import SearchBar from '../AdminPagesSharedComponents/SearchBar/SearchBar'
+import { useArtists } from 'src/providers/ArtistsProvider'
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
@@ -166,7 +166,6 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
               <NavBarSearchBar
                 placeholder={'Search Artist'}
                 wrapperClassName={styles.searchWrapper}
-                usersData={usersData}
                 switchToDatePicker={switchToDatePicker}
                 // dateInputRef={dateInputRef.current}
                 setActiveItem={setActiveItem}
@@ -310,18 +309,20 @@ export const CustomDropdown = ({ hideMenuItems, bookerInputRef }) => {
   )
 }
 
-export const NavBarSearchBar = ({ usersData, switchToDatePicker, placeholder, setActiveItem, activeTab }) => {
+export const NavBarSearchBar = ({ switchToDatePicker, placeholder, setActiveItem, activeTab }) => {
   const [query, setQuery] = useState('')
   const [artistsList, setArtistsList] = useState([])
   const [filteredArtistsList, setFilteredArtistsList] = useState([])
   const [options, setOptions] = useState([])
   const searchInputRef = useRef()
+  const { artists } = useArtists()
 
   useEffect(() => {
-    const filteredArtistsList = usersData.filter(user => user.type === 'Artist')
-    setArtistsList(filteredArtistsList)
-    setFilteredArtistsList(filteredArtistsList)
-  }, [usersData])
+    //Get All Artists Lists
+
+    if (artists) setArtistsList(artists)
+    if (artists) setFilteredArtistsList(artists)
+  }, [])
 
   useEffect(() => {
     const newOptions = filteredArtistsList.map(

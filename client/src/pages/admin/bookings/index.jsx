@@ -15,8 +15,7 @@ import { GridFilterAltIcon } from '@mui/x-data-grid'
 import { DatePicker, Select, ConfigProvider } from 'antd'
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
-import { getOnlyArtistsList } from 'src/services/artists'
-
+import { useArtists } from 'src/providers/ArtistsProvider'
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
 
@@ -230,9 +229,11 @@ export const EventStatusIcon = ({ style, className }) => {
 export const BookingsModalContent = () => {
   const [options, setOptions] = useState([])
   const [artistsOptions, setArtistsOptions] = useState([])
+  const { artists } = useArtists()
+
   useEffect(() => {
     const fetchArtists = async () => {
-      const artists = await getOnlyArtistsList()
+      // const artists = await getOnlyArtistsList()
       setArtistsOptions(artists)
 
       const newOptions = artists.map(artist => {

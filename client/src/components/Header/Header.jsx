@@ -30,7 +30,7 @@ export default function Header() {
       <HeaderCarouselContainer
         layout={styles['header-carousel-layout']}
         className={styles['header-carousel']}
-        artistsList={artists}
+        artists={artists}
         // className={styles["header-carousel"]}
       />
     </header>

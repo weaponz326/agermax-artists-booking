@@ -9,6 +9,8 @@ import Link from 'next/link'
 import { getEventsPhotos } from 'src/services/artists'
 import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
+import BookingsProvider from 'src/providers/BookingsProvider'
+import { useBookings } from 'src/providers/BookingsProvider'
 
 function ArtistProfile() {
   const router = useRouter()
@@ -21,16 +23,18 @@ function ArtistProfile() {
   return (
     <CustomPagesLayout>
       <main>
-        <div className={styles['page-layout']}>
-          <ArtisteProfileSection
-            openDrawer={openDrawer}
-            openSideDrawer={openSideDrawer}
-            setOpenSideDrawer={setOpenSideDrawer}
-            drawerState={drawerState}
-            artistDetails={artistDetails}
-          />
-          <EventsSection artistDetails={artistDetails} />
-        </div>
+        <BookingsProvider>
+          <div className={styles['page-layout']}>
+            <ArtisteProfileSection
+              openDrawer={openDrawer}
+              openSideDrawer={openSideDrawer}
+              setOpenSideDrawer={setOpenSideDrawer}
+              drawerState={drawerState}
+              artistDetails={artistDetails}
+            />
+            <EventsSection artistDetails={artistDetails} />
+          </div>
+        </BookingsProvider>
       </main>
     </CustomPagesLayout>
   )
@@ -88,17 +92,18 @@ const EventsSection = ({ artistDetails }) => {
 
       <div className={styles['divider']}></div>
       <div className={styles['videos-block']}>
-        <VideoItem />
+        <VideoItem artistDetails={artistDetails} />
       </div>
     </section>
   )
 }
 
-export const VideoItem = () => {
+export const VideoItem = ({ artistDetails }) => {
   const [photos, setPhotos] = useState([])
+  const { bookings } = useBookings()
   useEffect(() => {
     const fetchData = async () => {
-      const eventPhotos = await getEventsPhotos()
+      const eventPhotos = bookings.filter(booking => booking.id === artistDetails.id)
       if (eventPhotos) setPhotos(eventPhotos.slice(0, 5))
       console.log(photos)
       return
@@ -171,8 +176,8 @@ const ArtisteProfileSection = ({ artistDetails }) => {
     <section>
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
-          {artistDetails.length ? (
-            <img src={artistDetails.picture} alt='profile-image' />
+          {artistDetails ? (
+            <img src={artistDetails.profilePhoto} alt='profile-image' />
           ) : (
             <Skeleton
               animation='wave'
@@ -195,7 +200,7 @@ const ArtisteProfileSection = ({ artistDetails }) => {
             open={open}
             setOpen={setOpen}
             btnClassName={styles['side-drawer-button']}
-            modalContent={<BookingCard open={open} setOpen={setOpen} />}
+            modalContent={<BookingCard open={open} setOpen={setOpen} artistDetails={artistDetails} />}
           />
         </div>
         <div className={styles['bio-container']}>

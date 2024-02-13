@@ -7,40 +7,24 @@ import Image from 'next/image'
 import Button from 'src/components/Button/Button'
 import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
+import BookingsProvider from 'src/providers/BookingsProvider'
+import { useBookings } from 'src/providers/BookingsProvider'
 import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
 
 const HomePage = () => {
   const [imgList, setImgList] = useState([])
   const [artistsList, setArtistsList] = useState([])
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const eventsPhotos = await getEventsPhotos()
-  //     const artists = await getOnlyArtistsList()
-  //     setArtistsList(artists)
-  //     if (eventsPhotos) {
-  //       setImgList(eventsPhotos.slice(0, 9))
-  //     }
-  //   }
-
-  //   fetchData()
-  //   const isServer = typeof window === 'undefined'
-
-  //   if (isServer) {
-  //     console.log('Running on the server side')
-  //   } else {
-  //     console.log('Running on the client side')
-  //   }
-  // }, [])
-
   return (
     <div className='homepage'>
       <Header artistsList={artistsList} />
       <main>
-        <EventsSection imgList={imgList} />
-        <AboutSection />
-        <FaqSection />
-        <SubscriptionSection />
+        <BookingsProvider>
+          <EventsSection imgList={imgList} />
+          <AboutSection />
+          <FaqSection />
+          <SubscriptionSection />
+        </BookingsProvider>
       </main>
     </div>
   )

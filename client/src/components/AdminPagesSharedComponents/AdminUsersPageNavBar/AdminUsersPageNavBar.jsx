@@ -36,17 +36,24 @@ const AdminUsersPageNavBar = ({ setActiveEventsView, activeEventsView }) => {
 
 export default AdminUsersPageNavBar
 
-export const AdminUsersPageViewStyleTabs = ({ usersData, usersList, setUsersList, query, setQuery }) => {
-  const [activeView, setActiveView] = useState('1')
-
+export const AdminUsersPageViewStyleTabs = ({
+  usersData,
+  usersList,
+  setUsersList,
+  query,
+  setQuery,
+  activeView,
+  setActiveView
+}) => {
   function handleTabSelection(e) {
     setActiveView(e.target.id)
     setQuery('')
-
-    e.target.id === '1' && setUsersList(usersData)
-    e.target.id === '2' && setUsersList(usersData.filter(users => users.type === 'Artist'))
-    e.target.id === '3' && setUsersList(usersData.filter(users => users.type === 'Organizer'))
-    e.target.id === '4' && setUsersList(usersData.filter(users => users.type === 'Staff'))
+    if (usersData) {
+      e.target.id === '1' && setUsersList(usersData)
+      e.target.id === '2' && setUsersList(usersData.filter(users => users.role === 'artist'))
+      e.target.id === '3' && setUsersList(usersData.filter(users => users.role === 'organizer'))
+      e.target.id === '4' && setUsersList(usersData.filter(users => users.role === 'admin'))
+    }
   }
   return (
     <div className={styles.viewStylesTabs}>

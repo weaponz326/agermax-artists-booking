@@ -32,7 +32,7 @@ export default ArtistsProvider
 export const useArtists = () => {
   const context = useContext(ArtistContext)
   if (!context.artists) {
-    throw new Error('useArtists must be used within an ArtistsProvider')
+    console.log('No Artists fetched')
   }
   return context
 }

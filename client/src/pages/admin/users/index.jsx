@@ -6,31 +6,31 @@ import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/Searc
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import styles from './users.module.css'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
-import SidebarAddUser from './AddUserDrawer'
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import axios from 'axios'
 import usersData from './Music Artists Data'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
+import { useUsers } from 'src/providers/UsersProvider'
 
 const UsersListPage = () => {
   // ** State for storing users data
   const [openModal, setOpenModal] = useState(false)
-  const [usersList, setUsersList] = useState(usersData)
+  const [usersList, setUsersList] = useState([])
   const [query, setQuery] = useState('')
+  const { users } = useUsers()
+  const [activeView, setActiveView] = useState('1')
 
-  // useEffect(() => {
-  //   //Fetch Users List Data with Axios
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const usersData = await axios.get('https://api.mockaroo.com/api/7e49e110?count=100&key=15462290')
-  //       setUsersList(usersData)
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-
-  //   fetchUsers()
-  // }, [])
+  useEffect(() => {
+    if (users !== undefined) {
+      setUsersList(users)
+    }
+  }, [users])
+  useEffect(() => {
+    if (!query || query === '') {
+      setUsersList(users)
+    } else {
+    }
+  }, [query])
 
   function unhideModal() {
     setOpenModal(true)
@@ -42,13 +42,14 @@ const UsersListPage = () => {
 
   function handleQueryChange(e) {
     setQuery(e.target.value)
-    if (query === '') {
-      setUsersList(usersData)
+    if (!query || query === '') {
+      setUsersList(users)
     } else {
-      const filteredList = usersData.filter(
-        users =>
-          users.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          users.lastName.toLowerCase().includes(query.toLowerCase())
+      setActiveView('1')
+      const filteredList = users.filter(
+        user =>
+          user.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          user.lastName.toLowerCase().includes(query.toLowerCase())
       )
       setUsersList(filteredList)
     }
@@ -60,18 +61,20 @@ const UsersListPage = () => {
         <SearchBar
           usersList={usersList}
           setUsersList={setUsersList}
-          usersData={usersData}
+          usersData={users}
           query={query}
           setQuery={setQuery}
           onChange={handleQueryChange}
           value={query}
         />
         <AdminUsersPageViewStyleTabs
-          usersData={usersData}
+          usersData={users}
           usersList={usersList}
           setUsersList={setUsersList}
           query={query}
           setQuery={setQuery}
+          activeView={activeView}
+          setActiveView={setActiveView}
         />
         <TabButton onClick={unhideModal} className={styles.usersListPageNavBarAddUsersBtn}>
           Add Users

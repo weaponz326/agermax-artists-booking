@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import styles from './header-carousel-container.module.css'
 
-const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
+const HeaderCarouselContainer = ({ artists, className, layout }) => {
   //Conditional Rendering depending on availability of APi call
-  if (!artistsList || artistsList.length <= 0) {
+  if (!artists || artists.length <= 0) {
     return (
       <div className={className}>
         <div className={styles['hot-artists-nav']}>
@@ -34,7 +34,7 @@ const HeaderCarouselContainer = ({ artistsList, className, layout }) => {
         </div>
         <div className={styles.carouselWrapper}>
           <div className={layout}>
-            {artistsList.map(artist => (
+            {artists.map(artist => (
               <Fragment key={artist.id}>
                 <Carousel artist={artist} />
               </Fragment>
