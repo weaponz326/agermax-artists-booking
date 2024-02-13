@@ -42,15 +42,15 @@ export default function Navbar() {
 const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) => {
   const menuBarWrapper = useRef()
   const searchBarContainerRef = useRef()
-  const dateInputRef = useRef()
-  const dateRangePickerRef = useRef()
+  const dateInputRef = useRef(null)
+  const dateRangePickerRef = useRef(null)
   const bookerInputRef = useRef()
 
   useEffect(() => {
     const handleScroll = () => {
       setHideMenuItems(true)
       setActiveTab(null)
-      searchBarContainerRef.current.blur()
+      // searchBarContainerRef.current.blur()
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
@@ -93,6 +93,7 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
   }
   function switchToDatePicker() {
     dateRangePickerRef.current.focus()
+    console.log(dateRangePickerRef.current)
   }
   function switchToBookerDetails() {
     bookerInputRef.current.focus()
@@ -344,19 +345,6 @@ export const NavBarSearchBar = ({ usersData, switchToDatePicker, placeholder, se
     setOptions(newOptions)
   }, [filteredArtistsList])
 
-  const handleQueryChange = value => {
-    setQuery(value)
-    if (artistsList.length != 0) {
-      const filteredList = artistsList.filter(
-        artist =>
-          artist.firstName.toLowerCase().includes(value.toLowerCase()) ||
-          artist.lastName.toLowerCase().includes(value.toLowerCase())
-      )
-
-      setFilteredArtistsList(filteredList)
-    }
-  }
-
   const handleSelectQuery = e => {
     switchToDatePicker()
     if (artistsList.length != 0) {
@@ -382,16 +370,13 @@ export const NavBarSearchBar = ({ usersData, switchToDatePicker, placeholder, se
     >
       <AutoComplete
         allowClear
-        defaultOpen
         // open={true}
         autoFocus
         options={options}
-        popupMatchSelectWidth={true}
+        popupMatchSelectWidth={false}
         popupClassName={styles.popup}
         notFoundContent='Sorry, Artist not found!'
         onSelect={e => handleSelectQuery(e)}
-        // onSearch={handleQueryChange}
-        // onChange={handleQueryChange} // Add onChange to handle controlled input
         className={styles.searchInputField}
         placeholder={placeholder ? placeholder : 'Search Artist'}
         // value={query}

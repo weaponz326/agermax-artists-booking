@@ -272,7 +272,7 @@
 }
 
 .popup {
-  width: 10rem;
+  width: 20rem;
 }
 .search-item-detail p,
 .search-item-detail input {
@@ -555,12 +555,12 @@ header .greetings-message {
 /* styles/transition.css */
 
 .fade-enter {
-  transform: scale(1.1);
+  transform: scale(1.025);
   /* transition: transform 500ms linear; */
 }
 
 .fade-enter-active {
-  transform: scale(1.05);
+  transform: scale(1.01);
   transition: transform 100ms linear;
 }
 
@@ -570,7 +570,7 @@ header .greetings-message {
 }
 
 .fade-exit {
-  transform: scale(0.7);
+  transform: scale(0.85);
   /* transition: transform 100ms linear; */
 }
 

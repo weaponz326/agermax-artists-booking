@@ -6,7 +6,7 @@ import { Drawer, ConfigProvider } from 'antd'
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
-import { getEventsPhotos } from 'src/services/FetchData'
+import { getEventsPhotos } from 'src/services/artists'
 import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 

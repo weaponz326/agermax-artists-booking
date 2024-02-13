@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
-import { getOnlyArtistsList } from 'src/services/FetchData'
+import { getAllArtists } from 'src/services/artists'
 
 const ArtistContext = createContext()
 
@@ -11,7 +11,7 @@ const ArtistsProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const artistsList = await getOnlyArtistsList()
+        const artistsList = await getAllArtists()
         setArtists(artistsList)
       } catch (error) {
         setError(error)
@@ -31,7 +31,7 @@ export default ArtistsProvider
 // Consumer custom hook
 export const useArtists = () => {
   const context = useContext(ArtistContext)
-  if (!context) {
+  if (!context.artists) {
     throw new Error('useArtists must be used within an ArtistsProvider')
   }
   return context

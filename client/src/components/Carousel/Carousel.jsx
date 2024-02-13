@@ -21,7 +21,13 @@ export default function Carousel({ artist }) {
     return (
       <div className={styles['carousel-container']}>
         <div className={styles['carousel-img']}>
-          <Image className={styles['carousel-img']} alt='Artist-Image' src={artist.picture} fill loading='eager' />
+          <Image
+            className={styles['carousel-img']}
+            alt='Artist-Image'
+            src={artist.picture ? artist.picture : '/images/rectangle-2-15.png'}
+            fill
+            loading='eager'
+          />
         </div>
         <div
           onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}

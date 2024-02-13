@@ -1,7 +1,6 @@
-
 // ** React Import
 import { useRef, useState } from 'react'
-import styles from './NavStyles.module.css';
+import styles from './NavStyles.module.css'
 
 // ** MUI Imports
 import { Button, List } from '@mui/material'
@@ -130,12 +129,12 @@ const QuickActions = () => {
         //Replace the Link tag with div, which we can use useRouter to push to new Links
         <div key={index} href={link.path} onClick={() => router.push(`${link.path}`)}>
           {/* <Tooltip title={link.title} arrow> */}
-            <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto' }}>
-              <Icon icon={link.icon} className='icon' />
-              <Typography variant='caption' className='quick-link-text'>
-                {link.title}
-              </Typography>
-            </IconButton>
+          <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto' }}>
+            <Icon icon={link.icon} className='icon' />
+            <Typography variant='caption' className='quick-link-text'>
+              {link.title}
+            </Typography>
+          </IconButton>
           {/* </Tooltip> */}
         </div>
       ))}
@@ -271,13 +270,19 @@ const Navigation = props => {
         {(beforeVerticalNavMenuContentPosition === 'static' || !beforeNavMenuContent) && (
           <StyledBoxForShadow ref={shadowRef} />
         )}
-        <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+        <Box
+          sx={{
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
           {/* @ts-ignore */}
-          <ScrollWrapper
+          <Box
+            sx={{ height: '100%', gap: '30px', display: 'flex', flexDirection: 'column' }}
             {...(hidden
               ? {
-                  onScroll: container => scrollMenu(container),
-                  sx: { height: '100%', overflowY: 'auto', overflowX: 'hidden' }
+                  onScroll: container => scrollMenu(container)
+                  // sx: { height: '100%', overflowY: 'auto', overflowX: 'hidden' }
                 }
               : {
                   options: { wheelPropagation: false },
@@ -316,7 +321,7 @@ const Navigation = props => {
               </Typography>
               <CalendarComponent sx={{ mx: 12 }} />
             </Box>
-          </ScrollWrapper>
+          </Box>
         </Box>
         {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed'
           ? afterNavMenuContent(navMenuContentProps)

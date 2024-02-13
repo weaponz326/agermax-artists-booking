@@ -7,31 +7,31 @@ import Image from 'next/image'
 import Button from 'src/components/Button/Button'
 import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
-import { getOnlyArtistsList, getEventsPhotos } from 'src/services/FetchData'
+import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
 
 const HomePage = () => {
   const [imgList, setImgList] = useState([])
   const [artistsList, setArtistsList] = useState([])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const eventsPhotos = await getEventsPhotos()
-      const artists = await getOnlyArtistsList()
-      setArtistsList(artists)
-      if (eventsPhotos) {
-        setImgList(eventsPhotos.slice(0, 9))
-      }
-    }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const eventsPhotos = await getEventsPhotos()
+  //     const artists = await getOnlyArtistsList()
+  //     setArtistsList(artists)
+  //     if (eventsPhotos) {
+  //       setImgList(eventsPhotos.slice(0, 9))
+  //     }
+  //   }
 
-    fetchData()
-    const isServer = typeof window === 'undefined'
+  //   fetchData()
+  //   const isServer = typeof window === 'undefined'
 
-    if (isServer) {
-      console.log('Running on the server side')
-    } else {
-      console.log('Running on the client side')
-    }
-  }, [])
+  //   if (isServer) {
+  //     console.log('Running on the server side')
+  //   } else {
+  //     console.log('Running on the client side')
+  //   }
+  // }, [])
 
   return (
     <div className='homepage'>

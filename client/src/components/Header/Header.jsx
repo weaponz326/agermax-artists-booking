@@ -3,8 +3,11 @@ import styles from './header.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import Link from 'next/link'
 import { useAuth } from 'src/providers/AuthProvider'
-export default function Header({ artistsList }) {
+import { getAllArtists } from 'src/services/artists'
+import { useArtists } from 'src/providers/ArtistsProvider'
+export default function Header() {
   const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+  const { artists } = useArtists()
 
   const renderedItem = !isLoggedIn ? (
     <Link href='/register'>
@@ -27,7 +30,7 @@ export default function Header({ artistsList }) {
       <HeaderCarouselContainer
         layout={styles['header-carousel-layout']}
         className={styles['header-carousel']}
-        artistsList={artistsList}
+        artistsList={artists}
         // className={styles["header-carousel"]}
       />
     </header>

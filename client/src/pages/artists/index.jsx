@@ -10,6 +10,7 @@ const ArtistsPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentArtistsData, setCurrentArtistsData] = useState([])
   const { artists, setArtists } = useArtists()
+  console.log('Artists', artists)
 
   useEffect(() => {
     const lastIndexOfList = currentPage * artistsPerPage

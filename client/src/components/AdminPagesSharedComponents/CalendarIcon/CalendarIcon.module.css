@@ -21,7 +21,11 @@
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
-  background: linear-gradient(to bottom, #ff1e46 50%, #ffffff 50%);
+  background: linear-gradient(180deg, #ff1e46 45%, #fff 0);
+  border: 1px solid #e2e2e2;
+  width: 45px;
+  height: 45px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
 }
 
 .calendar-month {
