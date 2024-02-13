@@ -5,15 +5,6 @@ const Artist = require("../models/Artist");
 const EventOrganizer = require("../models/EventOrganizer");
 const Admin = require("../models/Admin");
 
-const getAllUsers = async (req, res) => {
-  try {
-    // Exclude the password field from the results
-    const users = await User.find().select("-password");
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 const registerUser = async (req, res) => {
   const {
@@ -158,108 +149,10 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getUserProfile = async (req, res) => {
-  try {
-    if (req.user) {
-      const {
-        _id,
-        firstName,
-        lastName,
-        email,
-        role,
-        profilePhoto = "",
-        contactPhone = "",
-        address = "",
-        nickName = "",
-        genre = "",
-        bio = "",
-        companyName = "",
-        organizationNumber = "",
-        socialMediaLinks = [],
-        availableDates = [],
-        gallery = [],
-        eventsHosted = [],
-      } = req.user;
 
-      res.json({
-        userData: {
-          _id,
-          firstName,
-          lastName,
-          fullName: user.firstName + " " + user.lastName,
-          email,
-          role,
-          profilePhoto,
-          contactPhone,
-          address,
-          nickName,
-          genre,
-          bio,
-          companyName,
-          organizationNumber,
-          socialMediaLinks,
-          availableDates,
-          gallery,
-          eventsHosted,
-        },
-      });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
 
-const updateUserDetails = async (req, res) => {
-  const userId = req.user._id;
-  const role = req.user.role;
-  const updateData = req.body;
-
-  try {
-    // Dynamically construct update fields based on role
-    let userUpdateFields = {
-      firstName: updateData.firstName,
-      lastName: updateData.lastName,
-      email: updateData.email,
-      contactPhone: updateData.contactPhone,
-      address: updateData.address,
-      profilePhoto: updateData.profilePhoto,
-    };
-
-    // Extend userUpdateFields with role-specific fields
-    if (role === "artist") {
-      Object.assign(userUpdateFields, {
-        nickName: updateData.nickName,
-        genre: updateData.genre,
-        bio: updateData.bio,
-        organizationNumber: updateData.organizationNumber,
-        socialMediaLinks: updateData.socialMediaLinks,
-        availableDates: updateData.availableDates,
-        gallery: updateData.gallery,
-      });
-    } else if (role === "organizer") {
-      Object.assign(userUpdateFields, {
-        companyName: updateData.companyName,
-        organizationNumber: updateData.organizationNumber,
-        eventsHosted: updateData.eventsHosted,
-      });
-    } else if (role === "admin") {
-      Object.assign(userUpdateFields, {});
-    }
-
-    await User.findByIdAndUpdate(userId, userUpdateFields, { new: true });
-    res.json({ message: "User details updated successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
 
 module.exports = {
-  getAllUsers,
   registerUser,
   loginUser,
-  getUserProfile,
-  updateUserDetails,
 };

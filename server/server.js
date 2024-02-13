@@ -34,18 +34,20 @@ require('./configs/passport-configs'); // Adjust the path as needed
 app.use(express.json());
 
 // Routes
-const userRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const artistRoutes = require('./routes/artistRoutes');
 const organizerRoutes = require('./routes/eventOrganizerRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const userRoutes = require('./routes/userRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
-app.use('/api', userRoutes);
+app.use('/api', authRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', artistRoutes);
 app.use('/api', organizerRoutes);
 app.use('/api', bookingRoutes);
+app.use('/api', userRoutes);
 app.use('/api/payment', paymentRoutes);
 
 const PORT = process.env.PORT || 5000;

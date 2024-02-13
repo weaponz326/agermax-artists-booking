@@ -4,7 +4,6 @@ const generateToken = require("../utils/generateToken");
 const express = require("express");
 const multer = require("multer");
 const router = express.Router();
-const { protect } = require("../middleware/authMiddleware");
 const {
   getAllUsers,
   registerUser,
@@ -14,22 +13,11 @@ const {
 } = require("../controllers/authController");
 const passport = require("passport");
 
-const profilePhotoUpload = multer({ dest: "uploads/user/profile_photo/" });
-const galleryUpload = multer({ dest: "uploads/user/artist_gallery/" });
-
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/users", getAllUsers);
-router.route("/profile").get(protect, getUserProfile);
-router
-  .route("/profile")
-  .put(
-    protect,
-    profilePhotoUpload.single("profilePhoto"),
-    galleryUpload.array("gallery", 10),
-    updateUserDetails
-  );
 
+
+//facebook Oauth
 router.get(
   "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
