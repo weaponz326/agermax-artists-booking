@@ -1,7 +1,6 @@
 // ** React Imports
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useAuth } from 'src/hooks/useAuth'
 
 // ** MUI Components
 import { Box, Divider } from '@mui/material'
@@ -28,13 +27,10 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-
-
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))
-
 
 const Register = () => {
   // ** State for form values
@@ -49,7 +45,6 @@ const Register = () => {
   // ** State for form submission status
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const auth = useAuth();
 
   // ** Router for redirection after successful registration
   const router = useRouter()
@@ -60,32 +55,35 @@ const Register = () => {
   }
 
   // ** Handle form submission
-const handleSubmit = async event => {
-  event.preventDefault();
-  setSubmitting(true);
-  setError('');
+  const handleSubmit = async event => {
+    event.preventDefault()
+    setSubmitting(true)
+    setError('')
 
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formValues)
+      })
 
-  // Construct the form data
-  const formData = {
-    firstName: formValues.firstName,
-    lastName: formValues.lastName,
-    email: formValues.email,
-    password: formValues.password,
-    role: formValues.role,
-  };
+      const data = await response.json()
 
-  // Use auth.register to submit the form data
-  auth.register(formData, (err) => {
-    setSubmitting(false);
-    if (err) {
-      setError(err.response.data.message || 'An error occurred. Please try again.');
-    } else {
-      router.push('/admin/account'); // Or redirect to a 'success' page
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed')
+      }
+
+      // TODO: Handle token storage and user data as needed
+      // Assuming the API returns a 'token' property
+      localStorage.setItem('token', data.token)
+      // Redirect to the /admin/account page
+      router.push('/admin/account')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
     }
-  });
-};
-
+  }
 
   // ** Theme hook
   const theme = useTheme()

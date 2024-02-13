@@ -73,6 +73,10 @@ const userSchema = mongoose.Schema({
   },
 });
 
+userSchema.virtual('fullName').get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();

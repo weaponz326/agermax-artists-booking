@@ -1,3 +1,5 @@
+// utils/generateToken
+
 const jwt = require('jsonwebtoken');
 
 /**
