@@ -12,10 +12,15 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import styles from './bookings.module.css'
 
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { DatePicker, Select, ConfigProvider } from 'antd'
+import { DatePicker, AutoComplete, TimePicker, ConfigProvider } from 'antd'
+
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
 import { useArtists } from 'src/providers/ArtistsProvider'
+
+//Import services
+import { createBooking } from 'src/services/bookings'
+
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
 
@@ -175,7 +180,7 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
           unhideModal={unhideModal}
           hideModal={hideModal}
           modalContent={<BookingsModalContent />}
-          saveButtonText={'Book Now'}
+          SubmitButton={'Submit'}
         />
       </div>
     </nav>
@@ -230,125 +235,200 @@ export const BookingsModalContent = () => {
   const [options, setOptions] = useState([])
   const [artistsOptions, setArtistsOptions] = useState([])
   const { artists } = useArtists()
+  const [formData, setFormData] = useState({
+    // Initialize form data
+    // Example:
+    adminID: '',
+    bookingID: '',
+    firstName: '',
+    lastName: '',
+    lastName: '',
+    dateTimeRequested: '',
+    startTime: '',
+    endTime: '',
+    getInTime: '',
+    numberOfGuests: '',
+    ageRange: '',
+    locationVenue: '',
+    artistID: '',
+    availableTechnology: '',
+    otherComments: ''
+
+    // Add other fields as needed
+  })
+
+  const handleChange = e => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleChangeArtist = (artist, option) => {
+    const { artistID } = option
+    artist && setFormData({ ...formData, artistID: artistID })
+    console.log(formData)
+  }
+
+  const handleChangeDate = (date, dateString) => {
+    date && setFormData({ ...formData, dateTimeRequested: date.toDate() })
+  }
+
+  const handleChangeGetInTime = (time, timeString) => {
+    time && setFormData({ ...formData, getInTime: time.toDate() })
+  }
+
+  const handleChangeStartTime = (time, timeString) => {
+    time && setFormData({ ...formData, startTime: time.toDate() })
+  }
+
+  const handleChangeEndTime = (time, timeString) => {
+    time && setFormData({ ...formData, endTime: time.toDate() })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const newBooking = await createBooking(formData)
+      console.log('New booking created: ', newBooking)
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error creating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
+  }
 
   useEffect(() => {
-    const fetchArtists = async () => {
-      // const artists = await getOnlyArtistsList()
-      setArtistsOptions(artists)
-
-      const newOptions = artists.map(artist => {
-        const artistPicture = <img className={styles.optionsPicture} src={artist.picture} alt={artist.firstName} />
-        return {
-          label: (
-            <div className={styles.optionsContainer}>
-              {artistPicture}
-              <span>
-                {artist.firstName} {artist.lastName}
-              </span>
-            </div>
-          ),
-          value: `${artist.firstName}-${artist.lastName}`
-        }
-      })
-      setOptions(newOptions)
-    }
-    fetchArtists()
+    if (!artists) return
+    setOptions(artists)
   }, [])
 
-  // const onSearch = value => {
-  //   const newOptions = options.filter(artist => {
-  //     if (artist.value.toLowerCase().includes(value)) {
-  //       setOptions(artist)
-  //     } else {
-  //       return options
-  //     }
-  //   })
-  // }
-
-  const onChange = value => {
-    // console.log(`selected ${value}`)
+  const filterOption = (inputValue, option) => {
+    return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
   }
 
   return (
-    <div className={styles.modalCardContentUserDetails}>
+    <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
       <h3>Booker Details</h3>
       <input
         placeholder='First Name'
         className={styles.modalCardContentInputField}
         type='text'
-        name='first-name'
-        id='first-name'
+        name='firstName'
+        id='firstName'
+        value={formData.firstName}
+        onChange={handleChange}
         required
       />
       <input
         placeholder='Last Name'
         className={styles.modalCardContentInputField}
         type='text'
-        name='last-name'
-        id='last-name'
+        name='lastName'
+        id='lastName'
+        value={formData.lastName}
+        onChange={handleChange}
         required
       />
       <input
-        placeholder='Contact'
+        placeholder='Admin ID'
         className={styles.modalCardContentInputField}
         type='text'
-        name='contact'
-        id='contact'
+        name='adminID'
+        id='adminID'
+        value={formData.adminID}
+        onChange={handleChange}
         required
       />
-      <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-      <ConfigProvider
-        theme={{
-          token: {
-            controlPaddingHorizontalSM: '3rem'
-          }
-        }}
-      >
-        <ConfigProvider
-          theme={{
-            components: {
-              Select: {
-                selectorBg: '#f2f4f8',
-                optionPadding: '0.5rem',
-                dropdownBg: '#fff',
-                // paddingSM: '3rem',
-                paddingXS: '3rem'
-              }
-            }
-          }}
-        >
-          <Select
-            // showSearch
-            className={styles.selectOptions}
-            placeholder='Select An Artist'
-            options={options}
-            optionFilterProp='children'
-            // onSearch={onSearch}
-            onChange={onChange}
-            allowClear
-          />
-        </ConfigProvider>
-      </ConfigProvider>
+      <input
+        placeholder='Booking ID'
+        className={styles.modalCardContentInputField}
+        type='number'
+        name='bookingID'
+        id='bookingID'
+        value={formData.bookingID}
+        onChange={handleChange}
+        required
+      />
+
+      <AutoComplete
+        // style={{
+        //   width: 200
+        // }}
+
+        onSelect={handleChangeArtist}
+        defaultValue={formData.artistID}
+        options={options.map(artist => ({
+          artistID: artist.artistID,
+          value: `${artist.firstName} ${artist.lastName}`,
+          label: `${artist.firstName} ${artist.lastName}`
+        }))}
+        placeholder='Select Artist'
+        filterOption={filterOption}
+      />
 
       <DatePicker
-        showTime={{
-          format: 'HH:mm'
-        }}
-        format='YYYY-MM-DD HH:mm'
-        placeholder='Select Start Date & Time'
+        format='YYYY-MM-DD'
+        placeholder='Select Date'
         className={styles.modalCardContentInputField}
         showNow={false}
+        minuteStep={15}
+        name='dateTimeRequested'
+        defaultValue={formData.dateTimeRequested}
+        onChange={handleChangeDate}
       />
-      <DatePicker
-        showTime={{
-          format: 'HH:mm'
-        }}
-        format='YYYY-MM-DD HH:mm'
-        placeholder='Select End Date & Time'
-        className={styles.modalCardContentInputField}
+      <TimePicker
+        name='getInTime'
+        placeholder='Get In Time'
+        minuteStep={15}
         showNow={false}
+        showSecond={false}
+        format='HH:mm'
+        defaultValue={formData.getInTime}
+        onChange={handleChangeGetInTime}
       />
-    </div>
+      <TimePicker
+        name='startTime'
+        placeholder='Start Time'
+        minuteStep={15}
+        showNow={false}
+        showSecond={false}
+        format='HH:mm'
+        defaultValue={formData.startTime}
+        onChange={handleChangeStartTime}
+      />
+      <TimePicker
+        name='endTime'
+        placeholder='End Time'
+        minuteStep={15}
+        showNow={false}
+        showSecond={false}
+        format='HH:mm'
+        defaultOpen={formData.endTime}
+        onChange={handleChangeEndTime}
+      />
+      <input
+        placeholder='Venue'
+        className={styles.modalCardContentInputField}
+        type='text'
+        name='locationVenue'
+        id='locationVenue'
+        value={formData.locationVenue}
+        onChange={handleChange}
+      />
+      <input
+        placeholder='Expected Number of Guests'
+        className={styles.modalCardContentInputField}
+        type='number'
+        step='1'
+        min='1'
+        name='numberOfGuests'
+        id='numberOfGuests'
+        value={formData.numberOfGuests}
+        onChange={handleChange}
+      />
+      <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
+    </form>
   )
 }
 
