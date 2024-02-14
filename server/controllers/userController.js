@@ -17,13 +17,13 @@ const getAllUsers = async (req, res) => {
       filter.role = query.role;
     }
     if (query.firstName) {
-      filter.firstName = { $regex: query.firstName, $options: 'i' }; // Case-insensitive search
+      filter.firstName = { $regex: query.firstName, $options: "i" }; // Case-insensitive search
     }
     if (query.lastName) {
-      filter.lastName = { $regex: query.lastName, $options: 'i' }; // Case-insensitive search
+      filter.lastName = { $regex: query.lastName, $options: "i" }; // Case-insensitive search
     }
     if (query.email) {
-      filter.email = { $regex: query.email, $options: 'i' }; // Case-insensitive search
+      filter.email = { $regex: query.email, $options: "i" }; // Case-insensitive search
     }
 
     const users = await User.find(filter).select("-password");
@@ -61,7 +61,7 @@ const getUserProfile = async (req, res) => {
           _id,
           firstName,
           lastName,
-          fullName: user.firstName + " " + user.lastName,
+          fullName: firstName + " " + lastName,
           email,
           role,
           profilePhoto,

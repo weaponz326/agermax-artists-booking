@@ -127,7 +127,7 @@ const UserDropdown = props => {
         </Box>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
+          <Box sx={styles} href='/admin/account'>
             <Icon icon='tabler:user-check' />
             My Profile
           </Box>
@@ -138,7 +138,7 @@ const UserDropdown = props => {
             Settings
           </Box>
         </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        {/* <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <Icon icon='tabler:credit-card' />
             Billing
@@ -162,7 +162,7 @@ const UserDropdown = props => {
             <Icon icon='tabler:currency-dollar' />
             Pricing
           </Box>
-        </MenuItemStyled>
+        </MenuItemStyled> */}
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={handleLogout}>
           <Box sx={styles}>
