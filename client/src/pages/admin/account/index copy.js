@@ -11,6 +11,7 @@ const TabAccount = () => {
   const { user } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState({
+    profilePhoto: user?.profilePhoto || '',
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
@@ -65,21 +66,28 @@ const TabAccount = () => {
   const steps = ['Basic Information', 'Additional Information']
 
   // Render array fields dynamically
-  const renderArrayFields = (field, label) =>
-    formData[field].map((value, index) => (
-      <Grid item xs={12} key={`${field}-${index}`}>
-        <TextField
-          fullWidth
-          label={`${label} ${index + 1}`}
-          value={value}
-          onChange={e => handleArrayChange(field, index)(e)}
-          InputProps={{
-            endAdornment:
-              formData[field].length > 1 ? <Button onClick={() => removeArrayField(field, index)}>Remove</Button> : null
-          }}
-        />
+  // Dynamically render array fields with add and remove functionality
+  const renderArrayFields = (field, label) => (
+    <>
+      {formData[field].map((value, index) => (
+        <Grid item xs={12} key={`${field}-${index}`}>
+          <TextField
+            fullWidth
+            label={`${label} ${index + 1}`}
+            value={value}
+            onChange={handleArrayChange(field, index)}
+            InputProps={{
+              endAdornment:
+                formData[field].length > 1 ? <Button onClick={() => removeArrayField(field, index)}>-</Button> : null
+            }}
+          />
+        </Grid>
+      ))}
+      <Grid item xs={12}>
+        <Button onClick={() => addArrayField(field)}>Add {label}</Button>
       </Grid>
-    ))
+    </>
+  )
 
   return (
     <Card>
@@ -184,6 +192,11 @@ const TabAccount = () => {
               {renderArrayFields('eventsHosted', 'Event Hosted')}
             </Grid>
           )}
+          {['socialMediaLinks', 'availableDates', 'gallery', 'eventsHosted'].map(field => (
+            <Button key={field} onClick={() => addArrayField(field)}>
+              Add More {field}
+            </Button>
+          ))}
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
             <Button disabled={activeStep === 0} onClick={handleBack}>
               Back
@@ -196,11 +209,6 @@ const TabAccount = () => {
               {activeStep < steps.length - 1 ? 'Next' : 'Submit'}
             </Button>
           </Box>
-          {['socialMediaLinks', 'availableDates', 'gallery', 'eventsHosted'].map(field => (
-            <Button key={field} onClick={() => addArrayField(field)}>
-              Add More {field}
-            </Button>
-          ))}
         </form>
       </CardContent>
     </Card>

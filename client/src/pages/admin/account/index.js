@@ -8,9 +8,9 @@ import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import FileUploaderMultiple from 'src/components/FileUploader/FileUploader'
 
 const TabAccount = () => {
-  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
   const { user } = useAuth()
   const [formData, setFormData] = useState({
+    profilePhoto: user?.profilePhoto || '',
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
@@ -19,11 +19,15 @@ const TabAccount = () => {
   })
   const [activeStep, setActiveStep] = useState(0)
   const [additionalFormData, setAdditionalFormData] = useState({
-    genre: user?.genre || '',
+    genre: user?.genre || [''],
     bio: user?.bio || '',
+    nickName: user?.nickName || '',
     socialMediaLinks: user?.socialMediaLinks || [''],
     availableDates: user?.availableDates || [''],
-    eventsHosted: user?.eventsHosted || ['']
+    eventsHosted: user?.eventsHosted || [''],
+    companyName: user?.companyName || '',
+    organizationNumber: user?.organizationNumber || '',
+    gallery: user?.gallery || ['']
   })
 
   const handleFormChange = field => event => {
@@ -71,8 +75,7 @@ const TabAccount = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-  // Assuming steps array is defined elsewhere or you need to define it
-  const steps = ['Step 1', 'Step 2'] // Example steps
+  const steps = ['Basic Info', 'Additional Info']
 
   return (
     <Card>
@@ -110,7 +113,7 @@ const TabAccount = () => {
                   onChange={handleFormChange('lastName')}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   type='email'
@@ -134,14 +137,6 @@ const TabAccount = () => {
           )}
           {activeStep === 1 && user.role == 'artist' && (
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label='Genre'
-                  value={additionalFormData.genre}
-                  onChange={handleAdditionalFormChange('genre')}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -151,7 +146,19 @@ const TabAccount = () => {
                   value={additionalFormData.bio}
                   onChange={handleAdditionalFormChange('bio')}
                 />
-              </Grid>
+              </Grid>{' '}
+              {additionalFormData.genre.map((event, index) => (
+                <Grid item xs={12} sm={6} key={index}>
+                  <TextField
+                    fullWidth
+                    label={`Genre ${index + 1}`}
+                    value={event}
+                    onChange={handleArrayChange('genre', index)}
+                  />
+                  <Button onClick={() => removeArrayField('genre', index)}>Remove</Button>
+                </Grid>
+              ))}
+              <Button onClick={() => addArrayField('genre')}>Add Genre</Button>
               <Grid item xs={12}>
                 <FileUploaderMultiple />
               </Grid>
@@ -161,7 +168,7 @@ const TabAccount = () => {
           {activeStep === 1 && user.role === 'organizer' && (
             <Grid container spacing={2}>
               {/* Organizer-specific fields */}
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label='Company Name'
@@ -169,7 +176,7 @@ const TabAccount = () => {
                   onChange={handleFormChange('companyName')}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label='Organization Number'
@@ -178,7 +185,7 @@ const TabAccount = () => {
                 />
               </Grid>
               {additionalFormData.eventsHosted.map((event, index) => (
-                <Grid item xs={12} key={index}>
+                <Grid item xs={12} sm={6} key={index}>
                   <TextField
                     fullWidth
                     label={`Event ${index + 1}`}
