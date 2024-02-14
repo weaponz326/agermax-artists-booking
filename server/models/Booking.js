@@ -1,50 +1,49 @@
-// models/booking.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const bookingSchema = new mongoose.Schema({
-  bookingID: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  artistID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Artist",
   },
-  artistID: { 
-    type: String, 
-    required: true 
+  organizerID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "EventOrganizer",
   },
-  adminID: { 
-    type: String, 
-    required: true 
+  dateTimeRequested: {
+    type: Date,
+    default: Date.now,
   },
-  dateTimeRequested: { 
-    type: Date, 
-    default: Date.now 
+  startTime: {
+    type: Date,
   },
-  startTime: { 
-    type: Date 
+  endTime: {
+    type: Date,
   },
-  endTime: { 
-    type: Date 
+  getInTime: {
+    type: Date,
   },
-  getInTime: { 
-    type: Date 
+  numberOfGuests: {
+    type: Number,
   },
-  numberOfGuests: { 
-    type: Number 
+  ageRange: {
+    type: String,
   },
-  ageRange: { 
-    type: String 
+  locationVenue: {
+    type: String,
   },
-  locationVenue: { 
-    type: String 
+  availableTechnology: {
+    type: String,
   },
-  availableTechnology: { 
-    type: String 
-  },
-  otherComments: { 
-    type: String 
+  otherComments: {
+    type: String,
   },
 });
 
-const Booking = mongoose.model('Booking', bookingSchema);
+bookingSchema.plugin(AutoIncrement, { inc_field: "bookingID" });
+
+const Booking = mongoose.model("Booking", bookingSchema);
 
 module.exports = Booking;
