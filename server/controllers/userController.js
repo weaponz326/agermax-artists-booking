@@ -8,7 +8,6 @@ const Admin = require("../models/Admin");
 
 const getAllUsers = async (req, res) => {
   try {
-    // Extract query parameters from the request
     const query = req.query;
     let filter = {};
 
@@ -26,7 +25,14 @@ const getAllUsers = async (req, res) => {
       filter.email = { $regex: query.email, $options: "i" }; // Case-insensitive search
     }
 
-    const users = await User.find(filter).select("-password");
+    let users = await User.find(filter).select("-password").lean();
+
+    // Add fullName to each user object
+    users = users.map((user) => ({
+      fullName: `${user.firstName} ${user.lastName}`,
+      ...user,
+    }));
+
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
