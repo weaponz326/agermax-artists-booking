@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  Stepper,
-  Step,
-  StepLabel,
-  Snackbar,
-  IconButton
-} from '@mui/material'
+import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
 // import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 // import CloseIcon from '@mui/icons-material/Close'
@@ -26,6 +15,7 @@ import styles from './BookingCard.module.css'
 // import { TimeField } from '@mui/x-date-pickers/TimeField'
 // import { CheckroomSharp } from '@mui/icons-material'
 import CheckCircle from '@material-ui/icons/CheckCircle'
+import { createBooking } from 'src/services/bookings'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -147,7 +137,44 @@ function BookingCard({ open, setOpen, artistDetails }) {
   const [startTime, setStartTime] = useState(null)
   const [endTime, setEndTime] = useState(null)
   const [disableNext, setDisableNext] = useState(true)
+  const [formData, setFormData] = useState({
+    // Initialize form data
+    // Example:
+    organizerID: '12',
+    dateTimeRequested: '',
+    startTime: '',
+    endTime: '',
+    getInTime: '',
+    numberOfGuests: '',
+    ageRange: '',
+    locationVenue: '',
+    artistID: '',
+    availableTechnology: '',
+    otherComments: ''
 
+    // Add other fields as needed
+  })
+
+  const handleChange = e => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async e => {
+    // e.preventDefault()
+    try {
+      const newBooking = await createBooking(formData)
+      console.log('New booking created: ', newBooking)
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error creating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
+  }
+
+  //Handle Disable or Enable effects of buttons
   useEffect(() => {
     if (!startTime || !endTime || !selectedDate || !getInTime) {
       setDisableNext(true)
@@ -158,8 +185,11 @@ function BookingCard({ open, setOpen, artistDetails }) {
 
   const steps = ['Select Date', 'Select Times', 'Summary']
 
+  //Handlers for Next and Back Buttons Click and Submission of Date
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
+    //Handle Condition, Embed Artist ID and submit form
+    if (activeStep === 1) handleSubmit()
   }
 
   const handleBack = () => {
@@ -168,9 +198,26 @@ function BookingCard({ open, setOpen, artistDetails }) {
     return
   }
 
+  //Handlers for Form Data Input
   const handleDateChange = date => {
-    console.log(date.format('YYYY-MM-DD'))
     setSelectedDate(date.format('YYYY-MM-DD'))
+    //Embed artistID into the form data
+    date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artistDetails._id })
+  }
+
+  const handleChangeGetInTime = (time, timeString) => {
+    time && setFormData({ ...formData, getInTime: time.toDate() })
+    setGetInTime(time)
+  }
+
+  const handleChangeStartTime = (time, timeString) => {
+    time && setFormData({ ...formData, startTime: time.toDate() })
+    setStartTime(time)
+  }
+
+  const handleChangeEndTime = (time, timeString) => {
+    time && setFormData({ ...formData, endTime: time.toDate() })
+    setEndTime(time)
   }
 
   const handleSnackbarClose = () => {
@@ -232,10 +279,11 @@ function BookingCard({ open, setOpen, artistDetails }) {
                     </Typography>
                     <TimePicker
                       defaultValue={new Date().getHours()}
+                      name='getInTime'
                       ampm={false}
                       minutesStep={15}
                       value={getInTime}
-                      onChange={time => setGetInTime(time)}
+                      onChange={handleChangeGetInTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
                         '& .MuiTextField-root': {
@@ -268,7 +316,7 @@ function BookingCard({ open, setOpen, artistDetails }) {
                       ampm={false}
                       minutesStep={15}
                       value={startTime}
-                      onChange={time => setStartTime(time)}
+                      onChange={handleChangeStartTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
                         '& .MuiTextField-root': {
@@ -301,7 +349,7 @@ function BookingCard({ open, setOpen, artistDetails }) {
                       ampm={false}
                       minutesStep={15}
                       value={endTime}
-                      onChange={time => setEndTime(time)}
+                      onChange={handleChangeEndTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
                         '& .MuiTextField-root': {

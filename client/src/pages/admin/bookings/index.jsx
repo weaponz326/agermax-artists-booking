@@ -238,7 +238,7 @@ export const BookingsModalContent = () => {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
-    adminID: '',
+    organizerID: '',
     bookingID: '',
     firstName: '',
     lastName: '',
@@ -334,9 +334,9 @@ export const BookingsModalContent = () => {
         placeholder='Admin ID'
         className={styles.modalCardContentInputField}
         type='text'
-        name='adminID'
-        id='adminID'
-        value={formData.adminID}
+        name='organizerID'
+        id='organizerID'
+        value={formData.organizerID}
         onChange={handleChange}
         required
       />
