@@ -117,10 +117,15 @@
 .bookingStatus *:hover {
   background-color: var(--tabs-hover-color);
 }
-.bookingStatusAllButton {
+.bookingStatusActiveButton {
   background-color: #4328f21c;
   border: 1px solid #4428f2;
   color: #4428f2;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e6e6e6;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
 .statusCount {
   background-color: var(--primary-color);
