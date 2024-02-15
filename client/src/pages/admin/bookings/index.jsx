@@ -17,18 +17,21 @@ import { DatePicker, AutoComplete, TimePicker, ConfigProvider } from 'antd'
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
 import { useArtists } from 'src/providers/ArtistsProvider'
+import { useBookings } from 'src/providers/BookingsProvider'
 
 //Import services
 import { createBooking } from 'src/services/bookings'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
+  const { bookings } = useBookings()
+  const { artists } = useArtists()
 
   if (activeEventsView === 'ListView') {
     return (
       <main className={styles.bookingsPage}>
         <AdminPagesNavBar activeEventsView={activeEventsView} setActiveEventsView={setActiveEventsView} />
-        <EventsListView />
+        <EventsListView bookings={bookings} />
       </main>
     )
   } else if (activeEventsView === 'ThreeDView') {
@@ -82,7 +85,17 @@ export const WeekView = () => {
   )
 }
 
-export const EventsListView = () => {
+export const EventsListView = ({ bookings }) => {
+  const [events, setEvents] = useState([])
+  useEffect(() => {
+    if (bookings) {
+      const sortedBookingsByDate = bookings.sort(
+        (a, b) => new Date(b.dateTimeRequested) - new Date(a.dateTimeRequested)
+      )
+      setEvents(sortedBookingsByDate)
+    }
+  }, [bookings])
+
   return (
     <section className={styles.bookingStatusSection}>
       <div className={styles.bookingStatus}>
@@ -94,10 +107,11 @@ export const EventsListView = () => {
         <TabButton>Approved</TabButton>
         <TabButton>Canceled</TabButton>
       </div>
-      <EventsList month={'December'} />
-      <EventsList month={'January'} />
+      <EventsList events={events} />
+
+      {/* <EventsList month={'January'} />
       <EventsList month={'February'} />
-      <EventsList month={'March'} />
+      <EventsList month={'March'} /> */}
     </section>
   )
 }
@@ -187,48 +201,104 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
   )
 }
 
-export const EventsList = ({ month }) => {
+export const EventsList = ({ events }) => {
+  const [groupedEvents, setGroupedEvents] = useState(null)
+
+  useEffect(() => {
+    if (events) {
+      const groupedBookings = groupBookingsByMonth(events)
+      const sortedGroups = sortGroupsByMonth(groupedBookings)
+      setGroupedEvents(sortedGroups)
+    }
+  }, [events])
+
+  // Function to group bookings by month and year
+  const groupBookingsByMonth = bookings => {
+    const groups = {}
+
+    bookings.forEach(booking => {
+      const date = new Date(booking.date)
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1 // Adding 1 to get 1-based months
+
+      const key = `${year}-${month.toString().padStart(2, '0')}` // Format: "YYYY-MM"
+
+      if (!groups[key]) {
+        groups[key] = []
+      }
+      groups[key].push(booking)
+    })
+
+    return groups
+  }
+
+  // Function to sort groups by month and year
+  const sortGroupsByMonth = groups => {
+    return Object.entries(groups).sort(([a], [b]) => {
+      return new Date(a) - new Date(b)
+    })
+  }
+
   return (
     <section className={styles.monthlyLookaheadSection}>
-      <div className={styles.monthLabel}>{month}</div>
+      {/* <div className={styles.monthLabel}>{events.length}</div> */}
       <div className={styles.allEventsInMonth}>
-        <EventsListItem />
-        <EventsListItem />
-        <EventsListItem approvalStatus={'pending'} />
+        {events
+          ? events.map(event => (
+              <div key={event._id}>
+                <EventsListItem event={event} />
+              </div>
+            ))
+          : 'Loading...'}
       </div>
     </section>
   )
 }
 
-export const EventsListItem = ({ approvalStatus }) => {
+export const EventsListItem = ({ event }) => {
   const eventStatus = {
     buttonStyle: {
-      background: approvalStatus === 'pending' ? 'Black' : 'White',
-      color: approvalStatus === 'pending' ? 'White' : 'Black',
+      background: event.status === 'pending' ? 'Black' : 'White',
+      color: event.status === 'pending' ? 'White' : 'Black',
       fontSize: '0.81rem'
     },
-    buttonText: approvalStatus === 'pending' ? 'Approve' : 'Details'
+    buttonText: event.status === 'pending' ? 'Approve' : 'Details'
   }
+
   return (
     <div className={styles.monthEventListItem}>
       <div className={styles.statusInfo}>
-        <EventStatusIcon className={styles.statusIcon} />
-        <CalendarIcon />
+        <EventStatusIcon event={event} />
+        <CalendarIcon booking={event} />
         <div className={styles.event}>
           <div className={styles.eventTitle}>Stockholm Music Festival</div>
-          <div className={styles.eventArtist}>John Doe</div>
+          <div className={styles.eventArtist}>{event.artistID}</div>
         </div>
       </div>
 
       <div className={styles.eventStatusButton}>
-        <TabButton buttonStyle={eventStatus.buttonStyle}>{eventStatus.buttonText}</TabButton>
+        {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>}
+        {event.status === 'approved' && <TabButton buttonStyle={eventStatus.buttonStyle}>Details</TabButton>}
+        {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>}
+        {!event.status && <TabButton buttonStyle={eventStatus.buttonStyle}>N/A</TabButton>}
       </div>
     </div>
   )
 }
 
-export const EventStatusIcon = ({ style, className }) => {
-  return <div style={style} className={className}></div>
+export const EventStatusIcon = ({ style, className, event }) => {
+  const statusIconColor = () => {
+    switch (event.status) {
+      case 'cancelled':
+        return '#FF1E46'
+      case 'approved':
+        return '#27EC76'
+      default:
+        return '#FFD027'
+    }
+  }
+
+  return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
 export const BookingsModalContent = () => {
@@ -238,6 +308,7 @@ export const BookingsModalContent = () => {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
+    status: 'pending',
     organizerID: '',
     bookingID: '',
     firstName: '',

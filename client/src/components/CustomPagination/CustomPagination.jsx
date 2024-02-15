@@ -11,7 +11,7 @@ const CustomPagination = ({ artistsPerPage, artists, currentPage, setCurrentPage
       <Pagination
         current={currentPage}
         onChange={onChange}
-        total={artists.length}
+        total={artists ? artists.length : artistsPerPage}
         pageSize={artistsPerPage}
         showPrevNextJumpers={true}
         responsive

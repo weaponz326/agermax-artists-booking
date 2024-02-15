@@ -37,6 +37,7 @@ import Spinner from 'src/@core/components/spinner'
 import { AuthProvider } from 'src/context/AuthContext'
 import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
 import UsersProvider from 'src/providers/UsersProvider'
+import BookingsProvider from 'src/providers/BookingsProvider'
 
 // ** Styled Components
 import ReactHotToast from 'src/@core/styles/libs/react-hot-toast'
@@ -100,35 +101,40 @@ const App = props => {
     <Provider store={store}>
       <UsersProvider>
         <ArtistsProvider>
-          <CacheProvider value={emotionCache}>
-            <Head>
-              <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
-              <meta name='description' content={`${themeConfig.templateName} –Artist Booking Platform`} />
-              <meta name='keywords' content='' />
-              <meta name='viewport' content='initial-scale=1, width=device-width' />
-            </Head>
+          <BookingsProvider>
+            <CacheProvider value={emotionCache}>
+              <Head>
+                <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
+                <meta name='description' content={`${themeConfig.templateName} –Artist Booking Platform`} />
+                <meta name='keywords' content='' />
+                <meta name='viewport' content='initial-scale=1, width=device-width' />
+              </Head>
 
-            <AuthProvider>
-              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                <SettingsConsumer>
-                  {({ settings }) => {
-                    return (
-                      <ThemeComponent settings={settings}>
-                        <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                          {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
-                          {getLayout(<Component {...pageProps} />)}
-                          {/* </AclGuard> */}
-                        </Guard>
-                        <ReactHotToast>
-                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                        </ReactHotToast>
-                      </ThemeComponent>
-                    )
-                  }}
-                </SettingsConsumer>
-              </SettingsProvider>
-            </AuthProvider>
-          </CacheProvider>
+              <AuthProvider>
+                <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                  <SettingsConsumer>
+                    {({ settings }) => {
+                      return (
+                        <ThemeComponent settings={settings}>
+                          <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                            {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                            {getLayout(<Component {...pageProps} />)}
+                            {/* </AclGuard> */}
+                          </Guard>
+                          <ReactHotToast>
+                            <Toaster
+                              position={settings.toastPosition}
+                              toastOptions={{ className: 'react-hot-toast' }}
+                            />
+                          </ReactHotToast>
+                        </ThemeComponent>
+                      )
+                    }}
+                  </SettingsConsumer>
+                </SettingsProvider>
+              </AuthProvider>
+            </CacheProvider>
+          </BookingsProvider>
         </ArtistsProvider>
       </UsersProvider>
     </Provider>

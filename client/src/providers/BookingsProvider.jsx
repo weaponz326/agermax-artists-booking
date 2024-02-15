@@ -31,8 +31,9 @@ export default BookingsProvider
 // Consumer custom hook
 export const useBookings = () => {
   const context = useContext(BookingContext)
-  if (!context.Bookings) {
-    console.log('No Bookings fetched')
+  if (!context.bookings) {
+    throw new Error('Provider should be up in higher director')
   }
+  console.log('Bookings fetched!')
   return context
 }
