@@ -7,17 +7,22 @@ import Skeleton from '@mui/material/Skeleton'
 import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
+import { useBookings } from 'src/providers/BookingsProvider'
+import { useArtists } from 'src/providers/ArtistsProvider'
 
-export default function EventsLayout({ imgList }) {
+export default function EventsLayout() {
+  const { bookings } = useBookings()
+  const [bookingsList, setBookingsList] = useState()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!imgList || imgList.length < 1) {
+    if (!bookings || bookings.length < 1) {
       setLoading(true)
     } else {
+      setBookingsList(bookings)
       setLoading(false)
     }
-  }, [imgList])
+  }, [bookings])
 
   if (loading) {
     return (
@@ -50,9 +55,9 @@ export default function EventsLayout({ imgList }) {
           <Link href='#'>See all</Link>
         </span>
         <div className={styles['events-preview']}>
-          {imgList.map((img, index) => (
+          {bookingsList.map((booking, index) => (
             <Fragment key={index}>
-              <EventCard imgUrl={img.urls.regular} />
+              <EventCard booking={booking} />
             </Fragment>
           ))}
         </div>
@@ -61,38 +66,65 @@ export default function EventsLayout({ imgList }) {
   }
 }
 
-const EventCard = ({ imgUrl }) => {
+//Booking.Picture not yet supplied in the backend
+const EventCard = ({ booking }) => {
   return (
-    <div className={styles['events-preview-container']} onClick={() => Router.push('#')}>
-      <Image className={styles['evt-img']} src={imgUrl} alt='Alt Text' loading='eager' fill />
-      <CalendarIcon />
-      <EventsDetails />
+    <div className={styles['events-preview-container']}>
+      <Image
+        className={styles['evt-img']}
+        src={booking.picture ? booking.picture : ''}
+        alt='BookingImg'
+        loading='eager'
+        fill
+      />
+      <CalendarIcon booking={booking} />
+      <EventsDetails booking={booking} />
       <div className={styles.gradientOverlay}></div>
     </div>
   )
 }
 
-// export const CalendarIcon = ({ style }) => {
-//   return (
-//     <div style={style} className={styles['calendar-icon']}>
-//       <div className={styles['calendar-icon-ins-con']}>
-//         <span className={styles['calender-date calendar-month']}>Dec</span>
-//         <span className={styles['calendar-date calendar-day']}>28</span>
-//       </div>
-//     </div>
-//   )
-// }
+const EventsDetails = ({ booking }) => {
+  const { artists } = useArtists()
+  const [artistName, setArtistName] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
 
-const EventsDetails = () => {
+  // Fetch artist name from API if it is not provided in the data from the server
+  useEffect(() => {
+    if (artists && booking) {
+      const artist = artists.find(a => a._id === booking.artistID)
+      const artistFullName = artist ? `${artist?.firstName} ${artist?.lastName}` : 'Unknown Artist'
+      setArtistName(artistFullName)
+
+      //Configure Time for display
+      const formattedStartTime = formatDateTime(booking.startTime)
+      const formattedEndTime = formatDateTime(booking.endTime)
+
+      setStartTime(formattedStartTime)
+      setEndTime(formattedEndTime)
+    }
+  }, [artists, booking])
+
+  const formatDateTime = (inputDateTime, outputFormat) => {
+    const time = new Date(inputDateTime)
+    const hour = time.getHours()
+    const minutes = time.getMinutes()
+    const formattedTime = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+    return formattedTime
+  }
+
   return (
     <div className={styles.eventDetailsWrapper}>
-      <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>Jimi Hendrix</div>
-      <div className={styles['event-prev-detail']}>Stockholm Music Arena</div>
+      <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>{artistName}</div>
+      <div className={styles['event-prev-detail']}>
+        {booking.locationVenue ? booking.locationVenue : 'Location not specified'}
+      </div>
       <div className={styles['event-preview-schedule']}>
         <Clock color='orange' fill='orange' variant='Bold' className={styles['iconsans-bold-clock']} />
-        <div className={styles['event-prev-detail']}>20:00</div>
+        <div className={styles['event-prev-detail']}>{startTime}</div>
         <MdArrowForward color='white' />
-        <div className={styles['event-prev-detail']}>01:00</div>
+        <div className={styles['event-prev-detail']}>{endTime}</div>
       </div>
     </div>
   )

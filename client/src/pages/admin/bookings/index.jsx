@@ -257,6 +257,11 @@ export const BookingsModalContent = () => {
     // Add other fields as needed
   })
 
+  useEffect(() => {
+    if (!artists) return
+    setOptions(artists)
+  }, [])
+
   const handleChange = e => {
     setFormData({
       ...formData,
@@ -267,7 +272,6 @@ export const BookingsModalContent = () => {
   const handleChangeArtist = (artist, option) => {
     const { artistID } = option
     artist && setFormData({ ...formData, artistID: artistID })
-    console.log(formData)
   }
 
   const handleChangeDate = (date, dateString) => {
@@ -297,11 +301,6 @@ export const BookingsModalContent = () => {
       // Handle error, e.g., display an error message to the user
     }
   }
-
-  useEffect(() => {
-    if (!artists) return
-    setOptions(artists)
-  }, [])
 
   const filterOption = (inputValue, option) => {
     return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1

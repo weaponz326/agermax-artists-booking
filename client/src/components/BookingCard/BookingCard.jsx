@@ -140,7 +140,7 @@ function BookingCard({ open, setOpen, artistDetails }) {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
-    organizerID: '12',
+    organizerID: '65ca3d8256ec877c775dc0d4',
     dateTimeRequested: '',
     startTime: '',
     endTime: '',
@@ -203,6 +203,7 @@ function BookingCard({ open, setOpen, artistDetails }) {
     setSelectedDate(date.format('YYYY-MM-DD'))
     //Embed artistID into the form data
     date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artistDetails._id })
+    console.log(artistDetails)
   }
 
   const handleChangeGetInTime = (time, timeString) => {
@@ -218,15 +219,6 @@ function BookingCard({ open, setOpen, artistDetails }) {
   const handleChangeEndTime = (time, timeString) => {
     time && setFormData({ ...formData, endTime: time.toDate() })
     setEndTime(time)
-  }
-
-  const handleSnackbarClose = () => {
-    // setDisableNext(false)
-  }
-
-  const handleConfirmBooking = () => {
-    // Logic to confirm booking
-    setDisableNext(true)
   }
 
   return (

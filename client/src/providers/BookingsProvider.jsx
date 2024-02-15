@@ -12,7 +12,7 @@ const BookingsProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const bookingsList = await getAllBookings()
-        setBookings(BookingsList)
+        setBookings(bookingsList)
       } catch (error) {
         setError(error)
       } finally {

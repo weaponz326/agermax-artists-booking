@@ -34,8 +34,8 @@ const HeaderCarouselContainer = ({ artists, className, layout }) => {
         </div>
         <div className={styles.carouselWrapper}>
           <div className={layout}>
-            {artists.map(artist => (
-              <Fragment key={artist.id}>
+            {artists.map((artist, index) => (
+              <Fragment key={`${artist.id} __${index}`}>
                 <Carousel artist={artist} />
               </Fragment>
             ))}

@@ -55,7 +55,13 @@ export const AboutSection = () => {
     <section className={styles['about']}>
       <div className={styles.aboutWrapper}>
         <div className={styles['about-content']}>
-          <Image className={styles['about-content-img']} src={'/images/rectangle-22462.png'} width={350} height={350} />
+          <Image
+            className={styles['about-content-img']}
+            src={'/images/rectangle-22462.png'}
+            width={350}
+            height={350}
+            alt='about'
+          />
           <div className={styles['about-message']}>
             <div className={styles['about-message-title']}>About</div>
             <div className={styles['about-message-content']}>

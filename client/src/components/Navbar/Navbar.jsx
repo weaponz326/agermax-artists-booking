@@ -6,14 +6,22 @@ import { Dropdown, DatePicker, Space, AutoComplete, ConfigProvider } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 
 import CustomizedDropdown from '../Dropdown/CustomizedDropDown'
-const { RangePicker } = DatePicker
+const { RangePicker, TimePicker } = DatePicker
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import SearchBar from '../AdminPagesSharedComponents/SearchBar/SearchBar'
 import { useArtists } from 'src/providers/ArtistsProvider'
+import { createBooking } from 'src/services/bookings'
+
+const disabledDate = current => {
+  // Can not select days before today and today
+  return current && current < dayjs().endOf('day')
+}
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
-  const [activeTab, setActiveTab] = useState(null)
 
   const navBarRef = useRef()
 
@@ -26,12 +34,7 @@ export default function Navbar() {
               <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
             </Link>
           </div>
-          <Search
-            hideMenuItems={hideMenuItems}
-            setHideMenuItems={setHideMenuItems}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          <BookArtistPanel hideMenuItems={hideMenuItems} setHideMenuItems={setHideMenuItems} navBarRef={navBarRef} />
           <CustomizedDropdown className={styles.userActionsButtons} />
         </div>
       </div>
@@ -39,18 +42,41 @@ export default function Navbar() {
   )
 }
 
-const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) => {
+const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, navBarRef }) => {
+  const [activeTab, setActiveTab] = useState(null)
+
+  const { artists } = useArtists()
   const menuBarWrapper = useRef()
   const searchBarContainerRef = useRef()
   const dateInputRef = useRef(null)
   const dateRangePickerRef = useRef(null)
-  const bookerInputRef = useRef()
+  const bookerInputRef = useRef(null)
+  const getInTimeRef = useRef(null)
+  const startTimeRef = useRef(null)
+  const endTimeRef = useRef(null)
+  const [formData, setFormData] = useState({
+    // Initialize form data
+    // Example:
+    organizerID: '65ca3d8256ec877c775dc0d4',
+    dateTimeRequested: '',
+    startTime: '',
+    endTime: '',
+    getInTime: '',
+    numberOfGuests: '',
+    ageRange: '',
+    locationVenue: '',
+    artistID: '',
+    availableTechnology: '',
+    otherComments: ''
 
+    // Add other fields as needed
+  })
+
+  //Effects from scroll and click events
   useEffect(() => {
     const handleScroll = () => {
       setHideMenuItems(true)
       setActiveTab(null)
-      // searchBarContainerRef.current.blur()
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
@@ -67,6 +93,7 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
       const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
       const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
 
+      // if (navBarRef.current) return
       if (antDropdown) return
       if (antDropdownMenu) return
       if (antDropdownPicker) return
@@ -81,19 +108,50 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
     }
   }, [])
 
+  //Handlers for Form Data Input
+  const handleDateChange = date => {
+    date && setFormData({ ...formData, dateTimeRequested: date.toDate() })
+  }
+
+  const handleChangeGetInTime = (time, timeString) => {
+    time && setFormData({ ...formData, getInTime: time.toDate() })
+  }
+
+  const handleChangeStartTime = (time, timeString) => {
+    time && setFormData({ ...formData, startTime: time.toDate() })
+  }
+
+  const handleChangeEndTime = (time, timeString) => {
+    time && setFormData({ ...formData, endTime: time.toDate() })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const newBooking = await createBooking(formData)
+      console.log('New booking created: ', newBooking)
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error creating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
+  }
+
+  //Handlers for Clicking Booking Panel Tabs
   function setActiveItem(item) {
     setActiveTab(item)
-    item.focus()
   }
 
   function handleMenuClick() {
     setActiveTab(null)
     setHideMenuItems(false)
-    const antDropdown = document.querySelector('.ant-select-selection-search-input')
   }
   function switchToDatePicker() {
-    dateRangePickerRef.current.focus()
-    console.log(dateRangePickerRef.current)
+    dateInputRef.current.focus()
+    console.log(dateInputRef.current)
+    setActiveItem(dateInputRef.current)
+
+    // setActiveTab(dateInputRef.current)
   }
   function switchToBookerDetails() {
     bookerInputRef.current.focus()
@@ -119,6 +177,9 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
 
   ///Set Conditional Classes
   const checkDateActiveClass = activeTab === dateInputRef.current ? styles.activeTab : null
+  const checkGetInTimeActiveClass = activeTab === getInTimeRef.current ? styles.activeTab : null
+  const checkStartTimeActiveClass = activeTab === startTimeRef.current ? styles.activeTab : null
+  const checkEndTimeActiveClass = activeTab === endTimeRef.current ? styles.activeTab : null
   const checkBookerActiveClass = activeTab === bookerInputRef.current ? styles.activeTab : null
   // const checkSearchBarActiveClass = activeTab === searchBarContainerRef.current ? styles.activeTab : null
 
@@ -150,7 +211,7 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
           wrapperClassName={styles.collapsedStateSearchBarWrapper}
           className={styles.collapsedStateSearchInput}
           placeholder='Find & Book your Artist here....'
-          onClick={handleMenuClick}
+          onClickWrapper={handleMenuClick}
           onChange={handleMenuClick}
         />
         <ConfigProvider
@@ -162,23 +223,38 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
         >
           <div className={styles.searchFormWrapper} style={hideMenuItems ? noDisplayStyle : displayStyle}>
             {navMenu}
-            <form className={styles['search-bar']} onSubmit={e => e.preventDefault()} ref={searchBarContainerRef}>
+            <form className={styles['search-bar']} onSubmit={handleSubmit} ref={searchBarContainerRef}>
               <NavBarSearchBar
                 placeholder={'Search Artist'}
                 wrapperClassName={styles.searchWrapper}
                 switchToDatePicker={switchToDatePicker}
-                // dateInputRef={dateInputRef.current}
                 setActiveItem={setActiveItem}
                 activeTab={activeTab}
+                formData={formData}
+                setFormData={setFormData}
+                artists={artists}
+                dateInputRef={dateInputRef}
               />
               <div className={styles['search-item-divider']}></div>
-              <div
+
+              <DatePicker
                 className={`${styles.searchWrapper} ${checkDateActiveClass}`}
-                onClick={e => setActiveItem(dateInputRef.current)}
-                onFocus={e => setActiveItem(dateInputRef.current)}
                 ref={dateInputRef}
-              >
-                <RangePicker
+                format='YYYY-MM-DD'
+                placeholder='Select Date'
+                showNow={false}
+                minuteStep={15}
+                name='dateTimeRequested'
+                defaultValue={formData.dateTimeRequested}
+                onChange={handleDateChange}
+                variant='borderless'
+                size='small'
+                disabledDate={disabledDate}
+                onFocus={e => setActiveItem(dateInputRef.current)}
+                aria-required='true'
+              />
+
+              {/* <RangePicker
                   ref={dateRangePickerRef}
                   variant='borderless'
                   className={`${styles.rangePicker} dateRangePicker`}
@@ -189,10 +265,68 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
                   // onChange={onChange}
                   onOk={switchToBookerDetails}
                   minuteStep={15}
-                />
-              </div>
+                /> */}
+              {/* </div> */}
               <div className={styles['search-item-divider']}></div>
-              <div
+
+              <TimePicker
+                className={`${styles.searchWrapper} ${checkGetInTimeActiveClass}`}
+                onClick={e => setActiveItem(getInTimeRef.current)}
+                onFocus={e => setActiveItem(getInTimeRef.current)}
+                ref={getInTimeRef}
+                name='getInTime'
+                placeholder='Get In Time'
+                minuteStep={15}
+                showNow={false}
+                showSecond={false}
+                format='HH:mm'
+                defaultValue={formData.getInTime}
+                onChange={handleChangeGetInTime}
+                variant='borderless'
+                size='small'
+                aria-required='true'
+              />
+              <div className={styles['search-item-divider']}></div>
+
+              <TimePicker
+                className={`${styles.searchWrapper} ${checkStartTimeActiveClass}`}
+                onClick={e => setActiveItem(startTimeRef.current)}
+                onFocus={e => setActiveItem(startTimeRef.current)}
+                ref={startTimeRef}
+                name='startTime'
+                placeholder='Start Time'
+                minuteStep={15}
+                showNow={false}
+                showSecond={false}
+                format='HH:mm'
+                defaultValue={formData.startTime}
+                onChange={handleChangeStartTime}
+                variant='borderless'
+                size='small'
+                aria-required='true'
+              />
+              <div className={styles['search-item-divider']}></div>
+
+              <TimePicker
+                className={`${styles.searchWrapper} ${checkEndTimeActiveClass}`}
+                onClick={e => setActiveItem(endTimeRef.current)}
+                onFocus={e => setActiveItem(endTimeRef.current)}
+                ref={endTimeRef}
+                name='endTime'
+                placeholder='End Time'
+                minuteStep={15}
+                showNow={false}
+                showSecond={false}
+                format='HH:mm'
+                defaultValue={formData.endTime}
+                onChange={handleChangeEndTime}
+                variant='borderless'
+                size='small'
+                aria-required
+              />
+              <div className={styles['search-item-divider']}></div>
+
+              {/* <div
                 className={`${styles.searchWrapper} ${checkBookerActiveClass}`}
                 onClick={e => setActiveItem(bookerInputRef.current)}
                 onFocus={e => setActiveItem(bookerInputRef.current)}
@@ -200,7 +334,7 @@ const Search = ({ hideMenuItems, setHideMenuItems, activeTab, setActiveTab }) =>
               >
                 <CustomDropdown hideMenuItems={hideMenuItems} />
               </div>
-              <div className={styles['search-item-divider']}></div>
+              <div className={styles['search-item-divider']}></div> */}
 
               <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
             </form>
@@ -309,85 +443,70 @@ export const CustomDropdown = ({ hideMenuItems, bookerInputRef }) => {
   )
 }
 
-export const NavBarSearchBar = ({ switchToDatePicker, placeholder, setActiveItem, activeTab }) => {
-  const [query, setQuery] = useState('')
-  const [artistsList, setArtistsList] = useState([])
-  const [filteredArtistsList, setFilteredArtistsList] = useState([])
+export const NavBarSearchBar = ({
+  dateInputRef,
+  artists,
+  switchToDatePicker,
+  setActiveItem,
+  activeTab,
+  formData,
+  setFormData
+}) => {
   const [options, setOptions] = useState([])
   const searchInputRef = useRef()
-  const { artists } = useArtists()
+  // const { artists } = useArtists()
 
   useEffect(() => {
     //Get All Artists Lists
+    if (artists) setOptions(artists)
+  }, [artists])
 
-    if (artists) setArtistsList(artists)
-    if (artists) setFilteredArtistsList(artists)
-  }, [])
-
-  useEffect(() => {
-    const newOptions = filteredArtistsList.map(
-      artist => ({
-        value: `${artist.firstName} ${artist.lastName}`,
-        label: (
-          <div className={styles.artistsListPreview}>
-            <div className={styles.searchInputFieldPictureContainer}>
-              <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
-            </div>
-            <div>
-              <span>{artist.firstName}</span> <span>{artist.lastName}</span>
-              <div>{artist.genre}</div>
-            </div>
-          </div>
-        )
-      }),
-      [query]
-    )
-
-    setOptions(newOptions)
-  }, [filteredArtistsList])
-
-  const handleSelectQuery = e => {
+  const handleChangeArtist = (artist, option) => {
+    const { artistID } = option
+    artist && setFormData({ ...formData, artistID: artistID })
     switchToDatePicker()
-    if (artistsList.length != 0) {
-      const filteredList = artistsList.filter(
-        artist =>
-          artist.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          artist.lastName.toLowerCase().includes(query.toLowerCase())
-      )
-
-      setFilteredArtistsList(filteredList)
-    }
   }
 
   const checkSearchActiveClass = activeTab === searchInputRef.current ? styles.activeTab : null
+  const artistsDropdownDisplay = artist => (
+    <div className={styles.artistsListPreview}>
+      <div className={styles.searchInputFieldPictureContainer}>
+        <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
+      </div>
+      <div>
+        <span>{artist.firstName}</span> <span>{artist.lastName}</span>
+        <div>{artist.genre}</div>
+      </div>
+    </div>
+  )
+  const filterOption = (inputValue, option) => {
+    // return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+    return option.value.toLowerCase().includes(inputValue.toLowerCase())
+  }
 
   return (
-    <div
+    <AutoComplete
       onClick={e => setActiveItem(searchInputRef.current)}
       onFocus={e => setActiveItem(searchInputRef.current)}
       ref={searchInputRef}
       className={`${styles.searchWrapper} ${checkSearchActiveClass}`}
-      // className={`${styles.wrapperClass} ${checkActiveClass}`}
-    >
-      <AutoComplete
-        allowClear
-        // open={true}
-        autoFocus
-        options={options}
-        popupMatchSelectWidth={false}
-        popupClassName={styles.popup}
-        notFoundContent='Sorry, Artist not found!'
-        onSelect={e => handleSelectQuery(e)}
-        className={styles.searchInputField}
-        placeholder={placeholder ? placeholder : 'Search Artist'}
-        // value={query}
-        variant='borderless'
-        style={{
-          width: 185,
-          height: 50
-        }}
-        filterOption={(inputValue, option) => option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
-      />
-    </div>
+      style={{
+        width: 200
+      }}
+      autoFocus
+      popupMatchSelectWidth={false}
+      allowClear
+      notFoundContent='Sorry, no artist found'
+      variant='borderless'
+      onSelect={handleChangeArtist}
+      defaultValue={formData.artistID}
+      options={options.map(artist => ({
+        artistID: artist._id,
+        value: `${artist.firstName} ${artist.lastName}`,
+        label: artistsDropdownDisplay(artist)
+      }))}
+      placeholder='Search Artist'
+      filterOption={filterOption}
+    />
   )
 }
