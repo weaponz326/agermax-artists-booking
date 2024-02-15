@@ -8,6 +8,7 @@ import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import FileUploaderMultiple from 'src/components/FileUploader/FileUploader'
 
 const TabAccount = () => {
+  const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
   const { user } = useAuth()
   const [formData, setFormData] = useState({
     profilePhoto: user?.profilePhoto || '',
@@ -53,11 +54,23 @@ const TabAccount = () => {
     setAdditionalFormData({ ...additionalFormData, [field]: event.target.value })
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    console.log('Form Data:', formData)
+
+    const combinedData = {
+      ...formData,
+      ...additionalFormData,
+      genre: additionalFormData.genre.filter(item => item),
+      socialMediaLinks: additionalFormData.socialMediaLinks.filter(item => item),
+      availableDates: additionalFormData.availableDates.filter(item => item),
+      eventsHosted: additionalFormData.eventsHosted.filter(item => item),
+      gallery: additionalFormData.gallery.filter(item => item) // Assuming you handle file uploads separately and have their references here
+    }
+
+    console.log('Combined Form Data:', combinedData)
+
     try {
-      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formData, {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, combinedData, {
         headers: { Authorization: `Bearer ${accessToken}` }
       })
       alert('Profile updated successfully.')
