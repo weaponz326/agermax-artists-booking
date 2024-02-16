@@ -1,8 +1,7 @@
 // paymentController.js
 
 const Stripe = require("stripe");
-const Payment = require("../models/Payment"); // Assuming you have a Payment model
-
+const Payment = require("../models/Payment"); 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.getAllPayments = async (req, res) => {
@@ -31,11 +30,11 @@ exports.processPayment = async (req, res) => {
 
     // Basic validation for required fields
     if (!amount)
-      return res.status(400).json({ message: "Amount is required." });
+      return res.status(400).json({ message: "amount is required." });
     if (!source)
-      return res.status(400).json({ message: "Source is required." });
+      return res.status(400).json({ message: "source is required." });
     if (!receipt_email)
-      return res.status(400).json({ message: "Receipt email is required." });
+      return res.status(400).json({ message: "receipt_email is required." });
 
     const charge = await stripe.charges.create({
       amount: amount, // Ensure amount is in the smallest currency unit (e.g., cents for USD)
