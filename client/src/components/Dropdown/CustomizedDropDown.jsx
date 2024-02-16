@@ -8,43 +8,47 @@ import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 
 import { useRouter } from 'next/router'
 
-const isLoggedInItems = [
-  {
-    key: '1',
-    label: <a href='/artists'>Book Artists</a>
-  },
-  {
-    key: '2',
-    label: <a href='/admin/account'>Account</a>
-  },
-  {
-    key: '3',
-    label: <a href='#'>View Events</a>
-  },
-  {
-    key: '4',
-    label: <a href='#'>Help Center</a>
-  },
-  {
-    key: '5',
-    label: <a href='#'>Log Out</a>
-  }
-]
-
-const buttonStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-  padding: '1.5rem 0.7rem',
-  borderRadius: '1.5rem',
-  justifyContent: 'space-between',
-  color: '#183d4c',
-  border: '0.5px solid #183d4c'
-}
-
 const CustomizedDropdown = ({ className, user, logout }) => {
-  // const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
-  // const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  console.log(user)
+  const UserAccountLink = () => {
+    if (user.role === 'artist') return <Link href='admin/home/artist'>Artist Account</Link>
+    if (user.role === 'admin') return <Link href='admin/home/admin'>Admin Account</Link>
+    if (user.role === 'organizer') return <Link href='admin/home/organizer'>Organizer Account</Link>
+  }
+
+  const isLoggedInItems = [
+    {
+      key: '1',
+      label: <Link href='/artists'>Book Artists</Link>
+    },
+    {
+      key: '2',
+      label: <UserAccountLink />
+    },
+    {
+      key: '3',
+      label: <Link href='#'>View Events</Link>
+    },
+    {
+      key: '4',
+      label: <Link href='#'>Help Center</Link>
+    },
+    {
+      key: '5',
+      label: <Link href='/'>Log Out</Link>
+    }
+  ]
+
+  const buttonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '1.5rem 0.7rem',
+    borderRadius: '1.5rem',
+    justifyContent: 'space-between',
+    color: '#183d4c',
+    border: '0.5px solid #183d4c'
+  }
   const router = useRouter()
   const onClick = ({ key }) => {
     if (key === '5') logout()
