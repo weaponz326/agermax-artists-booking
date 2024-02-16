@@ -65,7 +65,7 @@ app.use("/api", artistRoutes);
 app.use("/api", organizerRoutes);
 app.use("/api", bookingRoutes);
 app.use("/api", userRoutes);
-app.use("/api/", paymentRoutes);
+app.use("/api", paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
