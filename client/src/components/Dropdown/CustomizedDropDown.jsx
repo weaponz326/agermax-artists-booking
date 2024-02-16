@@ -4,7 +4,10 @@ import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
-import { useAuth } from 'src/providers/AuthProvider'
+// import { useAuth } from 'src/providers/AuthProvider'
+import { useAuth } from 'src/hooks/useAuth'
+
+import { useRouter } from 'next/router'
 
 const isLoggedInItems = [
   {
@@ -41,12 +44,16 @@ const buttonStyle = {
 }
 
 const CustomizedDropdown = ({ className }) => {
-  const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+  // const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+  // const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const router = useRouter()
 
-  if (isLoggedIn) {
+  const { user, logout } = useAuth()
+
+  if (user) {
     const onClick = ({ key }) => {
       if (key === '5') {
-        setIsLoggedIn(false)
+        logout()
       }
     }
     return (
@@ -74,7 +81,7 @@ const CustomizedDropdown = ({ className }) => {
   } else {
     return (
       <div className={`${styles.userActionsButtons} ${className}`}>
-        <TabButton className={styles.userMenuSignInButton} onClick={() => setIsLoggedIn(true)}>
+        <TabButton className={styles.userMenuSignInButton} onClick={() => router.push('/login')}>
           Sign In
         </TabButton>
         <Link href={'/register'}>
