@@ -57,6 +57,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, navBarRef }) => {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
+    status: 'pending',
     organizerID: '65ca3d8256ec877c775dc0d4',
     dateTimeRequested: '',
     startTime: '',

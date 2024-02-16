@@ -87,31 +87,60 @@ export const WeekView = () => {
 
 export const EventsListView = ({ bookings }) => {
   const [events, setEvents] = useState([])
+  const [eventsStatusView, setEventsStatusView] = useState('all')
+
   useEffect(() => {
     if (bookings) {
+      //First Sort the bookings Ascending
       const sortedBookingsByDate = bookings.sort(
-        (a, b) => new Date(b.dateTimeRequested) - new Date(a.dateTimeRequested)
+        (a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested)
       )
-      setEvents(sortedBookingsByDate)
+      //Use the buttons and filter and show the sorted bookings
+      if (eventsStatusView === 'all') {
+        setEvents(sortedBookingsByDate)
+      }
+      if (eventsStatusView === 'pending') {
+        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'pending'))
+      }
+      if (eventsStatusView === 'approved') {
+        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'approved'))
+      }
+      if (eventsStatusView === 'cancelled') {
+        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'cancelled'))
+      }
     }
-  }, [bookings])
+  }, [bookings, eventsStatusView])
 
   return (
     <section className={styles.bookingStatusSection}>
       <div className={styles.bookingStatus}>
-        <TabButton className={styles.bookingStatusAllButton}>All</TabButton>
-        <TabButton>
+        <TabButton
+          onClick={() => setEventsStatusView('all')}
+          className={eventsStatusView === 'all' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
+        >
+          All
+        </TabButton>
+        <TabButton
+          onClick={() => setEventsStatusView('pending')}
+          className={eventsStatusView === 'pending' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
+        >
           Pending
           <div className={styles.statusCount}>6</div>
         </TabButton>
-        <TabButton>Approved</TabButton>
-        <TabButton>Canceled</TabButton>
+        <TabButton
+          onClick={() => setEventsStatusView('approved')}
+          className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
+        >
+          Approved
+        </TabButton>
+        <TabButton
+          onClick={() => setEventsStatusView('cancelled')}
+          className={eventsStatusView === 'cancelled' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
+        >
+          Cancelled
+        </TabButton>
       </div>
-      <EventsList events={events} />
-
-      {/* <EventsList month={'January'} />
-      <EventsList month={'February'} />
-      <EventsList month={'March'} /> */}
+      <EventsList events={events} eventsStatusView={eventsStatusView} />
     </section>
   )
 }
@@ -201,7 +230,7 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
   )
 }
 
-export const EventsList = ({ events }) => {
+export const EventsList = ({ events, eventsStatusView }) => {
   const [groupedEvents, setGroupedEvents] = useState(null)
 
   useEffect(() => {
@@ -250,12 +279,23 @@ export const EventsList = ({ events }) => {
               </div>
             ))
           : 'Loading...'}
+        {events.length === 0 && `No ${eventsStatusView} events to display now.`}
       </div>
     </section>
   )
 }
 
 export const EventsListItem = ({ event }) => {
+  const [artistName, setArtistName] = useState('')
+  const { artists } = useArtists()
+  useEffect(() => {
+    if (artists && event) {
+      const artist = artists.find(a => a._id === event.artistID)
+      const artistFullName = artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'
+      setArtistName(artistFullName)
+    }
+  }, [event, artists])
+
   const eventStatus = {
     buttonStyle: {
       background: event.status === 'pending' ? 'Black' : 'White',
@@ -272,7 +312,7 @@ export const EventsListItem = ({ event }) => {
         <CalendarIcon booking={event} />
         <div className={styles.event}>
           <div className={styles.eventTitle}>Stockholm Music Festival</div>
-          <div className={styles.eventArtist}>{event.artistID}</div>
+          <div className={styles.eventArtist}>{artistName}</div>
         </div>
       </div>
 
@@ -310,10 +350,6 @@ export const BookingsModalContent = () => {
     // Example:
     status: 'pending',
     organizerID: '',
-    bookingID: '',
-    firstName: '',
-    lastName: '',
-    lastName: '',
     dateTimeRequested: '',
     startTime: '',
     endTime: '',
