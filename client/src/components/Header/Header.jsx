@@ -2,14 +2,15 @@ import HeaderCarouselContainer from '../HeaderCarouselContainer/HeaderCarouselCo
 import styles from './header.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import Link from 'next/link'
-import { useAuth } from 'src/providers/AuthProvider'
 import { getAllArtists } from 'src/services/artists'
 import { useArtists } from 'src/providers/ArtistsProvider'
+import { useAuth } from 'src/hooks/useAuth'
 export default function Header() {
-  const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
+  const { user } = useAuth()
+
   const { artists } = useArtists()
 
-  const renderedItem = !isLoggedIn ? (
+  const renderedItem = !user ? (
     <Link href='/register'>
       <TabButton className={styles.joinAgermaxButton}>Join Agermax Today</TabButton>
     </Link>
