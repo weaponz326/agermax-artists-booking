@@ -32,7 +32,7 @@ export default BookingsProvider
 export const useBookings = () => {
   const context = useContext(BookingContext)
   if (!context.bookings) {
-    throw new Error('Provider should be up in higher director')
+    console.log('Either Network Error or useBookings must be used within the BookingsProvider')
   }
   console.log('Bookings fetched!')
   return context

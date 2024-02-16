@@ -11,16 +11,20 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 //**Import Custom Styles */
 import styles from './bookings.module.css'
 
+//**Import External Components */
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { DatePicker, AutoComplete, TimePicker, ConfigProvider } from 'antd'
+import { DatePicker, AutoComplete, TimePicker } from 'antd'
+import dayjs from 'dayjs'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
+
+//Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-
-//Import services
 import { createBooking } from 'src/services/bookings'
+import { ArrowBack } from '@material-ui/icons'
+import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
@@ -345,11 +349,13 @@ export const BookingsModalContent = () => {
   const [options, setOptions] = useState([])
   const [artistsOptions, setArtistsOptions] = useState([])
   const { artists } = useArtists()
+  const [modalContentView, setModalContentView] = useState('details')
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
     status: 'pending',
     organizerID: '',
+    eventTitle: '',
     dateTimeRequested: '',
     startTime: '',
     endTime: '',
@@ -413,129 +419,123 @@ export const BookingsModalContent = () => {
     return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
   }
 
-  return (
-    <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-      <h3>Booker Details</h3>
-      <input
-        placeholder='First Name'
-        className={styles.modalCardContentInputField}
-        type='text'
-        name='firstName'
-        id='firstName'
-        value={formData.firstName}
-        onChange={handleChange}
-        required
-      />
-      <input
-        placeholder='Last Name'
-        className={styles.modalCardContentInputField}
-        type='text'
-        name='lastName'
-        id='lastName'
-        value={formData.lastName}
-        onChange={handleChange}
-        required
-      />
-      <input
-        placeholder='Admin ID'
-        className={styles.modalCardContentInputField}
-        type='text'
-        name='organizerID'
-        id='organizerID'
-        value={formData.organizerID}
-        onChange={handleChange}
-        required
-      />
-      <input
-        placeholder='Booking ID'
-        className={styles.modalCardContentInputField}
-        type='number'
-        name='bookingID'
-        id='bookingID'
-        value={formData.bookingID}
-        onChange={handleChange}
-        required
-      />
+  const disabledDate = current => {
+    // Can not select days before today and today
+    return current && current < dayjs().endOf('day')
+  }
 
-      <AutoComplete
-        // style={{
-        //   width: 200
-        // }}
+  if (modalContentView === 'details') {
+    return (
+      <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
+        <h3>Booking Details</h3>
+        <div>Organizer: Kofi</div>
+        <input
+          placeholder='Event Title'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='eventTitle'
+          id='eventTitle'
+          value={formData.eventTitle}
+          onChange={handleChange}
+          required
+        />
 
-        onSelect={handleChangeArtist}
-        defaultValue={formData.artistID}
-        options={options.map(artist => ({
-          artistID: artist.artistID,
-          value: `${artist.firstName} ${artist.lastName}`,
-          label: `${artist.firstName} ${artist.lastName}`
-        }))}
-        placeholder='Select Artist'
-        filterOption={filterOption}
-      />
+        <AutoComplete
+          onSelect={handleChangeArtist}
+          defaultValue={formData.artistID}
+          options={options.map(artist => ({
+            artistID: artist.artistID,
+            value: `${artist.firstName} ${artist.lastName}`,
+            label: `${artist.firstName} ${artist.lastName}`
+          }))}
+          placeholder='Select Artist'
+          filterOption={filterOption}
+          allowClear
+          aria-required
+        />
 
-      <DatePicker
-        format='YYYY-MM-DD'
-        placeholder='Select Date'
-        className={styles.modalCardContentInputField}
-        showNow={false}
-        minuteStep={15}
-        name='dateTimeRequested'
-        defaultValue={formData.dateTimeRequested}
-        onChange={handleChangeDate}
-      />
-      <TimePicker
-        name='getInTime'
-        placeholder='Get In Time'
-        minuteStep={15}
-        showNow={false}
-        showSecond={false}
-        format='HH:mm'
-        defaultValue={formData.getInTime}
-        onChange={handleChangeGetInTime}
-      />
-      <TimePicker
-        name='startTime'
-        placeholder='Start Time'
-        minuteStep={15}
-        showNow={false}
-        showSecond={false}
-        format='HH:mm'
-        defaultValue={formData.startTime}
-        onChange={handleChangeStartTime}
-      />
-      <TimePicker
-        name='endTime'
-        placeholder='End Time'
-        minuteStep={15}
-        showNow={false}
-        showSecond={false}
-        format='HH:mm'
-        defaultOpen={formData.endTime}
-        onChange={handleChangeEndTime}
-      />
-      <input
-        placeholder='Venue'
-        className={styles.modalCardContentInputField}
-        type='text'
-        name='locationVenue'
-        id='locationVenue'
-        value={formData.locationVenue}
-        onChange={handleChange}
-      />
-      <input
-        placeholder='Expected Number of Guests'
-        className={styles.modalCardContentInputField}
-        type='number'
-        step='1'
-        min='1'
-        name='numberOfGuests'
-        id='numberOfGuests'
-        value={formData.numberOfGuests}
-        onChange={handleChange}
-      />
-      <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
-    </form>
-  )
+        <DatePicker
+          format='YYYY-MM-DD'
+          placeholder='Select Date'
+          className={styles.modalCardContentInputField}
+          showNow={false}
+          minuteStep={15}
+          name='dateTimeRequested'
+          defaultValue={formData.dateTimeRequested}
+          onChange={handleChangeDate}
+          disabledDate={disabledDate}
+          aria-required
+        />
+        <TimePicker
+          name='getInTime'
+          placeholder='Get In Time'
+          minuteStep={15}
+          showNow={false}
+          showSecond={false}
+          format='HH:mm'
+          defaultValue={formData.getInTime}
+          onChange={handleChangeGetInTime}
+        />
+        <TimePicker
+          name='startTime'
+          placeholder='Start Time'
+          minuteStep={15}
+          showNow={false}
+          showSecond={false}
+          format='HH:mm'
+          defaultValue={formData.startTime}
+          onChange={handleChangeStartTime}
+        />
+        <TimePicker
+          name='endTime'
+          placeholder='End Time'
+          minuteStep={15}
+          showNow={false}
+          showSecond={false}
+          format='HH:mm'
+          defaultOpen={formData.endTime}
+          onChange={handleChangeEndTime}
+          aria-required
+        />
+        <input
+          placeholder='Venue'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='locationVenue'
+          id='locationVenue'
+          value={formData.locationVenue}
+          onChange={handleChange}
+          required
+        />
+        <input
+          placeholder='Expected Number of Guests'
+          className={styles.modalCardContentInputField}
+          type='number'
+          step='1'
+          min='1'
+          name='numberOfGuests'
+          id='numberOfGuests'
+          value={formData.numberOfGuests}
+          onChange={handleChange}
+        />
+        <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
+          Add Gallery
+        </button>
+        <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
+      </form>
+    )
+  } else if (modalContentView === 'gallery') {
+    return (
+      <div>
+        <p>Your Gallery</p>
+        <UploadPictures />
+        <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('details')}>
+          <ArrowBack />
+          Back to details
+        </button>
+      </div>
+    )
+  }
 }
 
 BookingPage.authGuard = false

@@ -13,7 +13,8 @@
   position: fixed;
   top: 2rem;
   right: 2rem;
-  height: 90vh;
+  height: 46rem;
+  overflow: auto;
   width: 350px; /* Adjust width as needed */
   background-color: #ffffff;
   padding: 20px;
@@ -23,7 +24,6 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-
   gap: 0.5rem;
 }
 
