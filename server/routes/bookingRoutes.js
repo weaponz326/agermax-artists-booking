@@ -1,15 +1,18 @@
 // routes/bookingRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bookingController = require('../controllers/bookingController');
-const { createVismaInvoice } = require('../services/vismaInvoiceService');
+const bookingController = require("../controllers/bookingController");
+const { createVismaInvoice } = require("../services/vismaInvoiceService");
+const multer = require("multer");
+
+const galleryUpload = multer({ dest: "uploads/booking/artist_gallery/" });
 
 // Route to handle booking approval and invoice creation
-router.post('/approveBooking/:bookingId', async (req, res) => {
+router.post("/approveBooking/:bookingId", async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.bookingId);
     if (!booking) {
-      return res.status(404).json({ message: 'Booking not found' });
+      return res.status(404).json({ message: "Booking not found" });
     }
 
     // Here you would update the booking status to approved in your database
@@ -17,21 +20,28 @@ router.post('/approveBooking/:bookingId', async (req, res) => {
 
     // Create invoice in Visma
     const invoice = await createVismaInvoice(booking);
-    
+
     // You might want to save invoice details back in your database here
 
-    res.json({ message: 'Booking approved and invoice created', invoice });
+    res.json({ message: "Booking approved and invoice created", invoice });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-
-router.get('/bookings', bookingController.getAllBookings);
-router.get('/bookings/:id', bookingController.getBookingById);
-router.post('/bookings', bookingController.createBooking);
-router.put('/bookings/:id', bookingController.updateBooking);
-router.delete('/bookings/:id', bookingController.deleteBooking);
+router.get("/bookings", bookingController.getAllBookings);
+router.get("/bookings/:id", bookingController.getBookingById);
+router.post(
+  "/bookings",
+  galleryUpload.array("gallery", 10),
+  bookingController.createBooking
+);
+router.put(
+  "/bookings/:id",
+  galleryUpload.array("gallery", 10),
+  bookingController.updateBooking
+);
+router.delete("/bookings/:id", bookingController.deleteBooking);
 
 module.exports = router;

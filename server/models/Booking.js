@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const bookingSchema = new mongoose.Schema({
+  eventTitle: {
+    type: String,
+  },
   artistID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -39,6 +42,14 @@ const bookingSchema = new mongoose.Schema({
   },
   otherComments: {
     type: String,
+  },
+  status: {
+    type: String,
+    default: "pending",
+    enum: ["pending", "approved", "cancelled"],
+  },
+  gallery: {
+    type: [String],
   },
 });
 
