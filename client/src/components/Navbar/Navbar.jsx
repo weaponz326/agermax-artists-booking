@@ -15,6 +15,8 @@ import SearchBar from '../AdminPagesSharedComponents/SearchBar/SearchBar'
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { createBooking } from 'src/services/bookings'
 
+import { useAuth } from 'src/hooks/useAuth'
+
 const disabledDate = current => {
   // Can not select days before today and today
   return current && current < dayjs().endOf('day')
@@ -22,6 +24,7 @@ const disabledDate = current => {
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
+  const { user, logout } = useAuth()
 
   const navBarRef = useRef()
 
@@ -35,7 +38,7 @@ export default function Navbar() {
             </Link>
           </div>
           <BookArtistPanel hideMenuItems={hideMenuItems} setHideMenuItems={setHideMenuItems} navBarRef={navBarRef} />
-          <CustomizedDropdown className={styles.userActionsButtons} />
+          <CustomizedDropdown className={styles.userActionsButtons} user={user} logout={logout} />
         </div>
       </div>
     </nav>

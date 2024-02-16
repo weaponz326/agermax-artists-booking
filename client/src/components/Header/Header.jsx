@@ -16,7 +16,9 @@ export default function Header() {
     </Link>
   ) : (
     <div>
-      <h2>Welcome, John Doe</h2>
+      <h2>
+        Welcome, {user?.firstName || 'Friend'} {user?.lastName || ''}
+      </h2>
       <p className={styles['greetings-message']}>Book amazing artists for your next events</p>
     </div>
   )

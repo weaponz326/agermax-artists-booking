@@ -5,7 +5,6 @@ import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 // import { useAuth } from 'src/providers/AuthProvider'
-import { useAuth } from 'src/hooks/useAuth'
 
 import { useRouter } from 'next/router'
 
@@ -43,19 +42,15 @@ const buttonStyle = {
   border: '0.5px solid #183d4c'
 }
 
-const CustomizedDropdown = ({ className }) => {
+const CustomizedDropdown = ({ className, user, logout }) => {
   // const { isLoggedIn, setIsLoggedIn, login, logout } = useAuth()
   // const accessToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
   const router = useRouter()
-
-  const { user, logout } = useAuth()
+  const onClick = ({ key }) => {
+    if (key === '5') logout()
+  }
 
   if (user) {
-    const onClick = ({ key }) => {
-      if (key === '5') {
-        logout()
-      }
-    }
     return (
       <div>
         <Dropdown
