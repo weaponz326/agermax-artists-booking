@@ -14,18 +14,20 @@ import authConfig from 'src/configs/auth'
 const defaultProvider = {
   user: null,
   loading: true,
+  token: null,
   setUser: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
-  initiateOAuth: (provider) => {},
+  initiateOAuth: provider => {}
 }
 const AuthContext = createContext(defaultProvider)
 
 const AuthProvider = ({ children }) => {
   // ** States
   const [user, setUser] = useState(defaultProvider.user)
+  const [token, setToken] = useState(defaultProvider.token); // State for the token
   const [loading, setLoading] = useState(defaultProvider.loading)
 
   // ** Hooks
@@ -97,6 +99,13 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+    if (storedToken) {
+      setToken(storedToken) // Set the token from localStorage
+    }
+  }, [])
+
   const handleLogin = (params, errorCallback) => {
     axios
       .post(authConfig.loginEndpoint, params)
@@ -132,9 +141,9 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  const initiateOAuth = (provider) => {
-    window.location.href = `${authConfig.oauthEndpoint}/${provider}`;
-  };
+  const initiateOAuth = provider => {
+    window.location.href = `${authConfig.oauthEndpoint}/${provider}`
+  }
 
   const handleLogout = () => {
     setUser(null)
@@ -145,13 +154,18 @@ const AuthProvider = ({ children }) => {
 
   const values = {
     user,
+    token,
+    setToken: newToken => {
+      window.localStorage.setItem(authConfig.storageTokenKeyName, newToken)
+      setToken(newToken)
+    },
     loading,
     setUser,
     setLoading,
     login: handleLogin,
     logout: handleLogout,
     register: handleRegistration,
-    initiateOAuth,
+    initiateOAuth
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
