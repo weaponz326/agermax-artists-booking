@@ -88,8 +88,10 @@ const CalendarComponent = () => {
 
 // Define a Box to contain the quick links, with appropriate styling
 const QuickLinksContainer = styled(Box)(({ theme }) => ({
+  //QuickLinks container styles here
   display: 'flex',
-  justifyContent: 'space-around',
+  justifyContent: 'flex-start',
+  gap: '10px',
   padding: theme.spacing(2), // Add some padding for spacing
   '& .quick-link': {
     display: 'flex',
@@ -129,7 +131,7 @@ const QuickActions = () => {
         //Replace the Link tag with div, which we can use useRouter to push to new Links
         <div key={index} href={link.path} onClick={() => router.push(`${link.path}`)}>
           {/* <Tooltip title={link.title} arrow> */}
-          <IconButton className='quick-link' component='a' sx={{ width: 'auto', height: 'auto' }}>
+          <IconButton className={styles.sideNavQuickLink} component='a' sx={{ width: 'auto', height: 'auto' }}>
             <Icon icon={link.icon} className='icon' />
             <Typography variant='caption' className='quick-link-text'>
               {link.title}
@@ -270,15 +272,10 @@ const Navigation = props => {
         {(beforeVerticalNavMenuContentPosition === 'static' || !beforeNavMenuContent) && (
           <StyledBoxForShadow ref={shadowRef} />
         )}
-        <Box
-          sx={{
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
+        <Box className={styles.sideNavScrollBarContainer}>
           {/* @ts-ignore */}
           <Box
-            sx={{ height: '100%', gap: '30px', display: 'flex', flexDirection: 'column' }}
+            className={styles.sideNavMainNavContainer}
             {...(hidden
               ? {
                   onScroll: container => scrollMenu(container)
@@ -311,12 +308,12 @@ const Navigation = props => {
               ? afterNavMenuContent(navMenuContentProps)
               : null}
             <Box sx={{ px: 2, py: 2 }}>
-              <Typography variant='overline' sx={{ pl: 6, my: 2 }}>
+              <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
                 Quick Links
               </Typography>
               <QuickActions sx={{ mx: 12 }} />
 
-              <Typography variant='overline' sx={{ pl: 6, my: 2 }}>
+              <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
                 Next Event
               </Typography>
               <CalendarComponent sx={{ mx: 12 }} />

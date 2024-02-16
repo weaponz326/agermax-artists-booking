@@ -217,7 +217,7 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
           </TabButton>
         </div>
         <div className={styles.searchBar}>
-          <SearchBar />
+          <SearchBar placeholder={'Search bookings ...'} />
         </div>
         <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
           Add Bookings
@@ -354,7 +354,7 @@ export const BookingsModalContent = () => {
     // Initialize form data
     // Example:
     status: 'pending',
-    organizerID: '',
+    organizerID: '65c9f17656ec877c775dc072',
     eventTitle: '',
     dateTimeRequested: '',
     startTime: '',
@@ -365,7 +365,8 @@ export const BookingsModalContent = () => {
     locationVenue: '',
     artistID: '',
     availableTechnology: '',
-    otherComments: ''
+    otherComments: '',
+    gallery: []
 
     // Add other fields as needed
   })
@@ -444,7 +445,7 @@ export const BookingsModalContent = () => {
           onSelect={handleChangeArtist}
           defaultValue={formData.artistID}
           options={options.map(artist => ({
-            artistID: artist.artistID,
+            artistID: artist._id,
             value: `${artist.firstName} ${artist.lastName}`,
             label: `${artist.firstName} ${artist.lastName}`
           }))}

@@ -1,6 +1,9 @@
 // ** MUI Imports
 import { styled } from '@mui/material/styles'
+import { StyledEngineProvider } from '@mui/material/styles'
 import MuiSwipeableDrawer from '@mui/material/SwipeableDrawer'
+import styles from './Drawer.module.css'
+import { width } from '@mui/system'
 
 const SwipeableDrawer = styled(MuiSwipeableDrawer)({
   overflowX: 'hidden',
@@ -81,29 +84,44 @@ const Drawer = props => {
   delete userNavMenuProps.PaperProps
 
   return (
-    <SwipeableDrawer
-      className='layout-vertical-nav'
-      variant={hidden ? 'temporary' : 'permanent'}
-      {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
-      PaperProps={{
-        sx: {
-          backgroundColor: 'background.paper',
-          ...(!hidden && skin !== 'bordered' && { boxShadow: 2 }),
-          width: navCollapsed && !navHover ? collapsedNavWidth : navWidth,
-          borderRight: theme =>
-            navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid ${theme.palette.divider}`,
-          ...userNavMenuPaperStyle
-        },
-        ...navMenuProps?.PaperProps
-      }}
-      sx={{
-        width: navCollapsed ? collapsedNavWidth : navWidth,
-        ...userNavMenuStyle
-      }}
-      {...userNavMenuProps}
-    >
-      {children}
-    </SwipeableDrawer>
+    <StyledEngineProvider injectFirst>
+      <SwipeableDrawer
+        className={styles.sideNavLayoutVerticalNav}
+        variant={hidden ? 'temporary' : 'permanent'}
+        {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
+        PaperProps={{
+          sx: {
+            backgroundColor: 'background.paper',
+            ...(!hidden && skin !== 'bordered' && { boxShadow: 2 }),
+            width: navCollapsed && !navHover ? collapsedNavWidth : navWidth,
+            borderRight: theme =>
+              navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid ${theme.palette.divider}`,
+            ...userNavMenuPaperStyle
+          },
+          ...navMenuProps?.PaperProps
+        }}
+        sx={{
+          width: navCollapsed ? collapsedNavWidth : navWidth,
+          ...userNavMenuStyle,
+          '& .MuiIconButton-root': {
+            display: 'flex',
+            flex: '1',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            // margin: '0px 0.875rem',
+
+            minWidth: '0px',
+            borderRadius: '12px',
+            width: '100%',
+            transition: 'padding-left 0.25s ease-in-out 0s, padding-right 0.25s ease-in-out 0s'
+            // padding: '0.5rem 1rem'
+          }
+        }}
+        {...userNavMenuProps}
+      >
+        {children}
+      </SwipeableDrawer>
+    </StyledEngineProvider>
   )
 }
 

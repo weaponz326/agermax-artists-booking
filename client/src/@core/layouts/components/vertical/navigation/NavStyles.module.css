@@ -1,12 +1,13 @@
 /* NavStyles.module.css */
-.css-1e72eac {
+/* .css-1e72eac {
   flex: 0 0 auto;
   overflow-x: hidden;
   transition: width 0.25s ease-in-out 0s;
   width: 310px;
-}
+} */
 
-.css-1sr0gdr {
+.css-1sr0gdr,
+.sideNavMainNavContainer {
   color: #747474;
   background-image: none;
   overflow-y: auto;
@@ -15,7 +16,7 @@
   height: 100%;
   flex: 1 0 auto;
   z-index: 1200;
-  position: fixed;
+  /* position: fixed; */
   top: 0px;
   outline: 0px;
   left: 0px;
@@ -28,19 +29,22 @@
 }
 
 /* done */
-.scrollbar-container {
+.scrollbar-container,
+.sideNavScrollBarContainer {
   position: relative;
   height: 100%;
   gap: 30px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .css-bnxmro.active {
   background-color: #e5e7ea;
 }
 
-.css-bnxmro {
+/* IconButton  */
+/* .css-bnxmro {
   -webkit-tap-highlight-color: transparent;
   background-color: transparent;
   outline: 0px;
@@ -64,7 +68,7 @@
   transition: padding-left 0.25s ease-in-out 0s, padding-right 0.25s ease-in-out 0s;
   padding: 0.5rem 1rem;
   cursor: pointer;
-}
+} */
 
 .css-1ma7fdi {
   color: #000;
@@ -124,7 +128,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
 }
 
-.css-i8n673 .quick-link {
+.css-i8n673 .quick-link,
+.sideNavQuickLink {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,6 +137,13 @@
   box-shadow: rgb(4 4 4 / 10%) 0px 1px 3px 0px;
   background-color: rgb(255, 255, 255);
   border: 1px solid #e6e6e6;
+}
+
+.css-i8n673 .quick-link:hover,
+.sideNavQuickLink:hover {
+  background-color: rgba(68, 40, 242, 0.1);
+  color: rgb(68, 40, 242);
+  border: 1px solid rgb(68, 40, 242);
 }
 
 .css-i8n673 {
@@ -145,8 +157,5 @@
   width: 100%;
 }
 
-.css-i8n673 .quick-link:hover {
-  background-color: rgba(68, 40, 242, 0.1);
-  color: rgb(68, 40, 242);
-  border: 1px solid rgb(68, 40, 242);
+.sideNavTitleText {
 }
