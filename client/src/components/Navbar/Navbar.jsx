@@ -503,7 +503,6 @@ export const NavBarSearchBar = ({
 
   const handleChangeArtist = value => {
     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
-    console.log(artist)
     onSetFormData(0, 'artistID', artist._id)
   }
 
