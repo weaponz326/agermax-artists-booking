@@ -13,6 +13,7 @@ import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
+import FallbackSpinner from 'src/@core/components/spinner'
 
 function ArtistProfile() {
   const router = useRouter()
@@ -36,8 +37,8 @@ function ArtistProfile() {
   function drawerState(value) {
     setOpenDrawer(value)
   }
-  if (artist === null) return <div>Loading....</div>
 
+  if (artist === null) return <FallbackSpinner />
   return (
     <CustomPagesLayout>
       <main>
@@ -117,27 +118,27 @@ const EventsSection = ({ artist }) => {
 }
 
 export const VideoItem = ({ artist }) => {
-  console.log(artist)
-  const [photos, setPhotos] = useState([])
+  const [artistVideoGallery, setArtistVideoGallery] = useState([])
   const { bookings } = useBookings()
   useEffect(() => {
-    const fetchData = async () => {
-      const eventPhotos = bookings.filter(booking => booking.id === artist.id)
-      if (eventPhotos) setPhotos(eventPhotos.slice(0, 5))
-      return
-    }
+    if (!bookings.length) return
+    let videoArray = []
+    bookings.forEach(booking => {
+      if (booking.artistID === artist._id) {
+        videoArray.push([...booking.gallery])
+      }
+    })
+    setArtistVideoGallery(videoArray)
+  }, [bookings, artist])
 
-    fetchData()
-  }, [])
-
-  if (photos.length) {
+  if (artistVideoGallery.length) {
     return (
       <>
-        {photos.map((photo, index) => (
+        {artistVideoGallery.map((gallery, index) => (
           <div className={styles['video-item']} key={index}>
             <div key={index}>
               <PlayCircle size={80} className={styles['play-icon']} color='white' />
-              <img src={photo.urls.regular} alt='event-video' className={styles.videoImage} />
+              <div className={styles.videoImage}>{gallery}</div>
             </div>
           </div>
         ))}
@@ -146,7 +147,7 @@ export const VideoItem = ({ artist }) => {
   } else {
     return (
       <>
-        {Array.from({ length: 1 }).map((event, index) => (
+        {Array.from({ length: 3 }).map((event, index) => (
           <div className={styles['video-item']}>
             <PlayCircle size={80} className={styles['play-icon']} color='white' />
             <Skeleton
