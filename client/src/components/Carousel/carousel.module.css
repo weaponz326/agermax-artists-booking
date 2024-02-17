@@ -38,11 +38,11 @@
 .carousel-container,
 .carousel-skeleton-container {
   min-width: 18rem;
-  width: 15.625rem;
+  /* width: 15.625rem; */
   max-width: 20rem;
   width: 100%;
   min-height: 292px;
-  flex: 1 1;
+  /* flex: 1 1; */
   padding: 20px;
   display: flex;
   flex-direction: column;

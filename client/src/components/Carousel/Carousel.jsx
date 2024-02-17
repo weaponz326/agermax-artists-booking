@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import Skeleton from '@mui/material/Skeleton'
 
 export default function Carousel({ artist }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -16,8 +17,8 @@ export default function Carousel({ artist }) {
       setLoading(false)
     }
   }, [artist])
-  const router = useRouter()
   if (!loading) {
+    const artistName = `${artist.firstName}-${artist.lastName}`
     return (
       <div className={styles['carousel-container']}>
         <div className={styles['carousel-img']}>
@@ -33,7 +34,16 @@ export default function Carousel({ artist }) {
           onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}
           className={styles['carousel-title-text']}
         >
-          {artist.firstName} {artist.lastName}
+          <Link
+            href={{
+              pathname: `/artists/${artist._id}`,
+              query: artist
+            }}
+            as={`/artists/${artist._id}`}
+            style={{ width: '100%' }}
+          >
+            {artist.firstName} {artist.lastName}
+          </Link>
         </div>
 
         {/* A good place to map your tags from Api calls */}
@@ -44,7 +54,14 @@ export default function Carousel({ artist }) {
           <Tag genre={'R&B'} />
           <Tag genre={'Afrobeat'} />
         </div>
-        <Link href={'/artist-profile'} style={{ width: '100%' }}>
+        <Link
+          href={{
+            pathname: `/artists/${artist._id}`,
+            query: artist
+          }}
+          as={`/artists/${artist._id}`}
+          style={{ width: '100%' }}
+        >
           <Button buttonText={'Book Now'} />
         </Link>
       </div>

@@ -72,8 +72,9 @@ const UploadPictures = () => {
       <Upload
         showUploadList
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(50px, 1fr))'
+          display: 'flex',
+          // flexDirection: 'column-reverse',
+          background: 'red'
         }}
         action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
         listType='picture-card'

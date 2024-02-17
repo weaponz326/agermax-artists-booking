@@ -10,8 +10,7 @@ import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIco
 import { useBookings } from 'src/providers/BookingsProvider'
 import { useArtists } from 'src/providers/ArtistsProvider'
 
-export default function EventsLayout() {
-  const { bookings } = useBookings()
+export default function EventsLayout({ bookings, numOfBookings }) {
   const [bookingsList, setBookingsList] = useState()
   const [loading, setLoading] = useState(true)
 
@@ -19,10 +18,10 @@ export default function EventsLayout() {
     if (!bookings || bookings.length < 1) {
       setLoading(true)
     } else {
-      setBookingsList(bookings)
+      setBookingsList(bookings.slice(0, numOfBookings))
       setLoading(false)
     }
-  }, [bookings])
+  }, [bookings, numOfBookings])
 
   if (loading) {
     return (
@@ -31,7 +30,7 @@ export default function EventsLayout() {
           <Link href='#'>See all</Link>
         </span>
         <div className={styles['events-preview']}>
-          {Array.from({ length: 9 }).map((img, index) => (
+          {Array.from({ length: numOfBookings }).map((img, index) => (
             <Fragment key={index}>
               <div className={styles['skeleton-container']}>
                 <div className={styles.skeletonCalendarIcon}>

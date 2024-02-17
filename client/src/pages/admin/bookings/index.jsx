@@ -26,40 +26,23 @@ import { createBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
+import { useAuth } from 'src/hooks/useAuth'
+
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
   const { bookings } = useBookings()
   const { artists } = useArtists()
+  const { user, logout } = useAuth()
 
-  if (activeEventsView === 'ListView') {
-    return (
-      <main className={styles.bookingsPage}>
-        <AdminPagesNavBar activeEventsView={activeEventsView} setActiveEventsView={setActiveEventsView} />
-        <EventsListView bookings={bookings} />
-      </main>
-    )
-  } else if (activeEventsView === 'ThreeDView') {
-    return (
-      <main className={styles.bookingsPage}>
-        <AdminPagesNavBar setActiveEventsView={setActiveEventsView} activeEventsView={activeEventsView} />
-        <ThreeDView />
-      </main>
-    )
-  } else if (activeEventsView === 'MonthView') {
-    return (
-      <main className={styles.bookingsPage}>
-        <AdminPagesNavBar setActiveEventsView={setActiveEventsView} activeEventsView={activeEventsView} />
-        <MonthView />
-      </main>
-    )
-  } else if (activeEventsView === 'WeekView') {
-    return (
-      <main className={styles.bookingsPage}>
-        <AdminPagesNavBar setActiveEventsView={setActiveEventsView} activeEventsView={activeEventsView} />
-        <WeekView />
-      </main>
-    )
-  }
+  return (
+    <main className={styles.bookingsPage}>
+      <AdminPagesNavBar user={user} activeEventsView={activeEventsView} setActiveEventsView={setActiveEventsView} />
+      {activeEventsView === 'ListView' && <EventsListView bookings={bookings} />}
+      {activeEventsView === 'ThreeDView' && <ThreeDView />}
+      {activeEventsView === 'MonthView' && <MonthView />}
+      {activeEventsView === 'WeekView' && <WeekView />}
+    </main>
+  )
 }
 
 export default BookingPage
@@ -148,7 +131,7 @@ export const EventsListView = ({ bookings }) => {
     </section>
   )
 }
-export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
+export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView, user }) => {
   const [openModal, setOpenModal] = useState(false)
 
   function unhideModal() {
@@ -226,7 +209,7 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView }) => {
           openModal={openModal}
           unhideModal={unhideModal}
           hideModal={hideModal}
-          modalContent={<BookingsModalContent />}
+          modalContent={<BookingsModalContent user={user} />}
           SubmitButton={'Submit'}
         />
       </div>
@@ -345,7 +328,7 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
-export const BookingsModalContent = () => {
+export const BookingsModalContent = ({ user }) => {
   const [options, setOptions] = useState([])
   const [artistsOptions, setArtistsOptions] = useState([])
   const { artists } = useArtists()
@@ -429,7 +412,7 @@ export const BookingsModalContent = () => {
     return (
       <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
         <h3>Booking Details</h3>
-        <div>Organizer: Kofi</div>
+        <div>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</div>
         <input
           placeholder='Event Title'
           className={styles.modalCardContentInputField}

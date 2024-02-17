@@ -12,7 +12,6 @@ import { useBookings } from 'src/providers/BookingsProvider'
 import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
 
 const HomePage = () => {
-  const [imgList, setImgList] = useState([])
   const [artistsList, setArtistsList] = useState([])
 
   return (
@@ -20,7 +19,7 @@ const HomePage = () => {
       <Header artistsList={artistsList} />
       <main>
         <BookingsProvider>
-          <EventsSection imgList={imgList} />
+          <EventsSection />
           <AboutSection />
           <FaqSection />
           <SubscriptionSection />
@@ -31,7 +30,14 @@ const HomePage = () => {
 }
 export default HomePage
 
-export const EventsSection = ({ imgList }) => {
+export const EventsSection = () => {
+  const { bookings } = useBookings()
+  const [numOfBookings, setNumberOfBookings] = useState(9)
+
+  const handleLoadMoreEvents = () => {
+    setNumberOfBookings(current => current + 4)
+  }
+
   return (
     <section className={styles['events']}>
       <div className={styles.eventsWrapper}>
@@ -39,12 +45,14 @@ export const EventsSection = ({ imgList }) => {
           <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
         </div>
         <EventsGenreButtons genreList={mockGenreList} />
-        <EventsLayout imgList={imgList} />
-        <div className={styles['events-load-more']}>
-          <Link href={'#'}>
-            <Button buttonText={'Load more ...'} customStyles={styles['events-load-more-btn']} />
-          </Link>
-        </div>
+        <EventsLayout numOfBookings={numOfBookings} bookings={bookings} />
+        {/* <div className={styles['events-load-more']}> */}
+        {bookings && bookings.length > numOfBookings ? (
+          <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
+            Load More ...🌟
+          </button>
+        ) : null}
+        {/* </div> */}
       </div>
     </section>
   )

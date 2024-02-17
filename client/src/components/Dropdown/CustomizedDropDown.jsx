@@ -4,6 +4,9 @@ import { HambergerMenu, User } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import { Avatar, Space } from 'antd'
+import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
+
 // import { useAuth } from 'src/providers/AuthProvider'
 
 import { useRouter } from 'next/router'
@@ -11,9 +14,9 @@ import { useRouter } from 'next/router'
 const CustomizedDropdown = ({ className, user, logout }) => {
   console.log(user)
   const UserAccountLink = () => {
-    if (user.role === 'artist') return <Link href='admin/home/artist'>Artist Account</Link>
-    if (user.role === 'admin') return <Link href='admin/home/admin'>Admin Account</Link>
-    if (user.role === 'organizer') return <Link href='admin/home/organizer'>Organizer Account</Link>
+    if (user.role === 'artist') return <Link href='admin/home/artist'>My Account</Link>
+    if (user.role === 'admin') return <Link href='admin/home/admin'>My Account</Link>
+    if (user.role === 'organizer') return <Link href='admin/home/organizer'>My Account</Link>
   }
 
   const isLoggedInItems = [
@@ -70,7 +73,15 @@ const CustomizedDropdown = ({ className, user, logout }) => {
           <Button style={buttonStyle} className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
-              <img className={styles.userImage} src='/images/ellipse-121.png' alt='user-image' />
+              <div className={styles.userImage}>
+                {user.profilePhoto ? user.profilePhoto : <Avatar icon={<UserOutlined size={36} />} />}
+              </div>
+              {/* <img
+                className={styles.userImage}
+                src={user.profilePhoto ? user.profilePhoto : <Avatar size={64} icon={<UserOutlined />} />}
+                // src={user.profilePhoto ? user.profilePhoto : '/images/ellipse-121.png'}
+                alt='user'
+              /> */}
             </div>
             <HambergerMenu size={'35'} />
           </Button>
