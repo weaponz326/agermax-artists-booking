@@ -60,9 +60,9 @@ const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
 app.use("/api", authRoutes);
-app.use("/api", adminRoutes);
-app.use("/api", artistRoutes);
-app.use("/api", organizerRoutes);
+// app.use("/api", adminRoutes);
+// app.use("/api", artistRoutes);
+// app.use("/api", organizerRoutes);
 app.use("/api", bookingRoutes);
 app.use("/api", userRoutes);
 app.use("/api", paymentRoutes);
