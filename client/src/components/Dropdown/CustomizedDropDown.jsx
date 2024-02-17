@@ -12,7 +12,6 @@ import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 
 const CustomizedDropdown = ({ className, user, logout }) => {
-  console.log(user)
   const UserAccountLink = () => {
     if (user.role === 'artist') return <Link href='admin/home/artist'>My Account</Link>
     if (user.role === 'admin') return <Link href='admin/home/admin'>My Account</Link>

@@ -4,7 +4,8 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL
 export async function getAllBookings() {
   try {
     const { data } = await axios.get(`${baseUrl}/bookings`)
-    return data
+    const sortedBookingsByDate = data.sort((a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested))
+    return sortedBookingsByDate
   } catch (error) {
     console.log('Error: ', error)
   }

@@ -27,7 +27,7 @@ const AuthContext = createContext(defaultProvider)
 const AuthProvider = ({ children }) => {
   // ** States
   const [user, setUser] = useState(defaultProvider.user)
-  const [token, setToken] = useState(defaultProvider.token); // State for the token
+  const [token, setToken] = useState(defaultProvider.token) // State for the token
   const [loading, setLoading] = useState(defaultProvider.loading)
 
   // ** Hooks
@@ -74,10 +74,11 @@ const AuthProvider = ({ children }) => {
         await axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: storedToken
+              Authorization: `Bearer ${storedToken}`
             }
           })
           .then(async response => {
+            console.log('Log in Successful')
             setLoading(false)
             setUser({ ...response.data.userData })
           })
@@ -117,7 +118,7 @@ const AuthProvider = ({ children }) => {
         setUser({ ...response.data.userData })
         params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
         // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/home'
+        const redirectURL = returnUrl ? returnUrl : '/'
         router.replace(redirectURL)
       })
       .catch(err => {

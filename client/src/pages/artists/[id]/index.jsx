@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
-import { Drawer, ConfigProvider } from 'antd'
+import { Drawer, ConfigProvider, Avatar } from 'antd'
+import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
+
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
@@ -14,7 +16,7 @@ import { useBookings } from 'src/providers/BookingsProvider'
 
 function ArtistProfile() {
   const router = useRouter()
-  const [artistDetails, setArtistsDetails] = useState(router.query)
+  const [artist, setArtist] = useState(router.query)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
 
@@ -35,9 +37,9 @@ function ArtistProfile() {
               openSideDrawer={openSideDrawer}
               setOpenSideDrawer={setOpenSideDrawer}
               drawerState={drawerState}
-              artistDetails={artistDetails}
+              artist={artist}
             />
-            <EventsSection artistDetails={artistDetails} />
+            <EventsSection artist={artist} />
           </div>
         </BookingsProvider>
       </main>
@@ -47,7 +49,7 @@ function ArtistProfile() {
 
 export default ArtistProfile
 
-const EventsSection = ({ artistDetails }) => {
+const EventsSection = ({ artist }) => {
   const [numberOfUpcomingEvents, setNumberOfUpcomingEvents] = useState(2)
   const [numberOfPastEvents, setNumberOfPastEvents] = useState(2)
   const [artistsUpcomingEvents, setArtistsUpcomingEvents] = useState([])
@@ -64,7 +66,7 @@ const EventsSection = ({ artistDetails }) => {
   const tabConfig = {
     'Upcoming Events': (
       <UpcomingEventsTable
-        artistDetails={artistDetails}
+        artist={artist}
         artistsUpcomingEvents={artistsUpcomingEvents}
         setArtistsUpcomingEvents={setArtistsUpcomingEvents}
         handleLoadMoreUpcomingEvents={handleLoadMoreUpcomingEvents}
@@ -72,7 +74,7 @@ const EventsSection = ({ artistDetails }) => {
     ),
     'Past Events': (
       <PastEventsTable
-        artistDetails={artistDetails}
+        artist={artist}
         artistsPastEvents={artistsPastEvents}
         setArtistsPastEvents={setArtistsPastEvents}
         handleLoadPastEvents={handleLoadPastEvents}
@@ -97,18 +99,19 @@ const EventsSection = ({ artistDetails }) => {
 
       <div className={styles['divider']}></div>
       <div className={styles['videos-block']}>
-        <VideoItem artistDetails={artistDetails} />
+        <VideoItem artist={artist} />
       </div>
     </section>
   )
 }
 
-export const VideoItem = ({ artistDetails }) => {
+export const VideoItem = ({ artist }) => {
+  console.log(artist)
   const [photos, setPhotos] = useState([])
   const { bookings } = useBookings()
   useEffect(() => {
     const fetchData = async () => {
-      const eventPhotos = bookings.filter(booking => booking.id === artistDetails.id)
+      const eventPhotos = bookings.filter(booking => booking.id === artist.id)
       if (eventPhotos) setPhotos(eventPhotos.slice(0, 5))
       return
     }
@@ -173,15 +176,16 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = ({ artistDetails }) => {
+const ArtisteProfileSection = ({ artist }) => {
   const [open, setOpen] = useState(false)
+  console.log(artist)
 
   return (
     <section>
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
-          {artistDetails ? (
-            <img src={artistDetails.profilePhoto} alt='profile-image' />
+          {artist ? (
+            <div>{artist.profilePhoto ? artist.profilePhoto : <Avatar icon={<UserOutlined size={100} />} />}</div>
           ) : (
             <Skeleton
               animation='wave'
@@ -192,31 +196,32 @@ const ArtisteProfileSection = ({ artistDetails }) => {
             />
           )}
         </div>
-        <h5 id={styles['username']}>
-          {artistDetails ? `${artistDetails.firstName} ${artistDetails.lastName}` : 'John Doe'}
-        </h5>
+        <h5 id={styles['username']}>{artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'}</h5>
         <div className={styles['tags-container']}>
-          <Tag>Rock</Tag>
-          <Tag>Trubadur</Tag>
+          {artist.genre ? (
+            artist.genre.map((genreItem, index) => <Tag>genreItem.name</Tag>)
+          ) : (
+            <Tag>No Genre Added yet.</Tag>
+          )}
         </div>
         <div className={styles['button-container']}>
           <TransitionsModal
             open={open}
             setOpen={setOpen}
             btnClassName={styles['side-drawer-button']}
-            modalContent={<BookingCard open={open} setOpen={setOpen} artistDetails={artistDetails} />}
+            modalContent={<BookingCard open={open} setOpen={setOpen} artist={artist} />}
           />
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>{artistDetails.bio}</p>
+          <p className={styles['body']}>{artist.bio}</p>
         </div>
       </Card>
     </section>
   )
 }
 
-const UpcomingEventsTable = ({ artistDetails, artistsUpcomingEvents, handleLoadMoreUpcomingEvents }) => {
+const UpcomingEventsTable = ({ artist, artistsUpcomingEvents, handleLoadMoreUpcomingEvents }) => {
   return (
     <>
       <div className={styles['events-table']}>
@@ -229,7 +234,7 @@ const UpcomingEventsTable = ({ artistDetails, artistsUpcomingEvents, handleLoadM
             <div className={styles['event-name']}>
               <div className={styles['name']}>
                 <h5 className={styles['event-text']}>
-                  {artistDetails.firstName} {artistDetails.lastName}
+                  {artist.firstName} {artist.lastName}
                 </h5>
                 <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
               </div>
@@ -256,7 +261,7 @@ const UpcomingEventsTable = ({ artistDetails, artistsUpcomingEvents, handleLoadM
   )
 }
 
-const PastEventsTable = ({ artistDetails, artistsPastEvents, handleLoadPastEvents }) => {
+const PastEventsTable = ({ artist, artistsPastEvents, handleLoadPastEvents }) => {
   return (
     <>
       <div className={styles['events-table']}>
@@ -269,7 +274,7 @@ const PastEventsTable = ({ artistDetails, artistsPastEvents, handleLoadPastEvent
             <div className={styles['event-name']}>
               <div className={styles['name']}>
                 <h5 className={styles['event-text']}>
-                  {artistDetails.firstName} {artistDetails.lastName}
+                  {artist.firstName} {artist.lastName}
                 </h5>
                 <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
               </div>
@@ -354,7 +359,7 @@ export const Tag = ({ children }) => {
   )
 }
 
-ArtistProfile.authGuard = false
+ArtistProfile.authGuard = true
 ArtistProfile.guestGuard = false
 ArtistProfile.acl = {
   action: 'manage',

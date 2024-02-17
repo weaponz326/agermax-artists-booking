@@ -140,7 +140,9 @@ function BookingCard({ open, setOpen, artistDetails }) {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
-    organizerID: '65ca3d8256ec877c775dc0d4',
+    status: 'pending',
+    organizerID: '65c9f17656ec877c775dc072',
+    eventTitle: '',
     dateTimeRequested: '',
     startTime: '',
     endTime: '',
@@ -150,7 +152,8 @@ function BookingCard({ open, setOpen, artistDetails }) {
     locationVenue: '',
     artistID: '',
     availableTechnology: '',
-    otherComments: ''
+    otherComments: '',
+    gallery: []
 
     // Add other fields as needed
   })

@@ -79,21 +79,21 @@ export const EventsListView = ({ bookings }) => {
   useEffect(() => {
     if (bookings) {
       //First Sort the bookings Ascending
-      const sortedBookingsByDate = bookings.sort(
-        (a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested)
-      )
+      // const sortedBookingsByDate = bookings.sort(
+      //   (a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested)
+      // )
       //Use the buttons and filter and show the sorted bookings
       if (eventsStatusView === 'all') {
-        setEvents(sortedBookingsByDate)
+        setEvents(bookings)
       }
       if (eventsStatusView === 'pending') {
-        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'pending'))
+        setEvents(bookings.filter(booking => booking.status === 'pending'))
       }
       if (eventsStatusView === 'approved') {
-        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'approved'))
+        setEvents(bookings.filter(booking => booking.status === 'approved'))
       }
       if (eventsStatusView === 'cancelled') {
-        setEvents(sortedBookingsByDate.filter(booking => booking.status === 'cancelled'))
+        setEvents(bookings.filter(booking => booking.status === 'cancelled'))
       }
     }
   }, [bookings, eventsStatusView])

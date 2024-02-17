@@ -14,14 +14,14 @@ const ArtistsPage = () => {
   useEffect(() => {
     const lastIndexOfList = currentPage * artistsPerPage
     const firstIndexOfList = lastIndexOfList - artistsPerPage
-    setCurrentArtistsData(artists.slice(firstIndexOfList, lastIndexOfList))
-  }, [currentPage])
+    if (artists) setCurrentArtistsData(artists.slice(firstIndexOfList, lastIndexOfList))
+  }, [currentPage, artists])
 
   return (
     <CustomPagesLayout>
       <main className={styles['main']}>
         <div className={styles['artists-page-layout']}>
-          {!currentArtistsData || currentArtistsData.length < 1
+          {!artists
             ? Array.from({ length: artistsPerPage }).map((artist, index) => (
                 <Fragment key={index}>
                   <Carousel />
