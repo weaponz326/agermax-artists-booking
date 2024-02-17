@@ -76,8 +76,38 @@ export const EventsListView = ({ bookings }) => {
   const [events, setEvents] = useState([])
   const [eventsStatusView, setEventsStatusView] = useState('all')
 
+  function groupBy(array, keyGetter) {
+    const map = new Map()
+    array.forEach(item => {
+      const key = keyGetter(item)
+      const collection = map.get(key)
+      if (!collection) {
+        map.set(key, [item])
+      } else {
+        collection.push(item)
+      }
+    })
+    return map
+  }
+
   useEffect(() => {
     if (bookings) {
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+      const groupedByMonth = groupBy(bookings, booking => monthNames[new Date(booking.dateTimeRequested).getMonth()])
+      console.log(groupedByMonth)
       //First Sort the bookings Ascending
       // const sortedBookingsByDate = bookings.sort(
       //   (a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested)

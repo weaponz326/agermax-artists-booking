@@ -8,7 +8,7 @@ import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
-import { getEventsPhotos } from 'src/services/artists'
+import { getArtistById, getEventsPhotos } from 'src/services/artists'
 import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
@@ -16,17 +16,28 @@ import { useBookings } from 'src/providers/BookingsProvider'
 
 function ArtistProfile() {
   const router = useRouter()
-  const [artist, setArtist] = useState(router.query)
+  const [artist, setArtist] = useState(null)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
 
   useEffect(() => {
-    console.log(router.query)
+    const fetchArtistID = async () => {
+      try {
+        const artist = await getArtistById(router.query.id)
+        setArtist(artist)
+        console.log({ artist })
+      } catch (error) {
+        console.log('failed to fetch')
+      }
+    }
+    fetchArtistID()
   }, [])
 
   function drawerState(value) {
     setOpenDrawer(value)
   }
+  if (artist === null) return <div>Loading....</div>
+
   return (
     <CustomPagesLayout>
       <main>
@@ -197,13 +208,7 @@ const ArtisteProfileSection = ({ artist }) => {
           )}
         </div>
         <h5 id={styles['username']}>{artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'}</h5>
-        <div className={styles['tags-container']}>
-          {artist.genre ? (
-            artist.genre.map((genreItem, index) => <Tag>genreItem.name</Tag>)
-          ) : (
-            <Tag>No Genre Added yet.</Tag>
-          )}
-        </div>
+        <div className={styles['tags-container']}>{artist === null ? 'Nothing' : <Tag>No Genre Added yet.</Tag>}</div>
         <div className={styles['button-container']}>
           <TransitionsModal
             open={open}
@@ -214,7 +219,7 @@ const ArtisteProfileSection = ({ artist }) => {
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>{artist.bio}</p>
+          <p className={styles['body']}>{artist ? artist.bio : 'No bio provided!'}</p>
         </div>
       </Card>
     </section>

@@ -30,20 +30,10 @@ export default function Carousel({ artist }) {
             loading='eager'
           />
         </div>
-        <div
-          onClick={() => router.push({ pathname: `/artist-profile`, query: artist })}
-          className={styles['carousel-title-text']}
-        >
-          <Link
-            href={{
-              pathname: `/artists/${artist._id}`,
-              query: artist
-            }}
-            as={`/artists/${artist._id}`}
-            style={{ width: '100%' }}
-          >
+        <div className={styles['carousel-title-text']}>
+          <div>
             {artist.firstName} {artist.lastName}
-          </Link>
+          </div>
         </div>
 
         {/* A good place to map your tags from Api calls */}
@@ -56,8 +46,7 @@ export default function Carousel({ artist }) {
         </div>
         <Link
           href={{
-            pathname: `/artists/${artist._id}`,
-            query: artist
+            pathname: `/artists/${artist._id}`
           }}
           as={`/artists/${artist._id}`}
           style={{ width: '100%' }}
