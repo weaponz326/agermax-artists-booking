@@ -9,6 +9,7 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
+import { getUserById } from 'src/services/users'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -17,6 +18,12 @@ const UsersListPage = () => {
   const [query, setQuery] = useState('')
   const { users } = useUsers()
   const [activeView, setActiveView] = useState('1')
+  const [modalType, setModalType] = useState('Add User')
+  const [selectedUser, setSelectedUser] = useState('')
+
+  /* **********
+   * Functions *
+   ********** */
 
   useEffect(() => {
     if (users !== undefined) {
@@ -36,6 +43,11 @@ const UsersListPage = () => {
 
   function hideModal() {
     setOpenModal(false)
+  }
+
+  function handleAddUser() {
+    setModalType('Add User')
+    setOpenModal(true)
   }
 
   function handleQueryChange(e) {
@@ -76,7 +88,7 @@ const UsersListPage = () => {
           activeView={activeView}
           setActiveView={setActiveView}
         />
-        <TabButton onClick={unhideModal} className={styles.usersListPageNavBarAddUsersBtn}>
+        <TabButton onClick={handleAddUser} className={styles.usersListPageNavBarAddUsersBtn}>
           Add Users
         </TabButton>
       </nav>
@@ -87,22 +99,26 @@ const UsersListPage = () => {
         hideModal={hideModal}
         usersList={usersList}
         setUsersList={setUsersList}
+        setModalType={setModalType}
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
       />
       <SlideInModal
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<UserListPageModalContent />}
+        modalContent={
+          modalType === 'Add User' ? <AddUserModalContent /> : <EditUserModalContent selectedUser={selectedUser} />
+        }
       />
     </div>
   )
 }
 
-export const UserListPageModalContent = () => {
+export const AddUserModalContent = () => {
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
-        {/* <Camera /> */}
         <ImageUpload />
       </div>
       <div className={styles.modalCardContentUserDetails}>
@@ -112,6 +128,78 @@ export const UserListPageModalContent = () => {
           type='text'
           name=''
           id=''
+        />
+        <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input placeholder='Company Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input
+          placeholder='Organization Number'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name=''
+          id=''
+        />
+        <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <input placeholder='Billing Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+      </div>
+      <div className={styles.modalCardContentUserProfile}>
+        <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
+        <select className={styles.modalCardContentInputField} name='' id=''>
+          <option>Member Type</option>
+          <option>Organizer</option>
+          <option>Artist</option>
+          <option>Sponsor </option>
+        </select>
+
+        <input placeholder='Display Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
+      </div>
+    </>
+  )
+}
+
+export const EditUserModalContent = ({ selectedUser }) => {
+  const [userData, setUserData] = useState({
+    profilePhoto: selectedUser?.profilePhoto || '',
+    firstName: selectedUser?.firstName || '',
+    lastName: selectedUser?.lastName || '',
+    email: selectedUser?.email || '',
+    contactPhone: selectedUser?.contactPhone || '',
+    address: selectedUser?.address || '',
+    bio: selectedUser?.bio || '',
+    nickName: selectedUser?.nickName || '',
+    socialMediaLinks: selectedUser?.socialMediaLinks || [''],
+    availableDates: selectedUser?.availableDates || [''],
+    eventsHosted: selectedUser?.eventsHosted || [''],
+    companyName: selectedUser?.companyName || '',
+    organizationNumber: selectedUser?.organizationNumber || '',
+    gallery: selectedUser?.gallery || ['']
+  })
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const data = await getUserById(selectedUser)
+      setUserData(data)
+      console.log({ selectedUser, userData })
+    }
+    fetchUserData()
+  }, [selectedUser])
+
+  const handleChange = (name, value) => {
+    setUserData({ ...userData, [name]: value })
+    console.log(userData)
+  }
+
+  return (
+    <>
+      <div className={styles.modalCardContentPictureInput}>{/* <ImageUpload /> */}</div>
+      <div className={styles.modalCardContentUserDetails}>
+        <input
+          placeholder='First Name'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='firstName'
+          id='firstName'
+          value={userData.firstName}
+          onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
         <input placeholder='Company Address' className={styles.modalCardContentInputField} type='text' name='' id='' />

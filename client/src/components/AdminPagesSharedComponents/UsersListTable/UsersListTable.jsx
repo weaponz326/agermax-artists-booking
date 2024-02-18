@@ -1,7 +1,15 @@
 import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 
-const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => {
+const UsersListTable = ({
+  hideModal,
+  unhideModal,
+  usersList,
+  setUsersList,
+  setModalType,
+  selectedUser,
+  setSelectedUser
+}) => {
   const data = usersList
 
   const columns = [
@@ -22,8 +30,8 @@ const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => 
     {
       title: 'Phone',
       dataIndex: 'contactPhone',
-      key: 'phone',
-      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
+      key: 'contactPhone',
+      sorter: (a, b) => a.contactPhone - b.contactPhone
     },
     {
       title: 'Email',
@@ -52,7 +60,8 @@ const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => 
 
   // Handlers for edit and delete actions
   const handleEdit = userId => {
-    console.log(`Edit user with ID ${userId}`)
+    setModalType('Edit User')
+    setSelectedUser(userId)
     unhideModal(true)
   }
 
@@ -64,10 +73,10 @@ const UsersListTable = ({ hideModal, unhideModal, usersList, setUsersList }) => 
   // Dropdown menu content
   const getMenu = record => (
     <Menu>
-      <Menu.Item key='edit' onClick={() => handleEdit(record.key)}>
+      <Menu.Item key='edit' onClick={() => handleEdit(record._id)}>
         Edit
       </Menu.Item>
-      <Menu.Item key='delete' onClick={() => handleDelete(record.key)}>
+      <Menu.Item key='delete' onClick={() => handleDelete(record._id)}>
         Delete
       </Menu.Item>
     </Menu>
