@@ -117,7 +117,7 @@ const LoginPage = () => {
               <Avatar src='/images/logo.png' alt='Logo' />
             </Link>
             <Link href={'/'}>
-              <Typography variant='h3' sx={{ ml: 2.5, fontWeight: 700 }}>
+              <Typography variant='h6' sx={{ ml: 3, fontWeight: 600 }}>
                 {themeConfig.templateName}
               </Typography>
             </Link>
