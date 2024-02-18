@@ -52,7 +52,7 @@ export default function Navbar() {
 
 const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
   const [options, setOptions] = useState([])
-  const { user, logout, loading } = useAuth()
+  const { user, logout, loading, login } = useAuth()
 
   const { artists } = useArtists()
   const menuBarWrapper = useRef()
@@ -131,7 +131,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     setActiveInputTab(10)
     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
     handleSetFormData(0, 'artistID', artist._id)
-    setFormData({ ...formData, organizerID: user._id })
   }
 
   function handleSetFormData(id, name, value) {
@@ -158,13 +157,19 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    try {
-      const newBooking = await createBooking(formData)
-      console.log('New booking created: ', newBooking)
-      // Optionally, you can redirect or perform any other action after successful booking creation
-    } catch (error) {
-      console.error('Error creating booking: ', error)
-      // Handle error, e.g., display an error message to the user
+    if (!user) {
+      logout()
+    } else {
+      setFormData({ ...formData, organizerID: user._id })
+
+      try {
+        const newBooking = await createBooking(formData)
+        console.log('New booking created: ', newBooking)
+        // Optionally, you can redirect or perform any other action after successful booking creation
+      } catch (error) {
+        console.error('Error creating booking: ', error)
+        // Handle error, e.g., display an error message to the user
+      }
     }
   }
 

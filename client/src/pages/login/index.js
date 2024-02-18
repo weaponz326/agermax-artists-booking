@@ -69,56 +69,58 @@ const defaultValues = {
 }
 
 const LoginPage = () => {
-  const [rememberMe, setRememberMe] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true)
+  const [showPassword, setShowPassword] = useState(false)
 
   // ** Use the useAuth hook
-  const auth = useAuth();
-  const theme = useTheme();
-  const { settings } = useSettings();
-  const hidden = useMediaQuery(theme.breakpoints.down('md'));
+  const auth = useAuth()
+  const theme = useTheme()
+  const { settings } = useSettings()
+  const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
   // ** Vars
-  const { skin } = settings;
+  const { skin } = settings
 
   const {
     control,
     setError,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     defaultValues,
     mode: 'onBlur',
-    resolver: yupResolver(schema),
-  });
+    resolver: yupResolver(schema)
+  })
 
   const onSubmit = data => {
-    const { email, password } = data;
+    const { email, password } = data
     auth.login({ email, password, rememberMe }, () => {
       setError('email', {
         type: 'manual',
-        message: 'Email or Password is invalid',
-      });
-    });
-  };
+        message: 'Email or Password is invalid'
+      })
+    })
+  }
 
   // ** Function to handle OAuth login
-  const handleOAuthLogin = (provider) => {
+  const handleOAuthLogin = provider => {
     // Assuming `initiateOAuth` is a method provided by your `useAuth` hook
-    auth.initiateOAuth(provider);
-  };
-
+    auth.initiateOAuth(provider)
+  }
 
   return (
     <Box className='content-center'>
       <Card>
         <CardContent sx={{ p: theme => `${theme.spacing(10.5, 8, 8)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Avatar src='/images/logo.png' alt='Logo' />
-
-            <Typography variant='h3' sx={{ ml: 2.5, fontWeight: 700 }}>
-              {themeConfig.templateName}
-            </Typography>
+            <Link href={'/'}>
+              <Avatar src='/images/logo.png' alt='Logo' />
+            </Link>
+            <Link href={'/'}>
+              <Typography variant='h3' sx={{ ml: 2.5, fontWeight: 700 }}>
+                {themeConfig.templateName}
+              </Typography>
+            </Link>
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h4' sx={{ mb: 1.5 }}>
