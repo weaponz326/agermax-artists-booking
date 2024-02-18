@@ -11,14 +11,13 @@ export default function Carousel({ artist }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!artist || artist.length < 1) {
+    if (!artist) {
       setLoading(true)
     } else {
       setLoading(false)
     }
   }, [artist])
   if (!loading) {
-    const artistName = `${artist.firstName}-${artist.lastName}`
     return (
       <div className={styles['carousel-container']}>
         <div className={styles['carousel-img']}>
@@ -31,18 +30,24 @@ export default function Carousel({ artist }) {
           />
         </div>
         <div className={styles['carousel-title-text']}>
-          <div>
+          <Link
+            href={{
+              pathname: `/artists/${artist._id}`
+            }}
+            as={`/artists/${artist._id}`}
+          >
             {artist.firstName} {artist.lastName}
-          </div>
+          </Link>
         </div>
 
         {/* A good place to map your tags from Api calls */}
 
         <div className={styles['carousel-genre']}>
-          <Tag genre={'Rock'} />
-          <Tag genre={'Gospel'} />
-          <Tag genre={'R&B'} />
-          <Tag genre={'Afrobeat'} />
+          {artist.genre.length ? (
+            artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+          ) : (
+            <Tag>No genre provided yet.</Tag>
+          )}
         </div>
         <Link
           href={{
@@ -65,11 +70,11 @@ export default function Carousel({ artist }) {
 }
 
 //Tag Component
-export const Tag = ({ genre }) => {
+export const Tag = ({ children }) => {
   return (
     <div className={styles['carousel-genre']}>
       <Link href='#'>
-        <span className={styles['carousel-genre-text']}>{genre}</span>
+        <span className={styles['carousel-genre-text']}>{children}</span>
       </Link>
     </div>
   )
@@ -85,18 +90,11 @@ export const SkeletonCarousel = () => {
         <Skeleton animation='wave' height={32} width='60%' variant='text' />
       </div>
       <div className={styles['skeleton-carousel-genre']}>
-        <Skeleton animation='wave' height={32}>
-          <Tag genre={'Rock'} />
-        </Skeleton>
-        <Skeleton animation='wave' height={32}>
-          <Tag genre={'Gospel'} />
-        </Skeleton>
-        <Skeleton animation='wave' height={32}>
-          <Tag genre={'R&B'} />
-        </Skeleton>
-        <Skeleton animation='wave' height={32}>
-          <Tag genre={'Afrobeat'} />
-        </Skeleton>
+        {Array.from({ length: 3 }).map((genre, index) => (
+          <Skeleton key={index} animation='wave' height={32}>
+            <Tag>Genre</Tag>
+          </Skeleton>
+        ))}
       </div>
       <div className={styles.skeletonButtonContainer}>
         <Skeleton

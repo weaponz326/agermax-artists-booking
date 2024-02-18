@@ -32,7 +32,12 @@ export default HomePage
 
 export const EventsSection = () => {
   const { bookings } = useBookings()
+  const [events, setEvents] = useState([])
   const [numOfBookings, setNumberOfBookings] = useState(9)
+
+  useEffect(() => {
+    if (bookings) setEvents(bookings)
+  }, [bookings])
 
   const handleLoadMoreEvents = () => {
     setNumberOfBookings(current => current + 4)
@@ -44,8 +49,8 @@ export const EventsSection = () => {
         <div className={styles['upcoming-events']}>
           <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
         </div>
-        <EventsGenreButtons genreList={mockGenreList} />
-        <EventsLayout numOfBookings={numOfBookings} bookings={bookings} />
+        <EventsGenreButtons bookings={bookings} genreList={mockGenreList} />
+        <EventsLayout numOfBookings={numOfBookings} bookings={events} />
         {/* <div className={styles['events-load-more']}> */}
         {bookings && bookings.length > numOfBookings ? (
           <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
@@ -124,7 +129,7 @@ export const SubscriptionSection = () => {
   )
 }
 
-export const EventsGenreButtons = ({ genreList }) => {
+export const EventsGenreButtons = ({ genreList, bookings }) => {
   return (
     <div className={styles['events-genre-buttons']}>
       {genreList.map(genre => (

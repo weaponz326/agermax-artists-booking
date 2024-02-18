@@ -17,6 +17,7 @@ import FallbackSpinner from 'src/@core/components/spinner'
 
 function ArtistProfile() {
   const router = useRouter()
+  const { id } = router.query
   const [artist, setArtist] = useState(null)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
@@ -24,21 +25,21 @@ function ArtistProfile() {
   useEffect(() => {
     const fetchArtistID = async () => {
       try {
-        const artist = await getArtistById(router.query.id)
+        const artist = await getArtistById(id)
         setArtist(artist)
-        console.log({ artist })
       } catch (error) {
         console.log('failed to fetch')
       }
     }
     fetchArtistID()
-  }, [])
+  }, [artist])
 
   function drawerState(value) {
     setOpenDrawer(value)
   }
 
   if (artist === null) return <FallbackSpinner />
+
   return (
     <CustomPagesLayout>
       <main>
@@ -120,25 +121,17 @@ const EventsSection = ({ artist }) => {
 export const VideoItem = ({ artist }) => {
   const [artistVideoGallery, setArtistVideoGallery] = useState([])
   const { bookings } = useBookings()
-  useEffect(() => {
-    if (!bookings.length) return
-    let videoArray = []
-    bookings.forEach(booking => {
-      if (booking.artistID === artist._id) {
-        videoArray.push([...booking.gallery])
-      }
-    })
-    setArtistVideoGallery(videoArray)
-  }, [bookings, artist])
+  useEffect(() => {}, [])
 
-  if (artistVideoGallery.length) {
+  if (artist.gallery.length) {
     return (
       <>
-        {artistVideoGallery.map((gallery, index) => (
+        {artist.gallery.map((gallery, index) => (
           <div className={styles['video-item']} key={index}>
             <div key={index}>
               <PlayCircle size={80} className={styles['play-icon']} color='white' />
               <div className={styles.videoImage}>{gallery}</div>
+              <img src={gallery.urls.regular} alt='event-video' />
             </div>
           </div>
         ))}
@@ -147,18 +140,17 @@ export const VideoItem = ({ artist }) => {
   } else {
     return (
       <>
-        {Array.from({ length: 3 }).map((event, index) => (
-          <div className={styles['video-item']}>
-            <PlayCircle size={80} className={styles['play-icon']} color='white' />
-            <Skeleton
-              variant='rounded'
-              animation='wave'
-              height={300}
-              sx={{ borderRadius: '21px' }}
-              className={styles.videoImage}
-            />
-          </div>
-        ))}
+        <p>No videos available for this artist.</p>
+        <div className={styles['video-item']}>
+          <PlayCircle size={80} className={styles['play-icon']} color='white' />
+          <Skeleton
+            variant='rounded'
+            animation='wave'
+            height={300}
+            sx={{ borderRadius: '21px' }}
+            className={styles.videoImage}
+          />
+        </div>
       </>
     )
   }
@@ -190,7 +182,6 @@ const TabView = ({ config }) => {
 
 const ArtisteProfileSection = ({ artist }) => {
   const [open, setOpen] = useState(false)
-  console.log(artist)
 
   return (
     <section>
@@ -209,7 +200,13 @@ const ArtisteProfileSection = ({ artist }) => {
           )}
         </div>
         <h5 id={styles['username']}>{artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'}</h5>
-        <div className={styles['tags-container']}>{artist === null ? 'Nothing' : <Tag>No Genre Added yet.</Tag>}</div>
+        <div className={styles['tags-container']}>
+          {artist.genre.length ? (
+            artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+          ) : (
+            <Tag>No genre provided yet.</Tag>
+          )}
+        </div>
         <div className={styles['button-container']}>
           <TransitionsModal
             open={open}
@@ -220,7 +217,7 @@ const ArtisteProfileSection = ({ artist }) => {
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>{artist ? artist.bio : 'No bio provided!'}</p>
+          <p className={styles['body']}>{artist.bio ? artist.bio : 'No bio provided yet!'}</p>
         </div>
       </Card>
     </section>

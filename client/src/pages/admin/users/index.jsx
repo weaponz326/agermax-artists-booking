@@ -7,8 +7,6 @@ import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButt
 import styles from './users.module.css'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
-import axios from 'axios'
-import usersData from './Music Artists Data'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
 
@@ -42,16 +40,18 @@ const UsersListPage = () => {
 
   function handleQueryChange(e) {
     setQuery(e.target.value)
-    if (!query || query === '') {
-      setUsersList(users)
-    } else {
-      setActiveView('1')
-      const filteredList = users.filter(
-        user =>
-          user.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          user.lastName.toLowerCase().includes(query.toLowerCase())
-      )
-      setUsersList(filteredList)
+    if (users) {
+      if (!query || query === '') {
+        setUsersList(users)
+      } else {
+        setActiveView('1')
+        const filteredList = users.filter(
+          user =>
+            user.firstName.toLowerCase().includes(query.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(query.toLowerCase())
+        )
+        setUsersList(filteredList)
+      }
     }
   }
 

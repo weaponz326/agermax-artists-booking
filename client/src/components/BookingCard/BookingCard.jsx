@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
-// import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-// import CloseIcon from '@mui/icons-material/Close'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
+import enLocale from 'date-fns/locale/en-US'
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import { Tag } from 'src/pages/artist-profile'
-// import { borderRadius, fontFamily } from '@mui/system'
 import { Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
-// import { TimeField } from '@mui/x-date-pickers/TimeField'
-// import { CheckroomSharp } from '@mui/icons-material'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import { createBooking } from 'src/services/bookings'
+import { useAuth } from 'src/hooks/useAuth'
+import Link from 'next/link'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -130,7 +129,8 @@ const customTheme = createTheme({
   }
 })
 
-function BookingCard({ open, setOpen, artistDetails }) {
+function BookingCard({ open, setOpen, artist }) {
+  const { user, logout, loading } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
   const [getInTime, setGetInTime] = useState(null)
@@ -141,8 +141,8 @@ function BookingCard({ open, setOpen, artistDetails }) {
     // Initialize form data
     // Example:
     status: 'pending',
-    organizerID: '65c9f17656ec877c775dc072',
-    eventTitle: '',
+    organizerID: '',
+    eventTitle: 'Not Provided',
     dateTimeRequested: '',
     startTime: '',
     endTime: '',
@@ -204,9 +204,9 @@ function BookingCard({ open, setOpen, artistDetails }) {
   //Handlers for Form Data Input
   const handleDateChange = date => {
     setSelectedDate(date.format('YYYY-MM-DD'))
-    //Embed artistID into the form data
-    date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artistDetails._id })
-    console.log(artistDetails)
+    //Embed artistID and userID into the form data
+    date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artist._id, organizerID: user._id })
+    console.log(formData)
   }
 
   const handleChangeGetInTime = (time, timeString) => {
@@ -227,17 +227,29 @@ function BookingCard({ open, setOpen, artistDetails }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={customLocale}>
       <ThemeProvider theme={customTheme}>
-        <Card sx={{ height: '100%', paddingBottom: '0', fontFamily: 'var(--main-font-family)' }}>
-          <CardContent sx={{ height: '100%' }}>
+        <div
+          style={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto',
+            padding: '20px',
+            fontFamily: 'var(--main-font-family)'
+          }}
+        >
+          <div style={{ height: '100%' }}>
             {activeStep === 0 && (
-              <Grid container flexDirection='column' height='100%' color='#183D4C'>
-                <Typography sx={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
-                  {artistDetails.firstName} {artistDetails.lastName}
-                </Typography>
-                <Grid container gap={1} marginBottom={4}>
-                  <Tag>Rock</Tag>
-                  <Tag>Afrobeat</Tag>
-                </Grid>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
+                <div style={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
+                  {artist.firstName} {artist.lastName}
+                </div>
+                <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
+                  {artist.genre.length ? (
+                    artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                  ) : (
+                    <Tag>No genre provided yet.</Tag>
+                  )}
+                </div>
                 <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
                   Choose When 👇
                 </Typography>
@@ -378,23 +390,31 @@ function BookingCard({ open, setOpen, artistDetails }) {
                     disableNext={disableNext}
                   />
                 </Grid>
-              </Grid>
+              </div>
             )}
 
             {activeStep === 1 && (
               <Grid height='100%' container flexDirection='column'>
                 <Typography fontSize='24px' fontWeight='500' gutterBottom>
-                  John Doe
+                  {artist.firstName} {artist.lastName}
                 </Typography>
                 <Grid container gap={1} marginBottom={4}>
-                  <Tag>Rock</Tag>
-                  <Tag>Afrobeat</Tag>
+                  {artist.genre.length ? (
+                    artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                  ) : (
+                    <Tag>No genre provided yet.</Tag>
+                  )}
                 </Grid>
                 <Grid container justifyContent='space-between' alignItems='center'>
                   <Typography fontSize='19px' fontWeight='450'>
                     Summary
                   </Typography>
-                  <Typography fontSize='15px' color='#62AFE8'>
+                  <Typography
+                    sx={{ cursor: 'pointer' }}
+                    fontSize='15px'
+                    color='#62AFE8'
+                    onClick={() => setActiveStep(0)}
+                  >
                     Change
                   </Typography>
                 </Grid>
@@ -445,6 +465,15 @@ function BookingCard({ open, setOpen, artistDetails }) {
                 <Grid container gap={4} marginTop={3}>
                   <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>Your Details</Typography>
                 </Grid>
+                <Grid container direction='column' marginTop={3} color="'#4B627F'">
+                  <Typography>
+                    Name: {user.firstName} {user.lastName}
+                  </Typography>
+                  <Typography>User Type: {user.role}</Typography>
+                  <Typography>Contact: {user.contactPhone}</Typography>
+                  <Typography>Email: {user.email}</Typography>
+                  <Typography>Address: {user.address}</Typography>
+                </Grid>
                 <Grid marginTop='auto'>
                   <NavMobileStepper
                     activeStep={activeStep}
@@ -493,12 +522,12 @@ function BookingCard({ open, setOpen, artistDetails }) {
                   View Booking
                 </Button>
                 <Typography color='#62AFE8' marginTop={2}>
-                  Back to Home
+                  <Link href={'/'}>Back to Home</Link>
                 </Typography>
               </Grid>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </ThemeProvider>
     </LocalizationProvider>
   )

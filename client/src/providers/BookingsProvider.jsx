@@ -34,6 +34,5 @@ export const useBookings = () => {
   if (!context.bookings) {
     console.log('Either Network Error or useBookings must be used within the BookingsProvider')
   }
-  console.log('Bookings fetched!')
   return context
 }

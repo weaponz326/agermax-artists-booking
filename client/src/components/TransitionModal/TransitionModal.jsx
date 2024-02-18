@@ -17,7 +17,8 @@ const style = {
   height: '95%',
   boxShadow: 24,
   boxShadow: '0px 10px 30px #183D4C',
-  p: 5
+  p: 5,
+  overflow: 'auto'
 }
 
 export default function TransitionsModal({ modalContent, btnClassName, open, setOpen }) {

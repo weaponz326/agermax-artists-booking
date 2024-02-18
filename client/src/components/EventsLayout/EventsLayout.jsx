@@ -1,14 +1,12 @@
 import Link from 'next/link'
 import { Fragment, useEffect, useState } from 'react'
-import Router from 'next/router'
 import styles from './events-layout.module.css'
 import Image from 'next/image'
 import Skeleton from '@mui/material/Skeleton'
 import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
-import { useBookings } from 'src/providers/BookingsProvider'
-import { useArtists } from 'src/providers/ArtistsProvider'
+import { getArtistById } from 'src/services/artists'
 
 export default function EventsLayout({ bookings, numOfBookings }) {
   const [bookingsList, setBookingsList] = useState()
@@ -21,7 +19,7 @@ export default function EventsLayout({ bookings, numOfBookings }) {
       setBookingsList(bookings.slice(0, numOfBookings))
       setLoading(false)
     }
-  }, [bookings, numOfBookings])
+  }, [bookings, numOfBookings, loading])
 
   if (loading) {
     return (
@@ -84,17 +82,23 @@ const EventCard = ({ booking }) => {
 }
 
 const EventsDetails = ({ booking }) => {
-  const { artists } = useArtists()
   const [artistName, setArtistName] = useState('')
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
 
   // Fetch artist name from API if it is not provided in the data from the server
   useEffect(() => {
-    if (artists && booking) {
-      const artist = artists.find(a => a._id === booking.artistID)
-      const artistFullName = artist ? `${artist?.firstName} ${artist?.lastName}` : 'Unknown Artist'
-      setArtistName(artistFullName)
+    if (booking) {
+      const fetchArtistID = async () => {
+        try {
+          const artist = await getArtistById(booking.artistID)
+          const artistFullName = `${artist.firstName} ${artist.lastName}`
+          setArtistName(artistFullName)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      fetchArtistID()
 
       //Configure Time for display
       const formattedStartTime = formatDateTime(booking.startTime)
@@ -103,7 +107,7 @@ const EventsDetails = ({ booking }) => {
       setStartTime(formattedStartTime)
       setEndTime(formattedEndTime)
     }
-  }, [artists, booking])
+  }, [booking])
 
   const formatDateTime = (inputDateTime, outputFormat) => {
     const time = new Date(inputDateTime)
@@ -120,7 +124,7 @@ const EventsDetails = ({ booking }) => {
         {booking.locationVenue ? booking.locationVenue : 'Location not specified'}
       </div>
       <div className={styles['event-preview-schedule']}>
-        <Clock color='orange' fill='orange' variant='Bold' className={styles['iconsans-bold-clock']} />
+        <Clock color='orange' fill='orange' variant='Bold' />
         <div className={styles['event-prev-detail']}>{startTime}</div>
         <MdArrowForward color='white' />
         <div className={styles['event-prev-detail']}>{endTime}</div>
