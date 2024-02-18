@@ -179,6 +179,17 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
       </li>
     </ul>
   )
+  const artistsDropdownDisplay = artist => (
+    <div className={styles.artistsListPreview}>
+      <div className={styles.searchInputFieldPictureContainer}>
+        <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
+      </div>
+      <div>
+        <span>{artist.firstName}</span> <span>{artist.lastName}</span>
+        <div>{artist.genre}</div>
+      </div>
+    </div>
+  )
 
   ///Set Conditional Classes
   const checkActiveClass = id => {
