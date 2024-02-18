@@ -75,6 +75,18 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     gallery: []
   })
 
+  const datePickerRef = useRef(null)
+  const getInTimeRef = useRef(null)
+  const startTimeRef = useRef(null)
+  const endTimeRef = useRef(null)
+
+  useEffect(() => {
+    if (activeInputTab == 1) datePickerRef.current.focus()
+    if (activeInputTab == 2) getInTimeRef.current.focus()
+    if (activeInputTab == 3) startTimeRef.current.focus()
+    if (activeInputTab == 4) endTimeRef.current.focus()
+  }, [activeInputTab])
+
   useEffect(() => {
     //Get All Artists Lists
     if (artists) setOptions(artists)
@@ -116,11 +128,17 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
   }, [])
 
   const handleChangeArtist = value => {
+    setActiveInputTab(10)
     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
     handleSetFormData(0, 'artistID', artist._id)
     setFormData({ ...formData, organizerID: user._id })
   }
 
+  function handleSetFormData(id, name, value) {
+    const index = parseInt(id) + 1
+    setActiveInputTab(index)
+    setFormData(oldValue => ({ ...oldValue, [name]: value }))
+  }
   //Handlers for Form Data Input
   // const handleDateChange = date => {
   //   date && setFormData({ ...formData, dateTimeRequested: date.toDate() })
@@ -154,12 +172,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
   function handleMenuClick() {
     // setActiveTab(null)
     setHideMenuItems(false)
-  }
-
-  function handleSetFormData(id, name, value) {
-    const index = parseInt(id) + 1
-    setActiveInputTab(index)
-    setFormData(oldValue => ({ ...oldValue, [name]: value }))
   }
 
   const navMenu = (
@@ -243,13 +255,13 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
             {navMenu}
             <form className={styles['search-bar']} onSubmit={handleSubmit} ref={searchBarContainerRef}>
               <AutoComplete
-                onClick={e => setActiveInputTab(0)}
+                // onClick={e => setActiveInputTab(0)}
                 onFocus={e => setActiveInputTab(0)}
                 className={`${styles.searchWrapper} ${checkActiveClass(0)}`}
                 style={{
                   width: 200
                 }}
-                autoFocus={activeInputTab == 0}
+                // autoFocus={activeInputTab == 0}
                 popupMatchSelectWidth={false}
                 allowClear
                 notFoundContent='Sorry, no artist found'
@@ -262,7 +274,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 }))}
                 placeholder='Search Artist'
                 filterOption={filterOption}
-                open={activeInputTab == 0}
+                // open={activeInputTab == 0}
                 onSelect={handleChangeArtist}
                 // onChange={value => onSetFormData(0, 'artistID', value.artistID)}
                 id={0}
@@ -289,6 +301,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 open={activeInputTab == 1}
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 1}
+                ref={datePickerRef}
               />
 
               <div className={styles['search-item-divider']}></div>
@@ -312,6 +325,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 open={activeInputTab == 2}
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 2}
+                ref={getInTimeRef}
               />
               <div className={styles['search-item-divider']}></div>
 
@@ -334,6 +348,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 open={activeInputTab == 3}
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 3}
+                ref={startTimeRef}
               />
               <div className={styles['search-item-divider']}></div>
 
@@ -356,6 +371,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 open={activeInputTab == 4}
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 4}
+                ref={endTimeRef}
               />
               <div className={styles['search-item-divider']}></div>
               <TabButton className={styles.bookNowButton}>Book Now!</TabButton>
