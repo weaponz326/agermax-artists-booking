@@ -8,7 +8,7 @@ import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import { getArtistById } from 'src/services/artists'
 
-export default function EventsLayout({ bookings, numOfBookings }) {
+export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()
   const [loading, setLoading] = useState(true)
 
@@ -24,8 +24,8 @@ export default function EventsLayout({ bookings, numOfBookings }) {
   if (loading) {
     return (
       <div className={styles['main-events']}>
-        <span className={`${styles['events-nav']} ${styles['see-all']}`}>
-          <Link href='#'>See all</Link>
+        <span className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
+          See all
         </span>
         <div className={styles['events-preview']}>
           {Array.from({ length: numOfBookings }).map((img, index) => (
@@ -48,8 +48,8 @@ export default function EventsLayout({ bookings, numOfBookings }) {
   } else {
     return (
       <div className={styles['main-events']}>
-        <span className={`${styles['events-nav']} ${styles['see-all']}`}>
-          <Link href='#'>See all</Link>
+        <span className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
+          See all
         </span>
         <div className={styles['events-preview']}>
           {bookingsList.map((booking, index) => (

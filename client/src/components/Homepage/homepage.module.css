@@ -81,7 +81,7 @@
 }
 
 .genre-btn:hover {
-  filter: brightness(95%);
+  /* filter: brightness(95%); */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
