@@ -5,10 +5,23 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Skeleton from '@mui/material/Skeleton'
+import { getOnePhoto } from 'src/services/mock'
 
 export default function Carousel({ artist }) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
+
+  // useEffect(() => {
+  //   const fetchPhoto = async () => {
+  //     try {
+  //       const photo = await getOnePhoto()
+  //       console.log(photo)
+  //     } catch (error) {
+  //       console.log()
+  //     }
+  //   }
+  //   fetchPhoto()
+  // }, [])
 
   useEffect(() => {
     if (!artist) {
@@ -20,13 +33,14 @@ export default function Carousel({ artist }) {
   if (!loading) {
     return (
       <div className={styles['carousel-container']}>
-        <div className={styles['carousel-img']}>
+        <div className={styles['carousel-img-wrapper']}>
           <Image
             className={styles['carousel-img']}
             alt='Artist-Image'
             src={artist.picture ? artist.picture : '/images/rectangle-2-15.png'}
             fill
             loading='eager'
+            // width={'100%'}
           />
         </div>
         <div className={styles['carousel-title-text']}>
