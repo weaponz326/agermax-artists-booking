@@ -35,10 +35,23 @@ export const EventsSection = () => {
   const { bookings } = useBookings()
   const [events, setEvents] = useState([])
   const [numOfBookings, setNumberOfBookings] = useState(9)
+  const currentDate = new Date()
 
   useEffect(() => {
-    if (bookings) setEvents(bookings)
-  }, [bookings])
+    if (bookings) {
+      const upcomingEvents = bookings.filter(booking => {
+        const bookingDate = new Date(booking.dateTimeRequested)
+        return bookingDate >= currentDate // Compare booking date with current date
+      })
+      // console.log(upcomingEvents)
+      if (selectedGenre === null) {
+        setEvents(upcomingEvents)
+      } else if (selectedGenre) {
+        const filteredEvents = upcomingEvents.filter(event => event.genre.includes(selectedGenre))
+        setEvents(filteredEvents)
+      }
+    }
+  }, [bookings, selectedGenre])
 
   const handleLoadMoreEvents = () => {
     setNumberOfBookings(current => current + 3)
@@ -53,7 +66,6 @@ export const EventsSection = () => {
         <EventsGenreButtons
           events={events}
           setEvents={setEvents}
-          genreList={mockGenreList}
           bookings={bookings}
           selectedGenre={selectedGenre}
           setSelectedGenre={setSelectedGenre}
@@ -146,27 +158,19 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
   const [genreList, setGenreList] = useState([])
 
   useEffect(() => {
-    if (selectedGenre) {
-      const filteredEvents = bookings.filter(event => event.genre.includes(selectedGenre))
-      setEvents(filteredEvents)
-      console.log(filteredEvents)
-    } else if (selectedGenre === null) {
-      setEvents(bookings)
-    }
-    console.log(events)
-  }, [selectedGenre])
-
-  useEffect(() => {
     if (!events) return
-
     // Collect all genres from the list of bookings into a single array
     const allGenres = events.reduce((accumulator, event) => {
       // Concatenate genres of each booking into the accumulator array
       return accumulator.concat(event.genre)
     }, [])
-
+    // if (selectedGenre) {
+    //   const newGenreList = allGenres.filter(genre => genre === selectedGenre)
+    //   setGenreList(newGenreList)
+    // }
+    console.log(events)
     setGenreList(allGenres)
-  }, [events])
+  }, [events, selectedGenre, bookings])
 
   const handleGenreFilter = genre => {
     setSelectedGenre(genre)

@@ -12,6 +12,7 @@
   text-align: right;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  align-self: flex-end;
 }
 .see-all:hover {
   text-decoration: underline;

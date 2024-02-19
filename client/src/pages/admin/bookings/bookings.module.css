@@ -127,6 +127,7 @@
   border: 1px solid #e6e6e6;
   font-size: 0.85rem;
   cursor: pointer;
+  position: relative;
 }
 
 .addGalleryButton {
@@ -140,17 +141,18 @@
 }
 .statusCount {
   background-color: var(--primary-color);
-  width: 1rem;
+  width: 1.3rem;
   color: white;
   aspect-ratio: 1;
   border-radius: 50%;
   position: absolute;
-  right: -0.5rem;
-  top: -0.5rem;
+  right: -0.4rem;
+  top: -0.4rem;
   font-size: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1px;
 }
 
 .monthlyLookaheadSection {

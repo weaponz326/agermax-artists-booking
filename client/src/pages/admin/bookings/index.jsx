@@ -34,11 +34,39 @@ const BookingPage = () => {
   const { bookings } = useBookings()
   const { artists } = useArtists()
   const { user, logout } = useAuth()
+  const [events, setEvents] = useState([])
+  const [eventsStatusView, setEventsStatusView] = useState('all')
+  const [pendingCount, setPendingCount] = useState(null)
+  const [approvedCount, setApprovedCount] = useState(null)
+  const [cancelledCount, setCancelledCount] = useState(null)
 
   return (
     <main className={styles.bookingsPage}>
-      <AdminPagesNavBar user={user} activeEventsView={activeEventsView} setActiveEventsView={setActiveEventsView} />
-      {activeEventsView === 'ListView' && <EventsListView bookings={bookings} />}
+      <AdminPagesNavBar
+        events={events}
+        setEvents={setEvents}
+        user={user}
+        activeEventsView={activeEventsView}
+        setActiveEventsView={setActiveEventsView}
+        eventsStatusView={eventsStatusView}
+        setEventsStatusView={setEventsStatusView}
+        bookings={bookings}
+      />
+      {activeEventsView === 'ListView' && (
+        <EventsListView
+          bookings={bookings}
+          events={events}
+          setEvents={setEvents}
+          eventsStatusView={eventsStatusView}
+          setEventsStatusView={setEventsStatusView}
+          pendingCount={pendingCount}
+          setPendingCount={setPendingCount}
+          approvedCount={approvedCount}
+          setApprovedCount={setApprovedCount}
+          cancelledCount={cancelledCount}
+          setCancelledCount={setCancelledCount}
+        />
+      )}
       {activeEventsView === 'ThreeDView' && <ThreeDView />}
       {activeEventsView === 'MonthView' && <MonthView />}
       {activeEventsView === 'WeekView' && <WeekView />}
@@ -73,10 +101,19 @@ export const WeekView = () => {
   )
 }
 
-export const EventsListView = ({ bookings }) => {
-  const [events, setEvents] = useState([])
-  const [eventsStatusView, setEventsStatusView] = useState('all')
-
+export const EventsListView = ({
+  bookings,
+  eventsStatusView,
+  setEventsStatusView,
+  pendingCount,
+  setPendingCount,
+  approvedCount,
+  setApprovedCount,
+  cancelledCount,
+  setCancelledCount,
+  events,
+  setEvents
+}) => {
   function groupBy(array, keyGetter) {
     const map = new Map()
     array.forEach(item => {
@@ -108,26 +145,30 @@ export const EventsListView = ({ bookings }) => {
         'December'
       ]
       const groupedByMonth = groupBy(bookings, booking => monthNames[new Date(booking.dateTimeRequested).getMonth()])
-      console.log(groupedByMonth)
-      //First Sort the bookings Ascending
-      // const sortedBookingsByDate = bookings.sort(
-      //   (a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested)
-      // )
-      //Use the buttons and filter and show the sorted bookings
+
+      const pendingBookings = bookings.filter(booking => booking.status === 'pending')
+      setPendingCount(pendingBookings.length)
+
+      const approvedBookings = bookings.filter(booking => booking.status === 'approved')
+      setApprovedCount(approvedBookings.length)
+
+      const cancelledBookings = bookings.filter(booking => booking.status === 'cancelled')
+      setCancelledCount(cancelledBookings.length)
+
       if (eventsStatusView === 'all') {
         setEvents(bookings)
       }
       if (eventsStatusView === 'pending') {
-        setEvents(bookings.filter(booking => booking.status === 'pending'))
+        setEvents(pendingBookings)
       }
       if (eventsStatusView === 'approved') {
-        setEvents(bookings.filter(booking => booking.status === 'approved'))
+        setEvents(approvedBookings)
       }
       if (eventsStatusView === 'cancelled') {
-        setEvents(bookings.filter(booking => booking.status === 'cancelled'))
+        setEvents(cancelledBookings)
       }
     }
-  }, [bookings, eventsStatusView])
+  }, [bookings, eventsStatusView, pendingCount, approvedCount, cancelledCount])
 
   return (
     <section className={styles.bookingStatusSection}>
@@ -143,27 +184,59 @@ export const EventsListView = ({ bookings }) => {
           className={eventsStatusView === 'pending' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Pending
-          <div className={styles.statusCount}>6</div>
+          {events && <div className={styles.statusCount}>{pendingCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('approved')}
           className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Approved
+          {events && <div className={styles.statusCount}>{approvedCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('cancelled')}
           className={eventsStatusView === 'cancelled' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Cancelled
+          {events && <div className={styles.statusCount}>{cancelledCount}</div>}
         </TabButton>
       </div>
       <EventsList events={events} eventsStatusView={eventsStatusView} />
     </section>
   )
 }
-export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView, user }) => {
+export const AdminPagesNavBar = ({
+  setActiveEventsView,
+  activeEventsView,
+  user,
+  events,
+  setEvents,
+  eventsStatusView,
+  setEventsStatusView,
+  bookings
+}) => {
   const [openModal, setOpenModal] = useState(false)
+
+  //Search
+  const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    if (events.length && query) {
+      const filteredEventTitles = events.filter(event => {
+        if (event.eventTitle) {
+          return event.eventTitle.toLowerCase().includes(query.toLowerCase())
+        }
+      })
+      setEvents(filteredEventTitles)
+    } else {
+      setEvents(bookings)
+    }
+  }, [query])
+
+  function handleQuery(e) {
+    setQuery(e.target.value)
+    setEventsStatusView('all')
+  }
 
   function unhideModal() {
     setOpenModal(true)
@@ -231,7 +304,7 @@ export const AdminPagesNavBar = ({ setActiveEventsView, activeEventsView, user }
           </TabButton>
         </div>
         <div className={styles.searchBar}>
-          <SearchBar placeholder={'Search bookings ...'} />
+          <SearchBar placeholder='Search bookings ...' value={query} onChange={handleQuery} />
         </div>
         <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
           Add Bookings
@@ -329,7 +402,9 @@ export const EventsListItem = ({ event }) => {
         <EventStatusIcon event={event} />
         <CalendarIcon booking={event} />
         <div className={styles.event}>
-          <div className={styles.eventTitle}>Stockholm Music Festival</div>
+          <div className={styles.eventTitle}>
+            {event.eventTitle ? event.eventTitle : 'Event Title Not Provided Yet'}
+          </div>
           <div className={styles.eventArtist}>{artistName}</div>
         </div>
       </div>

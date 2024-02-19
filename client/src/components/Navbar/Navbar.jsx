@@ -136,7 +136,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
   function handleSetFormData(id, name, value) {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
-    setFormData(oldValue => ({ ...oldValue, [name]: value }))
+    setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
   }
 
   const handleSubmit = async e => {
@@ -144,8 +144,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     if (!user) {
       logout()
     } else {
-      setFormData({ ...formData, organizerID: user._id })
-
       try {
         const newBooking = await createBooking(formData)
         console.log('New booking created: ', newBooking)
