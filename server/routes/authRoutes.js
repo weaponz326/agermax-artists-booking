@@ -2,20 +2,12 @@
 const generateToken = require("../utils/generateToken");
 
 const express = require("express");
-const multer = require("multer");
 const router = express.Router();
-const {
-  getAllUsers,
-  registerUser,
-  loginUser,
-  getUserProfile,
-  updateUserDetails,
-} = require("../controllers/authController");
+const { registerUser, loginUser } = require("../controllers/authController");
 const passport = require("passport");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-
 
 //facebook Oauth
 router.get(

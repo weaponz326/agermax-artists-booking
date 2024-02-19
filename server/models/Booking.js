@@ -43,6 +43,9 @@ const bookingSchema = new mongoose.Schema({
   availableTechnology: {
     type: String,
   },
+  genre: {
+    type: String,
+  },
   otherComments: {
     type: String,
   },
