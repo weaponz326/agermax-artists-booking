@@ -40,7 +40,7 @@ export const EventsSection = () => {
   }, [bookings])
 
   const handleLoadMoreEvents = () => {
-    setNumberOfBookings(current => current + 4)
+    setNumberOfBookings(current => current + 3)
   }
 
   return (
@@ -49,7 +49,7 @@ export const EventsSection = () => {
         <div className={styles['upcoming-events']}>
           <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
         </div>
-        <EventsGenreButtons bookings={bookings} genreList={mockGenreList} />
+        <EventsGenreButtons events={events} genreList={mockGenreList} />
         <EventsLayout numOfBookings={numOfBookings} bookings={events} />
         {/* <div className={styles['events-load-more']}> */}
         {bookings && bookings.length > numOfBookings ? (
@@ -129,14 +129,26 @@ export const SubscriptionSection = () => {
   )
 }
 
-export const EventsGenreButtons = ({ genreList, bookings }) => {
+export const EventsGenreButtons = ({ events }) => {
+  const [genreList, setGenreList] = useState([])
+  useEffect(() => {
+    if (!events) return
+    let newList = []
+
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i]
+      newList.push(event.genre)
+    }
+
+    setGenreList(newList)
+  }, [events])
+
   return (
     <div className={styles['events-genre-buttons']}>
-      {genreList.map(genre => (
-        <Link href={genre.page} key={Math.random()} className={styles['genre-btn']}>
-          {' '}
-          {genre.icon} {genre.title}{' '}
-        </Link>
+      {genreList.map((genre, index) => (
+        <div key={Math.random()} className={styles['genre-btn']}>
+          🎸genre
+        </div>
       ))}
     </div>
   )
