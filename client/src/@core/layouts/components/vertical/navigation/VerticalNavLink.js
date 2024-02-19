@@ -32,11 +32,11 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   transition: 'padding-left .25s ease-in-out, padding-right .25s ease-in-out',
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
-    borderRadius: '14px', // Increased border radius for hover
+    borderRadius: '12px', // Increased border radius for hover
   },
   '&.active': {
-    backgroundColor: theme.palette.grey[200], // Light grey color for active state
-    borderRadius: '14px', // Increased border radius for active
+    backgroundColor: theme.palette.grey[300], // Light grey color for active state
+    borderRadius: '12px', // Increased border radius for active
     '& .MuiTypography-root, & svg': {
       color: theme.palette.common.black + ' !important', // Ensuring text color is black for active items
     },
