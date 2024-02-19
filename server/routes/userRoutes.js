@@ -20,6 +20,7 @@ router
   );
 
 router.get("/users/:id", userController.getUserById);
+router.put("/users/:id", userController.updateUserDetailsById);
 
 router.delete("/users/:id", userController.deleteUser);
 
