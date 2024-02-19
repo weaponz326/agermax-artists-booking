@@ -322,21 +322,21 @@ export const EditUserModalContent = ({ selectedUser }) => {
   const handleUpdateUser = async e => {
     e.preventDefault();
     try {
-      const response = await updateUserDetailsById(selectedUser, userData);
-      if (response.status === 200) { // Assuming 200 is your success status
-        console.log('User updated successfully:', response);
+      const response = await updateUserDetailsById(selectedUser, userData); // Ensure correct ID usage
+      if (response.status === 200) {
+        console.log('User updated successfully:', response.data);
         setSnackbarMessage('User updated successfully');
         setSnackbarSeverity('success');
+        setUserData(response.data); // Update userData with the response
       } else {
-        // Handle non-successful response
-        console.log('Update failed:', response);
+        console.log('Update failed:', response.data);
         setSnackbarMessage('Failed to update user');
         setSnackbarSeverity('error');
       }
       setSnackbarOpen(true);
     } catch (error) {
-      console.error('Failed to update user:', error.message);
-      setSnackbarMessage(error.message || 'Failed to update user');
+      console.error('Failed to update user:', error.response?.data?.message || error.message);
+      setSnackbarMessage(error.response?.data?.message || 'Failed to update user');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
