@@ -65,7 +65,7 @@ export const EventsSection = () => {
           setSelectedGenre={setSelectedGenre}
         />
         {/* <div className={styles['events-load-more']}> */}
-        {bookings && bookings.length > numOfBookings ? (
+        {events && events.length > numOfBookings ? (
           <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
             Load More ...🌟
           </button>
