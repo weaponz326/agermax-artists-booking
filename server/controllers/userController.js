@@ -152,6 +152,59 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+const updateUserDetailsById = async (req, res) => {
+  const targetUserId = req.params.id; // Get the user ID from the request parameters
+  const updateData = req.body;
+
+  try {
+    // Retrieve the user to update to check their role
+    const userToUpdate = await User.findById(targetUserId);
+    if (!userToUpdate) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const role = userToUpdate.role;
+
+    let userUpdateFields = {
+      firstName: updateData.firstName,
+      lastName: updateData.lastName,
+      email: updateData.email,
+      contactPhone: updateData.contactPhone,
+      address: updateData.address,
+      profilePhoto: updateData.profilePhoto,
+    };
+
+    // Depending on the role, add specific fields
+    if (role === "artist") {
+      Object.assign(userUpdateFields, {
+        nickName: updateData.nickName,
+        genre: updateData.genre,
+        bio: updateData.bio,
+        organizationNumber: updateData.organizationNumber,
+        socialMediaLinks: updateData.socialMediaLinks,
+        availableDates: updateData.availableDates,
+        gallery: updateData.gallery,
+      });
+      await Artist.findOneAndUpdate({ user: targetUserId }, userUpdateFields);
+    } else if (role === "organizer") {
+      Object.assign(userUpdateFields, {
+        companyName: updateData.companyName,
+        organizationNumber: updateData.organizationNumber,
+        eventsHosted: updateData.eventsHosted,
+      });
+      await EventOrganizer.findOneAndUpdate({ user: targetUserId }, userUpdateFields);
+    } else if (role === "admin") {
+      await Admin.findOneAndUpdate({ user: targetUserId }, userUpdateFields);
+    }
+
+    // Update the general user fields
+    await User.findByIdAndUpdate(targetUserId, userUpdateFields, { new: true });
+    res.json({ message: "User details updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -167,5 +220,6 @@ module.exports = {
   getUserProfile,
   getUserById,
   updateUserDetails,
+  updateUserDetailsById,
   deleteUser,
 };

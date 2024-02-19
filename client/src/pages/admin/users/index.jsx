@@ -13,9 +13,10 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
-import { getUserById, updateUserDetails } from 'src/services/users'
+import { getUserById, updateUserDetailsById } from 'src/services/users'
 import { useAuth } from 'src/hooks/useAuth'
 import { useRouter } from 'next/router'
+import { Snackbar, Alert } from '@mui/material'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -314,18 +315,40 @@ export const EditUserModalContent = ({ selectedUser }) => {
     setUserData({ ...userData, [name]: value })
     console.log(userData)
   }
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
   const handleUpdateUser = async e => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await updateUserDetails(selectedUser, userData)
-      console.log('User updated successfully:', response)
-      // Handle success, e.g., show success message to the user
+      const response = await updateUserDetailsById(selectedUser, userData);
+      if (response.status === 200) { // Assuming 200 is your success status
+        console.log('User updated successfully:', response);
+        setSnackbarMessage('User updated successfully');
+        setSnackbarSeverity('success');
+      } else {
+        // Handle non-successful response
+        console.log('Update failed:', response);
+        setSnackbarMessage('Failed to update user');
+        setSnackbarSeverity('error');
+      }
+      setSnackbarOpen(true);
     } catch (error) {
-      console.error('Failed to update user:', error.message)
-      // Handle error, e.g., show error message to the user
+      console.error('Failed to update user:', error.message);
+      setSnackbarMessage(error.message || 'Failed to update user');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
-  }
+  };
+
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <>
@@ -435,18 +458,17 @@ export const EditUserModalContent = ({ selectedUser }) => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
-      </form>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+         </form>
     </>
   )
 }
 
 export default UsersListPage
 
-UsersListPage.authGuard = false
-UsersListPage.guestGuard = false
-UsersListPage.acl = {
-  action: 'manage',
-  subject: 'all' // Adjust the permissions as per your application's ACL configuration
-}
 
 // UsersListPage.getLayout = page => <div>{page}</div>

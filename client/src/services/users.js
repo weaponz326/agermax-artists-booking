@@ -31,7 +31,7 @@ export async function deleteUserById(id) {
   }
 }
 
-export async function updateUserDetails(id, userData) {
+export async function updateUserDetailsById(id, userData) {
   try {
     const { data } = await axios.put(`${baseUrl}/users/${id}`, userData)
     return data
