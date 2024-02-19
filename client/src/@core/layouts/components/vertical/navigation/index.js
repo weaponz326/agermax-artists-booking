@@ -77,7 +77,7 @@ const CalendarComponent = () => {
           </Typography>
         </Box>
         <Divider sx={{ width: '100%' }} />
-        <Typography variant='h3' component='p' sx={{ my: 2 }}>
+        <Typography variant='h4' component='p' sx={{ my: 2 }}>
           21:00 to 01:00
         </Typography>
         <StyledButton size='small'>Details</StyledButton>
