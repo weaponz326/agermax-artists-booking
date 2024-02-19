@@ -33,9 +33,10 @@ export async function deleteUserById(id) {
 
 export async function updateUserDetailsById(id, userData) {
   try {
-    const { data } = await axios.put(`${baseUrl}/users/${id}`, userData)
-    return data
+    const response = await axios.put(`${baseUrl}/users/${id}`, userData);
+    return response; // Return the whole response
   } catch (error) {
-    console.log('Error: ', error)
+    console.log('Error: ', error.response || error.message);
+    throw error;
   }
 }
