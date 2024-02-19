@@ -11,9 +11,9 @@
 
 .modalCardContent {
   position: fixed;
-  top: 1rem;
-  right: 2rem;
-  height: 50rem;
+  top: 1%;
+  right: 3%;
+  /* height: 50rem; */
   overflow: auto;
   width: 350px; /* Adjust width as needed */
   background-color: #ffffff;
@@ -57,7 +57,6 @@
   border-radius: 1rem;
   cursor: pointer;
   margin-top: auto;
-
 }
 
 .modalCardContentSaveButton:hover {

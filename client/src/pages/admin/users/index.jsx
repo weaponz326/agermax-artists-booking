@@ -150,7 +150,6 @@ export const AddUserModalContent = () => {
 
   const handleChange = (name, value) => {
     setUserData({ ...userData, [name]: value })
-    console.log(userData)
   }
 
   const handleCreateUser = async e => {
@@ -315,40 +314,39 @@ export const EditUserModalContent = ({ selectedUser }) => {
     setUserData({ ...userData, [name]: value })
     console.log(userData)
   }
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
 
   const handleUpdateUser = async e => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const response = await updateUserDetailsById(selectedUser, userData); // Ensure correct ID usage
+      const response = await updateUserDetailsById(selectedUser, userData) // Ensure correct ID usage
       if (response.status === 200) {
-        console.log('User updated successfully:', response.data);
-        setSnackbarMessage('User updated successfully');
-        setSnackbarSeverity('success');
-        setUserData(response.data); // Update userData with the response
+        console.log('User updated successfully:', response.data)
+        setSnackbarMessage('User updated successfully')
+        setSnackbarSeverity('success')
+        setUserData(response.data) // Update userData with the response
       } else {
-        console.log('Update failed:', response.data);
-        setSnackbarMessage('Failed to update user');
-        setSnackbarSeverity('error');
+        console.log('Update failed:', response.data)
+        setSnackbarMessage('Failed to update user')
+        setSnackbarSeverity('error')
       }
-      setSnackbarOpen(true);
+      setSnackbarOpen(true)
     } catch (error) {
-      console.error('Failed to update user:', error.response?.data?.message || error.message);
-      setSnackbarMessage(error.response?.data?.message || 'Failed to update user');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      console.error('Failed to update user:', error.response?.data?.message || error.message)
+      setSnackbarMessage(error.response?.data?.message || 'Failed to update user')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
     }
-  };
-
+  }
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
-    setSnackbarOpen(false);
-  };
+    setSnackbarOpen(false)
+  }
 
   return (
     <>
@@ -459,16 +457,21 @@ export const EditUserModalContent = ({ selectedUser }) => {
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
         <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-         </form>
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </form>
     </>
   )
 }
 
 export default UsersListPage
 
-
+UsersListPage.authGuard = false
+UsersListPage.guestGuard = false
+UsersListPage.acl = {
+  action: 'manage',
+  subject: 'all' // Adjust the permissions as per your application's ACL configuration
+}
 // UsersListPage.getLayout = page => <div>{page}</div>

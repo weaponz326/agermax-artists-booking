@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './SlideInModal.module.css'
 import TabButton from '../ViewTab/TabButton'
+import { Close } from '@material-ui/icons'
 
 const SlideInModal = ({ openModal, unhideModal, hideModal, modalContent, saveButtonText, SubmitButton }) => {
   const [showModal, setShowModal] = useState(openModal)
@@ -15,15 +16,9 @@ const SlideInModal = ({ openModal, unhideModal, hideModal, modalContent, saveBut
       <>
         <div className={styles.modalCardContent}>
           <TabButton onClick={hideModal} className={styles.modalCardContentCloseButton}>
-            X
+            <Close />
           </TabButton>
           {modalContent}
-          {/* {!SubmitButton && (
-            <TabButton className={styles.modalCardContentSaveButton} onClick={hideModal}>
-              {saveButtonText ? saveButtonText : 'Save'}
-            </TabButton>
-          )} */}
-          {/* Add your modal content here */}
         </div>
         <div onClick={hideModal} className={styles.modalBackdrop}></div>
       </>

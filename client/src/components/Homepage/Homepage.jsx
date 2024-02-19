@@ -168,7 +168,6 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
     //   const newGenreList = allGenres.filter(genre => genre === selectedGenre)
     //   setGenreList(newGenreList)
     // }
-    console.log(events)
     setGenreList(allGenres)
   }, [events, selectedGenre, bookings])
 
