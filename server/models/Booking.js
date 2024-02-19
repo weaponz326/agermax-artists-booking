@@ -28,6 +28,9 @@ const bookingSchema = new mongoose.Schema({
   getInTime: {
     type: Date,
   },
+  genre: { 
+    type: [String] 
+  },
   numberOfGuests: {
     type: Number,
   },
