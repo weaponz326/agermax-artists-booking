@@ -31,6 +31,7 @@ const HomePage = () => {
 export default HomePage
 
 export const EventsSection = () => {
+  const [selectedGenre, setSelectedGenre] = useState(null)
   const { bookings } = useBookings()
   const [events, setEvents] = useState([])
   const [numOfBookings, setNumberOfBookings] = useState(9)
@@ -49,10 +50,22 @@ export const EventsSection = () => {
         <div className={styles['upcoming-events']}>
           <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>
         </div>
-        <EventsGenreButtons events={events} genreList={mockGenreList} />
-        <EventsLayout numOfBookings={numOfBookings} bookings={events} />
+        <EventsGenreButtons
+          events={events}
+          setEvents={setEvents}
+          genreList={mockGenreList}
+          bookings={bookings}
+          selectedGenre={selectedGenre}
+          setSelectedGenre={setSelectedGenre}
+        />
+        <EventsLayout
+          numOfBookings={numOfBookings}
+          bookings={events}
+          selectedGenre={selectedGenre}
+          setSelectedGenre={setSelectedGenre}
+        />
         {/* <div className={styles['events-load-more']}> */}
-        {bookings && bookings.length > numOfBookings ? (
+        {events && events.length > numOfBookings ? (
           <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
             Load More ...🌟
           </button>
@@ -129,25 +142,41 @@ export const SubscriptionSection = () => {
   )
 }
 
-export const EventsGenreButtons = ({ events }) => {
+export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre, setSelectedGenre }) => {
   const [genreList, setGenreList] = useState([])
+
+  useEffect(() => {
+    if (selectedGenre) {
+      const filteredEvents = bookings.filter(event => event.genre.includes(selectedGenre))
+      setEvents(filteredEvents)
+      console.log(filteredEvents)
+    } else if (selectedGenre === null) {
+      setEvents(bookings)
+    }
+    console.log(events)
+  }, [selectedGenre])
+
   useEffect(() => {
     if (!events) return
-    let newList = []
 
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i]
-      newList.push(event.genre)
-    }
+    // Collect all genres from the list of bookings into a single array
+    const allGenres = events.reduce((accumulator, event) => {
+      // Concatenate genres of each booking into the accumulator array
+      return accumulator.concat(event.genre)
+    }, [])
 
-    setGenreList(newList)
+    setGenreList(allGenres)
   }, [events])
+
+  const handleGenreFilter = genre => {
+    setSelectedGenre(genre)
+  }
 
   return (
     <div className={styles['events-genre-buttons']}>
       {genreList.map((genre, index) => (
-        <div key={Math.random()} className={styles['genre-btn']}>
-          🎸genre
+        <div key={index} className={styles['genre-btn']} onClick={() => handleGenreFilter(genre)}>
+          🎸{genre}
         </div>
       ))}
     </div>
