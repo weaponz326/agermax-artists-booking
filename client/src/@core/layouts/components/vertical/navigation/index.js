@@ -77,7 +77,7 @@ const CalendarComponent = () => {
           </Typography>
         </Box>
         <Divider sx={{ width: '100%' }} />
-        <Typography variant='h3' component='p' sx={{ my: 2 }}>
+        <Typography variant='h4' component='p' sx={{ my: 2 }}>
           21:00 to 01:00
         </Typography>
         <StyledButton size='small'>Details</StyledButton>
@@ -307,7 +307,7 @@ const Navigation = props => {
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
               ? afterNavMenuContent(navMenuContentProps)
               : null}
-            <Box sx={{ px: 2, py: 2 }}>
+            <Box sx={{ px: 2, py: 0 }}>
               <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
                 Quick Links
               </Typography>
