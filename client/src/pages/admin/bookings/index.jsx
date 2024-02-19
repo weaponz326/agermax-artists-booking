@@ -367,7 +367,7 @@ export const BookingsModalContent = ({ user }) => {
     // Initialize form data
     // Example:
     status: 'pending',
-    organizerID: '65c9f17656ec877c775dc072',
+    organizerID: '',
     eventTitle: '',
     dateTimeRequested: '',
     startTime: '',
@@ -398,7 +398,7 @@ export const BookingsModalContent = ({ user }) => {
 
   const handleChangeArtist = (artist, option) => {
     const { artistID } = option
-    artist && setFormData({ ...formData, artistID: artistID })
+    artist && setFormData({ ...formData, artistID: artistID, organizerID: user._id })
   }
 
   const handleChangeDate = (date, dateString) => {

@@ -43,6 +43,7 @@
   justify-content: center;
   cursor: pointer;
   border: none;
+  padding: 0.5em;
 }
 
 .modalCardContentCloseButton:hover {

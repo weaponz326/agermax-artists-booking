@@ -30,3 +30,12 @@ export async function deleteUserById(id) {
     console.log('Error: ', error)
   }
 }
+
+export async function updateUserDetails(id, userData) {
+  try {
+    const { data } = await axios.put(`${baseUrl}/users/${id}`, userData)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}

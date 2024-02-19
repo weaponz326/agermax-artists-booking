@@ -1,5 +1,6 @@
 import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
+import { deleteUserById } from 'src/services/users'
 
 const UsersListTable = ({
   hideModal,
@@ -65,9 +66,16 @@ const UsersListTable = ({
     unhideModal(true)
   }
 
-  const handleDelete = userId => {
+  const handleDelete = async userId => {
     // Implement delete logic here
-    console.log(`Delete user with ID ${userId}`)
+    try {
+      const response = await deleteUserById(userId)
+      console.log('User deleted successfully:', response)
+      // Handle success, e.g., show success message to the user
+    } catch (error) {
+      console.error('Failed to delete user:', error.message)
+      // Handle error, e.g., show error message to the user
+    }
   }
 
   // Dropdown menu content

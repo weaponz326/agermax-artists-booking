@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Modal, Upload } from 'antd'
-
 const getBase64 = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -37,6 +36,18 @@ const UploadPictures = () => {
       name: 'image.png',
       status: 'done',
       url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+    },
+    {
+      uid: '-xxx',
+      percent: 50,
+      name: 'image.png',
+      status: 'uploading',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+    },
+    {
+      uid: '-5',
+      name: 'image.png',
+      status: 'error'
     }
   ])
   const handleCancel = () => setPreviewOpen(false)
@@ -70,19 +81,13 @@ const UploadPictures = () => {
   return (
     <>
       <Upload
-        showUploadList
-        style={{
-          display: 'flex',
-          flexDirection: 'row-reverse',
-          background: 'red'
-        }}
         action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-        listType='picture-card'
+        listType='picture'
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {uploadButton}
+        {fileList.length >= 8 ? null : uploadButton}
       </Upload>
       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
         <img

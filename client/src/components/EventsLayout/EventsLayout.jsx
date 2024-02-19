@@ -69,7 +69,7 @@ const EventCard = ({ booking }) => {
     <div className={styles['events-preview-container']}>
       <Image
         className={styles['evt-img']}
-        src={booking.picture ? booking.picture : ''}
+        src={booking.picture ? booking.picture : '#'}
         alt='BookingImg'
         loading='eager'
         fill

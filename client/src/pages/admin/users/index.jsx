@@ -1,5 +1,9 @@
 // ** React Imports
 import { useState, useEffect } from 'react'
+
+import { UserOutlined } from '@ant-design/icons'
+import { Avatar } from 'antd'
+
 import UsersListTable from 'src/components/AdminPagesSharedComponents/UsersListTable/UsersListTable'
 
 import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
@@ -9,7 +13,7 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
-import { getUserById } from 'src/services/users'
+import { getUserById, updateUserDetails } from 'src/services/users'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -188,41 +192,119 @@ export const EditUserModalContent = ({ selectedUser }) => {
     console.log(userData)
   }
 
+  const handleUpdateUser = async e => {
+    e.preventDefault()
+    try {
+      const response = await updateUserDetails(userId, updateData)
+      console.log('User updated successfully:', response)
+      // Handle success, e.g., show success message to the user
+    } catch (error) {
+      console.error('Failed to update user:', error.message)
+      // Handle error, e.g., show error message to the user
+    }
+  }
+
   return (
     <>
-      <div className={styles.modalCardContentPictureInput}>{/* <ImageUpload /> */}</div>
-      <div className={styles.modalCardContentUserDetails}>
+      <div className={styles.modalCardContentPictureInput}>
+        <ImageUpload />
+      </div>
+      <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
         <input
           placeholder='First Name'
           className={styles.modalCardContentInputField}
           type='text'
           name='firstName'
           id='firstName'
-          value={userData.firstName}
+          value={''} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          required
+        />
+        <input
+          placeholder='Last Name'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='lastName'
+          id='lastName'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
         />
         <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
-        <input placeholder='Company Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
+
+        <input
+          placeholder='Email Address'
+          className={styles.modalCardContentInputField}
+          type='email'
+          name='email'
+          id='email'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
+        />
+        <input
+          placeholder='Phone'
+          className={styles.modalCardContentInputField}
+          type='tel'
+          name='contactPhone'
+          id='phoneContact'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
+        />
+        <input
+          placeholder='Address'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='address'
+          id='address'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <textarea
+          placeholder='Biography'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='bio'
+          id='bio'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <input
+          placeholder='Nickname'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='nickname'
+          id='nickname'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <input
+          placeholder='Company Name'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='companyName'
+          id='companyName'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
         <input
           placeholder='Organization Number'
           className={styles.modalCardContentInputField}
           type='text'
-          name=''
-          id=''
+          name='organizationNumber'
+          id='organizationNumber'
+          value={''} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-        <input placeholder='Billing Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-      </div>
+      </form>
       <div className={styles.modalCardContentUserProfile}>
         <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
-        <select className={styles.modalCardContentInputField} name='' id=''>
-          <option>Member Type</option>
-          <option>Organizer</option>
-          <option>Artist</option>
-          <option>Sponsor </option>
+        <select className={styles.modalCardContentInputField} name='role' id='role'>
+          <option value='artist'>Artist</option>
+          <option value='organizer'>Organizer</option>
+          <option value='admin'>Admin</option>
         </select>
-
-        <input placeholder='Display Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
       </div>
     </>
   )

@@ -138,22 +138,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     setActiveInputTab(index)
     setFormData(oldValue => ({ ...oldValue, [name]: value }))
   }
-  //Handlers for Form Data Input
-  // const handleDateChange = date => {
-  //   date && setFormData({ ...formData, dateTimeRequested: date.toDate() })
-  // }
-
-  // const handleChangeGetInTime = (time, timeString) => {
-  //   time && setFormData({ ...formData, getInTime: time.toDate() })
-  // }
-
-  // const handleChangeStartTime = (time, timeString) => {
-  //   time && setFormData({ ...formData, startTime: time.toDate() })
-  // }
-
-  // const handleChangeEndTime = (time, timeString) => {
-  //   time && setFormData({ ...formData, endTime: time.toDate() })
-  // }
 
   const handleSubmit = async e => {
     e.preventDefault()
