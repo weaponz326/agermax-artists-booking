@@ -131,7 +131,7 @@ const QuickActions = () => {
         //Replace the Link tag with div, which we can use useRouter to push to new Links
         <div key={index} href={link.path} onClick={() => router.push(`${link.path}`)}>
           {/* <Tooltip title={link.title} arrow> */}
-          <IconButton className={styles.sideNavQuickLink} component='a' sx={{ width: 'auto', height: 'auto' }}>
+          <IconButton className={styles.sideNavQuickLink} component='a' sx={{ width: 'auto', padding: '12px', height: 'auto' }}>
             <Icon icon={link.icon} className='icon' />
             <Typography variant='caption' className='quick-link-text'>
               {link.title}
@@ -293,7 +293,7 @@ const Navigation = props => {
             {userNavMenuContent ? (
               userNavMenuContent(navMenuContentProps)
             ) : (
-              <List className='nav-items' sx={{ pt: 0, '& > :first-child': { mt: '0' } }}>
+              <List className='nav-items' sx={{ pt: 6, '& > :first-child': { mt: '0' } }}>
                 <VerticalNavItems
                   navHover={navHover}
                   groupActive={groupActive}
