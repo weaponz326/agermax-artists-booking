@@ -44,7 +44,7 @@ const bookingSchema = new mongoose.Schema({
     type: String,
   },
   genre: {
-    type: String,
+    type: [String],
   },
   otherComments: {
     type: String,
