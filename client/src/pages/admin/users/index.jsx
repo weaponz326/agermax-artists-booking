@@ -14,6 +14,8 @@ import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComp
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
 import { getUserById, updateUserDetails } from 'src/services/users'
+import { useAuth } from 'src/hooks/useAuth'
+import { useRouter } from 'next/router'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -120,43 +122,163 @@ const UsersListPage = () => {
 }
 
 export const AddUserModalContent = () => {
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const auth = useAuth()
+
+  // ** Router for redirection after successful registration
+  const router = useRouter()
+  const [userData, setUserData] = useState({
+    profilePhoto: '',
+    firstName: '',
+    lastName: '',
+    password: '123456789',
+    role: '',
+    email: '',
+    contactPhone: '',
+    address: '',
+    bio: '',
+    nickName: '',
+    socialMediaLinks: [''],
+    availableDates: [''],
+    eventsHosted: [''],
+    companyName: '',
+    organizationNumber: '',
+    gallery: ['']
+  })
+
+  const handleChange = (name, value) => {
+    setUserData({ ...userData, [name]: value })
+    console.log(userData)
+  }
+
+  const handleCreateUser = async e => {
+    e.preventDefault()
+    setSubmitting(true)
+    setError('')
+
+    auth.register(userData, err => {
+      setSubmitting(false)
+      if (err) {
+        setError(err.response.data.message || 'An error occurred. Please try again.')
+      } else {
+        router.push('/admin/users') // Or redirect to a 'success' page
+      }
+    })
+  }
+
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
         <ImageUpload />
       </div>
-      <div className={styles.modalCardContentUserDetails}>
+      <form className={styles.modalCardContentUserDetails} onSubmit={handleCreateUser}>
         <input
-          placeholder='Organization Number'
+          placeholder='First Name'
           className={styles.modalCardContentInputField}
           type='text'
-          name=''
-          id=''
+          name='firstName'
+          id='firstName'
+          value={userData.firstName} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
         />
-        <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
-        <input placeholder='Company Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
         <input
-          placeholder='Organization Number'
+          placeholder='Last Name'
           className={styles.modalCardContentInputField}
           type='text'
-          name=''
-          id=''
+          name='lastName'
+          id='lastName'
+          value={userData.lastName} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
         />
-        <input placeholder='Email Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-        <input placeholder='Billing Address' className={styles.modalCardContentInputField} type='text' name='' id='' />
-      </div>
-      <div className={styles.modalCardContentUserProfile}>
-        <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
-        <select className={styles.modalCardContentInputField} name='' id=''>
-          <option>Member Type</option>
-          <option>Organizer</option>
-          <option>Artist</option>
-          <option>Sponsor </option>
-        </select>
 
-        <input placeholder='Display Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
-        <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
-      </div>
+        <input
+          placeholder='Email Address'
+          className={styles.modalCardContentInputField}
+          type='email'
+          name='email'
+          id='email'
+          value={userData.email} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
+        />
+        <input
+          placeholder='Phone'
+          className={styles.modalCardContentInputField}
+          type='tel'
+          name='contactPhone'
+          id='contactPhone'
+          value={userData.contactPhone} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+          required
+        />
+        <input
+          placeholder='Address'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='address'
+          id='address'
+          value={userData.address} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <textarea
+          placeholder='Biography'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='bio'
+          id='bio'
+          value={userData.bio} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <input
+          placeholder='Nickname'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='nickname'
+          id='nickname'
+          value={userData.nickName} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <input
+          placeholder='Company Name'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='companyName'
+          id='companyName'
+          value={userData.companyName} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <input
+          placeholder='Organization Number'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='organizationNumber'
+          id='organizationNumber'
+          value={userData.organizationNumber} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <div className={styles.modalCardContentUserProfile}>
+          <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
+          <select
+            className={styles.modalCardContentInputField}
+            name='role'
+            id='role'
+            value={userData.role}
+            onChange={e => handleChange(e.target.name, e.target.value)}
+            required
+          >
+            <option value='' disabled>
+              [Select Role]
+            </option>
+            <option value='organizer'>Organizer</option>
+            <option value='artist'>Artist</option>
+            <option value='admin'>Admin</option>
+          </select>
+        </div>
+        <TabButton className={styles.modalCardContentSaveButton}>Add New User</TabButton>
+      </form>
     </>
   )
 }
@@ -166,6 +288,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
     profilePhoto: selectedUser?.profilePhoto || '',
     firstName: selectedUser?.firstName || '',
     lastName: selectedUser?.lastName || '',
+    role: selectedUser?.role || '',
     email: selectedUser?.email || '',
     contactPhone: selectedUser?.contactPhone || '',
     address: selectedUser?.address || '',
@@ -304,9 +427,10 @@ export const EditUserModalContent = ({ selectedUser }) => {
             id='role'
             value={userData.role}
             onChange={e => handleChange(e.target.name, e.target.value)}
+            required
           >
-            <option value='artist'>Artist</option>
             <option value='organizer'>Organizer</option>
+            <option value='artist'>Artist</option>
             <option value='admin'>Admin</option>
           </select>
         </div>
