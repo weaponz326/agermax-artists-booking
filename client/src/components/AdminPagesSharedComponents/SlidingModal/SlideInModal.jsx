@@ -18,11 +18,11 @@ const SlideInModal = ({ openModal, unhideModal, hideModal, modalContent, saveBut
             X
           </TabButton>
           {modalContent}
-          {!SubmitButton && (
+          {/* {!SubmitButton && (
             <TabButton className={styles.modalCardContentSaveButton} onClick={hideModal}>
               {saveButtonText ? saveButtonText : 'Save'}
             </TabButton>
-          )}
+          )} */}
           {/* Add your modal content here */}
         </div>
         <div onClick={hideModal} className={styles.modalBackdrop}></div>

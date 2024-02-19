@@ -155,6 +155,7 @@ export const AddUserModalContent = () => {
         </select>
 
         <input placeholder='Display Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
+        <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
       </div>
     </>
   )
@@ -182,7 +183,6 @@ export const EditUserModalContent = ({ selectedUser }) => {
     const fetchUserData = async () => {
       const data = await getUserById(selectedUser)
       setUserData(data)
-      console.log({ selectedUser, userData })
     }
     fetchUserData()
   }, [selectedUser])
@@ -195,7 +195,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
   const handleUpdateUser = async e => {
     e.preventDefault()
     try {
-      const response = await updateUserDetails(userId, updateData)
+      const response = await updateUserDetails(selectedUser, userData)
       console.log('User updated successfully:', response)
       // Handle success, e.g., show success message to the user
     } catch (error) {
@@ -216,7 +216,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='firstName'
           id='firstName'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.firstName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
@@ -226,11 +226,10 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='lastName'
           id='lastName'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.lastName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
-        <input placeholder='Company Name' className={styles.modalCardContentInputField} type='text' name='' id='' />
 
         <input
           placeholder='Email Address'
@@ -238,7 +237,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='email'
           name='email'
           id='email'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.email} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
@@ -247,8 +246,8 @@ export const EditUserModalContent = ({ selectedUser }) => {
           className={styles.modalCardContentInputField}
           type='tel'
           name='contactPhone'
-          id='phoneContact'
-          value={''} // @todo fix this when we have a real user to edit
+          id='contactPhone'
+          value={userData.contactPhone} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
@@ -258,7 +257,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='address'
           id='address'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.address} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <textarea
@@ -267,7 +266,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='bio'
           id='bio'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.bio} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <input
@@ -276,7 +275,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='nickname'
           id='nickname'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.nickName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <input
@@ -285,7 +284,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='companyName'
           id='companyName'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.companyName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <input
@@ -294,18 +293,25 @@ export const EditUserModalContent = ({ selectedUser }) => {
           type='text'
           name='organizationNumber'
           id='organizationNumber'
-          value={''} // @todo fix this when we have a real user to edit
+          value={userData.organizationNumber} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
+        <div className={styles.modalCardContentUserProfile}>
+          <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
+          <select
+            className={styles.modalCardContentInputField}
+            name='role'
+            id='role'
+            value={userData.role}
+            onChange={e => handleChange(e.target.name, e.target.value)}
+          >
+            <option value='artist'>Artist</option>
+            <option value='organizer'>Organizer</option>
+            <option value='admin'>Admin</option>
+          </select>
+        </div>
+        <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
       </form>
-      <div className={styles.modalCardContentUserProfile}>
-        <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
-        <select className={styles.modalCardContentInputField} name='role' id='role'>
-          <option value='artist'>Artist</option>
-          <option value='organizer'>Organizer</option>
-          <option value='admin'>Admin</option>
-        </select>
-      </div>
     </>
   )
 }

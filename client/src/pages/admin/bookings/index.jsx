@@ -15,6 +15,7 @@ import styles from './bookings.module.css'
 import { GridFilterAltIcon } from '@mui/x-data-grid'
 import { DatePicker, AutoComplete, TimePicker } from 'antd'
 import dayjs from 'dayjs'
+import moment from 'moment'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -369,7 +370,7 @@ export const BookingsModalContent = ({ user }) => {
     status: 'pending',
     organizerID: '',
     eventTitle: '',
-    dateTimeRequested: '',
+    dateTimeRequested: new Date(),
     startTime: '',
     endTime: '',
     getInTime: '',
@@ -475,7 +476,8 @@ export const BookingsModalContent = ({ user }) => {
           showNow={false}
           minuteStep={15}
           name='dateTimeRequested'
-          defaultValue={formData.dateTimeRequested}
+          // defaultValue={formData.dateTimeRequested}
+          // value={formData.dateTimeRequested}
           onChange={handleChangeDate}
           disabledDate={disabledDate}
           aria-required
@@ -487,7 +489,7 @@ export const BookingsModalContent = ({ user }) => {
           showNow={false}
           showSecond={false}
           format='HH:mm'
-          defaultValue={formData.getInTime}
+          // defaultValue={formData.getInTime}
           onChange={handleChangeGetInTime}
         />
         <TimePicker
@@ -497,7 +499,7 @@ export const BookingsModalContent = ({ user }) => {
           showNow={false}
           showSecond={false}
           format='HH:mm'
-          defaultValue={formData.startTime}
+          // defaultValue={formData.startTime}
           onChange={handleChangeStartTime}
         />
         <TimePicker
@@ -507,7 +509,7 @@ export const BookingsModalContent = ({ user }) => {
           showNow={false}
           showSecond={false}
           format='HH:mm'
-          defaultOpen={formData.endTime}
+          // defaultOpen={formData.endTime}
           onChange={handleChangeEndTime}
           aria-required
         />

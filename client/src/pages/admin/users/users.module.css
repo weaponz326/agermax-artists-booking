@@ -60,3 +60,20 @@
   border: none;
   outline-color: #4428f2;
 }
+
+.modalCardContentSaveButton {
+  background-color: #4428f2;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-top: auto;
+}
+.modalCardContentSaveButton:hover {
+  filter: brightness(90%);
+  transform: scale(1.01);
+}
+
+.modalCardContentUserProfileTitle {
+  font-size: 0.75rem;
+}
