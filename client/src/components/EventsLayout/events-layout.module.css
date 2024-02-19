@@ -11,6 +11,10 @@
   font-weight: 500;
   text-align: right;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.see-all:hover {
+  text-decoration: underline;
 }
 
 .main-events {

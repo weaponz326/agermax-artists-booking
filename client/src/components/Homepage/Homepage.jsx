@@ -150,6 +150,8 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
       const filteredEvents = bookings.filter(event => event.genre.includes(selectedGenre))
       setEvents(filteredEvents)
       console.log(filteredEvents)
+    } else if (selectedGenre === null) {
+      setEvents(bookings)
     }
     console.log(events)
   }, [selectedGenre])
