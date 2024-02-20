@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button'
 import Slide from '@mui/material/Slide'
+import { useAuth } from 'src/hooks/useAuth'
 
 const style = {
   position: 'absolute',
@@ -22,7 +23,12 @@ const style = {
 }
 
 export default function TransitionsModal({ modalContent, btnClassName, open, setOpen }) {
-  const handleOpen = () => setOpen(true)
+  const { user, logout, loading, login } = useAuth()
+  const handleOpen = () => {
+    // if (user)
+    setOpen(true)
+    // logout()
+  }
   const handleClose = () => setOpen(false)
 
   return (

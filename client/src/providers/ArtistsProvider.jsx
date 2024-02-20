@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
 import { getAllArtists } from 'src/services/artists'
+import { getAllArtistsFromUsers } from 'src/services/artists'
 
 const ArtistContext = createContext()
 
@@ -11,7 +12,7 @@ const ArtistsProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const artistsList = await getAllArtists()
+        const artistsList = await getAllArtistsFromUsers()
         setArtists(artistsList)
       } catch (error) {
         setError(error)

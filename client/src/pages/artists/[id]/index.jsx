@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
 import { getArtistById, getEventsPhotos } from 'src/services/artists'
+import { getUserById } from 'src/services/users'
 import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
@@ -25,21 +26,20 @@ function ArtistProfile() {
   useEffect(() => {
     const fetchArtistID = async () => {
       try {
-        const artist = await getArtistById(id)
+        const artist = await getUserById(id)
         setArtist(artist)
       } catch (error) {
-        console.log('failed to fetch')
+        console.log('failed to fetch user')
       }
     }
     fetchArtistID()
-  }, [artist])
+  }, [])
 
   function drawerState(value) {
     setOpenDrawer(value)
   }
 
   if (artist === null) return <FallbackSpinner />
-
   return (
     <CustomPagesLayout>
       <main>
@@ -362,7 +362,7 @@ export const Tag = ({ children }) => {
   )
 }
 
-ArtistProfile.authGuard = true
+ArtistProfile.authGuard = false
 ArtistProfile.guestGuard = false
 ArtistProfile.acl = {
   action: 'manage',

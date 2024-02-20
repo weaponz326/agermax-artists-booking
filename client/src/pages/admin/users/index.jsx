@@ -1,8 +1,8 @@
 // ** React Imports
 import { useState, useEffect } from 'react'
 
-import { UserOutlined } from '@ant-design/icons'
-import { Avatar } from 'antd'
+// import { UserOutlined } from '@ant-design/icons'
+// import { Avatar } from 'antd'
 
 import UsersListTable from 'src/components/AdminPagesSharedComponents/UsersListTable/UsersListTable'
 
@@ -449,6 +449,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
             value={userData.role}
             onChange={e => handleChange(e.target.name, e.target.value)}
             required
+            disabled
           >
             <option value='organizer'>Organizer</option>
             <option value='artist'>Artist</option>

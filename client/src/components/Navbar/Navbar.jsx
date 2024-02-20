@@ -62,7 +62,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     status: 'pending',
     organizerID: '',
     eventTitle: 'Not Provided yet.',
-    dateTimeRequested: '',
+    dateTimeRequested: user ? user._id : '',
     startTime: '',
     endTime: '',
     getInTime: '',
@@ -136,7 +136,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
   function handleSetFormData(id, name, value) {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
-    setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
+    setFormData(oldValue => ({ ...oldValue, [name]: value }))
   }
 
   const handleSubmit = async e => {
@@ -288,6 +288,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 open={activeInputTab == 1}
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 1}
+                // disabled={activeInputTab != 1}
                 ref={datePickerRef}
               />
 
@@ -313,6 +314,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 2}
                 ref={getInTimeRef}
+                // disabled={activeInputTab != 2}
               />
               <div className={styles['search-item-divider']}></div>
 
@@ -336,6 +338,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 3}
                 ref={startTimeRef}
+                // disabled={activeInputTab != 3}
               />
               <div className={styles['search-item-divider']}></div>
 
@@ -359,6 +362,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 4}
                 ref={endTimeRef}
+                // disabled={activeInputTab != 4}
               />
               <div className={styles['search-item-divider']}></div>
               <TabButton className={styles.bookNowButton}>Book Now!</TabButton>

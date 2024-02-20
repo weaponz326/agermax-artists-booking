@@ -7,13 +7,14 @@ import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/Searc
 import CalendarIcon from 'src/components/AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import React from 'react'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
+import moment from 'moment' // Import moment library
 
 //**Import Custom Styles */
 import styles from './bookings.module.css'
 
 //**Import External Components */
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { AutoComplete } from 'antd'
+import { DatePicker, AutoComplete, TimePicker } from 'antd'
 import { ConfigProvider } from 'antd'
 import es from 'antd/locale/es_ES'
 import dayjs from 'dayjs'
@@ -22,9 +23,6 @@ import 'dayjs/locale/es'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -485,6 +483,7 @@ export const BookingsModalContent = ({ user }) => {
 
     // Add other fields as needed
   })
+  const defaultValue = moment() // You can use any default date you want
 
   useEffect(() => {
     if (!artists) return
@@ -542,11 +541,11 @@ export const BookingsModalContent = ({ user }) => {
 
   if (modalContentView === 'details') {
     return (
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ConfigProvider locale={'en_US'}>
         <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-          <h3>Booking Details</h3>
-          <div>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</div>
-          <input
+          <h2>Booking Details</h2>
+          <h3>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</h3>
+          <TextField
             placeholder='Event Title'
             className={styles.modalCardContentInputField}
             type='text'
@@ -555,6 +554,8 @@ export const BookingsModalContent = ({ user }) => {
             value={formData.eventTitle}
             onChange={handleChange}
             required
+            label="Event's Title"
+            size='small'
           />
 
           <AutoComplete
@@ -578,9 +579,10 @@ export const BookingsModalContent = ({ user }) => {
             showNow={false}
             minuteStep={15}
             name='dateTimeRequested'
+            defaultValue={defaultValue}
             // defaultValue={formData.dateTimeRequested}
-            value={formData.dateTimeRequested}
-            onChange={handleChangeDate}
+            // value={formData.dateTimeRequested}
+            onOk={handleChangeDate}
             disabledDate={disabledDate}
             aria-required
           />
@@ -626,6 +628,7 @@ export const BookingsModalContent = ({ user }) => {
             required
             variant='outlined'
             label='Venue'
+            size='small'
           />
           <TextField
             placeholder='Expected Number of Guests'
@@ -639,13 +642,14 @@ export const BookingsModalContent = ({ user }) => {
             onChange={handleChange}
             helperText='Please enter a number greater than 0.'
             label='Number of Guests'
+            size='small'
           />
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery
           </button>
           <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
         </form>
-      </LocalizationProvider>
+      </ConfigProvider>
     )
   } else if (modalContentView === 'gallery') {
     return (

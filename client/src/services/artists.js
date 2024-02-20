@@ -12,7 +12,14 @@ export async function getAllArtists() {
     console.log('Error: ', error)
   }
 }
-
+export async function getAllArtistsFromUsers() {
+  try {
+    const { data } = await axios.get(`${baseUrl}/users?role=artist`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
 export async function getArtistById(id) {
   try {
     const { data } = await axios.get(`${baseUrl}/artists/${id}`)

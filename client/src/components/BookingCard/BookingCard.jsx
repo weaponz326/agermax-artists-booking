@@ -206,7 +206,6 @@ function BookingCard({ open, setOpen, artist }) {
     setSelectedDate(date.format('YYYY-MM-DD'))
     //Embed artistID and userID into the form data
     date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artist._id, organizerID: user._id })
-    console.log(formData)
   }
 
   const handleChangeGetInTime = (time, timeString) => {
@@ -244,7 +243,7 @@ function BookingCard({ open, setOpen, artist }) {
                   {artist.firstName} {artist.lastName}
                 </div>
                 <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
-                  {artist.genre.length ? (
+                  {artist.genre ? (
                     artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
                   ) : (
                     <Tag>No genre provided yet.</Tag>
@@ -285,7 +284,7 @@ function BookingCard({ open, setOpen, artist }) {
                       Get In Time{' '}
                     </Typography>
                     <TimePicker
-                      defaultValue={new Date().getHours()}
+                      // defaultValue={new Date().getHours()}
                       name='getInTime'
                       ampm={false}
                       minutesStep={15}
@@ -319,7 +318,7 @@ function BookingCard({ open, setOpen, artist }) {
                       Start Time
                     </Typography>
                     <TimePicker
-                      defaultValue={new Date().getHours()}
+                      // defaultValue={new Date().getHours()}
                       ampm={false}
                       minutesStep={15}
                       value={startTime}
