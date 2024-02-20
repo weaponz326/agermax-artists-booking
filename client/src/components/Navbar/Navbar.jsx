@@ -38,7 +38,12 @@ export default function Navbar() {
               <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
             </Link>
           </div>
-          <BookArtistPanel hideMenuItems={hideMenuItems} setHideMenuItems={setHideMenuItems} navBarRef={navBarRef} />
+          <BookArtistPanel
+            hideMenuItems={hideMenuItems}
+            setHideMenuItems={setHideMenuItems}
+            navBarRef={navBarRef}
+            user={user}
+          />
           {loading ? (
             <CircularProgress disableShrink />
           ) : (
@@ -50,9 +55,8 @@ export default function Navbar() {
   )
 }
 
-const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
+const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user }) => {
   const [options, setOptions] = useState([])
-  const { user, logout, loading, login } = useAuth()
 
   const { artists } = useArtists()
   const menuBarWrapper = useRef()
@@ -62,7 +66,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     status: 'pending',
     organizerID: '',
     eventTitle: 'Not Provided yet.',
-    dateTimeRequested: user ? user._id : '',
+    dateTimeRequested: '',
     startTime: '',
     endTime: '',
     getInTime: '',
@@ -91,6 +95,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
     //Get All Artists Lists
     if (artists) setOptions(artists)
   }, [artists])
+
   //Effects from scroll and click events
   useEffect(() => {
     const handleScroll = () => {
@@ -362,6 +367,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems }) => {
                 onBlur={() => setActiveInputTab(null)}
                 autoFocus={activeInputTab == 4}
                 ref={endTimeRef}
+
                 // disabled={activeInputTab != 4}
               />
               <div className={styles['search-item-divider']}></div>
@@ -471,84 +477,3 @@ export const CustomDropdown = ({ hideMenuItems, bookerInputRef }) => {
     </Dropdown>
   )
 }
-
-// export const NavBarSearchBar = ({
-//   dateInputRef,
-//   artists,
-//   switchToDatePicker,
-//   setActiveItem,
-//   activeTab,
-//   formData,
-//   setFormData,
-//   isActive,
-//   onSetFormData,
-//   setActiveInputTab
-// }) => {
-//   const [options, setOptions] = useState([])
-//   const searchInputRef = useRef()
-//   // const { artists } = useArtists()
-
-//   useEffect(() => {
-//     //Get All Artists Lists
-//     if (artists) setOptions(artists)
-//   }, [artists])
-
-//   const handleChangeArtist = value => {
-//     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
-//     onSetFormData(0, 'artistID', artist._id)
-//   }
-
-//   const checkSearchActiveClass = activeTab === searchInputRef.current ? styles.activeTab : null
-//   const artistsDropdownDisplay = artist => (
-//     <div className={styles.artistsListPreview}>
-//       <div className={styles.searchInputFieldPictureContainer}>
-//         <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
-//       </div>
-//       <div>
-//         <span>{artist.firstName}</span> <span>{artist.lastName}</span>
-//         <div>{artist.genre}</div>
-//       </div>
-//     </div>
-//   )
-//   const filterOption = (inputValue, option) => {
-//     // return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-//     return option.value.toLowerCase().includes(inputValue.toLowerCase())
-//   }
-
-//   const handleActiveInput = () => {
-//     setActiveItem(searchInputRef.current)
-//     setActiveInputTab(0)
-//   }
-
-//   return (
-//     <AutoComplete
-//       onClick={handleActiveInput}
-//       onFocus={e => setActiveItem(searchInputRef.current)}
-//       ref={searchInputRef}
-//       className={`${styles.searchWrapper} ${checkSearchActiveClass}`}
-//       style={{
-//         width: 200
-//       }}
-//       autoFocus={isActive}
-//       popupMatchSelectWidth={false}
-//       allowClear
-//       notFoundContent='Sorry, no artist found'
-//       variant='borderless'
-//       defaultValue={formData.artistID}
-//       options={options.map(artist => ({
-//         artistID: artist._id,
-//         value: `${artist.firstName} ${artist.lastName}`,
-//         // value: artist._id,
-
-//         label: artistsDropdownDisplay(artist)
-//       }))}
-//       placeholder='Search Artist'
-//       filterOption={filterOption}
-//       open={isActive}
-//       onSelect={handleChangeArtist}
-//       // onChange={value => onSetFormData(0, 'artistID', value.artistID)}
-//       id={0}
-//       onBlur={() => setActiveInputTab(null)}
-//     />
-//   )
-// }

@@ -19,7 +19,7 @@ export default function Header() {
       <h2>
         Welcome, {user?.firstName || 'Friend'} {user?.lastName || ''}
       </h2>
-      <p className={styles['greetings-message']}>Book amazing artists for your next events</p>
+      <p className={styles['greetings-message']}>Book amazing artists for your next events.</p>
     </div>
   )
 
@@ -34,7 +34,6 @@ export default function Header() {
         layout={styles['header-carousel-layout']}
         className={styles['header-carousel']}
         artists={artists}
-        // className={styles["header-carousel"]}
       />
     </header>
   )

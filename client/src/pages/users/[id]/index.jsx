@@ -26,10 +26,8 @@ function ArtistProfile() {
   useEffect(() => {
     const fetchArtistID = async () => {
       try {
-        console.log({ id })
         const artist = await getArtistById(id)
-        console.log(artist)
-
+        console.log({ artist })
         setArtist(artist)
       } catch (error) {
         console.log('failed to fetch user')

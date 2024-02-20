@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import dayjs from 'dayjs'
-import enLocale from 'date-fns/locale/en-US'
+// import dayjs from 'dayjs'
+// import moment from 'moment'
+
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
@@ -240,10 +241,10 @@ function BookingCard({ open, setOpen, artist }) {
             {activeStep === 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
                 <div style={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
-                  {artist.firstName} {artist.lastName}
+                  {artist && artist.firstName} {artist && artist.lastName}
                 </div>
                 <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
-                  {artist.genre ? (
+                  {artist ? (
                     artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
                   ) : (
                     <Tag>No genre provided yet.</Tag>
@@ -288,7 +289,7 @@ function BookingCard({ open, setOpen, artist }) {
                       name='getInTime'
                       ampm={false}
                       minutesStep={15}
-                      value={getInTime}
+                      // value={getInTime}
                       onChange={handleChangeGetInTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
@@ -321,7 +322,7 @@ function BookingCard({ open, setOpen, artist }) {
                       // defaultValue={new Date().getHours()}
                       ampm={false}
                       minutesStep={15}
-                      value={startTime}
+                      // value={startTime}
                       onChange={handleChangeStartTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
@@ -351,10 +352,10 @@ function BookingCard({ open, setOpen, artist }) {
                       End Time
                     </Typography>
                     <TimePicker
-                      defaultValue={new Date().getHours()}
+                      // defaultValue={new Date().getHours()}
                       ampm={false}
                       minutesStep={15}
-                      value={endTime}
+                      // value={endTime}
                       onChange={handleChangeEndTime}
                       renderInput={params => <TextField {...params} />}
                       sx={{
@@ -588,52 +589,52 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
   )
 }
 
-const BookingTimePicker = ({ getInTime, setGetInTime, startTime, setStartTime, endTime, setEndTime }) => {
-  const labelField = () => {
-    if (getInTime) return 'Get In Time'
-    if (startTime) return 'Start Time'
-    if (endTime) return 'End Time'
-  }
+// const BookingTimePicker = ({ getInTime, setGetInTime, startTime, setStartTime, endTime, setEndTime }) => {
+//   const labelField = () => {
+//     if (getInTime) return 'Get In Time'
+//     if (startTime) return 'Start Time'
+//     if (endTime) return 'End Time'
+//   }
 
-  const onChangeTime = () => {
-    if (getInTime) {
-      return time => {
-        setGetInTime(time)
-      }
-    }
-    if (startTime) {
-      return time => {
-        setStartTime(time.format('HH:mm'))
-      }
-    }
-    if (endTime) {
-      return time => {
-        setEndTime(time)
-      }
-    }
-  }
+//   const onChangeTime = () => {
+//     if (getInTime) {
+//       return time => {
+//         setGetInTime(time)
+//       }
+//     }
+//     if (startTime) {
+//       return time => {
+//         setStartTime(time.format('HH:mm'))
+//       }
+//     }
+//     if (endTime) {
+//       return time => {
+//         setEndTime(time)
+//       }
+//     }
+//   }
 
-  return (
-    <Grid item xs={4} padding={1.5}>
-      <Typography>{labelField()}</Typography>
-      <TimePicker
-        ampm={false}
-        minutesStep={15}
-        value={getInTime}
-        onChange={onChangeTime}
-        renderInput={params => <TextField {...params} />}
-        sx={{
-          '& .MuiOutlinedInput-input': {
-            padding: '0',
-            textAlign: 'center',
-            fontSize: 'inherit'
-          },
-          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-        }}
-      />
-    </Grid>
-  )
-}
+//   return (
+//     <Grid item xs={4} padding={1.5}>
+//       <Typography>{labelField()}</Typography>
+//       <TimePicker
+//         ampm={false}
+//         minutesStep={15}
+//         value={getInTime}
+//         onChange={onChangeTime}
+//         renderInput={params => <TextField {...params} />}
+//         sx={{
+//           '& .MuiOutlinedInput-input': {
+//             padding: '0',
+//             textAlign: 'center',
+//             fontSize: 'inherit'
+//           },
+//           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+//           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+//         }}
+//       />
+//     </Grid>
+//   )
+// }
 
 export default BookingCard

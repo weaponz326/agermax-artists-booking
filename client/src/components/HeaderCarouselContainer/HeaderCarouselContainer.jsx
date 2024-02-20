@@ -15,7 +15,7 @@ const HeaderCarouselContainer = ({ artists, className, layout }) => {
           </Link>
         </div>
         <div className={layout}>
-          {Array.from({ length: 12 }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <Fragment key={index}>
               <SkeletonCarousel />
             </Fragment>
