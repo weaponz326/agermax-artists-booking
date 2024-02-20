@@ -96,3 +96,4 @@ For any queries or issues, please open an issue in the GitHub repository or cont
 Repository: [Agermax on GitHub](https://github.com/weaponz326/agermax-artists-booking.git)
 
 Happy Booking with Agermax! 🎉🎶
+
