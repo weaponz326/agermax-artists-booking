@@ -21,12 +21,9 @@ export default function Carousel({ artist }) {
         const photos = await getRandomArtistPhotos()
         const randomPhoto = photos[Math.floor(Math.random() * photos.length)]
         setPhoto(randomPhoto.urls.regular)
-      } catch (error) {
-        console.log()
-      }
+      } catch (error) {}
     }
     fetchPhotos()
-    console.log(artist)
   }, [])
 
   /*************** */

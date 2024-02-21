@@ -17,6 +17,7 @@ import { createBooking } from 'src/services/bookings'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { useAuth } from 'src/hooks/useAuth'
+import { Tag } from '../Carousel/Carousel'
 
 const disabledDate = current => {
   // Can not select days before today and today
@@ -141,7 +142,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user }) => {
   function handleSetFormData(id, name, value) {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
-    setFormData(oldValue => ({ ...oldValue, [name]: value }))
+    setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
   }
 
   const handleSubmit = async e => {
@@ -188,9 +189,15 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user }) => {
       <div className={styles.searchInputFieldPictureContainer}>
         <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
       </div>
-      <div>
-        <span>{artist.firstName}</span> <span>{artist.lastName}</span>
-        <div>{artist.genre}</div>
+      <div className={styles.dropdownLabelWrapper}>
+        <span className={styles.dropdownLabelName}>
+          {artist.firstName} {artist.lastName}
+        </span>
+        <div className={styles.dropdownLabelGenreWrapper}>
+          {artist.genre.map((g, index) => (
+            <span key={index}>{g}</span>
+          ))}
+        </div>
       </div>
     </div>
   )

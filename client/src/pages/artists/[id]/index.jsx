@@ -27,8 +27,7 @@ function ArtistProfile() {
     const fetchArtistID = async () => {
       try {
         console.log({ id })
-        const artist = await getArtistById(id)
-        console.log(artist)
+        const artist = await getUserById(id)
 
         setArtist(artist)
       } catch (error) {

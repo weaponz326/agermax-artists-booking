@@ -13,7 +13,7 @@
   position: fixed;
   top: 1%;
   right: 3%;
-  /* height: 50rem; */
+  height: 50rem;
   overflow: auto;
   width: 350px; /* Adjust width as needed */
   background-color: #ffffff;

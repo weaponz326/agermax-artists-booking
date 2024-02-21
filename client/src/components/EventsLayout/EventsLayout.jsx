@@ -7,6 +7,7 @@ import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import { getArtistById } from 'src/services/artists'
+import { getUserById } from 'src/services/users'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()
@@ -91,7 +92,7 @@ const EventsDetails = ({ booking }) => {
     if (booking) {
       const fetchArtistID = async () => {
         try {
-          const artist = await getArtistById(booking.artistID)
+          const artist = await getUserById(booking.artistID)
           const artistFullName = `${artist.firstName} ${artist.lastName}`
           setArtistName(artistFullName)
         } catch (error) {
@@ -107,7 +108,7 @@ const EventsDetails = ({ booking }) => {
       setStartTime(formattedStartTime)
       setEndTime(formattedEndTime)
     }
-  }, [booking])
+  }, [])
 
   const formatDateTime = (inputDateTime, outputFormat) => {
     const time = new Date(inputDateTime)
@@ -119,7 +120,9 @@ const EventsDetails = ({ booking }) => {
 
   return (
     <div className={styles.eventDetailsWrapper}>
-      <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>{artistName}</div>
+      <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>
+        {artistName ? artistName : 'Not Provided'}
+      </div>
       <div className={styles['event-prev-detail']}>
         {booking.locationVenue ? booking.locationVenue : 'Location not specified'}
       </div>

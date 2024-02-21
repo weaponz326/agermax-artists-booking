@@ -14,15 +14,20 @@ import styles from './bookings.module.css'
 
 //**Import External Components */
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { DatePicker, AutoComplete, TimePicker } from 'antd'
+// import { DatePicker, TimePicker } from 'antd'
 import { ConfigProvider } from 'antd'
-import es from 'antd/locale/es_ES'
-import dayjs from 'dayjs'
-dayjs.locale('es')
-import 'dayjs/locale/es'
+// import es from 'antd/locale/es_ES'
+// import dayjs from 'dayjs'
+// dayjs.locale('es')
+// import 'dayjs/locale/es'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -273,75 +278,76 @@ export const AdminPagesNavBar = ({
   function handleTabSelection(e) {
     setActiveEventsView(e.target.id)
   }
+
   return (
-    <nav className={styles.navigationPanel}>
-      <div className={styles.calendarViewTabs}>
-        <div className={styles.dateFilter}>
-          <TabButton className={styles.selectMonth}>
-            <div className={styles.selectMonthContent}>
-              <DatePicker style={{ border: 'none' }} />
-            </div>
+    <LocalizationProvider adapterLocale={AdapterDayjs}>
+      <nav className={styles.navigationPanel}>
+        <div className={styles.calendarViewTabs}>
+          <div className={styles.dateFilter}>
+            <TabButton className={styles.selectMonth}>
+              <div className={styles.selectMonthContent}>{/* <DatePicker style={{ border: 'none' }} /> */}</div>
+            </TabButton>
+            <TabButton className={styles.filterTab}>
+              <div className={styles.filterTabContent}>
+                <GridFilterAltIcon />
+                <span>Filter</span>
+              </div>
+            </TabButton>
+          </div>
+          <div className={styles.viewStylesTabs}>
+            <TabButton
+              id={'ThreeDView'}
+              onClick={e => handleTabSelection(e)}
+              className={
+                activeEventsView === 'ThreeDView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
+              }
+            >
+              3D
+            </TabButton>
+            <TabButton
+              id={'MonthView'}
+              onClick={e => handleTabSelection(e)}
+              className={
+                activeEventsView === 'MonthView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
+              }
+            >
+              M
+            </TabButton>
+            <TabButton
+              id={'WeekView'}
+              onClick={e => handleTabSelection(e)}
+              className={
+                activeEventsView === 'WeekView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
+              }
+            >
+              W
+            </TabButton>
+            <TabButton
+              id={'ListView'}
+              onClick={e => handleTabSelection(e)}
+              className={
+                activeEventsView === 'ListView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
+              }
+            >
+              List
+            </TabButton>
+          </div>
+          <div className={styles.searchBar}>
+            <SearchBar placeholder='Search bookings ...' value={query} onChange={handleQuery} />
+          </div>
+          <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
+            Add Bookings
           </TabButton>
-          <TabButton className={styles.filterTab}>
-            <div className={styles.filterTabContent}>
-              <GridFilterAltIcon />
-              <span>Filter</span>
-            </div>
-          </TabButton>
+          <SlideInModal
+            openModal={openModal}
+            unhideModal={unhideModal}
+            hideModal={hideModal}
+            modalContent={<BookingsModalContent user={user} />}
+            SubmitButton={'Submit'}
+          />
         </div>
-        <div className={styles.viewStylesTabs}>
-          <TabButton
-            id={'ThreeDView'}
-            onClick={e => handleTabSelection(e)}
-            className={
-              activeEventsView === 'ThreeDView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
-            }
-          >
-            3D
-          </TabButton>
-          <TabButton
-            id={'MonthView'}
-            onClick={e => handleTabSelection(e)}
-            className={
-              activeEventsView === 'MonthView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
-            }
-          >
-            M
-          </TabButton>
-          <TabButton
-            id={'WeekView'}
-            onClick={e => handleTabSelection(e)}
-            className={
-              activeEventsView === 'WeekView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
-            }
-          >
-            W
-          </TabButton>
-          <TabButton
-            id={'ListView'}
-            onClick={e => handleTabSelection(e)}
-            className={
-              activeEventsView === 'ListView' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab
-            }
-          >
-            List
-          </TabButton>
-        </div>
-        <div className={styles.searchBar}>
-          <SearchBar placeholder='Search bookings ...' value={query} onChange={handleQuery} />
-        </div>
-        <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
-          Add Bookings
-        </TabButton>
-        <SlideInModal
-          openModal={openModal}
-          unhideModal={unhideModal}
-          hideModal={hideModal}
-          modalContent={<BookingsModalContent user={user} />}
-          SubmitButton={'Submit'}
-        />
-      </div>
-    </nav>
+      </nav>
+    </LocalizationProvider>
   )
 }
 
@@ -458,6 +464,9 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
+const customLocale = {
+  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
+}
 export const BookingsModalContent = ({ user }) => {
   const [options, setOptions] = useState([])
   const [artistsOptions, setArtistsOptions] = useState([])
@@ -541,10 +550,10 @@ export const BookingsModalContent = ({ user }) => {
 
   if (modalContentView === 'details') {
     return (
-      <ConfigProvider locale={'en_US'}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-          <h2>Booking Details</h2>
-          <h3>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</h3>
+          <div>Booking Details</div>
+          <div>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</div>
           <TextField
             placeholder='Event Title'
             className={styles.modalCardContentInputField}
@@ -557,8 +566,19 @@ export const BookingsModalContent = ({ user }) => {
             label="Event's Title"
             size='small'
           />
+          <Autocomplete
+            disablePortal
+            id='artistID'
+            options={options.map(artist => ({
+              artistID: artist._id,
+              value: `${artist.firstName} ${artist.lastName}`,
+              label: `${artist.firstName} ${artist.lastName}`
+            }))}
+            renderInput={params => <TextField {...params} label='Artist' />}
+            size='small'
+          />
 
-          <AutoComplete
+          {/* <AutoComplete
             onSelect={handleChangeArtist}
             defaultValue={formData.artistID}
             options={options.map(artist => ({
@@ -570,18 +590,16 @@ export const BookingsModalContent = ({ user }) => {
             filterOption={filterOption}
             allowClear
             aria-required
-          />
+          /> */}
 
           <DatePicker
             format='YYYY-MM-DD'
             placeholder='Select Date'
             className={styles.modalCardContentInputField}
-            showNow={false}
-            minuteStep={15}
+            // showNow={false}
             name='dateTimeRequested'
-            defaultValue={defaultValue}
             // defaultValue={formData.dateTimeRequested}
-            // value={formData.dateTimeRequested}
+            value={formData.dateTimeRequested}
             onOk={handleChangeDate}
             disabledDate={disabledDate}
             aria-required
@@ -593,7 +611,7 @@ export const BookingsModalContent = ({ user }) => {
             showNow={false}
             showSecond={false}
             format='HH:mm'
-            // defaultValue={formData.getInTime}
+            defaultValue={formData.getInTime}
             onChange={handleChangeGetInTime}
           />
           <TimePicker
@@ -649,7 +667,7 @@ export const BookingsModalContent = ({ user }) => {
           </button>
           <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
         </form>
-      </ConfigProvider>
+      </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {
     return (
