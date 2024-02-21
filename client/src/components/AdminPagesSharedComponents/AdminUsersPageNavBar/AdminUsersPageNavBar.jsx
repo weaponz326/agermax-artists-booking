@@ -47,6 +47,7 @@ export const AdminUsersPageViewStyleTabs = ({
 }) => {
   function handleTabSelection(e) {
     setActiveView(e.target.id)
+    setUsersList(usersData)
     setQuery('')
     if (usersData) {
       e.target.id === '1' && setUsersList(usersData)

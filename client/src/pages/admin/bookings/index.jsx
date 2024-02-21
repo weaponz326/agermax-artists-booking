@@ -14,20 +14,20 @@ import styles from './bookings.module.css'
 
 //**Import External Components */
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-// import { DatePicker, TimePicker } from 'antd'
+import { DatePicker, TimePicker, AutoComplete } from 'antd'
 import { ConfigProvider } from 'antd'
 // import es from 'antd/locale/es_ES'
-// import dayjs from 'dayjs'
+import dayjs from 'dayjs'
 // dayjs.locale('es')
 // import 'dayjs/locale/es'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
+// import Autocomplete from '@mui/material/Autocomplete'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { TimePicker } from '@mui/x-date-pickers/TimePicker'
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -40,6 +40,7 @@ import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 import { useAuth } from 'src/hooks/useAuth'
+import { Upload } from '@mui/icons-material'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
@@ -63,6 +64,7 @@ const BookingPage = () => {
         eventsStatusView={eventsStatusView}
         setEventsStatusView={setEventsStatusView}
         bookings={bookings}
+        logout={logout}
       />
       {activeEventsView === 'ListView' && (
         <EventsListView
@@ -221,6 +223,7 @@ export const AdminPagesNavBar = ({
   setActiveEventsView,
   activeEventsView,
   user,
+  logout,
   events,
   setEvents,
   eventsStatusView,
@@ -268,7 +271,11 @@ export const AdminPagesNavBar = ({
   }
 
   function unhideModal() {
-    setOpenModal(true)
+    if (user) {
+      setOpenModal(true)
+    } else {
+      logout()
+    }
   }
 
   function hideModal() {
@@ -512,19 +519,24 @@ export const BookingsModalContent = ({ user }) => {
   }
 
   const handleChangeDate = (date, dateString) => {
-    date && setFormData({ ...formData, dateTimeRequested: date.toDate() })
+    date && setFormData({ ...formData, dateTimeRequested: date })
+    console.log(formData)
   }
 
+  // const handleChangeTime = (time, timeString) => {
+  //   time && setFormData({ ...formData, getInTime: time.toDate() })
+  // }
+
   const handleChangeGetInTime = (time, timeString) => {
-    time && setFormData({ ...formData, getInTime: time.toDate() })
+    time && setFormData({ ...formData, getInTime: time })
   }
 
   const handleChangeStartTime = (time, timeString) => {
-    time && setFormData({ ...formData, startTime: time.toDate() })
+    time && setFormData({ ...formData, startTime: time })
   }
 
   const handleChangeEndTime = (time, timeString) => {
-    time && setFormData({ ...formData, endTime: time.toDate() })
+    time && setFormData({ ...formData, endTime: time })
   }
 
   const handleSubmit = async e => {
@@ -548,13 +560,27 @@ export const BookingsModalContent = ({ user }) => {
     return current && current < dayjs().endOf('day')
   }
 
+  const modalCardContentInputField = {
+    textAlign: 'left',
+    padding: '0.5rem 0.75rem',
+    width: '100%',
+    backgroundColor: '#f2f4f8',
+    color: 'black',
+    borderRadius: '0.7rem',
+    border: 'none',
+    outlineColor: '#4428f2',
+    ':focus': {
+      outlineColor: '#4428f2'
+    }
+  }
+
   if (modalContentView === 'details') {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
           <div>Booking Details</div>
           <div>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</div>
-          <TextField
+          <input
             placeholder='Event Title'
             className={styles.modalCardContentInputField}
             type='text'
@@ -566,7 +592,7 @@ export const BookingsModalContent = ({ user }) => {
             label="Event's Title"
             size='small'
           />
-          <Autocomplete
+          {/* <Autocomplete
             disablePortal
             id='artistID'
             options={options.map(artist => ({
@@ -576,21 +602,30 @@ export const BookingsModalContent = ({ user }) => {
             }))}
             renderInput={params => <TextField {...params} label='Artist' />}
             size='small'
-          />
-
-          {/* <AutoComplete
-            onSelect={handleChangeArtist}
-            defaultValue={formData.artistID}
-            options={options.map(artist => ({
-              artistID: artist._id,
-              value: `${artist.firstName} ${artist.lastName}`,
-              label: `${artist.firstName} ${artist.lastName}`
-            }))}
-            placeholder='Select Artist'
-            filterOption={filterOption}
-            allowClear
-            aria-required
           /> */}
+          <ConfigProvider
+            theme={{
+              token: {
+                colorBgContainer: '#f2f4f8',
+                borderRadius: '0.7rem'
+              }
+            }}
+          >
+            <AutoComplete
+              onSelect={handleChangeArtist}
+              defaultValue={formData.artistID}
+              options={options.map(artist => ({
+                artistID: artist._id,
+                value: `${artist.firstName} ${artist.lastName}`,
+                label: `${artist.firstName} ${artist.lastName}`
+              }))}
+              placeholder='Select Artist'
+              filterOption={filterOption}
+              allowClear
+              aria-required
+              style={{ padding: '0', height: '40px', borderColor: 'red' }}
+            />
+          </ConfigProvider>
 
           <DatePicker
             format='YYYY-MM-DD'
@@ -598,12 +633,14 @@ export const BookingsModalContent = ({ user }) => {
             className={styles.modalCardContentInputField}
             // showNow={false}
             name='dateTimeRequested'
-            // defaultValue={formData.dateTimeRequested}
+            defaultValue={formData.dateTimeRequested}
             value={formData.dateTimeRequested}
-            onOk={handleChangeDate}
+            onChange={handleChangeDate}
             disabledDate={disabledDate}
             aria-required
+            style={modalCardContentInputField}
           />
+
           <TimePicker
             name='getInTime'
             placeholder='Get In Time'
@@ -612,7 +649,9 @@ export const BookingsModalContent = ({ user }) => {
             showSecond={false}
             format='HH:mm'
             defaultValue={formData.getInTime}
+            value={formData.getInTime}
             onChange={handleChangeGetInTime}
+            style={modalCardContentInputField}
           />
           <TimePicker
             name='startTime'
@@ -621,8 +660,10 @@ export const BookingsModalContent = ({ user }) => {
             showNow={false}
             showSecond={false}
             format='HH:mm'
-            // defaultValue={formData.startTime}
+            defaultValue={formData.startTime}
+            value={formData.startTime}
             onChange={handleChangeStartTime}
+            style={modalCardContentInputField}
           />
           <TimePicker
             name='endTime'
@@ -630,12 +671,14 @@ export const BookingsModalContent = ({ user }) => {
             minuteStep={15}
             showNow={false}
             showSecond={false}
+            defaultValue={formData.endTime}
+            value={formData.endTime}
             format='HH:mm'
-            // defaultOpen={formData.endTime}
             onChange={handleChangeEndTime}
             aria-required
+            style={modalCardContentInputField}
           />
-          <TextField
+          <input
             placeholder='Venue'
             className={styles.modalCardContentInputField}
             type='text'
@@ -648,7 +691,7 @@ export const BookingsModalContent = ({ user }) => {
             label='Venue'
             size='small'
           />
-          <TextField
+          <input
             placeholder='Expected Number of Guests'
             className={styles.modalCardContentInputField}
             type='number'
@@ -663,7 +706,7 @@ export const BookingsModalContent = ({ user }) => {
             size='small'
           />
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
-            Add Gallery
+            Add Gallery <Upload />
           </button>
           <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
         </form>
@@ -671,10 +714,10 @@ export const BookingsModalContent = ({ user }) => {
     )
   } else if (modalContentView === 'gallery') {
     return (
-      <div>
+      <div className={styles.addGalleryContainer}>
         <p>Your Gallery</p>
         <UploadPictures />
-        <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('details')}>
+        <button type='button' className={styles.backToDetailsButton} onClick={() => setModalContentView('details')}>
           <ArrowBack />
           Back to details
         </button>
