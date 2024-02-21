@@ -5,23 +5,32 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Skeleton from '@mui/material/Skeleton'
-import { getOnePhoto } from 'src/services/mock'
+import { getOnePhoto, getRandomArtistPhotos } from 'src/services/mock'
 
 export default function Carousel({ artist }) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
 
-  // useEffect(() => {
-  //   const fetchPhoto = async () => {
-  //     try {
-  //       const photo = await getOnePhoto()
-  //       console.log(photo)
-  //     } catch (error) {
-  //       console.log()
-  //     }
-  //   }
-  //   fetchPhoto()
-  // }, [])
+  /**************** */
+  /*   Mock Data from Unsplash  */
+  const [photo, setPhoto] = useState([])
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const photos = await getRandomArtistPhotos()
+        const randomPhoto = photos[Math.floor(Math.random() * photos.length)]
+        setPhoto(randomPhoto.urls.regular)
+      } catch (error) {
+        console.log()
+      }
+    }
+    fetchPhotos()
+    console.log(artist)
+  }, [])
+
+  /*************** */
+  // Get one photo by id from the API if we have an ID in the URL parameters
 
   useEffect(() => {
     if (!artist) {
@@ -37,10 +46,9 @@ export default function Carousel({ artist }) {
           <Image
             className={styles['carousel-img']}
             alt='Artist-Image'
-            src={artist.picture ? artist.picture : '/images/rectangle-2-15.png'}
+            src={artist.profilePhoto ? artist.profilePhoto : '/images/artist-1.jpg'}
             fill
             loading='eager'
-            // width={'100%'}
           />
         </div>
         <div className={styles['carousel-title-text']}>

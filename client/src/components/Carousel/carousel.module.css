@@ -60,20 +60,20 @@
   width: 100%;
   height: 10rem;
   position: relative;
-  border-radius: inherit;
+  border-radius: 1rem;
   box-shadow: 0 3px 16px rgba(24, 61, 76, 0.15);
   margin-bottom: 0.75rem;
   /* object-fit: cover; */
 }
 
 .carousel-img {
-  /* width: 100%;
+  width: 100%;
   height: 10rem;
-  position: relative; */
+  position: relative;
   border-radius: inherit;
-  /* box-shadow: 0 3px 16px rgba(24, 61, 76, 0.15);
-  margin-bottom: 0.75rem; */
-  /* object-fit: cover; */
+  box-shadow: 0 3px 16px rgba(24, 61, 76, 0.15);
+  margin-bottom: 0.75rem;
+  object-fit: cover;
 }
 
 .carousel-title-text,
