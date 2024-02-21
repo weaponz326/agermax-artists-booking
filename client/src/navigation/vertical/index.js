@@ -43,7 +43,7 @@ const navigation = () => {
         : []),
 
     {
-      path: '/admin/account',
+      path: '/admin/account/account',
       title: 'Account',
       icon: 'tabler:user-circle'
     },

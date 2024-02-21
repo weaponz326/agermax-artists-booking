@@ -66,7 +66,7 @@ const AccountSettings = ({ tab, apiPricingPlanData }) => {
 
   const handleChange = (event, value) => {
     setIsLoading(true)
-    router.push(`/pages/account-settings/${value.toLowerCase()}`).then(() => setIsLoading(false))
+    router.push(`/admin/account/${value.toLowerCase()}`).then(() => setIsLoading(false))
   }
   useEffect(() => {
     if (tab && tab !== activeTab) {
