@@ -13,7 +13,7 @@
   position: fixed;
   top: 1%;
   right: 3%;
-  height: 50rem;
+  height: 52rem;
   overflow: auto;
   width: 350px; /* Adjust width as needed */
   background-color: #ffffff;
@@ -33,7 +33,6 @@
 
 .modalCardContentCloseButton {
   align-self: flex-end;
-  background-color: rgb(221, 221, 235);
   border-radius: 50%;
   width: 2rem;
   aspect-ratio: 1;
@@ -43,7 +42,6 @@
   justify-content: center;
   cursor: pointer;
   border: none;
-  padding: 0.5em;
 }
 
 .modalCardContentCloseButton:hover {
