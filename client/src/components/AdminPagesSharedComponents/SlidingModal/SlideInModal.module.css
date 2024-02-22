@@ -11,9 +11,9 @@
 
 .modalCardContent {
   position: fixed;
-  top: 1%;
+  top: 5px;
   right: 3%;
-  height: 52rem;
+  height: 98%;
   overflow: auto;
   width: 350px; /* Adjust width as needed */
   background-color: #ffffff;

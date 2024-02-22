@@ -26,8 +26,9 @@ function ArtistProfile() {
   useEffect(() => {
     const fetchArtistID = async () => {
       try {
-        const artist = await getArtistById(id)
-        console.log({ artist })
+        console.log({ id })
+        const artist = await getUserById(id)
+
         setArtist(artist)
       } catch (error) {
         console.log('failed to fetch user')
@@ -189,7 +190,9 @@ const ArtisteProfileSection = ({ artist }) => {
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
           {artist ? (
-            <div>{artist.profilePhoto ? artist.profilePhoto : <Avatar icon={<UserOutlined size={100} />} />}</div>
+            <div>
+              {artist.profilePhoto ? artist.profilePhoto : <Avatar size={60} icon={<UserOutlined size={100} />} />}
+            </div>
           ) : (
             <Skeleton
               animation='wave'
