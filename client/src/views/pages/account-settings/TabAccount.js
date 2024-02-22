@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Grid, Box, Button, Typography, InputAdornment, TextField } from '@mui/material'
+import { Grid, Divider, Box, Button, Typography, InputAdornment, TextField, Snackbar, Alert } from '@mui/material'
 import CustomTextField from 'src/@core/components/mui/text-field' // Adjust based on your project structure
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
@@ -12,6 +12,10 @@ import Icon from 'src/@core/components/icon'
 import ArrayFieldComponent from 'src/pages/admin/account/ArrayFieldComponent'
 
 const TabAccount = () => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info') // Can be 'error', 'warning', 'info', 'success'
+
   const { user, token } = useAuth()
   const [formData, setFormData] = useState({
     firstName: user?.firstName || '',
@@ -91,35 +95,21 @@ const TabAccount = () => {
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, combinedData, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      alert('Profile updated successfully.')
+      setSnackbarMessage('Profile updated successfully.')
+      setSnackbarSeverity('success')
     } catch (error) {
-      console.error('Error updating profile:', error)
-      alert('Error updating profile.')
+      setSnackbarMessage('Error updating profile.')
+      setSnackbarSeverity('error')
     }
+    setSnackbarOpen(true) // Open the snackbar with the message
   }
-  const renderArrayFields = (field, label) => {
-    return additionalFormData[field].map((value, index) => (
-      <Grid container alignItems='center' key={index} spacing={2}>
-        <Grid item xs={4}>
-          <Typography>
-            {label} {index + 1}
-          </Typography>
-        </Grid>
-        <Grid item xs={7}>
-          <TextField fullWidth variant='outlined' value={value} onChange={handleArrayChange(field, index)} />
-        </Grid>
-        <Grid item xs={1}>
-          <IconButton onClick={addArrayField(field)}>
-            <AddCircleOutlineIcon />
-          </IconButton>
-          {index > 0 && (
-            <IconButton onClick={removeArrayField(field, index)}>
-              <RemoveCircleOutlineIcon />
-            </IconButton>
-          )}
-        </Grid>
-      </Grid>
-    ))
+
+  // Function to close the Snackbar
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
   }
 
   return (
@@ -131,9 +121,10 @@ const TabAccount = () => {
             <Grid item xs={4}>
               <Typography>Profile Photo</Typography>
             </Grid>
-            <Grid item xs={8} sx={{ mb: 4 }}>
+            <Grid item xs={6}>
               <ImageUpload image={profilePhoto} onImageUpload={handleProfilePhotoChange} />
             </Grid>
+            <Divider sx={{ width: '100%', m: 4 }} />
           </Grid>
 
           {/* Basic Information Fields */}
@@ -142,7 +133,7 @@ const TabAccount = () => {
               <Grid item xs={4}>
                 <Typography>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={6}>
                 <CustomTextField
                   fullWidth
                   value={value}
@@ -169,7 +160,8 @@ const TabAccount = () => {
                     )
                   }}
                 />
-              </Grid>
+              </Grid>{' '}
+              <Divider sx={{ width: '100%', m: 4 }} />
             </Grid>
           ))}
 
@@ -180,7 +172,7 @@ const TabAccount = () => {
                 <Grid item xs={4}>
                   <Typography>Bio</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     multiline
@@ -189,25 +181,28 @@ const TabAccount = () => {
                     onChange={handleAdditionalFormChange('bio')}
                   />
                 </Grid>
+                <Divider sx={{ width: '100%', m: 4 }} />
               </Grid>
-              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+
+              <Grid item container alignItems='flex-end' spacing={2} sx={{ mb: 4 }}>
                 <Grid item xs={4}>
                   <Typography>Genres</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                   <ArrayFieldComponent
                     initialValues={additionalFormData.genre}
                     type='text'
                     onChange={handleGenresChange} // Ensure this handler updates the state correctly
                   />
                 </Grid>
+                <Divider sx={{ width: '100%', m: 4 }} />
               </Grid>
 
-              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+              <Grid item container alignItems='flex-end' spacing={2} sx={{ mb: 4 }}>
                 <Grid item xs={4}>
                   <Typography>Available Dates</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                   <ArrayFieldComponent
                     initialValues={additionalFormData.availableDates}
                     type='date'
@@ -216,22 +211,24 @@ const TabAccount = () => {
                     }}
                   />
                 </Grid>
+                <Divider sx={{ width: '100%', m: 4 }} />
               </Grid>
             </>
           )}
           {user.role === 'organizer' && (
             <>
-              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+              <Grid item container alignItems='flex-end' spacing={2} sx={{ mb: 4 }}>
                 <Grid item xs={4}>
                   <Typography>Events Hosted</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                   <ArrayFieldComponent
                     initialValues={additionalFormData.eventsHosted}
                     type='text'
                     onChange={handleEventsHostedChange}
                   />
                 </Grid>
+                <Divider sx={{ width: '100%', m: 4 }} />
               </Grid>
             </>
           )}
@@ -243,6 +240,16 @@ const TabAccount = () => {
               Submit
             </Button>
           </Box>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} // Position Snackbar to the bottom-right
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </Grid>
       </form>
     </>
