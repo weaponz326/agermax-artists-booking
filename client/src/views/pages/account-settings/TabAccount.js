@@ -119,7 +119,7 @@ const TabAccount = () => {
           {/* Profile Photo Upload */}
           <Grid item container spacing={2} alignItems='flex-end' sx={{ mb: 4 }}>
             <Grid item xs={4}>
-              <Typography>Profile Photo</Typography>
+              <Typography sx={{mb:12}}>Profile Photo</Typography>
             </Grid>
             <Grid item xs={6}>
               <ImageUpload image={profilePhoto} onImageUpload={handleProfilePhotoChange} />
@@ -131,7 +131,7 @@ const TabAccount = () => {
           {Object.entries(formData).map(([field, value]) => (
             <Grid item container spacing={2} key={field} alignItems='flex-end' sx={{ mb: 4 }}>
               <Grid item xs={4}>
-                <Typography>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
+                <Typography sx={{mb:2}}>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <CustomTextField
@@ -235,7 +235,7 @@ const TabAccount = () => {
 
           {/* Additional fields for both roles and submission button below... */}
 
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box sx={{ mt: 2, ml: 2, display: 'flex', justifyContent: 'flex-end' }}>
             <Button type='submit' variant='contained'>
               Submit
             </Button>
