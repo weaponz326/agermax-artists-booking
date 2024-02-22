@@ -43,7 +43,7 @@
   width: 100%;
   min-height: 292px;
   /* flex: 1 1; */
-  padding: 20px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -93,6 +93,11 @@
 
 .carousel-title-text:hover {
   text-decoration: underline;
+}
+
+.carouselArtistNameLinks {
+  text-decoration: none;
+  color: #183d4c;
 }
 
 .carousel-genre,

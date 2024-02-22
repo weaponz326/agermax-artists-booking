@@ -50,6 +50,7 @@ export default function Carousel({ artist }) {
         </div>
         <div className={styles['carousel-title-text']}>
           <Link
+            className={styles.carouselArtistNameLinks}
             href={{
               pathname: `/artists/${artist._id}`
             }}
@@ -69,6 +70,7 @@ export default function Carousel({ artist }) {
           )}
         </div>
         <Link
+          className={styles.carouselArtistNameLinks}
           href={{
             pathname: `/artists/${artist._id}`
           }}

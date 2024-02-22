@@ -58,7 +58,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
 
   if (user) {
     return (
-      <div>
+      <div className={className}>
         <Dropdown
           menu={{
             items: isLoggedInItems,
@@ -75,12 +75,6 @@ const CustomizedDropdown = ({ className, user, logout }) => {
               <div className={styles.userImage}>
                 {user.profilePhoto ? user.profilePhoto : <Avatar icon={<UserOutlined size={36} />} />}
               </div>
-              {/* <img
-                className={styles.userImage}
-                src={user.profilePhoto ? user.profilePhoto : <Avatar size={64} icon={<UserOutlined />} />}
-                // src={user.profilePhoto ? user.profilePhoto : '/images/ellipse-121.png'}
-                alt='user'
-              /> */}
             </div>
             <HambergerMenu size={'35'} />
           </Button>
