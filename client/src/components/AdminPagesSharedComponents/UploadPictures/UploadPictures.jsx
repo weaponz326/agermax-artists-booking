@@ -8,48 +8,47 @@ const getBase64 = file =>
     reader.onload = () => resolve(reader.result)
     reader.onerror = error => reject(error)
   })
-const UploadPictures = () => {
+const UploadPictures = ({ formData, setFormData, fileList, setFileList }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-2',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-3',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-4',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-xxx',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error'
-    }
-  ])
+
+  // {
+  //   uid: '-1',
+  //   name: 'image.png',
+  //   status: 'done',
+  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+  // }
+  // {
+  //   uid: '-2',
+  //   name: 'image.png',
+  //   status: 'done',
+  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+  // },
+  // {
+  //   uid: '-3',
+  //   name: 'image.png',
+  //   status: 'done',
+  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+  // },
+  // {
+  //   uid: '-4',
+  //   name: 'image.png',
+  //   status: 'done',
+  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+  // },
+  // {
+  //   uid: '-xxx',
+  //   percent: 50,
+  //   name: 'image.png',
+  //   status: 'uploading',
+  //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+  // },
+  // {
+  //   uid: '-5',
+  //   name: 'image.png',
+  //   status: 'error'
+  // }
   const handleCancel = () => setPreviewOpen(false)
   const handlePreview = async file => {
     if (!file.url && !file.preview) {
@@ -59,7 +58,13 @@ const UploadPictures = () => {
     setPreviewOpen(true)
     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
   }
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
+
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList)
+    setFormData({ ...formData, gallery: [...fileList] })
+    console.log(formData)
+  }
+
   const uploadButton = (
     <button
       style={{
@@ -78,6 +83,7 @@ const UploadPictures = () => {
       </div>
     </button>
   )
+
   return (
     <>
       <Upload

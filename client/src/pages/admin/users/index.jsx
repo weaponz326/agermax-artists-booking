@@ -17,6 +17,7 @@ import { getUserById, updateUserDetailsById } from 'src/services/users'
 import { useAuth } from 'src/hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Snackbar, Alert } from '@mui/material'
+import AvatarsImage from 'src/views/components/avatars/AvatarsImage'
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -223,15 +224,7 @@ export const AddUserModalContent = () => {
           value={userData.address} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <textarea
-          placeholder='Biography'
-          className={styles.modalCardContentInputField}
-          type='text'
-          name='bio'
-          id='bio'
-          value={userData.bio} // @todo fix this when we have a real user to edit
-          onChange={e => handleChange(e.target.name, e.target.value)}
-        />
+
         <input
           placeholder='Nickname'
           className={styles.modalCardContentInputField}
@@ -257,6 +250,15 @@ export const AddUserModalContent = () => {
           name='organizationNumber'
           id='organizationNumber'
           value={userData.organizationNumber} // @todo fix this when we have a real user to edit
+          onChange={e => handleChange(e.target.name, e.target.value)}
+        />
+        <textarea
+          placeholder='Biography'
+          className={styles.modalCardContentInputField}
+          type='text'
+          name='bio'
+          id='bio'
+          value={userData.bio} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
         <div className={styles.modalCardContentUserProfile}>
@@ -351,7 +353,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
-        <ImageUpload />
+        {user.profilePhoto ? user.profilePhoto : <AvatarsImage />}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
         <input
