@@ -570,7 +570,7 @@ export const BookingsModalContent = ({ user }) => {
 
   const handleBackToDetails = () => {
     setModalContentView('details')
-    setFormData({ ...formData, gallery: fileList })
+    // setFormData({ ...formData, gallery: fileList })
   }
 
   const filterOption = (inputValue, option) => {

@@ -64,8 +64,8 @@ const UploadPictures = ({ formData, setFormData, fileList, setFileList }) => {
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
-    setFormData({ ...formData, gallery: [...fileList] })
-    console.log(formData)
+    // setFormData({ ...formData, gallery: newFileList })
+    // console.log(formData)
   }
 
   const uploadButton = (
