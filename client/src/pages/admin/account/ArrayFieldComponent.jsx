@@ -1,27 +1,30 @@
-// ArrayFieldComponent.jsx
 import React, { useState, useEffect } from 'react';
-import { Chip, Input, Paper, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'; // Adjust import based on your setup
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'; // Needed for DatePicker
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'; // Choose the correct adapter for your date library
+import { Chip, Stack, TextField, Box } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import CustomTextField from 'src/@core/components/mui/text-field'; // Adjust this path as necessary
 
-const ArrayFieldComponent = ({ initialValues = [], type = 'text' }) => {
-  const [items, setItems] = useState(initialValues);
+const ArrayFieldComponent = ({ initialValues = [], type = 'text', onChange }) => {
+  const [items, setItems] = useState(initialValues.map(item =>
+    type === 'date' && !(item instanceof Date) ? new Date(item) : item
+  ));
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    if (initialValues.length) {
-      setItems(initialValues);
+    // Adjust here for date type to keep the full ISO string
+    if (type === 'date') {
+      onChange(items.map(item => item.toISOString()));
+    } else {
+      onChange(items);
     }
-  }, [initialValues]);
+  }, [items, onChange, type]);
 
-  // For text type fields (genres, eventsHosted)
   const handleKeyDown = (event) => {
-    if (['Enter', ','].includes(event.key) && inputValue && type === 'text') {
+    if (['Enter', ','].includes(event.key) && inputValue.trim() && type === 'text') {
       event.preventDefault();
       const newItem = inputValue.trim();
       if (!items.includes(newItem)) {
-        setItems([...items, newItem]);
+        setItems(prevItems => [...prevItems, newItem]);
         setInputValue('');
       }
     }
@@ -32,38 +35,59 @@ const ArrayFieldComponent = ({ initialValues = [], type = 'text' }) => {
   };
 
   const handleDelete = (itemToDelete) => () => {
-    setItems(items.filter((item) => item !== itemToDelete));
+    setItems(items.filter(item => item !== itemToDelete));
   };
 
-  // For date type fields (availableDates)
-  const handleDateChange = (newValue) => {
-    setItems(newValue);
+  const handleDateChange = (newDate) => {
+    // Adjust here to not split the ISO string, keeping the full date-time format
+    if (newDate && !items.find(item => item.toISOString() === newDate.toISOString())) {
+      setItems(prevItems => [...prevItems, newDate]);
+    }
   };
 
   if (type === 'text') {
     return (
-      <Paper sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, alignItems: 'center', padding: '0.5rem' }}>
-        {items.map((item, index) => (
-          <Chip key={index} label={item} onDelete={handleDelete(item)} />
-        ))}
-        <Input
-          value={inputValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Type and press enter..."
-          sx={{ flex: 1 }}
-        />
-      </Paper>
+      <CustomTextField
+        fullWidth
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Type and press enter..."
+        InputProps={{
+          startAdornment: (
+            <Box sx={{ display: 'flex' }}>
+              {items.map((item, index) => (
+                <Chip
+                  key={index}
+                  label={item}
+                  onDelete={handleDelete(item)}
+                  size="small"
+                />
+              ))}
+            </Box>
+          ),
+        }}
+        variant="outlined"
+      />
     );
   } else if (type === 'date') {
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          multiple
-          value={items}
-          onChange={handleDateChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <DatePicker
+            label="Select Date"
+            value={null}
+            onChange={handleDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          {items.map((date, index) => (
+            <Chip
+              key={index}
+              label={date.toLocaleDateString()}
+              onDelete={handleDelete(date)}
+            />
+          ))}
+        </Stack>
       </LocalizationProvider>
     );
   }
@@ -72,7 +96,3 @@ const ArrayFieldComponent = ({ initialValues = [], type = 'text' }) => {
 };
 
 export default ArrayFieldComponent;
-
-// Use these components inside your form like so:
-// <GenresInput initialValues={additionalFormData.genre} />
-// <AvailableDatesInput initialValues={additionalFormData.availableDates} />

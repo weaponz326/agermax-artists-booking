@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import { Grid, Box, Button, Typography, InputAdornment, TextField } from '@mui/material'
 import CustomTextField from 'src/@core/components/mui/text-field' // Adjust based on your project structure
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
@@ -46,7 +47,16 @@ const TabAccount = () => {
   const handleAdditionalFormChange = field => event => {
     setAdditionalFormData({ ...additionalFormData, [field]: event.target.value })
   }
+  const handleGenresChange = newGenres => {
+    setAdditionalFormData(prev => ({ ...prev, genre: newGenres }))
+  }
 
+  const handleEventsHostedChange = newEventsHosted => {
+    setAdditionalFormData(prev => ({ ...prev, eventsHosted: newEventsHosted }))
+  }
+  const formattedAvailableDates = additionalFormData.availableDates.map(date =>
+    date instanceof Date ? date.toISOString().split('T')[0] : date
+  )
   const handleArrayChange = (field, index) => event => {
     const newValues = [...additionalFormData[field]]
     newValues[index] = event.target.value
@@ -128,11 +138,11 @@ const TabAccount = () => {
 
           {/* Basic Information Fields */}
           {Object.entries(formData).map(([field, value]) => (
-            <Grid item container spacing={2} key={field} alignItems='flex-end'>
+            <Grid item container spacing={2} key={field} alignItems='flex-end' sx={{ mb: 4 }}>
               <Grid item xs={4}>
                 <Typography>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
               </Grid>
-              <Grid item xs={8} x sx={{ mb: 4 }}>
+              <Grid item xs={8}>
                 <CustomTextField
                   fullWidth
                   value={value}
@@ -180,20 +190,48 @@ const TabAccount = () => {
                   />
                 </Grid>
               </Grid>
-
-              {/* Genre Fields */}
-              {additionalFormData.genre.map((genre, index) => (
-                <Grid container alignItems='center' spacing={2} key={`genre-${index}`}>
-                  <Grid item xs={4} sx={{ mb: 4 }}>
-                    <Typography>Genre {index + 1}</Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <ArrayFieldComponent initialValues={additionalFormData.genre} type='text' />{' '}
-                  </Grid>
+              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+                <Grid item xs={4}>
+                  <Typography>Genres</Typography>
                 </Grid>
-              ))}
-              <Grid item xs={12}>
-                <Button onClick={addArrayField('genre')}>Add Genre</Button>
+                <Grid item xs={8}>
+                  <ArrayFieldComponent
+                    initialValues={additionalFormData.genre}
+                    type='text'
+                    onChange={handleGenresChange} // Ensure this handler updates the state correctly
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+                <Grid item xs={4}>
+                  <Typography>Available Dates</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <ArrayFieldComponent
+                    initialValues={additionalFormData.availableDates}
+                    type='date'
+                    onChange={newDates => {
+                      setAdditionalFormData(prev => ({ ...prev, availableDates: newDates }))
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
+          {user.role === 'organizer' && (
+            <>
+              <Grid container alignItems='center' spacing={2} sx={{ mb: 4 }}>
+                <Grid item xs={4}>
+                  <Typography>Events Hosted</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <ArrayFieldComponent
+                    initialValues={additionalFormData.eventsHosted}
+                    type='text'
+                    onChange={handleEventsHostedChange}
+                  />
+                </Grid>
               </Grid>
             </>
           )}
