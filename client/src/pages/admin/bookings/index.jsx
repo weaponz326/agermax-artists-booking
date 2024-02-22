@@ -295,9 +295,9 @@ export const AdminPagesNavBar = ({
         <div className={styles.calendarViewTabs}>
           <div className={styles.dateFilter}>
             <TabButton className={styles.selectMonth}>
-              <div className={styles.selectMonthContent}>
+              {/* <div className={styles.selectMonthContent}>
                 <DatePicker style={{ border: 'none' }} />
-              </div>
+              </div> */}
             </TabButton>
             <TabButton className={styles.filterTab}>
               <div className={styles.filterTabContent}>
