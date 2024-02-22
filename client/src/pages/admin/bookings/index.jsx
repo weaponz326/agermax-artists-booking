@@ -41,7 +41,7 @@ import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 import { useAuth } from 'src/hooks/useAuth'
-import { Upload } from '@mui/icons-material'
+import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 
