@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import styles from './NavStyles.module.css'
 
 // ** MUI Imports
-import { Button, List } from '@mui/material'
+import { Button, List, Grid } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -68,7 +68,7 @@ const CalendarComponent = () => {
         <DateBox>
           <CalendarIcon />
         </DateBox>
-        <Box sx={{ float: 'left', width: 'calc(100% - 60px)' }}>
+        <Box sx={{ float: 'left', width: 'calc(100% - 60px)', mb: 4 }}>
           <Typography variant='body1' component='p' sx={{ textAlign: 'left' }}>
             Stockholm music fes..
           </Typography>
@@ -76,7 +76,7 @@ const CalendarComponent = () => {
             John Doe
           </Typography>
         </Box>
-        <Divider sx={{ width: '100%' }} />
+        <Divider sx={{ width: '100%', mb: 4  }} />
         <Typography variant='h4' component='p' sx={{ my: 2 }}>
           21:00 to 01:00
         </Typography>
@@ -91,8 +91,8 @@ const QuickLinksContainer = styled(Box)(({ theme }) => ({
   //QuickLinks container styles here
   display: 'flex',
   justifyContent: 'flex-start',
-  gap: '10px',
-  padding: theme.spacing(2), // Add some padding for spacing
+  gap: '12px',
+  padding: theme.spacing(3), // Add some padding for spacing
   '& .quick-link': {
     display: 'flex',
     flexDirection: 'column', // Stack icon and text vertically
@@ -131,7 +131,11 @@ const QuickActions = () => {
         //Replace the Link tag with div, which we can use useRouter to push to new Links
         <div key={index} href={link.path} onClick={() => router.push(`${link.path}`)}>
           {/* <Tooltip title={link.title} arrow> */}
-          <IconButton className={styles.sideNavQuickLink} component='a' sx={{ width: 'auto', padding: '12px', height: 'auto' }}>
+          <IconButton
+            className={styles.sideNavQuickLink}
+            component='a'
+            sx={{ width: 'auto', padding: '12px', height: 'auto' }}
+          >
             <Icon icon={link.icon} className='icon' />
             <Typography variant='caption' className='quick-link-text'>
               {link.title}
@@ -307,16 +311,19 @@ const Navigation = props => {
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
               ? afterNavMenuContent(navMenuContentProps)
               : null}
-            <Box sx={{ px: 2, py: 0 }}>
-              <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
-                Quick Links
-              </Typography>
-              <QuickActions sx={{ mx: 12 }} />
-
-              <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
-                Next Event
-              </Typography>
-              <CalendarComponent sx={{ mx: 12 }} />
+            <Box sx={{ px: 2, py: 0, mb: 6 }}>
+              <Grid sx={{ px: 2, py: 0, mb: 12 }}>
+                <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
+                  Quick Links
+                </Typography>
+                <QuickActions />
+              </Grid>
+              <Grid sx={{ px: 2, py: 0, mb: 12 }}>
+                <Typography variant='overline' sx={{ pl: 3, my: 2 }} className={styles.sideNavTitleText}>
+                  Next Event
+                </Typography>
+                <CalendarComponent sx={{ mx: 12 }} />
+              </Grid>
             </Box>
           </Box>
         </Box>
