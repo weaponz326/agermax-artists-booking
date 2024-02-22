@@ -59,7 +59,7 @@
   gap: 0.2rem;
   align-items: flex-start;
   flex: 0.25;
-  width: 182px;
+  /* width: 182px; */
 }
 
 .userActionsButtons a {

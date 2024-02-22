@@ -508,7 +508,7 @@ export const BookingsModalContent = ({ user }) => {
 
     // Add other fields as needed
   })
-  const [fileList, setFileList] = useState(formData.gallery || [])
+  const [fileList, setFileList] = useState(formData.gallery)
 
   useEffect(() => {
     if (!artists && !organizers) return
@@ -570,7 +570,7 @@ export const BookingsModalContent = ({ user }) => {
 
   const handleBackToDetails = () => {
     setModalContentView('details')
-    setFormData({ ...formData, gallery: [{ ...fileList, status: 'done' }] })
+    setFormData({ ...formData, gallery: fileList })
   }
 
   const filterOption = (inputValue, option) => {
@@ -602,7 +602,7 @@ export const BookingsModalContent = ({ user }) => {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-          <h3>Booking Details</h3>
+          <h3 style={{ margin: '0' }}>Booking Details</h3>
           <TextField
             placeholder='Event Title'
             className={styles.modalCardContentInputField}

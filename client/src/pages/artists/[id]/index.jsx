@@ -190,7 +190,9 @@ const ArtisteProfileSection = ({ artist }) => {
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
           {artist ? (
-            <div>{artist.profilePhoto ? artist.profilePhoto : <Avatar icon={<UserOutlined size={100} />} />}</div>
+            <div>
+              {artist.profilePhoto ? artist.profilePhoto : <Avatar size={60} icon={<UserOutlined size={100} />} />}
+            </div>
           ) : (
             <Skeleton
               animation='wave'
