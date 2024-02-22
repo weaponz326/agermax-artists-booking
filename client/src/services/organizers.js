@@ -18,3 +18,12 @@ export async function getOrganizerById(id) {
     console.log('Error: ', error)
   }
 }
+
+export async function getAllOrganizersFromUsers() {
+  try {
+    const { data } = await axios.get(`${baseUrl}/users?role=organizer`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
