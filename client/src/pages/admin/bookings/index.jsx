@@ -38,8 +38,6 @@ import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
-import { status } from 'nprogress'
-import invoice from 'src/store/apps/invoice'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')

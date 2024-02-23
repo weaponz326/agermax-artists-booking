@@ -25,7 +25,7 @@ export const ViewStyleTabs = ({ activeView, setActiveView, handleTabSelection })
       <TabButton
         id={'1'}
         onClick={() => setActiveView('Invoices')}
-        className={activeView === '1' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
+        className={activeView === 'Invoices' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
       >
         Invoices
       </TabButton>
@@ -34,7 +34,7 @@ export const ViewStyleTabs = ({ activeView, setActiveView, handleTabSelection })
       <TabButton
         id={'2'}
         onClick={() => setActiveView('Payments')}
-        clasPaymentsName={activeView === '2' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
+        className={activeView === 'Payments' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
       >
         Payments
       </TabButton>
@@ -48,7 +48,7 @@ export const TabButtonDivider = () => {
     width: '2px',
     padding: '0',
     backgroundColor: '#ddd',
-    margin: 'auto 0'
+    margin: 'auto 5px'
   }
 
   return <div style={style} className={styles.tabButtonDivider}></div>
