@@ -24,6 +24,33 @@ exports.getAllPayments = async (req, res) => {
   }
 };
 
+exports.getPaymentById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extracting the payment ID from the request parameters
+
+    // Attempt to find the payment record by its ID
+    const payment = await Payment.findById(id);
+
+    // Check if the payment was found
+    if (!payment) {
+      return res.status(404).json({ message: "Payment not found." });
+    }
+
+    // Respond with the found payment record
+    res.json({ success: true, payment });
+  } catch (error) {
+    console.error("Error fetching payment by ID:", error);
+
+    // Handle the case where an invalid ID format was provided
+    if (error.kind === 'ObjectId' && error.name === 'CastError') {
+      return res.status(400).json({ message: "Invalid payment ID format." });
+    }
+
+    return res.status(500).json({ message: "An error occurred while fetching the payment record." });
+  }
+};
+
+
 exports.processPayment = async (req, res) => {
   try {
     const { amount, source, receipt_email } = req.body;
