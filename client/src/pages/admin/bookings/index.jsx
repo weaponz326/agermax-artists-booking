@@ -42,7 +42,6 @@ import { createInvoice } from 'src/services/invoice'
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
   const { bookings } = useBookings()
-  const { artists } = useArtists()
   const { user, logout } = useAuth()
   const [events, setEvents] = useState([])
   const [eventsStatusView, setEventsStatusView] = useState('all')
@@ -649,7 +648,7 @@ export const BookingsModalContent = ({ booking }) => {
             renderInput={params => <TextField {...params} label='Organizer' required />}
             size='small'
             sx={{ padding: '0' }}
-            aria-required
+            value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
           />
           <Autocomplete
             className={styles.modalCardContentInputField}
@@ -662,13 +661,14 @@ export const BookingsModalContent = ({ booking }) => {
             renderInput={params => <TextField {...params} label='Artist' required />}
             size='small'
             sx={{ padding: '0' }}
+            value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
           />
           <DatePicker
             className={styles.modalCardContentInputField}
             label='Select Event Date'
             value={formData.dateTimeRequested}
             // minDate={nextDay} // Set the minimum selectable date to be the next day
-            onChange={date => setFormData({ ...formData, dateTimeRequested: date })}
+            onChange={date => setFormData({ ...formData, dateTimeRequested: dayjs(date) })}
             renderInput={params => <TextField {...params} required />}
             disablePast
           />
@@ -676,8 +676,7 @@ export const BookingsModalContent = ({ booking }) => {
             className={styles.modalCardContentInputField}
             label='Get In Time'
             value={formData.getInTime}
-            // minDate={nextDay} // Set the minimum selectable date to be the next day
-            onChange={time => setFormData({ ...formData, getInTime: time })}
+            onChange={time => setFormData({ ...formData, getInTime: dayjs(time) })}
             renderInput={params => <TextField {...params} required />}
             minutesStep={15}
           />
@@ -685,8 +684,7 @@ export const BookingsModalContent = ({ booking }) => {
             className={styles.modalCardContentInputField}
             label='Event Start Time'
             value={formData.startTime}
-            // minDate={nextDay} // Set the minimum selectable date to be the next day
-            onChange={time => setFormData({ ...formData, startTime: time })}
+            onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
             renderInput={params => <TextField {...params} required />}
             minutesStep={15}
           />
@@ -694,8 +692,7 @@ export const BookingsModalContent = ({ booking }) => {
             className={styles.modalCardContentInputField}
             label='Event End Time'
             value={formData.startTime}
-            // minDate={nextDay} // Set the minimum selectable date to be the next day
-            onChange={time => setFormData({ ...formData, endTime: time })}
+            onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
             renderInput={params => <TextField {...params} required />}
             minutesStep={15}
           />
@@ -717,13 +714,12 @@ export const BookingsModalContent = ({ booking }) => {
             placeholder='Expected Number of Guests'
             className={styles.modalCardContentInputField}
             type='number'
-            step='1'
+            step='5'
             min='1'
             name='numberOfGuests'
             id='numberOfGuests'
             value={formData.numberOfGuests}
             onChange={handleChange}
-            helperText='Please enter a number greater than 0.'
             label='Number of Guests'
             size='small'
           />
@@ -744,11 +740,11 @@ export const BookingsModalContent = ({ booking }) => {
 
         <div className={styles.bookingActionButtons}>
           <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-            <TabButton className={styles.modalCardContentSaveButton}>Create Invoice</TabButton>
+            <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
           </form>
           <form onSubmit={handleRejectBooking}>
             <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
-              Reject Booking
+              Reject Booking 👎
             </TabButton>
           </form>
         </div>

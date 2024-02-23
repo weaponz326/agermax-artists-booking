@@ -10,7 +10,7 @@ const AdminPagesNavBar = ({ setActiveView, activeView }) => {
       <div className={styles.calendarViewTabs}>
         <ViewStyleTabs setActiveView={setActiveView} activeView={activeView} />
         <div className={styles.searchBar}>
-          <SearchBar />
+          <SearchBar placeholder={activeView === 'Invoices' ? 'Search Invoice' : 'Search Payments'} />
         </div>
       </div>
     </nav>
