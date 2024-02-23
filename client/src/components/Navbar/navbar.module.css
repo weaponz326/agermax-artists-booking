@@ -215,6 +215,11 @@
   padding-inline: 0.5rem;
   border-radius: inherit;
   height: 100%;
+  width: 150px;
+}
+
+.searchWrapper:nth-child(2) {
+  padding-inline: 1rem;
 }
 
 .dropdownLabelWrapper {
@@ -335,7 +340,25 @@
   padding: 0.3rem 0;
 }
 .bookerDetailsButton:focus {
-  border-bottom: 2px solid #1677ff;
+  /* border-bottom: 2px solid #1677ff; */
+  background-color: white;
+}
+
+.userDetailForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bookerDetailsInputField {
+  text-align: left;
+  padding: 0.75rem;
+  width: 100%;
+  background-color: #f2f4f8;
+  color: black;
+  border-radius: 0.7rem;
+  border: none;
+  outline-color: #4428f2;
 }
 .bookNowButton:hover {
   filter: brightness(95%);

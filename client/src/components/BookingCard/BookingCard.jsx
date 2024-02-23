@@ -21,116 +21,7 @@ const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
 }
 
-const customTheme = createTheme({
-  components: {
-    MuiPickersCalendarHeader: {
-      styleOverrides: {
-        root: {
-          color: '#4B627F',
-          padding: '0',
-          justifyContent: 'space-between',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          border: 'none',
-          padding: '0',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          color: '#183D4C',
-          fontSize: '19px',
-          fontWeight: '450',
-          border: 'none',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: {
-          borderRadius: '9px',
-          '&:hover': {
-            backgroundColor: '#FC8A5E'
-          }
-        }
-      }
-    },
-
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       padding: '5px  16px',
-    //       borderRadius: '9px',
-    //       background: '#FC8A5E',
-    //       '&.Mui-selected': {
-    //         backgroundColor: '#f07a4b'
-    //       },
-    //       color: 'white',
-    //       fontFamily: 'inherit'
-    //     }
-    //   }
-    // },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          boxShadow: 'none',
-          padding: '24px',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    MuiCardContent: {
-      styleOverrides: {
-        root: {
-          boxShadow: 'none',
-          padding: '0',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-
-    MuiMobileStepper: {
-      styleOverrides: {
-        root: {
-          fontSize: '16px',
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    MuiPickersDay: {
-      styleOverrides: {
-        root: {
-          color: '#4B627F',
-          fontFamily: 'inherit',
-          padding: '0',
-          fontSize: '16px',
-          '&:hover': {
-            backgroundColor: '#B9FACF', // Example hover style
-            borderRadius: '9px'
-          },
-          '&.Mui-selected': {
-            backgroundColor: '#f07a4b', // Example selected state style
-            borderRadius: '9px'
-          },
-          '&:focus.Mui-selected': {
-            backgroundColor: '#f07a4b', // Change to desired style when focused and selected
-            borderRadius: '9px'
-          }
-        }
-      }
-    }
-  }
-})
-
-function BookingCard({ open, setOpen, artist }) {
+function BookingCard({ open, setOpen, artist, allowCancel }) {
   const { user, logout, loading } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
@@ -157,6 +48,115 @@ function BookingCard({ open, setOpen, artist }) {
     gallery: []
 
     // Add other fields as needed
+  })
+
+  const customTheme = createTheme({
+    components: {
+      MuiPickersCalendarHeader: {
+        styleOverrides: {
+          root: {
+            color: '#4B627F',
+            padding: '0',
+            justifyContent: 'space-between',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            border: 'none',
+            padding: '0',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            color: '#183D4C',
+            fontSize: '19px',
+            fontWeight: '450',
+            border: 'none',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiMenuItem: {
+        styleOverrides: {
+          root: {
+            borderRadius: '9px',
+            '&:hover': {
+              backgroundColor: '#FC8A5E'
+            }
+          }
+        }
+      },
+
+      // MuiButton: {
+      //   styleOverrides: {
+      //     root: {
+      //       padding: '5px  16px',
+      //       borderRadius: '9px',
+      //       background: '#FC8A5E',
+      //       '&.Mui-selected': {
+      //         backgroundColor: '#f07a4b'
+      //       },
+      //       color: 'white',
+      //       fontFamily: 'inherit'
+      //     }
+      //   }
+      // },
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            boxShadow: 'none',
+            padding: '24px',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiCardContent: {
+        styleOverrides: {
+          root: {
+            boxShadow: 'none',
+            padding: '0',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+
+      MuiMobileStepper: {
+        styleOverrides: {
+          root: {
+            fontSize: '16px',
+            fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiPickersDay: {
+        styleOverrides: {
+          root: {
+            color: '#4B627F',
+            fontFamily: 'inherit',
+            padding: '0',
+            fontSize: '16px',
+            '&:hover': {
+              backgroundColor: '#B9FACF', // Example hover style
+              borderRadius: '9px'
+            },
+            '&.Mui-selected': {
+              backgroundColor: '#f07a4b', // Example selected state style
+              borderRadius: '9px'
+            },
+            '&:focus.Mui-selected': {
+              backgroundColor: '#f07a4b', // Change to desired style when focused and selected
+              borderRadius: '9px'
+            }
+          }
+        }
+      }
+    }
   })
 
   const handleChange = e => {
@@ -236,6 +236,7 @@ function BookingCard({ open, setOpen, artist }) {
             padding: '20px',
             fontFamily: 'var(--main-font-family)'
           }}
+          className='bookingCardWrapper'
         >
           <div style={{ height: '100%' }}>
             {activeStep === 0 && (
@@ -388,6 +389,7 @@ function BookingCard({ open, setOpen, artist }) {
                     handleBack={handleBack}
                     handleNext={handleNext}
                     disableNext={disableNext}
+                    allowCancel={allowCancel}
                   />
                 </Grid>
               </div>
@@ -533,7 +535,7 @@ function BookingCard({ open, setOpen, artist }) {
   )
 }
 
-const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext }) => {
+const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext, allowCancel }) => {
   const theme = useTheme()
 
   return (
@@ -575,6 +577,7 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           onClick={handleBack}
           sx={{
             background: '#D5DFEC',
+            display: !allowCancel && 'none',
             color: '#4B627F',
             borderRadius: '9px',
             padding: '8px 10px',
