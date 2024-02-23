@@ -58,6 +58,7 @@ const organizerRoutes = require("./routes/eventOrganizerRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const invoiceRoutes = require("./routes/invoiceRoutes");
 
 app.use("/api", authRoutes);
 app.use("/api", adminRoutes);
@@ -65,6 +66,7 @@ app.use("/api", artistRoutes);
 app.use("/api", organizerRoutes);
 app.use("/api", bookingRoutes);
 app.use("/api", userRoutes);
+app.use("/api", invoiceRoutes);
 app.use("/api", paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
