@@ -5,28 +5,28 @@ const InvoiceContext = createContext()
 
 const initialData = [
   {
-    paymentId: 'P001',
-    payeeFirstName: 'Kofi',
-    payeeLastName: 'Fosu',
-    payeeContact: '+233 544803023',
+    _id: 'P001',
+    firstName: 'Kofi',
+    lastName: 'Fosu',
+    contactPhone: '+233 544803023',
+    email: 'kfosu@gmail.com',
     amount: '1500',
-    date: '2024-01-30',
     status: 'Paid'
   },
   {
-    paymentId: 'P002',
-    payeeFirstName: 'Kojo ',
-    payeeLastName: 'Appiah',
-    payeeContact: '+233 48235694',
+    _id: 'P002',
+    firstName: 'Kojo ',
+    lastName: 'Appiah',
+    email: 'kApiah@gmail.com',
+    contactPhone: '+233 48235694',
     amount: '700',
-    date: '2024-01-30',
     status: 'Pending'
   }
   // add more payment objects here
 ]
 
 const InvoiceProvider = ({ children }) => {
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -35,7 +35,7 @@ const InvoiceProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const invoice = await getAllInvoice()
-        if (invoice) setData(invoice)
+        setData(invoice)
       } catch (error) {
         setError(error)
       } finally {

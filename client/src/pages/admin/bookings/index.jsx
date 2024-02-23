@@ -538,12 +538,12 @@ export const BookingsModalContent = ({ booking }) => {
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
     booking: booking && booking._id,
-    amount: '',
-    tax: '',
-    email: '',
-    status: '',
-    invoiceDate: '',
-    paymentDueDate: ''
+    amount: booking?.amount || 0,
+    tax: booking?.tax || 0,
+    email: booking?.email || 'tobeLinked@gmail.com',
+    status: booking?.status || '',
+    invoiceDate: dayjs(booking?.invoiceDate) || '',
+    paymentDueDate: dayjs(booking?.paymentDueDate) || ''
   })
 
   const handleCreateInvoice = async e => {

@@ -9,15 +9,16 @@ import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvide
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
-  const { paymentId, payee, amount, date, status } = router.query
+  const { invoiceID, booker, amount, date, status } = router.query
+  console.log(router.query)
   return (
     <InvoiceProvider>
       <div className={styles.financialDetailsPage}>
         <div className={styles.financialDetailsPageInfo}>
           <div className={styles.organizerDetails}>
             <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
-            <p>{payee}</p>
-            <p>Payment ID: {paymentId}</p>
+            <p>{booker}</p>
+            <p>Payment ID: {invoiceID}</p>
           </div>
           <div className={styles.paymentItemsDetails}>
             <div className={styles.priceTotal}>
@@ -106,7 +107,7 @@ const FinancialDetailsPage = () => {
               menuContainer={styles.customMenuItemContainer}
               labelClassName={styles.customMenuItemLabel}
               label='Edit Payment Details'
-              subMenuItems={[<EditSubItems paymentId={paymentId} />]}
+              subMenuItems={[<EditSubItems invoiceID={invoiceID} />]}
             />
           </div>
         </div>
@@ -193,12 +194,12 @@ export const InvoiceTable = () => {
   )
 }
 
-export const EditSubItems = ({ paymentId }) => {
+export const EditSubItems = ({ invoiceID }) => {
   const { data, updateData, setData } = useInvoiceContext()
   const [paymentDetails, setPaymentDetails] = useState({})
 
   useEffect(() => {
-    const requiredData = data.find(paymentItem => paymentItem.paymentId === paymentId)
+    const requiredData = data.find(paymentItem => paymentItem.invoiceID === invoiceID)
     setPaymentDetails(requiredData)
   }, [])
 
@@ -213,9 +214,9 @@ export const EditSubItems = ({ paymentId }) => {
     setPaymentDetails(current => {
       return { ...current, ...formDataObject }
     })
-    // const requiredData = data.find(paymentItem => paymentItem.paymentId === paymentId)
+    // const requiredData = data.find(paymentItem => paymentItem.invoiceID === invoiceID)
     const newData = data.map(paymentItem => {
-      if (paymentItem.paymentId === paymentId) {
+      if (paymentItem.invoiceID === invoiceID) {
         return { ...paymentItem, ...formDataObject }
       }
       return paymentItem
@@ -233,27 +234,27 @@ export const EditSubItems = ({ paymentId }) => {
   return (
     <form onSubmit={e => handleFormSubmission(e)}>
       <div className={styles.formInput}>
-        <label htmlFor='payeeFirstName' className={styles.formInputLabel}>
+        <label htmlFor='bookerFirstName' className={styles.formInputLabel}>
           First Name:{' '}
         </label>
         <input
           className={styles.editInputField}
           type='text'
-          defaultValue={paymentDetails.payeeFirstName}
-          id='payeeFirstName'
-          name='payeeFirstName'
+          defaultValue={paymentDetails.bookerFirstName}
+          id='bookerFirstName'
+          name='bookerFirstName'
         />
       </div>
       <div className={styles.formInput}>
-        <label htmlFor='payeeLastName' className={styles.formInputLabel}>
+        <label htmlFor='bookerLastName' className={styles.formInputLabel}>
           Last Name:{' '}
         </label>
         <input
           className={styles.editInputField}
           type='text'
-          value={paymentDetails.payeeLastName}
-          id='payeeLastName'
-          name='payeeLastName'
+          value={paymentDetails.bookerLastName}
+          id='bookerLastName'
+          name='bookerLastName'
           onChange={e => handleChange(e)}
         />
       </div>

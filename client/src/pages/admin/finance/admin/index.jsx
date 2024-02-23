@@ -1,5 +1,5 @@
 import styles from './AdminFinance.module.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Table, Space } from 'antd'
 import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { updateInvoice } from 'src/services/invoice'
+import dayjs from 'dayjs'
 
 const Finance = () => {
   return (
@@ -25,22 +26,33 @@ export default Finance
 
 export const AdminFinance = () => {
   // const [data, setData] = useState(initialData)
+  const [invoiceData, setInvoiceData] = useState([])
   const { data, updateData } = useInvoiceContext()
+
+  /****************Fetch and Combined invoice details for table display***************/
+  useEffect(() => {
+    if (data) {
+      setInvoiceData(data)
+      try {
+        setInvoiceData(prevData => [...prevData, ...data])
+      } catch (error) {}
+    }
+  }, [])
 
   const columns = [
     {
-      title: 'Payee',
-      dataIndex: 'payeeFirstName',
-      key: 'payeeName',
-      sorter: (a, b) => b.payeeFirstName.localeCompare(a.payeeFirstName),
-      render: (text, record) => `${record.payeeFirstName} ${record.payeeLastName}`
+      title: 'Booker',
+      dataIndex: 'firstName',
+      key: 'booker',
+      sorter: (a, b) => b.firstName.localeCompare(a.firstName),
+      render: (text, booker) => `${booker.firstName} ${booker.lastName}`
     },
 
     {
       title: 'Phone',
-      dataIndex: 'payeeContact',
-      key: 'payeeContact',
-      sorter: (a, b) => a.payeeContact.localeCompare(b.payeeContact)
+      dataIndex: 'contactPhone',
+      key: 'contactPhone',
+      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
     },
     {
       title: 'Amount',
@@ -57,28 +69,18 @@ export const AdminFinance = () => {
     {
       title: 'Invoice',
       key: 'invoice',
-      render: (text, record) => (
+      render: (text, booker) => (
         <Space size='middle'>
-          <ViewInvoiceAction
-            id={record.paymentId}
-            payee={`${record.payeeFirstName} ${record.payeeLastName}`}
-            amount={record.amount}
-            status={record.status}
-          />
+          <ViewInvoiceAction booker={booker} />
         </Space>
       )
     },
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (text, record) => (
+      render: (text, booker) => (
         <Space size='middle'>
-          <ViewDetailsAction
-            id={record.paymentId}
-            payee={`${record.payeeFirstName} ${record.payeeLastName}`}
-            amount={record.amount}
-            status={record.status}
-          />
+          <ViewDetailsAction booker={booker} />
         </Space>
       )
     }
@@ -86,20 +88,21 @@ export const AdminFinance = () => {
 
   return (
     <div className={styles.financePage}>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={invoiceData} />
     </div>
   )
 }
 
-export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
+export const ViewDetailsAction = ({ booker }) => {
+  console.log(booker)
   const router = useRouter()
   return (
     <InvoiceProvider>
       <div
         onClick={() =>
           router.push({
-            pathname: `/admin/finance/admin/details/${id}`,
-            query: { payee, amount, date, status }
+            pathname: `/admin/finance/admin/details/${booker._id}`,
+            query: { booker }
           })
         }
         className={styles.viewDetailsActionWrapper}
@@ -110,7 +113,7 @@ export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
   )
 }
 
-export const ViewInvoiceAction = ({ id, payee, amount, date, status }) => {
+export const ViewInvoiceAction = ({ booker }) => {
   /****************Fetch Modal***************/
   const [openModal, setOpenModal] = useState(false)
   function unhideModal() {
@@ -134,23 +137,23 @@ export const ViewInvoiceAction = ({ id, payee, amount, date, status }) => {
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<InvoiceModalContent />}
+        modalContent={<InvoiceModalContent booker={booker} />}
         SubmitButton={'Submit'}
       />
     </InvoiceProvider>
   )
 }
 
-export const InvoiceModalContent = ({ booking }) => {
+export const InvoiceModalContent = ({ booker }) => {
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
-    booking: booking && booking._id,
-    amount: '',
-    tax: '',
-    email: '',
-    status: '',
-    invoiceDate: '',
-    paymentDueDate: ''
+    booking: booker && booker._id,
+    amount: booker?.amount || '',
+    tax: booker?.tax || '',
+    email: booker?.email || '',
+    status: booker?.status || '',
+    invoiceDate: dayjs(booker?.invoiceDate) || '',
+    paymentDueDate: dayjs(booker?.paymentDueDate) || ''
   })
 
   const handleChange = e => {
@@ -183,7 +186,6 @@ export const InvoiceModalContent = ({ booking }) => {
           name='amount'
           id='amount'
           value={invoiceData.amount}
-          defaultValue={invoiceData.amount}
           onChange={handleChange}
           required
           label='Invoice Amount'
@@ -197,7 +199,6 @@ export const InvoiceModalContent = ({ booking }) => {
           name='tax'
           id='tax'
           value={invoiceData.tax}
-          defaultValue={invoiceData.tax}
           onChange={handleChange}
           required
           label='Tax ID'
@@ -211,7 +212,6 @@ export const InvoiceModalContent = ({ booking }) => {
           name='email'
           id='email'
           value={invoiceData.email}
-          defaultValue={invoiceData.email}
           onChange={handleChange}
           required
           label='Payee Email'
@@ -225,7 +225,6 @@ export const InvoiceModalContent = ({ booking }) => {
           name='email'
           id='email'
           value={invoiceData.status}
-          defaultValue={invoiceData.status}
           onChange={handleChange}
           required
           label='Booking Status'
@@ -253,10 +252,6 @@ export const InvoiceModalContent = ({ booking }) => {
         />
         <TabButton className={styles.modalCardContentSaveButton}>Update</TabButton>
       </form>
-
-      {/* <div className={styles.bookingActionButtons}>
-        <TabButton className={styles.modalCardContentSaveButton}>View Details</TabButton>
-      </div> */}
     </LocalizationProvider>
   )
 }
