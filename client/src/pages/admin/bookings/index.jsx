@@ -39,6 +39,8 @@ import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
+import { status } from 'nprogress'
+import invoice from 'src/store/apps/invoice'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -532,6 +534,32 @@ export const BookingsModalContent = ({ booking }) => {
     // Add other fields as needed
   })
   const [fileList, setFileList] = useState(formData.gallery)
+  const [bookingOrganizer, setBookingOrganizer] = useState('')
+
+  /*********************************************
+   * Invoice Data
+   */
+  const [invoiceData, setInvoiceData] = useState({
+    booking: booking && booking._id,
+    amount: '',
+    tax: '',
+    email: '',
+    status: '',
+    invoiceDate: '',
+    paymentDueDate: ''
+  })
+
+  const handleCreateInvoice = async e => {
+    e.preventDefault()
+    try {
+      const newInvoice = await createInvoice(invoiceData)
+      console.log('Invoice Created Successfully! : ', newInvoice)
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error creating invoice: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
+  }
 
   useEffect(() => {
     if (!artists && !organizers) return
@@ -568,15 +596,9 @@ export const BookingsModalContent = ({ booking }) => {
       }
     }
   }
-  const handleCreateInvoice = async e => {
-    try {
-      const newInvoice = await createInvoice(formData)
-      console.log('Booking Updated Successfully! : ', newInvoice)
-      // Optionally, you can redirect or perform any other action after successful booking creation
-    } catch (error) {
-      console.error('Error updating booking: ', error)
-      // Handle error, e.g., display an error message to the user
-    }
+
+  const handleRejectBooking = e => {
+    e.preventDefault()
   }
 
   const handleBackToDetails = () => {
@@ -623,7 +645,6 @@ export const BookingsModalContent = ({ booking }) => {
             className={styles.modalCardContentInputField}
             onChange={(event, organizer) => {
               if (organizer) setFormData({ ...formData, organizerID: organizer._id })
-              console.log(formData)
             }}
             id='organizerID'
             options={organizersOptions}
@@ -723,9 +744,17 @@ export const BookingsModalContent = ({ booking }) => {
           </button>
           <TabButton className={styles.modalCardContentSaveButton}>{booking ? 'Update' : 'Book Now'}</TabButton>
         </form>
-        <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-          <TabButton className={styles.modalCardContentSaveButton}>Create Invoice</TabButton>
-        </form>
+
+        <div className={styles.bookingActionButtons}>
+          <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
+            <TabButton className={styles.modalCardContentSaveButton}>Create Invoice</TabButton>
+          </form>
+          <form onSubmit={handleRejectBooking}>
+            <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
+              Reject Booking
+            </TabButton>
+          </form>
+        </div>
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {
