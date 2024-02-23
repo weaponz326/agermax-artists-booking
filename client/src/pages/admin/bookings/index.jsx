@@ -17,7 +17,6 @@ import dayjs from 'dayjs'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
-// import Autocomplete from '@mui/material/Autocomplete'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -536,9 +535,7 @@ export const BookingsModalContent = ({ booking }) => {
   const [fileList, setFileList] = useState(formData.gallery)
   const [bookingOrganizer, setBookingOrganizer] = useState('')
 
-  /*********************************************
-   * Invoice Data
-   */
+  /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
     booking: booking && booking._id,
     amount: '',
@@ -553,13 +550,15 @@ export const BookingsModalContent = ({ booking }) => {
     e.preventDefault()
     try {
       const newInvoice = await createInvoice(invoiceData)
-      console.log('Invoice Created Successfully! : ', newInvoice)
+      console.log('Invoice created Successfully! : ', newInvoice)
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error creating invoice: ', error)
       // Handle error, e.g., display an error message to the user
     }
   }
+
+  /*****************Form Data****************/
 
   useEffect(() => {
     if (!artists && !organizers) return
@@ -620,7 +619,7 @@ export const BookingsModalContent = ({ booking }) => {
     }
   }
 
-  //***************** */
+  /*****************Rendering***************/
 
   if (modalContentView === 'details') {
     return (
@@ -770,171 +769,6 @@ export const BookingsModalContent = ({ booking }) => {
     )
   }
 }
-
-// const AntDesignBookingForm = () => {
-//   return (
-//     <LocalizationProvider dateAdapter={AdapterDayjs}>
-//       <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-//         <div>Booking Details</div>
-//         <div>Organizer: {user ? `${user.firstName} ${user.lastName}` : ''}</div>
-//         <input
-//           placeholder='Event Title'
-//           className={styles.modalCardContentInputField}
-//           type='text'
-//           name='eventTitle'
-//           id='eventTitle'
-//           value={formData.eventTitle}
-//           onChange={handleChange}
-//           required
-//           label="Event's Title"
-//           size='small'
-//         />
-//         {/* <Autocomplete
-//           disablePortal
-//           id='artistID'
-//           options={options.map(artist => ({
-//             artistID: artist._id,
-//             value: `${artist.firstName} ${artist.lastName}`,
-//             label: `${artist.firstName} ${artist.lastName}`
-//           }))}
-//           renderInput={params => <TextField {...params} label='Artist' />}
-//           size='small'
-//         /> */}
-//         <ConfigProvider
-//           theme={{
-//             token: {
-//               colorBgContainer: '#f2f4f8',
-//               borderRadius: '0.75rem'
-//             }
-//           }}
-//         >
-//           <AutoComplete
-//             onSelect={handleChangeOrganizer}
-//             defaultValue={formData.organizerID}
-//             options={organizerOptions.map(organizer => ({
-//               artistID: organizer._id,
-//               value: `${organizer.firstName} ${organizer.lastName}`,
-//               label: `${organizer.firstName} ${organizer.lastName}`
-//             }))}
-//             placeholder='Select Artist'
-//             filterOption={filterOption}
-//             allowClear
-//             aria-required
-//             style={{ padding: '0', height: '40px', borderColor: 'red' }}
-//           />
-//           <AutoComplete
-//             onSelect={handleChangeArtist}
-//             defaultValue={formData.artistID}
-//             options={artistsOptions.map(artist => ({
-//               artistID: artist._id,
-//               value: `${artist.firstName} ${artist.lastName}`,
-//               label: `${artist.firstName} ${artist.lastName}`
-//             }))}
-//             placeholder='Select Artist'
-//             filterOption={filterOption}
-//             allowClear
-//             aria-required
-//             style={{ padding: '0', height: '40px', borderColor: 'red' }}
-//           />
-//         </ConfigProvider>
-
-//         <DatePicker
-//           format='YYYY-MM-DD'
-//           placeholder='Select Date'
-//           className={styles.modalCardContentInputField}
-//           // showNow={false}
-//           name='dateTimeRequested'
-//           defaultValue={formData.dateTimeRequested}
-//           value={formData.dateTimeRequested}
-//           onChange={handleChangeDate}
-//           disabledDate={disabledDate}
-//           aria-required
-//           style={modalCardContentInputField}
-//         />
-
-//         <TimePicker
-//           name='getInTime'
-//           placeholder='Get In Time'
-//           minuteStep={15}
-//           showNow={false}
-//           showSecond={false}
-//           format='HH:mm'
-//           defaultValue={formData.getInTime}
-//           value={formData.getInTime}
-//           onChange={handleChangeGetInTime}
-//           style={modalCardContentInputField}
-//         />
-//         <TimePicker
-//           name='startTime'
-//           placeholder='Start Time'
-//           minuteStep={15}
-//           showNow={false}
-//           showSecond={false}
-//           format='HH:mm'
-//           defaultValue={formData.startTime}
-//           value={formData.startTime}
-//           onChange={handleChangeStartTime}
-//           style={modalCardContentInputField}
-//         />
-//         <TimePicker
-//           name='endTime'
-//           placeholder='End Time'
-//           minuteStep={15}
-//           showNow={false}
-//           showSecond={false}
-//           defaultValue={formData.endTime}
-//           value={formData.endTime}
-//           format='HH:mm'
-//           onChange={handleChangeEndTime}
-//           aria-required
-//           style={modalCardContentInputField}
-//         />
-//         <input
-//           placeholder='Venue'
-//           className={styles.modalCardContentInputField}
-//           type='text'
-//           name='locationVenue'
-//           id='locationVenue'
-//           value={formData.locationVenue}
-//           onChange={handleChange}
-//           required
-//           variant='outlined'
-//           label='Venue'
-//           size='small'
-//         />
-//         <input
-//           placeholder='Expected Number of Guests'
-//           className={styles.modalCardContentInputField}
-//           type='number'
-//           step='1'
-//           min='1'
-//           name='numberOfGuests'
-//           id='numberOfGuests'
-//           value={formData.numberOfGuests}
-//           onChange={handleChange}
-//           helperText='Please enter a number greater than 0.'
-//           label='Number of Guests'
-//           size='small'
-//         />
-//         <div></div>
-//         <LimitTags formData={formData} setFormData={setFormData} />
-//         <textarea
-//           className={styles.modalCardContentInputField}
-//           name='otherComments'
-//           id='otherComments'
-//           placeholder='Any Comments...'
-//           onChange={handleChange}
-//           value={formData.otherComments}
-//         />
-
-//         <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
-//           Add Gallery <Upload />
-//         </button>
-//         <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
-//       </form>
-//     </LocalizationProvider>
-//   )
-// }
 
 BookingPage.authGuard = false
 BookingPage.guestGuard = false
