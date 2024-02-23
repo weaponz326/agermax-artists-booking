@@ -3,7 +3,7 @@ import axios from 'axios'
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 export async function getAllPayment() {
   try {
-    const { data } = await axios.get(`${baseUrl}/payment`)
+    const { data } = await axios.get(`${baseUrl}/payments`)
     const sortedPaymentByDate = data.sort((a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested))
     return sortedPaymentByDate
   } catch (error) {
@@ -13,7 +13,7 @@ export async function getAllPayment() {
 
 export async function getPaymentById(id) {
   try {
-    const { data } = await axios.get(`${baseUrl}/payment/${id}`)
+    const { data } = await axios.get(`${baseUrl}/payments/${id}`)
     return data
   } catch (error) {
     console.log('Error: ', error)
