@@ -5,13 +5,13 @@ import styles from './FinancialDetails.module.css'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import { Calendar, Note } from 'iconsax-react'
-import { FinanceProvider, useFinanceContext } from '../FinanceContext'
+import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
   const { paymentId, payee, amount, date, status } = router.query
   return (
-    <FinanceProvider>
+    <InvoiceProvider>
       <div className={styles.financialDetailsPage}>
         <div className={styles.financialDetailsPageInfo}>
           <div className={styles.organizerDetails}>
@@ -111,7 +111,7 @@ const FinancialDetailsPage = () => {
           </div>
         </div>
       </div>
-    </FinanceProvider>
+    </InvoiceProvider>
   )
 }
 
@@ -194,7 +194,7 @@ export const InvoiceTable = () => {
 }
 
 export const EditSubItems = ({ paymentId }) => {
-  const { data, updateData, setData } = useFinanceContext()
+  const { data, updateData, setData } = useInvoiceContext()
   const [paymentDetails, setPaymentDetails] = useState({})
 
   useEffect(() => {

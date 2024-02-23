@@ -141,10 +141,10 @@ export const ViewInvoiceAction = ({ id, payee, amount, date, status }) => {
   )
 }
 
-export const InvoiceModalContent = () => {
+export const InvoiceModalContent = ({ booking }) => {
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
-    // booking: booking && booking._id,
+    booking: booking && booking._id,
     amount: '',
     tax: '',
     email: '',
