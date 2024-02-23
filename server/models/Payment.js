@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 
 const PaymentSchema = new mongoose.Schema({
-  user: {
+  oragnizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true
+  },
+  invoice: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Invoice',
     required: true
   },
   stripeId: {
