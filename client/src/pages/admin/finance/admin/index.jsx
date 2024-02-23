@@ -4,28 +4,6 @@ import { useRouter } from 'next/router'
 import { Table, Space } from 'antd'
 import { FinanceProvider, useFinanceContext } from './FinanceContext'
 
-const initialData = [
-  {
-    paymentId: 'P001',
-    payeeFirstName: 'Kofi',
-    payeeLastName: 'Fosu',
-    payeeContact: '+233 544803023',
-    amount: '1500',
-    date: '2024-01-30',
-    status: 'Paid'
-  },
-  {
-    paymentId: 'P002',
-    payeeFirstName: 'Kojo ',
-    payeeLastName: 'Appiah',
-    payeeContact: '+233 482356946',
-    amount: '700',
-    date: '2024-01-30',
-    status: 'Pending'
-  }
-  // add more payment objects here
-]
-
 const Finance = () => {
   return (
     <FinanceProvider>

@@ -13,12 +13,7 @@ import styles from './bookings.module.css'
 
 //**Import External Components */
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-// import { DatePicker, TimePicker, AutoComplete } from 'antd'
-// import { ConfigProvider } from 'antd'
-// import es from 'antd/locale/es_ES'
 import dayjs from 'dayjs'
-// dayjs.locale('es')
-// import 'dayjs/locale/es'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
@@ -28,7 +23,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
-import { addDays } from 'date-fns'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -36,7 +30,7 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 //Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { createBooking } from 'src/services/bookings'
+import { createBooking, updateBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
@@ -44,9 +38,10 @@ import { useAuth } from 'src/hooks/useAuth'
 import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
+import { createInvoice } from 'src/services/invoice'
 
 const BookingPage = () => {
-  const [activeEventsView, setActiveEventsView] = useState('ThreeDView')
+  const [activeEventsView, setActiveEventsView] = useState('ListView')
   const { bookings } = useBookings()
   const { artists } = useArtists()
   const { user, logout } = useAuth()
@@ -421,6 +416,8 @@ export const EventsList = ({ events, eventsStatusView }) => {
 export const EventsListItem = ({ event }) => {
   const [artistName, setArtistName] = useState('')
   const { artists } = useArtists()
+  const [openModal, setOpenModal] = useState(false)
+
   useEffect(() => {
     if (artists && event) {
       const artist = artists.find(a => a._id === event.artistID)
@@ -428,6 +425,21 @@ export const EventsListItem = ({ event }) => {
       setArtistName(artistFullName)
     }
   }, [event, artists])
+
+  /************* */
+  //Modal Functions
+  function unhideModal() {
+    // if (user) {
+    setOpenModal(true)
+    // } else {
+    //   logout()
+    // }
+  }
+
+  function hideModal() {
+    setOpenModal(false)
+  }
+  /************* */
 
   const eventStatus = {
     buttonStyle: {
@@ -453,10 +465,21 @@ export const EventsListItem = ({ event }) => {
 
       <div className={styles.eventStatusButton}>
         {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>}
-        {event.status === 'approved' && <TabButton buttonStyle={eventStatus.buttonStyle}>Details</TabButton>}
+        {event.status === 'approved' && (
+          <TabButton onClick={unhideModal} buttonStyle={eventStatus.buttonStyle}>
+            Details
+          </TabButton>
+        )}
         {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>}
         {!event.status && <TabButton buttonStyle={eventStatus.buttonStyle}>N/A</TabButton>}
       </div>
+      <SlideInModal
+        openModal={openModal}
+        unhideModal={unhideModal}
+        hideModal={hideModal}
+        modalContent={<BookingsModalContent booking={event} />}
+        SubmitButton={'Submit'}
+      />
     </div>
   )
 }
@@ -479,9 +502,7 @@ export const EventStatusIcon = ({ style, className, event }) => {
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
 }
-export const BookingsModalContent = ({ user }) => {
-  const currentDate = new Date()
-  const nextDay = addDays(currentDate, 1)
+export const BookingsModalContent = ({ booking }) => {
   const [artistsOptions, setArtistsOptions] = useState([])
   const [organizersOptions, setOrganizersOptions] = useState([])
   const { artists } = useArtists()
@@ -490,21 +511,23 @@ export const BookingsModalContent = ({ user }) => {
   const [formData, setFormData] = useState({
     // Initialize form data
     // Example:
-    status: 'pending',
-    organizerID: '',
-    eventTitle: '',
-    dateTimeRequested: '',
-    startTime: '',
-    endTime: '',
-    getInTime: '',
-    numberOfGuests: '',
-    ageRange: '',
-    locationVenue: '',
-    artistID: '',
-    availableTechnology: '',
-    otherComments: '',
-    gallery: [],
-    genre: []
+    _id: booking && booking._id,
+    status: booking?.status || 'pending',
+    organizerID: booking?.organizerID || '',
+    eventTitle: booking?.eventTitle || '',
+    dateTimeRequested: booking ? dayjs(booking.dateTimeRequested) : '',
+    startTime: booking ? dayjs(booking.dateTimeRequested) : '',
+    endTime: booking ? dayjs(booking.dateTimeRequested) : '',
+    getInTime: booking ? dayjs(booking.dateTimeRequested) : '',
+
+    numberOfGuests: booking?.numberOfGuests || '',
+    ageRange: booking?.ageRange || '',
+    locationVenue: booking?.locationVenue || '',
+    artistID: booking?.artistID || '',
+    availableTechnology: booking?.availableTechnology || '',
+    otherComments: booking?.otherComments || '',
+    gallery: booking?.gallery || [],
+    genre: booking?.genre || []
 
     // Add other fields as needed
   })
@@ -514,9 +537,6 @@ export const BookingsModalContent = ({ user }) => {
     if (!artists && !organizers) return
     setArtistsOptions(artists)
     setOrganizersOptions(organizers)
-
-    console.log('Artists: ', artists)
-    console.log('Organizers: ', organizers)
   }, [artists, organizers])
 
   const handleChange = e => {
@@ -526,44 +546,35 @@ export const BookingsModalContent = ({ user }) => {
     })
   }
 
-  const handleChangeOrganizer = (artist, option) => {
-    const { artistID } = option
-    artist && setFormData({ ...formData, organizerID: organizerID })
-  }
-
-  const handleChangeArtist = (artist, option) => {
-    const { artistID } = option
-    artist && setFormData({ ...formData, artistID: artistID })
-  }
-
-  const handleChangeDate = (date, dateString) => {
-    date && setFormData({ ...formData, dateTimeRequested: date })
-  }
-
-  // const handleChangeTime = (time, timeString) => {
-  //   time && setFormData({ ...formData, getInTime: time.toDate() })
-  // }
-
-  const handleChangeGetInTime = (time, timeString) => {
-    time && setFormData({ ...formData, getInTime: time })
-  }
-
-  const handleChangeStartTime = (time, timeString) => {
-    time && setFormData({ ...formData, startTime: time })
-  }
-
-  const handleChangeEndTime = (time, timeString) => {
-    time && setFormData({ ...formData, endTime: time })
-  }
-
   const handleSubmit = async e => {
     e.preventDefault()
+    if (!booking) {
+      try {
+        const newBooking = await createBooking(formData)
+        console.log('New booking created: ', newBooking)
+        // Optionally, you can redirect or perform any other action after successful booking creation
+      } catch (error) {
+        console.error('Error creating booking: ', error)
+        // Handle error, e.g., display an error message to the user
+      }
+    } else {
+      try {
+        const newBooking = await updateBooking(formData)
+        console.log('Booking Updated Successfully! : ', newBooking)
+        // Optionally, you can redirect or perform any other action after successful booking creation
+      } catch (error) {
+        console.error('Error updating booking: ', error)
+        // Handle error, e.g., display an error message to the user
+      }
+    }
+  }
+  const handleCreateInvoice = async e => {
     try {
-      const newBooking = await createBooking(formData)
-      console.log('New booking created: ', newBooking)
+      const newInvoice = await createInvoice(formData)
+      console.log('Booking Updated Successfully! : ', newInvoice)
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
-      console.error('Error creating booking: ', error)
+      console.error('Error updating booking: ', error)
       // Handle error, e.g., display an error message to the user
     }
   }
@@ -571,15 +582,6 @@ export const BookingsModalContent = ({ user }) => {
   const handleBackToDetails = () => {
     setModalContentView('details')
     // setFormData({ ...formData, gallery: fileList })
-  }
-
-  const filterOption = (inputValue, option) => {
-    return option.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-  }
-
-  const disabledDate = current => {
-    // Can not select days before today and today
-    return current && current < dayjs().endOf('day')
   }
 
   const modalCardContentInputField = {
@@ -610,6 +612,7 @@ export const BookingsModalContent = ({ user }) => {
             name='eventTitle'
             id='eventTitle'
             value={formData.eventTitle}
+            defaultValue={formData.eventTitle}
             onChange={handleChange}
             required
             label="Event's Title"
@@ -649,6 +652,7 @@ export const BookingsModalContent = ({ user }) => {
             // minDate={nextDay} // Set the minimum selectable date to be the next day
             onChange={date => setFormData({ ...formData, dateTimeRequested: date })}
             renderInput={params => <TextField {...params} required />}
+            disablePast
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -657,6 +661,7 @@ export const BookingsModalContent = ({ user }) => {
             // minDate={nextDay} // Set the minimum selectable date to be the next day
             onChange={time => setFormData({ ...formData, getInTime: time })}
             renderInput={params => <TextField {...params} required />}
+            minutesStep={15}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -665,6 +670,7 @@ export const BookingsModalContent = ({ user }) => {
             // minDate={nextDay} // Set the minimum selectable date to be the next day
             onChange={time => setFormData({ ...formData, startTime: time })}
             renderInput={params => <TextField {...params} required />}
+            minutesStep={15}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -673,6 +679,7 @@ export const BookingsModalContent = ({ user }) => {
             // minDate={nextDay} // Set the minimum selectable date to be the next day
             onChange={time => setFormData({ ...formData, endTime: time })}
             renderInput={params => <TextField {...params} required />}
+            minutesStep={15}
           />
 
           <TextField
@@ -714,7 +721,10 @@ export const BookingsModalContent = ({ user }) => {
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery <Upload />
           </button>
-          <TabButton className={styles.modalCardContentSaveButton}>Book Now</TabButton>
+          <TabButton className={styles.modalCardContentSaveButton}>{booking ? 'Update' : 'Book Now'}</TabButton>
+        </form>
+        <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
+          <TabButton className={styles.modalCardContentSaveButton}>Create Invoice</TabButton>
         </form>
       </LocalizationProvider>
     )
