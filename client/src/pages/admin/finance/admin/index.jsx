@@ -2,9 +2,11 @@ import styles from './AdminFinance.module.css'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Table, Space } from 'antd'
-import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
 import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
+
+//Import Internal COmponents
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
+import AdminPagesNavBar from 'src/components/AdminPagesSharedComponents/AdminPagesNavBar/AdminPagesNavBar'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
@@ -14,34 +16,39 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { updateInvoice } from 'src/services/invoice'
 import dayjs from 'dayjs'
 
+//Import Providers
+import PaymentsProvider, { usePaymentsContext } from 'src/providers/PaymentsProvider'
+import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
+
 const Finance = () => {
+  const [activeView, setActiveView] = useState('Invoices')
   return (
     <InvoiceProvider>
-      <AdminFinance />
+      <PaymentsProvider>
+        <AdminPagesNavBar activeView={activeView} setActiveView={setActiveView} />
+        <AdminFinance activeView={activeView} setActiveView={setActiveView} />
+      </PaymentsProvider>
     </InvoiceProvider>
   )
 }
 
 export default Finance
 
-export const AdminFinance = () => {
-  // const [data, setData] = useState(initialData)
-  const [invoiceData, setInvoiceData] = useState([])
-  const { data, updateData } = useInvoiceContext()
+export const AdminFinance = ({ activeView, setActiveView }) => {
+  const [invoiceDataSource, setInvoiceDataSource] = useState([])
+  const [paymentsDataSource, setPaymentsDataSource] = useState([])
+  const { invoiceData } = useInvoiceContext()
+  const { paymentsData } = usePaymentsContext()
 
-  /****************Fetch and Combined invoice details for table display***************/
+  /****************Fetch Details for table display***************/
   useEffect(() => {
-    if (data) {
-      setInvoiceData(data)
-      try {
-        setInvoiceData(prevData => [...prevData, ...data])
-      } catch (error) {}
-    }
-  }, [])
+    if (invoiceData) setInvoiceDataSource(invoiceData)
+    if (paymentsData) setPaymentsDataSource(paymentsData)
+  }, [invoiceData, paymentsData])
 
-  const columns = [
+  const invoicesColumns = [
     {
-      title: 'Booker',
+      title: 'Organizer',
       dataIndex: 'firstName',
       key: 'booker',
       sorter: (a, b) => b.firstName.localeCompare(a.firstName),
@@ -86,11 +93,78 @@ export const AdminFinance = () => {
     }
   ]
 
-  return (
-    <div className={styles.financePage}>
-      <Table columns={columns} dataSource={invoiceData} />
-    </div>
-  )
+  const paymentsColumns = [
+    {
+      title: 'Organizer',
+      dataIndex: 'name',
+      key: '1',
+      sorter: (a, b) => b.firstName.localeCompare(a.firstName),
+      render: (text, booker) => `${booker.firstName} ${booker.lastName}`
+    },
+
+    {
+      title: 'Phone',
+      dataIndex: 'contactPhone',
+      key: '2',
+      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: '3',
+      sorter: (a, b) => a.amount.localeCompare(b.amount)
+    },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: '4',
+      sorter: (a, b) => a.date.localeCompare(b.date)
+    },
+    {
+      title: 'Invoice',
+      key: '5',
+      render: (text, booker) => (
+        <Space size='middle'>
+          <ViewInvoiceAction booker={booker} />
+        </Space>
+      )
+    },
+    {
+      title: 'Status',
+      key: '6',
+      render: (text, booker) => (
+        <Space size='middle'>
+          <ViewInvoiceAction booker={booker} />
+        </Space>
+      )
+    },
+
+    {
+      title: 'Action',
+      key: '7',
+      render: (text, booker) => (
+        <Space size='middle'>
+          <ViewDetailsAction booker={booker} />
+        </Space>
+      )
+    }
+  ]
+
+  if (activeView === 'Invoices') {
+    return (
+      <div className={styles.financePage}>
+        <h4>Invoices</h4>
+        <Table columns={invoicesColumns} dataSource={invoiceDataSource} />
+      </div>
+    )
+  } else {
+    return (
+      <div className={styles.financePage}>
+        <h4>Payments</h4>
+        <Table columns={paymentsColumns} dataSource={paymentsDataSource} />
+      </div>
+    )
+  }
 }
 
 export const ViewDetailsAction = ({ booker }) => {

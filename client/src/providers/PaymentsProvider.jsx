@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import { getAllInvoice } from 'src/services/invoice'
+import { getAllPayments } from 'src/services/payments'
 
-const InvoiceContext = createContext()
+const PaymentsContext = createContext()
 
 const initialData = [
   {
@@ -25,17 +25,17 @@ const initialData = [
   // add more payment objects here
 ]
 
-const InvoiceProvider = ({ children }) => {
-  const [invoiceData, setInvoiceData] = useState([])
+const PaymentsProvider = ({ children }) => {
+  const [paymentsData, setPaymentsData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  /****************Fetch Invoice Data***************/
+  /****************Fetch Payments Data***************/
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const invoice = await getAllInvoice()
-        setInvoiceData(invoice)
+        const payments = await getAllPayments()
+        setPaymentsData(payments)
       } catch (error) {
         setError(error)
       } finally {
@@ -46,25 +46,25 @@ const InvoiceProvider = ({ children }) => {
     fetchData()
   }, [])
 
-  const updateInvoiceData = newData => {
-    setInvoiceData(newData)
+  const updatePaymentsData = newData => {
+    setPaymentsData(newData)
   }
 
   return (
-    <InvoiceContext.Provider value={{ invoiceData, updateInvoiceData, setInvoiceData }}>
+    <PaymentsContext.Provider value={{ paymentsData, updatePaymentsData, setPaymentsData }}>
       {children}
-    </InvoiceContext.Provider>
+    </PaymentsContext.Provider>
   )
 }
 
-export default InvoiceProvider
+export default PaymentsProvider
 
-const useInvoiceContext = () => {
-  const context = useContext(InvoiceContext)
+const usePaymentsContext = () => {
+  const context = useContext(PaymentsContext)
   if (!context) {
-    throw new Error('useInvoiceContext must be used within InvoiceProvider')
+    throw new Error('usePaymentsContext must be used within PaymentsProvider')
   }
   return context
 }
 
-export { InvoiceProvider, useInvoiceContext }
+export { PaymentsProvider, usePaymentsContext }

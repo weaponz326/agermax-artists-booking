@@ -15,7 +15,7 @@
 .navigationPanel {
   display: flex;
   margin-bottom: 2rem;
-  background-color: teal;
+  /* background-color: teal; */
   /* flex-wrap: wrap; */
 }
 .dateFilter {
