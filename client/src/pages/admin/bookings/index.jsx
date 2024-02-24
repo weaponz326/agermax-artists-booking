@@ -22,6 +22,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
+import { Select } from '@mui/base/Select'
+import { Option } from '@mui/base/Option'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -439,13 +441,16 @@ export const EventsListItem = ({ event }) => {
   }
   /************* */
 
-  const eventStatus = {
-    buttonStyle: {
-      background: event.status === 'pending' ? 'Black' : 'White',
-      color: event.status === 'pending' ? 'White' : 'Black',
-      fontSize: '0.81rem'
-    },
-    buttonText: event.status === 'pending' ? 'Approve' : 'Details'
+  const eventStatusStyle = () => {
+    if (event.status === 'pending') {
+      return { background: 'Black', color: 'White', fontSize: '0.81rem' }
+    }
+    if (event.status === 'approved') {
+      return { background: 'white', color: 'black', fontSize: '0.81rem' }
+    }
+    if (event.status === 'cancelled') {
+      return { background: 'gray', color: 'white', fontSize: '0.81rem' }
+    }
   }
 
   return (
@@ -462,14 +467,13 @@ export const EventsListItem = ({ event }) => {
       </div>
 
       <div className={styles.eventStatusButton}>
-        {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>}
-        {event.status === 'approved' && (
-          <TabButton onClick={unhideModal} buttonStyle={eventStatus.buttonStyle}>
+        {/* {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>} */}
+        {event.status && (
+          <TabButton onClick={unhideModal} buttonStyle={eventStatusStyle()}>
             Details
           </TabButton>
         )}
-        {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>}
-        {!event.status && <TabButton buttonStyle={eventStatus.buttonStyle}>N/A</TabButton>}
+        {/* {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>} */}
       </div>
       <SlideInModal
         openModal={openModal}
@@ -497,27 +501,26 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
-const customLocale = {
-  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
-}
 export const BookingsModalContent = ({ booking }) => {
+  /****************Generic States***************/
   const [artistsOptions, setArtistsOptions] = useState([])
   const [organizersOptions, setOrganizersOptions] = useState([])
   const { artists } = useArtists()
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
+  const [bookingOrganizer, setBookingOrganizer] = useState('')
+
+  /****************Form Data***************/
   const [formData, setFormData] = useState({
     // Initialize form data
-    // Example:
     _id: booking && booking._id,
     status: booking?.status || 'pending',
     organizerID: booking?.organizerID || '',
     eventTitle: booking?.eventTitle || '',
     dateTimeRequested: booking ? dayjs(booking.dateTimeRequested) : '',
-    startTime: booking ? dayjs(booking.dateTimeRequested) : '',
-    endTime: booking ? dayjs(booking.dateTimeRequested) : '',
-    getInTime: booking ? dayjs(booking.dateTimeRequested) : '',
-
+    startTime: booking ? dayjs(booking.startTime) : '',
+    endTime: booking ? dayjs(booking.endTime) : '',
+    getInTime: booking ? dayjs(booking.getInTime) : '',
     numberOfGuests: booking?.numberOfGuests || '',
     ageRange: booking?.ageRange || '',
     locationVenue: booking?.locationVenue || '',
@@ -526,11 +529,10 @@ export const BookingsModalContent = ({ booking }) => {
     otherComments: booking?.otherComments || '',
     gallery: booking?.gallery || [],
     genre: booking?.genre || []
-
-    // Add other fields as needed
   })
+
+  /****************Gallery***************/
   const [fileList, setFileList] = useState(formData.gallery)
-  const [bookingOrganizer, setBookingOrganizer] = useState('')
 
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
@@ -555,8 +557,7 @@ export const BookingsModalContent = ({ booking }) => {
     }
   }
 
-  /*****************Form Data****************/
-
+  /****************Both Invoice & FormData Actions***************/
   useEffect(() => {
     if (!artists && !organizers) return
     setArtistsOptions(artists)
@@ -593,8 +594,16 @@ export const BookingsModalContent = ({ booking }) => {
     }
   }
 
-  const handleRejectBooking = e => {
+  const handleRejectBooking = async e => {
     e.preventDefault()
+    try {
+      const newBooking = await updateBooking(formData)
+      console.log('Booking Updated Successfully! : ', newBooking)
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error updating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
   }
 
   const handleBackToDetails = () => {
@@ -602,22 +611,11 @@ export const BookingsModalContent = ({ booking }) => {
     // setFormData({ ...formData, gallery: fileList })
   }
 
-  const modalCardContentInputField = {
-    textAlign: 'left',
-    padding: '0.5rem 0.75rem',
-    width: '100%',
-    backgroundColor: '#f2f4f8',
-    color: 'black',
-    borderRadius: '0.7rem',
-    border: 'none',
-    outlineColor: '#4428f2',
-    ':focus': {
-      outlineColor: '#4428f2'
-    }
+  const onReject = () => {
+    setFormData({ ...formData, status: 'cancelled' })
   }
 
   /*****************Rendering***************/
-
   if (modalContentView === 'details') {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -630,12 +628,11 @@ export const BookingsModalContent = ({ booking }) => {
             name='eventTitle'
             id='eventTitle'
             value={formData.eventTitle}
-            defaultValue={formData.eventTitle}
             onChange={handleChange}
             required
             label="Event's Title"
             size='small'
-            variant='outlined'
+            spellCheck
           />
           <Autocomplete
             className={styles.modalCardContentInputField}
@@ -667,17 +664,15 @@ export const BookingsModalContent = ({ booking }) => {
             className={styles.modalCardContentInputField}
             label='Select Event Date'
             value={formData.dateTimeRequested}
-            // minDate={nextDay} // Set the minimum selectable date to be the next day
             onChange={date => setFormData({ ...formData, dateTimeRequested: dayjs(date) })}
-            renderInput={params => <TextField {...params} required />}
+            slots={params => <TextField {...params} required />}
             disablePast
           />
           <TimePicker
             className={styles.modalCardContentInputField}
             label='Get In Time'
             value={formData.getInTime}
-            onChange={time => setFormData({ ...formData, getInTime: dayjs(time) })}
-            renderInput={params => <TextField {...params} required />}
+            onChange={time => setFormData({ ...formData, getInTime: time })}
             minutesStep={15}
           />
           <TimePicker
@@ -685,15 +680,15 @@ export const BookingsModalContent = ({ booking }) => {
             label='Event Start Time'
             value={formData.startTime}
             onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
-            renderInput={params => <TextField {...params} required />}
             minutesStep={15}
+            slots={params => <TextField {...params} required />}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
             label='Event End Time'
             value={formData.startTime}
             onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
-            renderInput={params => <TextField {...params} required />}
+            slots={params => <TextField {...params} required />}
             minutesStep={15}
           />
 
@@ -714,8 +709,6 @@ export const BookingsModalContent = ({ booking }) => {
             placeholder='Expected Number of Guests'
             className={styles.modalCardContentInputField}
             type='number'
-            step='5'
-            min='1'
             name='numberOfGuests'
             id='numberOfGuests'
             value={formData.numberOfGuests}
@@ -735,19 +728,36 @@ export const BookingsModalContent = ({ booking }) => {
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery <Upload />
           </button>
+          {booking.status === 'cancelled' && (
+            <select
+              className={styles.modalCardContentInputField}
+              name='status'
+              id='status'
+              value={formData.status}
+              onChange={e => setFormData({ ...formData, status: e.target.value })}
+            >
+              <option value='cancelled' selected>
+                Cancelled
+              </option>
+              <option value='pending'>Pending</option>
+            </select>
+          )}
           <TabButton className={styles.modalCardContentSaveButton}>{booking ? 'Update' : 'Book Now'}</TabButton>
         </form>
 
-        <div className={styles.bookingActionButtons}>
-          <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-            <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
-          </form>
-          <form onSubmit={handleRejectBooking}>
-            <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
-              Reject Booking 👎
-            </TabButton>
-          </form>
-        </div>
+        {/* Conditional Rendering for different bookings Status */}
+        {booking.status === 'pending' && (
+          <div className={styles.bookingActionButtons}>
+            <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
+              <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
+            </form>
+            <form onSubmit={handleRejectBooking}>
+              <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
+                Reject Booking 👎
+              </TabButton>
+            </form>
+          </div>
+        )}
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {

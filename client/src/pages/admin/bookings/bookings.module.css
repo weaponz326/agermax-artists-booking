@@ -259,7 +259,8 @@
   border-radius: 1rem;
   cursor: pointer;
   margin-top: auto;
-  flex: 1;
+  /* flex: 1; */
+  width: 100%;
 }
 
 .modalCardContentSaveButton:hover {
