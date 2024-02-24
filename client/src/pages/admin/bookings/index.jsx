@@ -728,7 +728,7 @@ export const BookingsModalContent = ({ booking }) => {
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery <Upload />
           </button>
-          {booking.status === 'cancelled' && (
+          {booking && booking.status === 'cancelled' && (
             <select
               className={styles.modalCardContentInputField}
               name='status'
@@ -746,7 +746,7 @@ export const BookingsModalContent = ({ booking }) => {
         </form>
 
         {/* Conditional Rendering for different bookings Status */}
-        {booking.status === 'pending' && (
+        {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
             <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
               <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
