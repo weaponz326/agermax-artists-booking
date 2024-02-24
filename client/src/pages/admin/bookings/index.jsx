@@ -1,5 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 //**Import Components */
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
@@ -502,6 +503,8 @@ export const EventStatusIcon = ({ style, className, event }) => {
 }
 
 export const BookingsModalContent = ({ booking }) => {
+  const router = useRouter()
+
   /****************Generic States***************/
   const [artistsOptions, setArtistsOptions] = useState([])
   const [organizersOptions, setOrganizersOptions] = useState([])
@@ -728,6 +731,8 @@ export const BookingsModalContent = ({ booking }) => {
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery <Upload />
           </button>
+
+          {/* ****Conditional Rendering for different bookings Status ****/}
           {booking && booking.status === 'cancelled' && (
             <select
               className={styles.modalCardContentInputField}
@@ -742,14 +747,20 @@ export const BookingsModalContent = ({ booking }) => {
               <option value='pending'>Pending</option>
             </select>
           )}
+          {/* ********************************** */}
           <TabButton className={styles.modalCardContentSaveButton}>{booking ? 'Update' : 'Book Now'}</TabButton>
         </form>
 
-        {/* Conditional Rendering for different bookings Status */}
+        {/* *****Conditional Rendering for different bookings Status*** */}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
             <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-              <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
+              <TabButton
+                onClick={() => router.push('/admin/finance/admin')}
+                className={styles.modalCardContentSaveButton}
+              >
+                Create Invoice 👍
+              </TabButton>
             </form>
             <form onSubmit={handleRejectBooking}>
               <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
@@ -758,6 +769,7 @@ export const BookingsModalContent = ({ booking }) => {
             </form>
           </div>
         )}
+        {/* ********************************** */}
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {
