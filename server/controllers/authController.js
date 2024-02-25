@@ -12,7 +12,6 @@ const registerUser = async (req, res) => {
     email,
     password,
     role,
-    // Optional fields are not initialized with defaults here
     profilePhoto,
     contactPhone,
     address,
@@ -39,7 +38,6 @@ const registerUser = async (req, res) => {
       email,
       password,
       role,
-      // Optional fields are added only if they are provided
       ...(profilePhoto && { profilePhoto }),
       ...(contactPhone && { contactPhone }),
       ...(address && { address }),
@@ -55,6 +53,21 @@ const registerUser = async (req, res) => {
     });
 
     if (user) {
+      // Attempt to send a welcome email
+      const subject = "Welcome to Our Platform!";
+      const text = `Hi ${firstName}, welcome to our platform! We are excited to have you onboard.`;
+      const html = `<p>Hi ${firstName},</p><p>Welcome to our platform! We are excited to have you onboard.</p>`;
+
+      sendEmail({
+        to: email,
+        subject: subject,
+        text: text,
+        html: html,
+      }).catch((error) => {
+        // Log the error for internal tracking
+        console.error("Failed to send welcome email:", error);
+      });
+
       res.status(201).json({
         userData: {
           _id: user.id,
@@ -71,6 +84,7 @@ const registerUser = async (req, res) => {
       res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
+    console.error("Registration error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -114,45 +128,57 @@ const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      console.log(`Password reset attempted for non-existing email: ${email}`);
+      return res.status(200).json({
+        message:
+          "If your account exists, you will receive a password reset email.",
+      });
     }
 
     const { resetToken, hash, resetTokenExpire } = generateResetToken();
-
     user.resetPasswordToken = hash;
     user.resetPasswordExpire = resetTokenExpire;
     await user.save();
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. If you did not request this, please ignore this email and your password will remain unchanged.`;
-
-    // Enhanced HTML Email Body
     const emailBody = `
-      <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; color: #333;">
-        <h2 style="color: #0056b3;">Password Reset Request</h2>
-        <p>${message}</p>
-        <p><a href="${resetUrl}" style="display: inline-block; background-color: #0056b3; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
-        <p>If the button above does not work, paste this link in your browser:</p>
-        <p><a href="${resetUrl}" style="color: #0056b3;">${resetUrl}</a></p>
-      </div>
-    `;
+    <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; color: #333;">
+      <h2 style="color: #0056b3;">Password Reset Request</h2>
+      <p>${message}</p>
+      <p><a href="${resetUrl}" style="display: inline-block; background-color: #0056b3; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+      <p>If the button above does not work, paste this link in your browser:</p>
+      <p><a href="${resetUrl}" style="color: #0056b3;">${resetUrl}</a></p>
+    </div>
+  `;
 
     await sendEmail({
       to: user.email,
       subject: "Password Reset Request",
       text: message,
-      html: emailBody, // Updated to use the styled HTML
+      html: emailBody,
     });
 
     res
       .status(200)
-      .json({ message: "Email sent with password reset instructions" });
+      .json({ message: "Email sent with password reset instructions." });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Error sending password reset email",
-      error: error.message,
-    });
+    if (error.message.includes("Error sending email")) {
+      // This condition checks for SMTP errors
+      console.error(`SMTP Error for ${email}:`, error);
+      res.status(500).json({
+        message: "Failed to send password reset email. Please try again later.",
+      });
+    } else {
+      // Handle other errors
+      console.error(
+        `Internal error during password reset for ${email}:`,
+        error
+      );
+      res.status(500).json({
+        message: "An error occurred while processing your request.",
+      });
+    }
   }
 };
 
@@ -195,5 +221,5 @@ module.exports = {
   registerUser,
   loginUser,
   forgotPassword,
-  resetPassword, 
+  resetPassword,
 };
