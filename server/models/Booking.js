@@ -8,12 +8,12 @@ const bookingSchema = new mongoose.Schema({
   artistID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "Artist",
+    ref: "User",
   },
   organizerID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "EventOrganizer",
+    ref: "User",
   },
   dateTimeRequested: {
     type: Date,

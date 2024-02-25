@@ -1,111 +1,70 @@
 // controllers/authController.js
 const generateToken = require("../utils/generateToken");
 const User = require("../models/User");
-const Artist = require("../models/Artist");
-const EventOrganizer = require("../models/EventOrganizer");
-const Admin = require("../models/Admin");
 
 
 const registerUser = async (req, res) => {
   const {
     firstName,
     lastName,
-    email, // This is the incoming email field for User
+    email,
     password,
     role,
-    profilePhoto = "",
-    contactPhone = "",
-    address = "",
-    organizationNumber = "",
+    // Optional fields are not initialized with defaults here
+    profilePhoto,
+    contactPhone,
+    address,
+    organizationNumber,
     socialMediaLinks,
     availableDates,
     gallery,
     eventsHosted,
-    nickName = "",
+    nickName,
     genre,
-    bio = "",
-    companyName = "",
+    bio,
+    companyName,
   } = req.body;
 
   try {
-    const userExists = await User.findOne({ email });
 
+    const userExists = await User.findOne({ email });
     if (userExists) {
-      res.status(400).json({ message: "User already exists" });
-      return;
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const user = await User.create({
       firstName,
       lastName,
-      email, // Use as email in User model
-      password,
+      email,
+      password, 
       role,
-      profilePhoto,
-      contactPhone,
-      address,
-      organizationNumber,
-      socialMediaLinks,
-      availableDates,
-      gallery,
-      eventsHosted,
-      nickName,
-      genre,
-      bio,
-      companyName,
+      // Optional fields are added only if they are provided
+      ...(profilePhoto && { profilePhoto }),
+      ...(contactPhone && { contactPhone }),
+      ...(address && { address }),
+      ...(organizationNumber && { organizationNumber }),
+      ...(socialMediaLinks && { socialMediaLinks }),
+      ...(availableDates && { availableDates }),
+      ...(gallery && { gallery }),
+      ...(eventsHosted && { eventsHosted }),
+      ...(nickName && { nickName }),
+      ...(genre && { genre }),
+      ...(bio && { bio }),
+      ...(companyName && { companyName }),
     });
 
     if (user) {
-      let additionalDetails = {
-        firstName,
-        lastName,
-        contactEmail: email,
-        contactPhone,
-        address,
-        profilePhoto,
-      };
-
-      // Use switch-case for role handling
-      switch (role) {
-        case "artist":
-          await Artist.create({
-            ...additionalDetails,
-            nickName,
-            genre,
-            bio,
-            organizationNumber,
-            socialMediaLinks,
-            availableDates,
-            gallery,
-          });
-          break;
-        case "organizer":
-          await EventOrganizer.create({
-            ...additionalDetails,
-            companyName,
-            organizationNumber,
-            eventsHosted,
-          });
-          break;
-        case "admin":
-          await Admin.create({ ...additionalDetails, role });
-          break;
-        default:
-          // Handle unexpected role
-          throw new Error("Invalid user role");
-      }
-
       res.status(201).json({
         userData: {
           _id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          fullName: user.firstName + " " + user.lastName,
-          email,
+          fullName: user.firstName + " " + user.lastName, 
+          email: user.email,
           role: user.role,
           profilePhoto: user.profilePhoto,
         },
-        accessToken: generateToken(user._id),
+        accessToken: generateToken(user._id), 
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -148,9 +107,6 @@ const loginUser = async (req, res) => {
     res.status(401).json({ message: "Invalid email or password" });
   }
 };
-
-
-
 
 module.exports = {
   registerUser,
