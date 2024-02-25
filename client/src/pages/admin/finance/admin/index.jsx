@@ -49,10 +49,10 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
   const invoicesColumns = [
     {
       title: 'Organizer',
-      dataIndex: 'firstName',
+      dataIndex: 'organizerFirstName',
       key: 'booker',
-      sorter: (a, b) => b.firstName.localeCompare(a.firstName),
-      render: (text, booker) => `${booker.firstName} ${booker.lastName}`
+      sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
+      render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
     },
 
     {
@@ -98,8 +98,8 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       title: 'Organizer',
       dataIndex: 'name',
       key: '1',
-      sorter: (a, b) => b.firstName.localeCompare(a.firstName),
-      render: (text, booker) => `${booker.firstName} ${booker.lastName}`
+      sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
+      render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
     },
 
     {

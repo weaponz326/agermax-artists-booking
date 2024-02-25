@@ -71,9 +71,11 @@ const userSchema = mongoose.Schema({
     type: String,
     required: false,
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
 });
 
-userSchema.virtual('fullName').get(function () {
+userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 

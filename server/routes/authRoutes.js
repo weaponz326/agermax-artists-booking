@@ -2,12 +2,44 @@
 const generateToken = require("../utils/generateToken");
 
 const express = require("express");
-const router = express.Router();
-const { registerUser, loginUser } = require("../controllers/authController");
 const passport = require("passport");
+const { body } = require("express-validator");
+const router = express.Router();
+const {
+  registerUser,
+  loginUser,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/authController");
+const rateLimit = require("express-rate-limit");
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post(
+  "/register",
+  [
+    body("firstName").notEmpty().withMessage("First name is required"),
+    body("lastName").notEmpty().withMessage("Last name is required"),
+    body("email").isEmail().withMessage("A valid email is required"),
+    body("password")
+      .isLength({ min: 4 })
+      .withMessage("Password must be at least 4 characters long"),
+    body("role").notEmpty().withMessage("Role is required"),
+  ],
+  registerUser
+);
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 login requests per windowMs
+  message:
+    "Too many login attempts from this IP, please try again after 15 minutes",
+});
+
+router.post("/login", loginLimiter, loginUser);
+
+router.post("/forgot-password", forgotPassword);
+router.post('/reset-password', resetPassword);
+
+
 
 //facebook Oauth
 router.get(
