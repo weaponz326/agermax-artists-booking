@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './CalendarBookingCard.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
-import { EventStatusIcon } from 'src/pages/admin/bookings'
+import { EventStatusIcon } from 'src/pages/admin/bookings/admin'
 import { ArrowForward, Clock, More2 } from 'iconsax-react'
 
 const CalendarBookingCard = () => {
