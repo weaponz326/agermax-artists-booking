@@ -1,20 +1,17 @@
 // paymentController.js
-
+const dotenv = require("dotenv");
 const Stripe = require("stripe");
-const Payment = require("../models/Payment"); 
+const Payment = require("../models/Payment");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.getAllPayments = async (req, res) => {
   try {
-    // Fetch all payment records from the database
     const payments = await Payment.find({});
 
-    // Check if payments exist
     if (payments.length === 0) {
       return res.status(404).json({ message: "No payments found." });
     }
 
-    // Respond with all payment records
     res.json({ success: true, payments });
   } catch (error) {
     console.error("Error fetching payments:", error);
@@ -26,36 +23,37 @@ exports.getAllPayments = async (req, res) => {
 
 exports.getPaymentById = async (req, res) => {
   try {
-    const { id } = req.params; // Extracting the payment ID from the request parameters
+    const { id } = req.params;
 
-    // Attempt to find the payment record by its ID
     const payment = await Payment.findById(id);
 
-    // Check if the payment was found
     if (!payment) {
       return res.status(404).json({ message: "Payment not found." });
     }
 
-    // Respond with the found payment record
     res.json({ success: true, payment });
   } catch (error) {
     console.error("Error fetching payment by ID:", error);
 
-    // Handle the case where an invalid ID format was provided
-    if (error.kind === 'ObjectId' && error.name === 'CastError') {
+    if (error.kind === "ObjectId" && error.name === "CastError") {
       return res.status(400).json({ message: "Invalid payment ID format." });
     }
 
-    return res.status(500).json({ message: "An error occurred while fetching the payment record." });
+    return res.status(500).json({
+      message: "An error occurred while fetching the payment record.",
+    });
   }
 };
 
-
 exports.processPayment = async (req, res) => {
   try {
-    const { amount, source, receipt_email } = req.body;
+    const { invoice, organizer, amount, source, receipt_email } = req.body;
 
     // Basic validation for required fields
+    if (!invoice)
+      return res.status(400).json({ message: "invoice is required." });
+    if (!organizer)
+      return res.status(400).json({ message: "organizer is required." });
     if (!amount)
       return res.status(400).json({ message: "amount is required." });
     if (!source)
@@ -73,7 +71,9 @@ exports.processPayment = async (req, res) => {
 
     // Create and save the payment record in your database
     const paymentRecord = new Payment({
-      user: req.user._id, // Assuming the user ID is attached to the request
+      user: req.user._id,
+      invoice: invoice,
+      organizer: organizer,
       stripeId: charge.id,
       amount: charge.amount,
       email: charge.receipt_email,

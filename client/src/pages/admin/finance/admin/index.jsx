@@ -57,9 +57,9 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
 
     {
       title: 'Phone',
-      dataIndex: 'contactPhone',
-      key: 'contactPhone',
-      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
+      dataIndex: 'organizerContactPhone',
+      key: 'organizerContactPhone',
+      sorter: (a, b) => a.organizerContactPhone.localeCompare(b.organizerContactPhone)
     },
     {
       title: 'Amount',
@@ -104,9 +104,9 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
 
     {
       title: 'Phone',
-      dataIndex: 'contactPhone',
+      dataIndex: 'organizerContactPhone',
       key: '2',
-      sorter: (a, b) => a.contactPhone.localeCompare(b.contactPhone)
+      sorter: (a, b) => a.organizerContactPhone.localeCompare(b.organizerContactPhone)
     },
     {
       title: 'Amount',
