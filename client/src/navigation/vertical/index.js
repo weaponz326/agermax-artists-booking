@@ -29,18 +29,23 @@ const navigation = () => {
           }
         ]
       : []),
-      ...(user
-        ? [
-            {
-              title: 'Finance',
-              // Check the user's role and change the path accordingly
-              path: user.role === 'admin' ? '/admin/finance/admin' :
-                    user.role === 'organizer' ? '/admin/finance/organizer' :
-                    user.role === 'artist' ? '/admin/finance/artist' : '/admin/finance',
-              icon: 'tabler:report-money'
-            }
-          ]
-        : []),
+    ...(user
+      ? [
+          {
+            title: 'Finance',
+            // Check the user's role and change the path accordingly
+            path:
+              user.role === 'admin'
+                ? '/admin/finance/admin'
+                : user.role === 'organizer'
+                ? '/admin/finance/organizer'
+                : user.role === 'artist'
+                ? '/admin/finance/artist'
+                : '/admin/finance',
+            icon: 'tabler:report-money'
+          }
+        ]
+      : []),
 
     {
       path: '/admin/account/account',

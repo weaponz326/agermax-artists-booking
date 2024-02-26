@@ -1,0 +1,286 @@
+/* Global Styles */
+.bookingsPage {
+  --primary-color: rgb(252, 142, 94);
+  --tabs-border-radius: 0.5rem;
+  --tabs-container-padding: 0.25rem;
+  --tabs-container-border: 1px solid blue;
+  --regular-tab-background: #efefef;
+  --selected-tab-background: white;
+  --tabs-container-color: #efefef;
+  --tabs-hover-color: rgb(252, 142, 94);
+  --events-panel-backgroundColor: #f2f5f6;
+  /* --events-panel-backgroundColor: #2983a1; */
+
+  margin: 0 1.5rem;
+}
+
+/*Navigation Panel Section*/
+.navigationPanel {
+  display: flex;
+  margin-bottom: 2rem;
+  /* flex-wrap: wrap; */
+}
+.dateFilter {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.selectMonth {
+  background-color: none;
+  color: black;
+  padding: 0;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.selectMonth * {
+  /* color: black; */
+  background-color: #efefef;
+}
+
+.filterTab {
+  padding: 0.3rem 1.3rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.filterTabContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.calendarViewTabs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.viewStylesTabs * {
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  background-color: var(--regular-tab-background);
+  padding: 0.3rem 1.3rem;
+}
+
+.viewStylesTabs *:hover {
+  border-radius: inherit;
+  background-color: var(--tabs-hover-color);
+}
+
+.viewStylesTabs {
+  padding: var(--tabs-container-padding);
+  /* border: var(--tabs-container-border); */
+  border-radius: var(--tabs-border-radius);
+  background-color: var(--tabs-container-color);
+  display: flex;
+}
+
+.addBookingsButton {
+  background-color: #4428f2;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* .threeDViewTab {
+  border-radius: var(--tabs-border-radius) 0 0 var(--tabs-border-radius);
+} */
+
+/* .listViewTab {
+  border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
+} */
+
+.activeTab {
+  border-radius: inherit;
+  background-color: var(--selected-tab-background);
+  color: black;
+  font-weight: bold;
+}
+
+/*Booking Status Section*/
+.bookingStatus {
+  display: flex;
+  gap: 1rem;
+}
+
+.bookingStatus * {
+  background-color: var(--regular-tab-background);
+  /* border-radius: inherit; */
+}
+
+.bookingStatus *:hover {
+  background-color: var(--tabs-hover-color);
+}
+.bookingStatusActiveButton,
+.addGalleryButton,
+.backToDetailsButton {
+  background-color: #4328f21c;
+  border: 1px solid #4428f2;
+  color: #4428f2;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e6e6e6;
+  font-size: 0.85rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.addGalleryContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.backToDetailsButton {
+  display: flex;
+  align-self: flex-start;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+
+.addGalleryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.addGalleryButton:hover {
+  filter: brightness(90%);
+}
+.statusCount {
+  background-color: var(--primary-color);
+  width: 1.3rem;
+  color: white;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: absolute;
+  right: -0.4rem;
+  top: -0.4rem;
+  font-size: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+}
+
+.monthlyLookaheadSection {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 40rem;
+  /* gap: 2rem; */
+}
+
+.allEventsInMonth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.monthEventListItem {
+  background-color: var(--events-panel-backgroundColor);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.statusInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.statusIcon {
+  border-radius: 50%;
+  width: 12px;
+  aspect-ratio: 1;
+  background-color: green;
+}
+
+.eventArtist {
+  color: black;
+  font-weight: bold;
+}
+
+.calendarIcon {
+  width: 20px;
+  height: 20px;
+  background-color: rebeccapurple;
+}
+
+.modalCardContentUserDetails,
+.modalCardContentUserProfile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  /* justify-content: space-between; */
+}
+
+.modalCardContentInputField {
+  text-align: left;
+  padding: 0.75rem;
+  width: 100%;
+  background-color: #f2f4f8;
+  color: black;
+  border-radius: 0.7rem;
+  border: none;
+  outline-color: #4428f2;
+}
+
+.optionsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.optionsPicture {
+  border-radius: 50%;
+  width: 30px;
+  aspect-ratio: 1;
+}
+
+.selectOptions {
+}
+
+.modalCardContentSaveButton {
+  background-color: #4428f2;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-top: auto;
+  /* flex: 1; */
+  width: 100%;
+}
+
+.modalCardContentSaveButton:hover {
+  filter: brightness(90%);
+  transform: scale(1.01);
+}
+
+.bookingActionButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bookingActionButtons form {
+  flex: 1;
+  display: flex;
+  justify-content: stretch;
+}
+
+.rejectButton {
+  background-color: crimson;
+  border-color: white;
+}
