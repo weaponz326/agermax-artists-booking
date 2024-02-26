@@ -53,12 +53,14 @@ const BookingPage = () => {
   /*****************Fetch Artist Bookings ******************/
   const [artistBookings, setArtistBookings] = useState([])
   const [loading, setLoading] = useState(true)
+  const [approvedArtistBookings, setApprovedArtistBookings] = useState([])
 
   useEffect(() => {
     if (bookings && user) {
       const userBookings = bookings.filter(booking => booking.artistID === user._id)
       setArtistBookings(userBookings)
-      console.log(userBookings)
+      const readyBookings = bookings.filter(booking => booking.status === 'approved')
+      setApprovedArtistBookings(readyBookings)
       setLoading(false)
     }
   }, [bookings, user])
@@ -92,39 +94,16 @@ const BookingPage = () => {
           setCancelledCount={setCancelledCount}
         />
       )}
-      {activeEventsView === 'ThreeDView' && <ThreeDView />}
-      {activeEventsView === 'MonthView' && <MonthView />}
-      {activeEventsView === 'WeekView' && <WeekView />}
+      <div className={styles.threeDCalendar}>
+        {activeEventsView === 'ThreeDView' && <CustomFullCalendar view={'timeGridDay'} userBookings={artistBookings} />}
+        {activeEventsView === 'MonthView' && <CustomFullCalendar view={'dayGridMonth'} userBookings={artistBookings} />}
+        {activeEventsView === 'WeekView' && <CustomFullCalendar view={'dayGridWeek'} userBookings={artistBookings} />}
+      </div>
     </main>
   )
 }
 
 export default BookingPage
-
-export const ThreeDView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'timeGridDay'} />
-    </div>
-  )
-}
-
-export const MonthView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      {/* <CalendarBookingCard /> */}
-      <CustomFullCalendar view={'dayGridMonth'} />
-    </div>
-  )
-}
-
-export const WeekView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'dayGridWeek'} />
-    </div>
-  )
-}
 
 export const EventsListView = ({
   bookings,

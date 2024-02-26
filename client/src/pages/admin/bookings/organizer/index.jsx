@@ -91,39 +91,22 @@ const BookingPage = () => {
           setCancelledCount={setCancelledCount}
         />
       )}
-      {activeEventsView === 'ThreeDView' && <ThreeDView />}
-      {activeEventsView === 'MonthView' && <MonthView />}
-      {activeEventsView === 'WeekView' && <WeekView />}
+      <div className={styles.threeDCalendar}>
+        {activeEventsView === 'ThreeDView' && (
+          <CustomFullCalendar view={'timeGridDay'} userBookings={organizerBookings} />
+        )}
+        {activeEventsView === 'MonthView' && (
+          <CustomFullCalendar view={'dayGridMonth'} userBookings={organizerBookings} />
+        )}
+        {activeEventsView === 'WeekView' && (
+          <CustomFullCalendar view={'dayGridWeek'} userBookings={organizerBookings} />
+        )}
+      </div>
     </main>
   )
 }
 
 export default BookingPage
-
-export const ThreeDView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'timeGridDay'} />
-    </div>
-  )
-}
-
-export const MonthView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      {/* <CalendarBookingCard /> */}
-      <CustomFullCalendar view={'dayGridMonth'} />
-    </div>
-  )
-}
-
-export const WeekView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'dayGridWeek'} />
-    </div>
-  )
-}
 
 export const EventsListView = ({
   bookings,

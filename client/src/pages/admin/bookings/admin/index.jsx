@@ -51,6 +51,14 @@ const BookingPage = () => {
   const [pendingCount, setPendingCount] = useState(null)
   const [approvedCount, setApprovedCount] = useState(null)
   const [cancelledCount, setCancelledCount] = useState(null)
+  const [approvedBookings, setApprovedBookings] = useState([])
+
+  useEffect(() => {
+    if (bookings) {
+      const readyBookings = bookings.filter(booking => booking.status === 'approved')
+      setApprovedBookings(readyBookings)
+    }
+  }, [bookings])
 
   return (
     <main className={styles.bookingsPage}>
@@ -80,39 +88,40 @@ const BookingPage = () => {
           setCancelledCount={setCancelledCount}
         />
       )}
-      {activeEventsView === 'ThreeDView' && <ThreeDView />}
-      {activeEventsView === 'MonthView' && <MonthView />}
-      {activeEventsView === 'WeekView' && <WeekView />}
+      <div className={styles.threeDCalendar}>
+        {activeEventsView === 'ThreeDView' && <CustomFullCalendar view={'timeGridDay'} userBookings={bookings} />}
+        {activeEventsView === 'MonthView' && <CustomFullCalendar view={'dayGridMonth'} userBookings={bookings} />}
+        {activeEventsView === 'WeekView' && <CustomFullCalendar view={'dayGridWeek'} userBookings={bookings} />}
+      </div>
     </main>
   )
 }
 
 export default BookingPage
 
-export const ThreeDView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'timeGridDay'} />
-    </div>
-  )
-}
+// export const ThreeDView = () => {
+//   return (
+//     <div className={styles.threeDCalendar}>
+//       <CustomFullCalendar view={'timeGridDay'} />
+//     </div>
+//   )
+// }
 
-export const MonthView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      {/* <CalendarBookingCard /> */}
-      <CustomFullCalendar view={'dayGridMonth'} />
-    </div>
-  )
-}
+// export const MonthView = () => {
+//   return (
+//     <div className={styles.threeDCalendar}>
+//       <CustomFullCalendar view={'dayGridMonth'} />
+//     </div>
+//   )
+// }
 
-export const WeekView = () => {
-  return (
-    <div className={styles.threeDCalendar}>
-      <CustomFullCalendar view={'dayGridWeek'} />
-    </div>
-  )
-}
+// export const WeekView = () => {
+//   return (
+//     <div className={styles.threeDCalendar}>
+//       <CustomFullCalendar view={'dayGridWeek'} />
+//     </div>
+//   )
+// }
 
 export const EventsListView = ({
   bookings,
