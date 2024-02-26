@@ -11,7 +11,14 @@ const navigation = () => {
     },
     {
       title: 'Bookings',
-      path: '/admin/bookings',
+      path:
+        user.role === 'admin'
+          ? '/admin/bookings/admin'
+          : user.role === 'organizer'
+          ? '/admin/bookings/organizer'
+          : user.role === 'artist'
+          ? '/admin/bookings/artist'
+          : '/admin/bookings',
       icon: 'tabler:address-book'
     },
     {
@@ -19,7 +26,7 @@ const navigation = () => {
       path: '/admin/inbox',
       icon: 'tabler:mail'
     },
-    // Conditionally include the 'Users' link if the user is an admin
+
     ...(user && user.role === 'admin'
       ? [
           {
@@ -33,7 +40,6 @@ const navigation = () => {
       ? [
           {
             title: 'Finance',
-            // Check the user's role and change the path accordingly
             path:
               user.role === 'admin'
                 ? '/admin/finance/admin'
