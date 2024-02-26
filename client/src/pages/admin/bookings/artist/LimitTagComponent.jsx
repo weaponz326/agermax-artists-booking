@@ -17,12 +17,8 @@ const modalCardContentInputField = {
 }
 
 export default function LimitTags({ formData, setFormData, disabled }) {
-  const handleGenreInput = (e, newValue) => {
-    const title = [...newValue]
-    setFormData({ ...formData, genre: newValue })
-
-    // setFormData({ ...formData, genre: [e.target.value] })
-    console.log(formData)
+  const handleGenreInput = (e, newGenreList) => {
+    setFormData({ ...formData, genre: newGenreList })
   }
 
   return (
@@ -34,7 +30,7 @@ export default function LimitTags({ formData, setFormData, disabled }) {
       options={musicGenres}
       // getOptionLabel={option}
       onChange={handleGenreInput}
-      renderInput={params => <TextField {...params} label='Genre' placeholder='Genre' />}
+      renderInput={params => <TextField {...params} label='Genre' placeholder='Genre' disabled={disabled} />}
       size='small'
       sx={modalCardContentInputField}
       disabled={disabled ? true : false}
@@ -93,56 +89,3 @@ const musicGenres = [
   'Krautrock',
   'Afrobeat'
 ]
-
-// const musicGenres = [
-//   { title: 'Pop' },
-//   { title: 'Rock' },
-//   { title: 'Jazz' },
-//   { title: 'Blues' },
-//   { title: 'Classical' },
-//   { title: 'Country' },
-//   { title: 'Hip Hop/Rap' },
-//   { title: 'Electronic' },
-//   { title: 'R&B/Soul' },
-//   { title: 'Reggae' },
-//   { title: 'Folk' },
-//   { title: 'Punk' },
-//   { title: 'Metal' },
-//   { title: 'Funk' },
-//   { title: 'Alternative' },
-//   { title: 'Gospel' },
-//   { title: 'Dance' },
-//   { title: 'Indie' },
-//   { title: 'World' },
-//   { title: 'Latin' },
-//   { title: 'Ambient' },
-//   { title: 'Experimental' },
-//   { title: 'Ska' },
-//   { title: 'Techno' },
-//   { title: 'Dubstep' },
-//   { title: 'House' },
-//   { title: 'Trance' },
-//   { title: 'Drum and Bass' },
-//   { title: 'Grunge' },
-//   { title: 'Disco' },
-//   { title: 'Psychedelic' },
-//   { title: 'New Wave' },
-//   { title: 'Salsa' },
-//   { title: 'Flamenco' },
-//   { title: 'Bluegrass' },
-//   { title: 'Bollywood' },
-//   { title: 'Celtic' },
-//   { title: 'K-Pop' },
-//   { title: 'J-Pop' },
-//   { title: 'Opera' },
-//   { title: 'Baroque' },
-//   { title: 'Chamber' },
-//   { title: 'Choral' },
-//   { title: 'Gregorian Chant' },
-//   { title: 'Acoustic' },
-//   { title: 'Instrumental' },
-//   { title: 'Synth-pop' },
-//   { title: 'Shoegaze' },
-//   { title: 'Krautrock' },
-//   { title: 'Afrobeat' }
-// ]
