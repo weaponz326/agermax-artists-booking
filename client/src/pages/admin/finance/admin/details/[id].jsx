@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styles from './FinancialDetails.module.css';
+import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem';
+import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton';
+import { Calendar, Note } from 'iconsax-react';
 
 const FinancialDetailsPage = () => {
   const router = useRouter();
   const { id, type } = router.query;
-  const [details, setDetails] = useState(null);
+  const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -15,7 +18,7 @@ const FinancialDetailsPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${baseUrl}/${type}/${id}`);
+        const response = await axios.get(`${baseUrl}/${type}/${id}`); // Ensure endpoint matches your API route
         setDetails(response.data);
       } catch (err) {
         console.error('Error fetching details:', err);
@@ -31,39 +34,96 @@ const FinancialDetailsPage = () => {
   if (loading) return <div className={styles.loading}>Loading...</div>;
   if (error) return <div className={styles.error}>Error: {error}</div>;
 
-  // Dynamic field rendering based on type
-  const renderDetailsBasedOnType = () => {
+  // This function dynamically renders additional fields based on the data type (invoice or payment)
+  const renderAdditionalDetails = () => {
     if (type === 'invoice') {
       return (
         <>
-          <div className={styles.detailItem}>Invoice Date: {new Date(details.invoiceDate).toLocaleDateString()}</div>
-          <div className={styles.detailItem}>Payment Due Date: {new Date(details.paymentDueDate).toLocaleDateString()}</div>
+          <tr>
+            <td>Email:</td>
+            <td>{details.email}</td>
+          </tr>
+          <tr>
+            <td>Tax:</td>
+            <td>${details.tax}</td>
+          </tr>
         </>
       );
     } else if (type === 'payment') {
+      // Example: Add more payment-specific fields here
       return (
         <>
-          <div className={styles.detailItem}>Payment Date: {new Date(details.createdAt).toLocaleDateString()}</div>
-          <div className={styles.detailItem}>Stripe ID: {details.stripeId}</div>
+          <tr>
+            <td>Organizer Contact:</td>
+            <td>{details.organizerContactPhone}</td>
+          </tr>
         </>
       );
     }
   };
 
   return (
-    <div className={styles.financialDetailsContainer}>
-      <h1>{type.charAt(0).toUpperCase() + type.slice(1)} Details</h1>
-      <div className={styles.details}>
-        <div className={styles.detailItem}>ID: {details._id}</div>
-        <div className={styles.detailItem}>Amount: ${type === 'payment' ? (details.amount / 100).toFixed(2) : details.amount}</div>
-        <div className={styles.detailItem}>Status: {details.status}</div>
-        {renderDetailsBasedOnType()}
-        <div className={styles.detailItem}>Organizer ID: {details.organizerId || details.organizer}</div>
-        <div className={styles.detailItem}>Organizer Name: {details.organizerFirstName} {details.organizerLastName}</div>
-        <div className={styles.detailItem}>Organizer Email: {details.organizerEmail}</div>
-        <div className={styles.detailItem}>Organizer Phone: {details.organizerContactPhone}</div>
-        {/* Additional fields can be rendered based on your requirement */}
+    <div className={styles.financialDetailsPage}>
+      <div className={styles.financialDetailsPageInfo}>
+        <div className={styles.organizerDetails}>
+          <h3 className={styles.sectionUnderlined}>Event Organizer</h3>
+          <p>{details.organizerFirstName} {details.organizerLastName}</p>
+          <p>{type.charAt(0).toUpperCase() + type.slice(1)} ID: {details._id}</p>
+        </div>
+        <div className={styles.paymentItemsDetails}>
+          <div className={styles.priceTotal}>
+            <table className={styles.priceTotalTable}>
+              <thead>
+                <tr>
+                  <th className={styles.sectionUnderlined}>Description</th>
+                  <th className={styles.sectionUnderlined}>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Status:</td>
+                  <td>{details.status}</td>
+                </tr>
+                <tr>
+                  <td>Amount:</td>
+                  <td>${type === 'payment' ? (details.amount / 100).toFixed(2) : details.amount}</td>
+                </tr>
+                {renderAdditionalDetails()}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <CustomMenuItem
+          menuContainer={styles.customMenuItemContainer}
+          labelClassName={styles.customMenuItemLabel}
+          label="Payment Details"
+          subMenuItems={[<PaymentSubItems />]}
+        />
+        <CustomMenuItem
+          menuContainer={styles.customMenuItemContainer}
+          labelClassName={styles.customMenuItemLabel}
+          label="Advance Options"
+          subMenuItems={[<AdvancedOptionsSubItems />]}
+        />
       </div>
+    </div>
+  );
+};
+
+const PaymentSubItems = () => {
+  // Implement the sub-items for the Payment Details section
+  return (
+    <div>
+      {/* Content goes here */}
+    </div>
+  );
+};
+
+const AdvancedOptionsSubItems = () => {
+  // Implement the sub-items for the Advanced Options section
+  return (
+    <div>
+      {/* Content goes here */}
     </div>
   );
 };
