@@ -19,7 +19,7 @@ exports.getAllPayments = async (req, res) => {
       const { organizer, ...paymentDetails } = payment.toObject();
       return {
         ...paymentDetails,
-        organizerId: organizer._id,
+        organizer: organizer._id,
         organizerFirstName: organizer.firstName,
         organizerLastName: organizer.lastName,
         organizerEmail: organizer.email,
@@ -27,14 +27,13 @@ exports.getAllPayments = async (req, res) => {
       };
     });
 
-    res.json({ success: true, payments: paymentsWithOrganizerDetails });
+    res.json(paymentsWithOrganizerDetails); // Directly return the array of payments
   } catch (error) {
     console.error("Error fetching payments:", error);
-    return res
-      .status(500)
-      .json({ message: "An error occurred while fetching payment records." });
+    return res.status(500).json({ message: "An error occurred while fetching payment records." });
   }
 };
+
 
 exports.getPaymentById = async (req, res) => {
   try {
@@ -52,14 +51,14 @@ exports.getPaymentById = async (req, res) => {
     const { organizer, ...paymentDetails } = payment.toObject();
     const paymentWithOrganizerDetails = {
       ...paymentDetails, 
-      organizerId: organizer._id,
+      organizer: organizer._id,
       organizerFirstName: organizer.firstName,
       organizerLastName: organizer.lastName,
       organizerEmail: organizer.email,
       organizerContactPhone: organizer.contactPhone,
     };
 
-    res.json({ success: true, payment: paymentWithOrganizerDetails });
+    res.json(paymentWithOrganizerDetails); // Directly return the single payment object
   } catch (error) {
     console.error("Error fetching payment by ID:", error);
 
@@ -72,6 +71,7 @@ exports.getPaymentById = async (req, res) => {
     });
   }
 };
+
 
 
 

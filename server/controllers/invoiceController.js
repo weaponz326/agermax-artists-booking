@@ -33,7 +33,7 @@ exports.getAllInvoice = async (req, res) => {
         organizerLastName: lastName,
         organizerEmail: email,
         organizerContactPhone: contactPhone,
-        bookingId: invoice.booking._id,
+        booking: invoice.booking._id,
         bookingId2: invoice.booking.bookingID,
       };
     });
@@ -80,7 +80,7 @@ exports.getInvoiceById = async (req, res) => {
       organizerLastName: lastName,
       organizerEmail: email,
       organizerContactPhone: contactPhone,
-      bookingId: invoice.booking._id,
+      booking: invoice.booking._id,
       bookingId2: invoice.booking.bookingID,
     };
 

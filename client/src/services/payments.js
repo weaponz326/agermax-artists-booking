@@ -5,8 +5,8 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL
 export async function getAllPayments() {
   try {
     const { data } = await axios.get(`${baseUrl}/payments`)
-    if (data.success && Array.isArray(data.payments)) {
-      const sortedPaymentByDate = data.payments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    if (Array.isArray(data)) {
+      const sortedPaymentByDate = data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
       return sortedPaymentByDate
     }
     return []
@@ -15,6 +15,8 @@ export async function getAllPayments() {
     throw error
   }
 }
+
+
 
 export async function getPaymentById(id) {
   try {

@@ -43,11 +43,9 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
   /****************Fetch Details for table display***************/
   useEffect(() => {
     if (invoiceData) {
-      console.log("Invoice Data:", invoiceData); // Debugging line
       setInvoiceDataSource(invoiceData);
     }
     if (paymentsData) {
-      console.log("Payments Data:", paymentsData); // Debugging line
       setPaymentsDataSource(paymentsData);
     }
   }, [invoiceData, paymentsData]);
@@ -92,12 +90,11 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (text, booker) => (
-        <Space size='middle'>
-          <ViewDetailsAction booker={booker} />
-        </Space>
-      )
+      render: (_, record) => (
+        <ViewDetailsAction id={record._id} type="invoice" />
+      ),
     }
+
   ]
 
   const paymentsColumns = [
@@ -120,7 +117,7 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       dataIndex: 'amount',
       key: '3',
       sorter: (a, b) => a.amount - b.amount,
-      render: amount => `${(amount / 100).toFixed(2)}`, // Assuming amount is in cents
+      render: amount => `${(amount / 100).toFixed(2)}`,
     },
     {
       title: 'Date',
@@ -147,16 +144,14 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
         </Space>
       )
     },
-
     {
       title: 'Action',
-      key: '7',
-      render: (text, booker) => (
-        <Space size='middle'>
-          <ViewDetailsAction booker={booker} />
-        </Space>
-      )
+      key: 'viewDetails',
+      render: (_, record) => (
+        <ViewDetailsAction id={record._id} type="payments" />
+      ),
     }
+
   ]
 
   if (activeView === 'Invoices') {
@@ -176,25 +171,22 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
   }
 }
 
-export const ViewDetailsAction = ({ booker }) => {
-  console.log(booker)
-  const router = useRouter()
+// AdminFinance component part
+
+export const ViewDetailsAction = ({ id, type }) => {
+  const router = useRouter();
+
+  const handleViewDetails = () => {
+    router.push(`/admin/finance/admin/details/${id}?type=${type}`);
+  };
+
   return (
-    <InvoiceProvider>
-      <div
-        onClick={() =>
-          router.push({
-            pathname: `/admin/finance/admin/details/${booker._id}`,
-            query: { booker }
-          })
-        }
-        className={styles.viewDetailsActionWrapper}
-      >
-        View Details
-      </div>
-    </InvoiceProvider>
-  )
-}
+    <div onClick={handleViewDetails} className={styles.viewDetailsActionWrapper}>
+      View Details
+    </div>
+  );
+};
+
 
 export const ViewInvoiceAction = ({ booker }) => {
   /****************Fetch Modal***************/
