@@ -42,9 +42,15 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
 
   /****************Fetch Details for table display***************/
   useEffect(() => {
-    if (invoiceData) setInvoiceDataSource(invoiceData)
-    if (paymentsData) setPaymentsDataSource(paymentsData)
-  }, [invoiceData, paymentsData])
+    if (invoiceData) {
+      console.log("Invoice Data:", invoiceData); // Debugging line
+      setInvoiceDataSource(invoiceData);
+    }
+    if (paymentsData) {
+      console.log("Payments Data:", paymentsData); // Debugging line
+      setPaymentsDataSource(paymentsData);
+    }
+  }, [invoiceData, paymentsData]);
 
   const invoicesColumns = [
     {
@@ -69,9 +75,10 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
     },
     {
       title: 'Date',
-      dataIndex: 'date',
+      dataIndex: 'invoiceDate',
       key: 'date',
-      sorter: (a, b) => a.date.localeCompare(b.date)
+      sorter: (a, b) => new Date(a.invoiceDate) - new Date(b.invoiceDate),
+      render: text => dayjs(text).format('YYYY-MM-DD'),
     },
     {
       title: 'Invoice',
@@ -96,10 +103,10 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
   const paymentsColumns = [
     {
       title: 'Organizer',
-      dataIndex: 'name',
+      dataIndex: 'organizerFirstName',
       key: '1',
       sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
-      render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
+      render: (text, record) => `${record.organizerFirstName} ${record.organizerLastName}`,
     },
 
     {
@@ -112,13 +119,15 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       title: 'Amount',
       dataIndex: 'amount',
       key: '3',
-      sorter: (a, b) => a.amount.localeCompare(b.amount)
+      sorter: (a, b) => a.amount - b.amount,
+      render: amount => `${(amount / 100).toFixed(2)}`, // Assuming amount is in cents
     },
     {
       title: 'Date',
-      dataIndex: 'date',
+      dataIndex: 'createdAt',
       key: '4',
-      sorter: (a, b) => a.date.localeCompare(b.date)
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      render: text => dayjs(text).format('YYYY-MM-DD'),
     },
     {
       title: 'Invoice',

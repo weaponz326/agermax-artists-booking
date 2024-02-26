@@ -1,70 +1,44 @@
-import React, { createContext, useState, useContext, useEffect } from 'react'
-import { getAllPayments } from 'src/services/payments'
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { getAllPayments } from 'src/services/payments';
 
-const PaymentsContext = createContext()
-
-const initialData = [
-  {
-    _id: 'P001',
-    firstName: 'Kofi',
-    lastName: 'Fosu',
-    contactPhone: '+233 544803023',
-    email: 'kfosu@gmail.com',
-    amount: '1500',
-    status: 'Paid'
-  },
-  {
-    _id: 'P002',
-    firstName: 'Kojo ',
-    lastName: 'Appiah',
-    email: 'kApiah@gmail.com',
-    contactPhone: '+233 48235694',
-    amount: '700',
-    status: 'Pending'
-  }
-  // add more payment objects here
-]
+const PaymentsContext = createContext();
 
 const PaymentsProvider = ({ children }) => {
-  const [paymentsData, setPaymentsData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [paymentsData, setPaymentsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  /****************Fetch Payments Data***************/
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const payments = await getAllPayments()
-        setPaymentsData(payments)
+        const payments = await getAllPayments();
+        setPaymentsData(payments);
       } catch (error) {
-        setError(error)
+        setError(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  const updatePaymentsData = newData => {
-    setPaymentsData(newData)
-  }
-
+  // Expose only the data, error, loading state, and function to set payments data
   return (
-    <PaymentsContext.Provider value={{ paymentsData, updatePaymentsData, setPaymentsData }}>
+    <PaymentsContext.Provider value={{ paymentsData, loading, error, setPaymentsData }}>
       {children}
     </PaymentsContext.Provider>
-  )
-}
+  );
+};
 
-export default PaymentsProvider
+export default PaymentsProvider;
 
 const usePaymentsContext = () => {
-  const context = useContext(PaymentsContext)
+  const context = useContext(PaymentsContext);
   if (!context) {
-    throw new Error('usePaymentsContext must be used within PaymentsProvider')
+    throw new Error('usePaymentsContext must be used within PaymentsProvider');
   }
-  return context
-}
+  return context;
+};
 
-export { PaymentsProvider, usePaymentsContext }
+export { PaymentsProvider, usePaymentsContext };

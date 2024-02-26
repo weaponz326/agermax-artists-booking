@@ -1,13 +1,18 @@
 import axios from 'axios'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
-export async function getAllPayment() {
+
+export async function getAllPayments() {
   try {
     const { data } = await axios.get(`${baseUrl}/payments`)
-    const sortedPaymentByDate = data.sort((a, b) => new Date(a.dateTimeRequested) - new Date(b.dateTimeRequested))
-    return sortedPaymentByDate
+    if (data.success && Array.isArray(data.payments)) {
+      const sortedPaymentByDate = data.payments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      return sortedPaymentByDate
+    }
+    return []
   } catch (error) {
     console.log('Error: ', error)
+    throw error
   }
 }
 
@@ -26,7 +31,6 @@ export async function createPayment(paymentData) {
     return response.data
   } catch (error) {
     console.log('Error creating payment: ', error)
-    throw error // Re-throwing the error so that it can be handled where the function is called
+    throw error
   }
 }
-

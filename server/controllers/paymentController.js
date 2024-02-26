@@ -6,13 +6,28 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.getAllPayments = async (req, res) => {
   try {
-    const payments = await Payment.find({});
+    const payments = await Payment.find({}).populate({
+      path: "organizer",
+      select: "_id firstName lastName email contactPhone",
+    });
 
     if (payments.length === 0) {
       return res.status(404).json({ message: "No payments found." });
     }
 
-    res.json({ success: true, payments });
+    const paymentsWithOrganizerDetails = payments.map((payment) => {
+      const { organizer, ...paymentDetails } = payment.toObject();
+      return {
+        ...paymentDetails,
+        organizerId: organizer._id,
+        organizerFirstName: organizer.firstName,
+        organizerLastName: organizer.lastName,
+        organizerEmail: organizer.email,
+        organizerContactPhone: organizer.contactPhone,
+      };
+    });
+
+    res.json({ success: true, payments: paymentsWithOrganizerDetails });
   } catch (error) {
     console.error("Error fetching payments:", error);
     return res
@@ -25,13 +40,26 @@ exports.getPaymentById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const payment = await Payment.findById(id);
+    const payment = await Payment.findById(id).populate({
+      path: 'organizer', 
+      select: '_id firstName lastName email contactPhone'
+    });
 
     if (!payment) {
       return res.status(404).json({ message: "Payment not found." });
     }
 
-    res.json({ success: true, payment });
+    const { organizer, ...paymentDetails } = payment.toObject();
+    const paymentWithOrganizerDetails = {
+      ...paymentDetails, 
+      organizerId: organizer._id,
+      organizerFirstName: organizer.firstName,
+      organizerLastName: organizer.lastName,
+      organizerEmail: organizer.email,
+      organizerContactPhone: organizer.contactPhone,
+    };
+
+    res.json({ success: true, payment: paymentWithOrganizerDetails });
   } catch (error) {
     console.error("Error fetching payment by ID:", error);
 
@@ -44,6 +72,8 @@ exports.getPaymentById = async (req, res) => {
     });
   }
 };
+
+
 
 exports.processPayment = async (req, res) => {
   try {
