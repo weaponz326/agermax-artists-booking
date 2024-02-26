@@ -6,16 +6,33 @@ const passport = require("passport");
 const { body } = require("express-validator");
 const { protect, adminProtect } = require("../middleware/authMiddleware");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
 const {
   registerUser,
   loginUser,
   forgotPassword,
   resetPassword,
   changePassword,
-  resetPasswordByAdmin
+  resetPasswordByAdmin,
 } = require("../controllers/authController");
-const rateLimit = require("express-rate-limit");
 
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 login requests per windowMs
+  message:
+    "Too many login attempts from this IP, please try again after 15 minutes",
+});
+
+router.post("/login", loginLimiter, loginUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
+router.post("/change-password", protect, changePassword);
+router.post(
+  "/reset-password-by-admin",
+  protect,
+  adminProtect,
+  resetPasswordByAdmin
+);
 router.post(
   "/register",
   [
@@ -29,22 +46,6 @@ router.post(
   ],
   registerUser
 );
-
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Limit each IP to 10 login requests per windowMs
-  message:
-    "Too many login attempts from this IP, please try again after 15 minutes",
-});
-
-router.post("/login", loginLimiter, loginUser);
-
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
-router.post("/change-password", protect, changePassword);
-router.post('/reset-password-by-admin', protect, adminProtect,resetPasswordByAdmin);
-
-
 
 //facebook Oauth
 router.get(
