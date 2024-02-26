@@ -216,10 +216,91 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// Remember to export the function
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current password is incorrect" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred", error: error.message });
+  }
+};
+
+const resetPasswordByAdmin = async (req, res) => {
+  const { userId, newPassword } = req.body;
+  const adminUserId = req.user._id;
+
+  try {
+    const adminUser = await User.findById(adminUserId);
+    if (!adminUser || adminUser.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Access denied. Admin privileges required." });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password
+    user.password = hashedNewPassword;
+    await user.save();
+
+    // Optionally, send an email to the user notifying them about the password change
+    const subject = "Your Password Has Been Reset";
+    const text = `Your password has been reset by an administrator. If you did not request this, please contact support immediately.`;
+    const html = `<p>${text}</p>`;
+
+    sendEmail({
+      to: user.email,
+      subject: subject,
+      text: text,
+      html: html,
+    }).catch((error) => {
+      console.error("Failed to send password reset notification email:", error);
+    });
+
+    res
+      .status(200)
+      .json({ message: "User's password reset successfully", newPassword });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred", error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   forgotPassword,
   resetPassword,
+  changePassword,
+  resetPasswordByAdmin,
 };

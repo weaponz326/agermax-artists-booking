@@ -30,7 +30,27 @@ const protect = async (req, res, next) => {
   }
 };
 
+const adminProtect = async (req, res, next) => {
+  try {
+    const userId = req.user._id; 
+
+    const user = await User.findById(userId);
+    if (user && user.role === "admin") {
+      next();
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Access denied. Requires admin role." });
+    }
+  } catch (error) {
+    console.error("Admin verification error:", error);
+    res
+      .status(500)
+      .json({ message: "Error verifying admin status", error: error.message });
+  }
+};
 
 module.exports = {
   protect,
+  adminProtect,
 };

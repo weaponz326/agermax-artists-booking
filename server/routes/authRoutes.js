@@ -4,12 +4,15 @@ const generateToken = require("../utils/generateToken");
 const express = require("express");
 const passport = require("passport");
 const { body } = require("express-validator");
+const { protect, adminProtect } = require("../middleware/authMiddleware");
 const router = express.Router();
 const {
   registerUser,
   loginUser,
   forgotPassword,
   resetPassword,
+  changePassword,
+  resetPasswordByAdmin
 } = require("../controllers/authController");
 const rateLimit = require("express-rate-limit");
 
@@ -37,7 +40,9 @@ const loginLimiter = rateLimit({
 router.post("/login", loginLimiter, loginUser);
 
 router.post("/forgot-password", forgotPassword);
-router.post('/reset-password', resetPassword);
+router.post("/reset-password", resetPassword);
+router.post("/change-password", protect, changePassword);
+router.post('/reset-password-by-admin', protect, adminProtect,resetPasswordByAdmin);
 
 
 
