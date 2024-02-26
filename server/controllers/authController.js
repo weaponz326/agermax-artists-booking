@@ -197,12 +197,7 @@ const resetPassword = async (req, res) => {
         .json({ message: "Invalid or expired password reset token" });
     }
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    // Update user's password and clear the reset token fields
-    user.password = hashedPassword;
+    user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
@@ -231,10 +226,7 @@ const changePassword = async (req, res) => {
       return res.status(401).json({ message: "Current password is incorrect" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-
-    user.password = hashedNewPassword;
+    user.password = newPassword;
     await user.save();
 
     res.status(200).json({ message: "Password changed successfully" });
@@ -263,12 +255,7 @@ const resetPasswordByAdmin = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-
-    // Update the user's password
-    user.password = hashedNewPassword;
+    user.password = newPassword;
     await user.save();
 
     // Optionally, send an email to the user notifying them about the password change
@@ -287,7 +274,7 @@ const resetPasswordByAdmin = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "User's password reset successfully", newPassword });
+      .json({ message: "User's password has been reset successfully." });
   } catch (error) {
     console.error(error);
     res
