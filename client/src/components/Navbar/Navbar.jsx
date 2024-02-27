@@ -17,7 +17,7 @@ import TextField from '@mui/material/TextField'
 import { createBooking } from 'src/services/bookings'
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
-import BookingCard from '../BookingCard/BookingCard'
+import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -60,29 +60,34 @@ export default function Navbar() {
 }
 
 const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
+  const [openDropdown, setOpenDropdown] = useState(false)
   const [options, setOptions] = useState([])
-  const [selectedArtist, setSelectedArtist] = useState({})
+  const [selectedArtist, setSelectedArtist] = useState(null)
+  const [activeInputTab, setActiveInputTab] = useState(1)
 
   const { artists } = useArtists()
   const menuBarWrapper = useRef()
   const searchBarContainerRef = useRef()
-  const [activeInputTab, setActiveInputTab] = useState(null)
-  // const [formData, setFormData] = useState({
-  //   status: 'pending',
-  //   organizerID: '',
-  //   eventTitle: 'Not Provided yet.',
-  //   dateTimeRequested: '',
-  //   startTime: '',
-  //   endTime: '',
-  //   getInTime: '',
-  //   numberOfGuests: '',
-  //   ageRange: '',
-  //   locationVenue: '',
-  //   artistID: '',
-  //   availableTechnology: '',
-  //   otherComments: '',
-  //   gallery: []
-  // })
+
+  /************************Form Data ************************** */
+  const [formData, setFormData] = useState({
+    // Initialize form data
+    status: 'pending',
+    organizerID: '',
+    eventTitle: '',
+    dateTimeRequested: '',
+    startTime: '',
+    endTime: '',
+    getInTime: '',
+    numberOfGuests: '',
+    ageRange: '',
+    locationVenue: '',
+    artistID: '',
+    availableTechnology: '',
+    otherComments: '',
+    gallery: [],
+    genre: []
+  })
 
   const datePickerRef = useRef(null)
   const getInTimeRef = useRef(null)
@@ -141,7 +146,14 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   //   }
   // }, [])
   //************** */
+
+  useEffect(() => {
+    console.log(formData)
+  }, [formData])
+
+  /********** Functions *****************/
   const handleChangeArtist = value => {
+    if (!user) return logout()
     setActiveInputTab(10)
     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
     handleSetFormData(0, 'artistID', artist._id)
@@ -151,7 +163,8 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   function handleSetFormData(id, name, value) {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
-    // setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
+    setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
+    console.log(formData)
   }
 
   const handleSubmit = async e => {
@@ -288,14 +301,28 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
                 // onChange={value => onSetFormData(0, 'artistID', value.artistID)}
                 id={0}
                 onBlur={() => setActiveInputTab(null)}
+                onClear={() => setSelectedArtist(null)}
               />
               <div className={styles['search-item-divider']}></div>
               <CustomDropdown
+                open={openDropdown}
+                id={1}
                 activeInputTab={activeInputTab}
                 checkActiveClass={checkActiveClass}
                 label={'Date & Time'}
                 ref={datePickerRef}
-                slot={<BookingCard artist={selectedArtist} allowCancel={false} />}
+                slot={
+                  <NavBarBookingCard
+                    artist={selectedArtist}
+                    allowCancel={false}
+                    formData={formData}
+                    setFormData={setFormData}
+                    handleSetFormData={handleSetFormData}
+                    selectedArtist={selectedArtist}
+                    setSelectedArtist={setSelectedArtist}
+                    onDone={() => setOpenDropdown(false)}
+                  />
+                }
               />
               <div className={styles['search-item-divider']}></div>
 
@@ -303,7 +330,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
                 checkActiveClass={checkActiveClass}
                 activeInputTab={activeInputTab}
                 label='Your Details'
-                ref={datePickerRef}
+                // ref={datePickerRef}
                 slot={<UserDetailsForm />}
                 popUpWidth={'250px'}
               />
@@ -419,35 +446,21 @@ export const Backdrop = ({ handleModalEffect }) => {
   return <div className={styles['backdrop']} onClick={() => handleModalEffect()}></div>
 }
 
-export const CustomDropdown = ({ checkActiveClass, slot, label, popUpWidth, activeInputTab, artist }) => {
+export const CustomDropdown = ({ checkActiveClass, slot, label, popUpWidth, activeInputTab, artist, openDropdown }) => {
   const [open, setOpen] = useState(false)
+
   const datePickerRef = useRef(null)
   useEffect(() => {
     // if (activeInputTab == 1) datePickerRef.current.focus()
   }, [activeInputTab])
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     // Check if the dropdown is open
-  //     if (dropdownVisible) {
-  //       // Close the dropdown
-  //       setDropdownVisible(false)
-  //     }
-  //   }
-
-  //   // Add scroll event listener to the document
-  //   document.addEventListener('scroll', handleScroll)
-
-  //   // Cleanup the event listener on component unmount
-  //   return () => {
-  //     document.removeEventListener('scroll', handleScroll)
-  //   }
-  // }, [dropdownVisible])
+  useEffect(() => {
+    setOpen(openDropdown)
+  }, [openDropdown])
 
   const items = [
     {
       label: <div style={{ width: popUpWidth ? popUpWidth : '450px' }}>{slot}</div>,
-
       key: '0'
     }
   ]
@@ -457,15 +470,15 @@ export const CustomDropdown = ({ checkActiveClass, slot, label, popUpWidth, acti
   }
 
   const handleOpenChange = (nextOpen, info) => {
-    if (info.source === 'trigger' || nextOpen) {
-      setOpen(nextOpen)
-    }
+    console.log(info)
+    if (info.source === 'trigger') return setOpen(false)
+
+    //After Booking validation
+    setOpen(true)
   }
 
   const handleMenuClick = e => {
-    if (e.key != '0') {
-      setOpen(false)
-    }
+    setOpen(true)
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
-import { getAllBookings } from 'src/services/bookings'
+import * as services from 'src/services/bookings'
 
 const BookingContext = createContext()
 
@@ -11,7 +11,7 @@ const BookingsProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bookingsList = await getAllBookings()
+        const bookingsList = await services.getAllBookings()
         setBookings(bookingsList)
       } catch (error) {
         setError(error)
@@ -23,7 +23,21 @@ const BookingsProvider = ({ children }) => {
     fetchData()
   }, [])
 
-  return <BookingContext.Provider value={{ bookings, setBookings, loading, error }}>{children}</BookingContext.Provider>
+  const updateBooking = async booking => {
+    const updatedBooking = await services.updateBooking(booking)
+    setBookings(
+      bookings.map(booking => {
+        if (booking._id === updatedBooking._id) return updatedBooking
+        else return booking
+      })
+    )
+  }
+
+  return (
+    <BookingContext.Provider value={{ bookings, setBookings, loading, error, updateBooking }}>
+      {children}
+    </BookingContext.Provider>
+  )
 }
 
 export default BookingsProvider

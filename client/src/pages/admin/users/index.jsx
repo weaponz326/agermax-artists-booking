@@ -353,7 +353,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
-        {user.profilePhoto ? user.profilePhoto : <AvatarsImage />}
+        {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
         <input

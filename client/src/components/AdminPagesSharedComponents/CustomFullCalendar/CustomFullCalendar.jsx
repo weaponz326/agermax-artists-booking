@@ -36,6 +36,14 @@ const CustomFullCalendar = ({ view, userBookings }) => {
               newKey = 'date'
               break
 
+            case 'startTime':
+              newKey = 'start'
+              break
+
+            case 'endTime':
+              newKey = 'end'
+              break
+
             default:
               // If key name doesn't need to be changed, use the original key name
               newKey = key

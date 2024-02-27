@@ -1,6 +1,7 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 //**Import Components */
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
@@ -30,7 +31,7 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 //Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { createBooking, updateBooking } from 'src/services/bookings'
+import { createBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
@@ -455,13 +456,12 @@ export const EventsListItem = ({ event }) => {
             Details
           </TabButton>
         )}
-        {/* {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>} */}
       </div>
       <SlideInModal
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<BookingsModalContent booking={event} />}
+        modalContent={<BookingsModalContent booking={event} hideModal={hideModal} unhideModal={unhideModal} />}
         SubmitButton={'Submit'}
       />
     </div>
@@ -483,7 +483,7 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
-export const BookingsModalContent = ({ booking }) => {
+export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const router = useRouter()
 
   /****************Generic States***************/
@@ -493,6 +493,7 @@ export const BookingsModalContent = ({ booking }) => {
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
   const [bookingOrganizer, setBookingOrganizer] = useState([])
+  const { updateBooking } = useBookings()
 
   /****************Form Data***************/
   const [formData, setFormData] = useState({
@@ -515,7 +516,7 @@ export const BookingsModalContent = ({ booking }) => {
     genre: booking?.genre || []
   })
 
-  /****************Gallery***************/
+  /****************Gallery********************/
   const [fileList, setFileList] = useState(formData.gallery)
 
   /****************Invoice Data***************/
@@ -571,6 +572,8 @@ export const BookingsModalContent = ({ booking }) => {
       try {
         const newBooking = await createBooking(formData)
         console.log('New booking created: ', newBooking)
+        hideModal()
+
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
         console.error('Error creating booking: ', error)
@@ -580,6 +583,8 @@ export const BookingsModalContent = ({ booking }) => {
       try {
         const newBooking = await updateBooking(formData)
         console.log('Booking Updated Successfully! : ', newBooking)
+        hideModal()
+
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
         console.error('Error updating booking: ', error)
@@ -676,6 +681,7 @@ export const BookingsModalContent = ({ booking }) => {
             onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
             minutesStep={15}
             slots={params => <TextField {...params} required />}
+            minTime={formData.getInTime ? formData.getInTime : undefined}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -684,6 +690,7 @@ export const BookingsModalContent = ({ booking }) => {
             onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
             slots={params => <TextField {...params} required />}
             minutesStep={15}
+            minTime={formData.startTime ? formData.startTime : undefined}
           />
 
           <TextField
@@ -746,12 +753,13 @@ export const BookingsModalContent = ({ booking }) => {
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
             <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-              <TabButton
+              <Link
+                href={{ pathname: '/admin/finance/admin' }}
                 onClick={() => router.push('/admin/finance/admin')}
                 className={styles.modalCardContentSaveButton}
               >
                 Create Invoice 👍
-              </TabButton>
+              </Link>
             </form>
             <form onSubmit={handleRejectBooking}>
               <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
@@ -760,7 +768,7 @@ export const BookingsModalContent = ({ booking }) => {
             </form>
           </div>
         )}
-        {/* ********************************** */}
+        {/* ***********************************/}
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
-import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
+import { LocalizationProvider, TimePicker, DatePicker } from '@mui/x-date-pickers'
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-// import dayjs from 'dayjs'
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
+import dayjs from 'dayjs'
 // import moment from 'moment'
 
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
@@ -16,12 +18,27 @@ import CheckCircle from '@material-ui/icons/CheckCircle'
 import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const customLocale = {
-  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
-}
+function NavBarBookingCard({
+  onDone,
+  open,
+  setOpen,
+  artist,
+  allowCancel,
+  formData,
+  setFormData,
+  handleSetFormData,
+  selectedArtist,
+  setSelectedArtist
+}) {
+  const router = useRouter()
 
-function BookingCard({ open, setOpen, artist, allowCancel }) {
+  /****************Fetch Artist ********************/
+  useEffect(() => {
+    if (artist) setSelectedArtist(artist)
+  }, [artist])
+
   const { user, logout, loading } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
@@ -29,26 +46,6 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
   const [startTime, setStartTime] = useState(null)
   const [endTime, setEndTime] = useState(null)
   const [disableNext, setDisableNext] = useState(true)
-  const [formData, setFormData] = useState({
-    // Initialize form data
-    // Example:
-    status: 'pending',
-    organizerID: '',
-    eventTitle: 'Not Provided',
-    dateTimeRequested: '',
-    startTime: '',
-    endTime: '',
-    getInTime: '',
-    numberOfGuests: '',
-    ageRange: '',
-    locationVenue: '',
-    artistID: '',
-    availableTechnology: '',
-    otherComments: '',
-    gallery: []
-
-    // Add other fields as needed
-  })
 
   const customTheme = createTheme({
     components: {
@@ -185,6 +182,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     } else {
       setDisableNext(false)
     }
+    console.log(user)
   }, [selectedDate, getInTime, startTime, endTime])
 
   const steps = ['Select Date', 'Select Times', 'Summary']
@@ -224,9 +222,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     setEndTime(time)
   }
 
-  if (artist) {
+  if (selectedArtist != null) {
     return (
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={customLocale}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ThemeProvider theme={customTheme}>
           <div
             style={{
@@ -243,11 +241,11 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               {activeStep === 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
                   <div style={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
-                    {artist && artist.firstName} {artist && artist.lastName}
+                    {selectedArtist.fullName}
                   </div>
                   <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
-                    {artist ? (
-                      artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                    {selectedArtist.genre ? (
+                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
                     ) : (
                       <Tag>No genre provided yet.</Tag>
                     )}
@@ -256,7 +254,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     Choose When 👇
                   </Typography>
                   <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
-                    <DateCalendar
+                    <DatePicker
+                      onChange={handleDateChange}
                       sx={{
                         width: '100%',
                         '& .MuiDayCalendar-header': {
@@ -274,8 +273,10 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           fontSize: '16px'
                         }
                       }}
+                      className={styles.modalCardContentInputField}
+                      label='Select Event Date'
+                      value={formData.dateTimeRequested}
                       disablePast
-                      onChange={handleDateChange}
                     />
                   </Grid>
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
@@ -399,11 +400,11 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               {activeStep === 1 && (
                 <Grid height='100%' container flexDirection='column'>
                   <Typography fontSize='24px' fontWeight='500' gutterBottom>
-                    {artist.firstName} {artist.lastName}
+                    {selectedArtist.firstName} {selectedArtist.lastName}
                   </Typography>
                   <Grid container gap={1} marginBottom={4}>
-                    {artist.genre.length ? (
-                      artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                    {selectedArtist.genre.length ? (
+                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
                     ) : (
                       <Tag>No genre provided yet.</Tag>
                     )}
@@ -508,6 +509,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     />
                   </Grid>
                   <Button
+                    onClick={() => router.push(`/admin/bookings/${user.role}`)}
                     sx={{
                       background: '#FC8A5E',
                       width: '70%',
@@ -524,9 +526,6 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                   >
                     View Booking
                   </Button>
-                  <Typography color='#62AFE8' marginTop={2}>
-                    <Link href={'/'}>Back to Home</Link>
-                  </Typography>
                 </Grid>
               )}
             </div>
@@ -535,7 +534,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
       </LocalizationProvider>
     )
   } else {
-    return <div> Please Choose An Artist First </div>
+    return <p>Please Select An Artist/Entertainer First</p>
   }
 }
 
@@ -588,8 +587,8 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
             ':hover': { background: '#f07a4b' }
           }}
         >
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
           {activeStep === 0 ? 'Cancel' : 'Back'}
+          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
         </Button>
       }
     />
@@ -644,4 +643,4 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
 //   )
 // }
 
-export default BookingCard
+export default NavBarBookingCard
