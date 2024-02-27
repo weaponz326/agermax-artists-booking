@@ -23,8 +23,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
-import { Select } from '@mui/base/Select'
-import { Option } from '@mui/base/Option'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -41,6 +39,8 @@ import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
+import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
+import { getUserById } from 'src/services/users'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -98,30 +98,6 @@ const BookingPage = () => {
 }
 
 export default BookingPage
-
-// export const ThreeDView = () => {
-//   return (
-//     <div className={styles.threeDCalendar}>
-//       <CustomFullCalendar view={'timeGridDay'} />
-//     </div>
-//   )
-// }
-
-// export const MonthView = () => {
-//   return (
-//     <div className={styles.threeDCalendar}>
-//       <CustomFullCalendar view={'dayGridMonth'} />
-//     </div>
-//   )
-// }
-
-// export const WeekView = () => {
-//   return (
-//     <div className={styles.threeDCalendar}>
-//       <CustomFullCalendar view={'dayGridWeek'} />
-//     </div>
-//   )
-// }
 
 export const EventsListView = ({
   bookings,
@@ -279,11 +255,7 @@ export const AdminPagesNavBar = ({
   }
 
   function unhideModal() {
-    // if (user) {
     setOpenModal(true)
-    // } else {
-    //   logout()
-    // }
   }
 
   function hideModal() {
@@ -300,9 +272,9 @@ export const AdminPagesNavBar = ({
         <div className={styles.calendarViewTabs}>
           <div className={styles.dateFilter}>
             <TabButton className={styles.selectMonth}>
-              {/* <div className={styles.selectMonthContent}>
-                <DatePicker style={{ border: 'none' }} />
-              </div> */}
+              <div className={styles.selectMonthContent}>
+                <AntDesignDatePicker />
+              </div>
             </TabButton>
             <TabButton className={styles.filterTab}>
               <div className={styles.filterTabContent}>
@@ -520,7 +492,7 @@ export const BookingsModalContent = ({ booking }) => {
   const { artists } = useArtists()
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
-  const [bookingOrganizer, setBookingOrganizer] = useState('')
+  const [bookingOrganizer, setBookingOrganizer] = useState([])
 
   /****************Form Data***************/
   const [formData, setFormData] = useState({
@@ -549,13 +521,23 @@ export const BookingsModalContent = ({ booking }) => {
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
     booking: booking && booking._id,
-    amount: booking?.amount || 0,
-    tax: booking?.tax || 0,
-    email: booking?.email || 'tobeLinked@gmail.com',
-    status: booking?.status || '',
-    invoiceDate: dayjs(booking?.invoiceDate) || '',
-    paymentDueDate: dayjs(booking?.paymentDueDate) || ''
+    amount: 0,
+    tax: 0,
+    email: '',
+    status: 'unpaid',
+    invoiceDate: dayjs(),
+    paymentDueDate: dayjs().add(14, 'day')
   })
+
+  useEffect(() => {
+    if (!booking) return
+    const fetchOrgData = async () => {
+      const booker = await getUserById(booking.organizerID)
+      setBookingOrganizer(booker)
+      setInvoiceData({ ...invoiceData, email: booker.email })
+    }
+    fetchOrgData()
+  }, [booking])
 
   const handleCreateInvoice = async e => {
     e.preventDefault()
@@ -627,7 +609,7 @@ export const BookingsModalContent = ({ booking }) => {
     setFormData({ ...formData, status: 'cancelled' })
   }
 
-  /*****************Rendering***************/
+  /*********************Rendering**********************/
   if (modalContentView === 'details') {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>

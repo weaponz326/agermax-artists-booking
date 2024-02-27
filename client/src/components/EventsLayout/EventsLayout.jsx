@@ -8,6 +8,7 @@ import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import { getArtistById } from 'src/services/artists'
 import { getUserById } from 'src/services/users'
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()
@@ -25,9 +26,9 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
   if (loading) {
     return (
       <div className={styles['main-events']}>
-        <span className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
+        <TabButton className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
           See all
-        </span>
+        </TabButton>
         <div className={styles['events-preview']}>
           {Array.from({ length: numOfBookings }).map((img, index) => (
             <Fragment key={index}>
@@ -49,9 +50,9 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
   } else {
     return (
       <div className={styles['main-events']}>
-        <span className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
-          See all
-        </span>
+        <TabButton className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
+          See All Genre
+        </TabButton>
         <div className={styles['events-preview']}>
           {bookingsList.map((booking, index) => (
             <Fragment key={index}>

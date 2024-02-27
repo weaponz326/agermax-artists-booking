@@ -164,11 +164,8 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
       // Concatenate genres of each booking into the accumulator array
       return accumulator.concat(event.genre)
     }, [])
-    // if (selectedGenre) {
-    //   const newGenreList = allGenres.filter(genre => genre === selectedGenre)
-    //   setGenreList(newGenreList)
-    // }
-    setGenreList(allGenres)
+
+    setGenreList([...new Set(allGenres)])
   }, [events, selectedGenre, bookings])
 
   const handleGenreFilter = genre => {
@@ -185,13 +182,6 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
     </div>
   )
 }
-
-const mockGenreList = [
-  { title: 'Rock', icon: '🎸', page: '#' },
-  { title: 'Trubadur', icon: '🎸', page: '#' },
-  { title: 'Pop', icon: '🎹', page: '#' },
-  { title: 'R&B', icon: '🎸', page: '#' }
-]
 
 export const faqData = [
   {

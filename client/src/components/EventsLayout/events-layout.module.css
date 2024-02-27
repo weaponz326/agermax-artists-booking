@@ -6,11 +6,12 @@
 }
 .see-all {
   color: #fc8a5e;
-  font-family: 'Inter', Helvetica;
-  font-size: 1rem;
+  color: #183d4c;
   font-weight: 500;
-  text-align: right;
-  transition: all 0.3s ease-in-out;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0.1rem 0.3rem;
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.281), -1px 1px rgba(0, 0, 0, 0.281);
   cursor: pointer;
   align-self: flex-end;
 }

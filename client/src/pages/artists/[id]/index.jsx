@@ -41,7 +41,7 @@ function ArtistProfile() {
     setOpenDrawer(value)
   }
 
-  if (artist === null) return <FallbackSpinner />
+  // if (artist === null) return <FallbackSpinner />
   return (
     <CustomPagesLayout>
       <main>

@@ -13,12 +13,14 @@ import TextField from '@mui/material/TextField'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { updateInvoice } from 'src/services/invoice'
 import dayjs from 'dayjs'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 
-//Import Providers
+//Import Providers & services
 import PaymentsProvider, { usePaymentsContext } from 'src/providers/PaymentsProvider'
 import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
+import { updateInvoice } from 'src/services/invoice'
 
 const Finance = () => {
   const [activeView, setActiveView] = useState('Invoices')
@@ -43,12 +45,12 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
   /****************Fetch Details for table display***************/
   useEffect(() => {
     if (invoiceData) {
-      setInvoiceDataSource(invoiceData);
+      setInvoiceDataSource(invoiceData)
     }
     if (paymentsData) {
-      setPaymentsDataSource(paymentsData);
+      setPaymentsDataSource(paymentsData)
     }
-  }, [invoiceData, paymentsData]);
+  }, [invoiceData, paymentsData])
 
   const invoicesColumns = [
     {
@@ -75,26 +77,29 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       title: 'Date',
       dataIndex: 'invoiceDate',
       key: 'date',
-      sorter: (a, b) => new Date(a.invoiceDate) - new Date(b.invoiceDate),
-      render: text => dayjs(text).format('YYYY-MM-DD'),
+      sorter: (a, b) => new Date(b.invoiceDate) - new Date(a.invoiceDate),
+      render: text => dayjs(text).format('YYYY-MM-DD')
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a, b) => a.status.localeCompare(b.status)
     },
     {
       title: 'Invoice',
       key: 'invoice',
-      render: (text, booker) => (
+      render: (text, invoice) => (
         <Space size='middle'>
-          <ViewInvoiceAction booker={booker} />
+          <ViewInvoiceAction invoice={invoice} />
         </Space>
       )
     },
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (_, record) => (
-        <ViewDetailsAction id={record._id} type="invoice" />
-      ),
+      render: (_, record) => <ViewDetailsAction id={record._id} type='invoice' />
     }
-
   ]
 
   const paymentsColumns = [
@@ -103,7 +108,7 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       dataIndex: 'organizerFirstName',
       key: '1',
       sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
-      render: (text, record) => `${record.organizerFirstName} ${record.organizerLastName}`,
+      render: (text, record) => `${record.organizerFirstName} ${record.organizerLastName}`
     },
 
     {
@@ -117,41 +122,38 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       dataIndex: 'amount',
       key: '3',
       sorter: (a, b) => a.amount - b.amount,
-      render: amount => `${(amount / 100).toFixed(2)}`,
+      render: amount => `${(amount / 100).toFixed(2)}`
     },
     {
       title: 'Date',
       dataIndex: 'createdAt',
       key: '4',
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-      render: text => dayjs(text).format('YYYY-MM-DD'),
+      render: text => dayjs(text).format('YYYY-MM-DD')
     },
     {
       title: 'Invoice',
       key: '5',
-      render: (text, booker) => (
+      render: (text, invoice) => (
         <Space size='middle'>
-          <ViewInvoiceAction booker={booker} />
+          <ViewInvoiceAction invoice={invoice} />
         </Space>
       )
     },
     {
       title: 'Status',
       key: '6',
-      render: (text, booker) => (
+      render: (text, invoice) => (
         <Space size='middle'>
-          <ViewInvoiceAction booker={booker} />
+          <ViewInvoiceAction invoice={invoice} />
         </Space>
       )
     },
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (_, record) => (
-        <ViewDetailsAction id={record._id} type="payments" />
-      ),
+      render: (_, record) => <ViewDetailsAction id={record._id} type='payments' />
     }
-
   ]
 
   if (activeView === 'Invoices') {
@@ -174,29 +176,24 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
 // AdminFinance component part
 
 export const ViewDetailsAction = ({ id, type }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleViewDetails = () => {
-    router.push(`/admin/finance/admin/details/${id}?type=${type}`);
-  };
+    router.push(`/admin/finance/admin/details/${id}?type=${type}`)
+  }
 
   return (
     <div onClick={handleViewDetails} className={styles.viewDetailsActionWrapper}>
       View Details
     </div>
-  );
-};
+  )
+}
 
-
-export const ViewInvoiceAction = ({ booker }) => {
+export const ViewInvoiceAction = ({ invoice }) => {
   /****************Fetch Modal***************/
   const [openModal, setOpenModal] = useState(false)
   function unhideModal() {
-    // if (user) {
     setOpenModal(true)
-    // } else {
-    //   logout()
-    // }
   }
 
   function hideModal() {
@@ -212,23 +209,37 @@ export const ViewInvoiceAction = ({ booker }) => {
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<InvoiceModalContent booker={booker} />}
+        modalContent={<InvoiceModalContent invoice={invoice} />}
         SubmitButton={'Submit'}
       />
     </InvoiceProvider>
   )
 }
 
-export const InvoiceModalContent = ({ booker }) => {
+export const InvoiceModalContent = ({ invoice }) => {
+  /****************Snack Bar***************/
+  const [open, setOpen] = useState(false)
+  const handleClick = () => {
+    setOpen(true)
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
+
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
-    booking: booker && booker._id,
-    amount: booker?.amount || '',
-    tax: booker?.tax || '',
-    email: booker?.email || '',
-    status: booker?.status || '',
-    invoiceDate: dayjs(booker?.invoiceDate) || '',
-    paymentDueDate: dayjs(booker?.paymentDueDate) || ''
+    _id: invoice && invoice._id,
+    amount: invoice?.amount || '',
+    tax: invoice?.tax || '',
+    email: invoice?.email || '',
+    status: invoice?.status || '',
+    invoiceDate: dayjs(invoice?.invoiceDate) || '',
+    paymentDueDate: dayjs(invoice?.paymentDueDate) || ''
   })
 
   const handleChange = e => {
@@ -240,9 +251,11 @@ export const InvoiceModalContent = ({ booker }) => {
 
   const handleUpdateInvoice = async e => {
     e.preventDefault()
+
     try {
       const newInvoice = await updateInvoice(invoiceData)
       console.log('Invoice updated Successfully! : ', newInvoice)
+      setOpen(true)
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error update invoice: ', error)
@@ -250,6 +263,7 @@ export const InvoiceModalContent = ({ booker }) => {
     }
   }
 
+  /****************Render*******************/
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateInvoice}>
@@ -293,19 +307,6 @@ export const InvoiceModalContent = ({ booker }) => {
           size='small'
           variant='outlined'
         />
-        <TextField
-          placeholder='Booking Status'
-          className={styles.modalCardContentInputField}
-          type='email'
-          name='email'
-          id='email'
-          value={invoiceData.status}
-          onChange={handleChange}
-          required
-          label='Booking Status'
-          size='small'
-          variant='outlined'
-        />
 
         <DatePicker
           className={styles.modalCardContentInputField}
@@ -325,8 +326,32 @@ export const InvoiceModalContent = ({ booker }) => {
           renderInput={params => <TextField {...params} required />}
           disablePast
         />
+        <h3>Select Payment Status: </h3>
+        <select
+          className={styles.modalCardContentInputField}
+          name='status'
+          id='status'
+          value={invoiceData.status}
+          onChange={e => setInvoiceData({ ...invoiceData, status: e.target.value })}
+        >
+          <option value='unpaid' selected>
+            Unpaid
+          </option>
+          <option value='underReview'>Under Review</option>
+          <option value='paid'>Paid</option>
+        </select>
         <TabButton className={styles.modalCardContentSaveButton}>Update</TabButton>
       </form>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClose} severity='success' variant='filled' sx={{ width: '100%' }}>
+          Invoice Updated Successfully!
+        </Alert>
+      </Snackbar>
     </LocalizationProvider>
   )
 }
