@@ -9,18 +9,22 @@ const navigation = () => {
       path: '/admin/home/admin',
       icon: 'tabler:smart-home'
     },
-    {
-      title: 'Bookings',
-      path:
-        user.role === 'admin'
-          ? '/admin/bookings/admin'
-          : user.role === 'organizer'
-          ? '/admin/bookings/organizer'
-          : user.role === 'artist'
-          ? '/admin/bookings/artist'
-          : '/admin/bookings',
-      icon: 'tabler:address-book'
-    },
+    ...(user
+      ? [
+          {
+            title: 'Bookings',
+            path:
+              user.role === 'admin'
+                ? '/admin/bookings/admin'
+                : user.role === 'organizer'
+                ? '/admin/bookings/organizer'
+                : user.role === 'artist'
+                ? '/admin/bookings/artist'
+                : '/admin/bookings',
+            icon: 'tabler:address-book'
+          }
+        ]
+      : []),
     {
       title: 'Inbox',
       path: '/admin/inbox',
