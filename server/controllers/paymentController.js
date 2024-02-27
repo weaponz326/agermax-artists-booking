@@ -6,17 +6,34 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 exports.getAllPayments = async (req, res) => {
   try {
-    const payments = await Payment.find({}).populate({
-      path: "organizer",
-      select: "_id firstName lastName email contactPhone",
-    });
+    const payments = await Payment.find({})
+      .populate({
+        path: "organizer",
+        select: "_id firstName lastName email contactPhone",
+      })
+      .populate({
+        path: "invoice",
+        select: "booking",
+        populate: {
+          path: "booking",
+          select: "artistID",
+          populate: {
+            path: "artistID",
+            select: "_id name",
+          },
+        },
+      });
 
     if (payments.length === 0) {
       return res.status(404).json({ message: "No payments found." });
     }
 
-    const paymentsWithOrganizerDetails = payments.map((payment) => {
-      const { organizer, ...paymentDetails } = payment.toObject();
+    const paymentsWithDetails = payments.map((payment) => {
+      const { organizer, invoice, ...paymentDetails } = payment.toObject();
+      const artistID =
+        invoice && invoice.booking && invoice.booking.artistID
+          ? invoice.booking.artistID._id
+          : null;
       return {
         ...paymentDetails,
         organizer: organizer._id,
@@ -24,41 +41,61 @@ exports.getAllPayments = async (req, res) => {
         organizerLastName: organizer.lastName,
         organizerEmail: organizer.email,
         organizerContactPhone: organizer.contactPhone,
+        artistID,
       };
     });
 
-    res.json(paymentsWithOrganizerDetails); // Directly return the array of payments
+    res.json(paymentsWithDetails);
   } catch (error) {
     console.error("Error fetching payments:", error);
-    return res.status(500).json({ message: "An error occurred while fetching payment records." });
+    return res
+      .status(500)
+      .json({ message: "An error occurred while fetching payment records." });
   }
 };
-
 
 exports.getPaymentById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const payment = await Payment.findById(id).populate({
-      path: 'organizer', 
-      select: '_id firstName lastName email contactPhone'
-    });
+    const payment = await Payment.findById(id)
+      .populate({
+        path: "organizer",
+        select: "_id firstName lastName email contactPhone",
+      })
+      .populate({
+        path: "invoice",
+        select: "booking",
+        populate: {
+          path: "booking",
+          select: "artistID",
+          populate: {
+            path: "artistID",
+            select: "_id name",
+          },
+        },
+      });
 
     if (!payment) {
       return res.status(404).json({ message: "Payment not found." });
     }
 
-    const { organizer, ...paymentDetails } = payment.toObject();
-    const paymentWithOrganizerDetails = {
-      ...paymentDetails, 
+    const { organizer, invoice, ...paymentDetails } = payment.toObject();
+    const artistID =
+      invoice && invoice.booking && invoice.booking.artistID
+        ? invoice.booking.artistID._id
+        : null;
+    const paymentWithDetails = {
+      ...paymentDetails,
       organizer: organizer._id,
       organizerFirstName: organizer.firstName,
       organizerLastName: organizer.lastName,
       organizerEmail: organizer.email,
       organizerContactPhone: organizer.contactPhone,
+      artistID,
     };
 
-    res.json(paymentWithOrganizerDetails); // Directly return the single payment object
+    res.json(paymentWithDetails);
   } catch (error) {
     console.error("Error fetching payment by ID:", error);
 
@@ -71,9 +108,6 @@ exports.getPaymentById = async (req, res) => {
     });
   }
 };
-
-
-
 
 exports.processPayment = async (req, res) => {
   try {
