@@ -23,7 +23,7 @@ import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvide
 import { updateInvoice } from 'src/services/invoice'
 
 const Finance = () => {
-  const [activeView, setActiveView] = useState('Invoices')
+  const [activeView, setActiveView] = useState('invoice')
   return (
     <InvoiceProvider>
       <PaymentsProvider>
@@ -87,18 +87,9 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       sorter: (a, b) => a.status.localeCompare(b.status)
     },
     {
-      title: 'Invoice',
-      key: 'invoice',
-      render: (text, invoice) => (
-        <Space size='middle'>
-          <ViewInvoiceAction invoice={invoice} />
-        </Space>
-      )
-    },
-    {
       title: 'Action',
       key: 'viewDetails',
-      render: (_, record) => <ViewDetailsAction id={record._id} type='invoice' />
+      render: (_, record) => <ViewDetailsAction id={record._id} type={activeView} />
     }
   ]
 
@@ -156,14 +147,14 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
     }
   ]
 
-  if (activeView === 'Invoices') {
+  if (activeView === 'invoice') {
     return (
       <div className={styles.financePage}>
         <h4>Invoices</h4>
         <Table columns={invoicesColumns} dataSource={invoiceDataSource} />
       </div>
     )
-  } else {
+  } else if (activeView === 'payments') {
     return (
       <div className={styles.financePage}>
         <h4>Payments</h4>
@@ -189,172 +180,172 @@ export const ViewDetailsAction = ({ id, type }) => {
   )
 }
 
-export const ViewInvoiceAction = ({ invoice }) => {
-  /****************Fetch Modal***************/
-  const [openModal, setOpenModal] = useState(false)
-  function unhideModal() {
-    setOpenModal(true)
-  }
+// export const ViewInvoiceAction = ({ invoice }) => {
+//   /****************Fetch Modal***************/
+//   const [openModal, setOpenModal] = useState(false)
+//   function unhideModal() {
+//     setOpenModal(true)
+//   }
 
-  function hideModal() {
-    setOpenModal(false)
-  }
+//   function hideModal() {
+//     setOpenModal(false)
+//   }
 
-  return (
-    <InvoiceProvider>
-      <div onClick={unhideModal} className={styles.viewDetailsActionWrapper}>
-        Invoice
-      </div>
-      <SlideInModal
-        openModal={openModal}
-        unhideModal={unhideModal}
-        hideModal={hideModal}
-        modalContent={<InvoiceModalContent invoice={invoice} />}
-        SubmitButton={'Submit'}
-      />
-    </InvoiceProvider>
-  )
-}
+//   return (
+//     <InvoiceProvider>
+//       <div onClick={unhideModal} className={styles.viewDetailsActionWrapper}>
+//         Invoice
+//       </div>
+//       <SlideInModal
+//         openModal={openModal}
+//         unhideModal={unhideModal}
+//         hideModal={hideModal}
+//         modalContent={<InvoiceModalContent invoice={invoice} />}
+//         SubmitButton={'Submit'}
+//       />
+//     </InvoiceProvider>
+//   )
+// }
 
-export const InvoiceModalContent = ({ invoice }) => {
-  /****************Snack Bar***************/
-  const [open, setOpen] = useState(false)
-  const handleClick = () => {
-    setOpen(true)
-  }
+// export const InvoiceModalContent = ({ invoice }) => {
+//   /****************Snack Bar***************/
+//   const [open, setOpen] = useState(false)
+//   const handleClick = () => {
+//     setOpen(true)
+//   }
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
+//   const handleClose = (event, reason) => {
+//     if (reason === 'clickaway') {
+//       return
+//     }
 
-    setOpen(false)
-  }
+//     setOpen(false)
+//   }
 
-  /****************Invoice Data***************/
-  const [invoiceData, setInvoiceData] = useState({
-    _id: invoice && invoice._id,
-    amount: invoice?.amount || '',
-    tax: invoice?.tax || '',
-    email: invoice?.email || '',
-    status: invoice?.status || '',
-    invoiceDate: dayjs(invoice?.invoiceDate) || '',
-    paymentDueDate: dayjs(invoice?.paymentDueDate) || ''
-  })
+//   /****************Invoice Data***************/
+//   const [invoiceData, setInvoiceData] = useState({
+//     _id: invoice && invoice._id,
+//     amount: invoice?.amount || '',
+//     tax: invoice?.tax || '',
+//     email: invoice?.email || '',
+//     status: invoice?.status || '',
+//     invoiceDate: dayjs(invoice?.invoiceDate) || '',
+//     paymentDueDate: dayjs(invoice?.paymentDueDate) || ''
+//   })
 
-  const handleChange = e => {
-    setInvoiceData({
-      ...invoiceData,
-      [e.target.name]: e.target.value
-    })
-  }
+//   const handleChange = e => {
+//     setInvoiceData({
+//       ...invoiceData,
+//       [e.target.name]: e.target.value
+//     })
+//   }
 
-  const handleUpdateInvoice = async e => {
-    e.preventDefault()
+//   const handleUpdateInvoice = async e => {
+//     e.preventDefault()
 
-    try {
-      const newInvoice = await updateInvoice(invoiceData)
-      console.log('Invoice updated Successfully! : ', newInvoice)
-      setOpen(true)
-      // Optionally, you can redirect or perform any other action after successful booking creation
-    } catch (error) {
-      console.error('Error update invoice: ', error)
-      // Handle error, e.g., display an error message to the user
-    }
-  }
+//     try {
+//       const newInvoice = await updateInvoice(invoiceData)
+//       console.log('Invoice updated Successfully! : ', newInvoice)
+//       setOpen(true)
+//       // Optionally, you can redirect or perform any other action after successful booking creation
+//     } catch (error) {
+//       console.error('Error update invoice: ', error)
+//       // Handle error, e.g., display an error message to the user
+//     }
+//   }
 
-  /****************Render*******************/
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateInvoice}>
-        <h3 style={{ margin: '0' }}>Invoice Details</h3>
-        <TextField
-          placeholder='Amount'
-          className={styles.modalCardContentInputField}
-          type='text'
-          name='amount'
-          id='amount'
-          value={invoiceData.amount}
-          onChange={handleChange}
-          required
-          label='Invoice Amount'
-          size='small'
-          variant='outlined'
-        />
-        <TextField
-          placeholder='Tax ID'
-          className={styles.modalCardContentInputField}
-          type='text'
-          name='tax'
-          id='tax'
-          value={invoiceData.tax}
-          onChange={handleChange}
-          required
-          label='Tax ID'
-          size='small'
-          variant='outlined'
-        />
-        <TextField
-          placeholder='Payee Email'
-          className={styles.modalCardContentInputField}
-          type='email'
-          name='email'
-          id='email'
-          value={invoiceData.email}
-          onChange={handleChange}
-          required
-          label='Payee Email'
-          size='small'
-          variant='outlined'
-        />
+//   /****************Render*******************/
+//   return (
+//     <LocalizationProvider dateAdapter={AdapterDayjs}>
+//       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateInvoice}>
+//         <h3 style={{ margin: '0' }}>Invoice Details</h3>
+//         <TextField
+//           placeholder='Amount'
+//           className={styles.modalCardContentInputField}
+//           type='text'
+//           name='amount'
+//           id='amount'
+//           value={invoiceData.amount}
+//           onChange={handleChange}
+//           required
+//           label='Invoice Amount'
+//           size='small'
+//           variant='outlined'
+//         />
+//         <TextField
+//           placeholder='Tax ID'
+//           className={styles.modalCardContentInputField}
+//           type='text'
+//           name='tax'
+//           id='tax'
+//           value={invoiceData.tax}
+//           onChange={handleChange}
+//           required
+//           label='Tax ID'
+//           size='small'
+//           variant='outlined'
+//         />
+//         <TextField
+//           placeholder='Payee Email'
+//           className={styles.modalCardContentInputField}
+//           type='email'
+//           name='email'
+//           id='email'
+//           value={invoiceData.email}
+//           onChange={handleChange}
+//           required
+//           label='Payee Email'
+//           size='small'
+//           variant='outlined'
+//         />
 
-        <DatePicker
-          className={styles.modalCardContentInputField}
-          label='Invoice Date'
-          value={invoiceData.invoiceDate}
-          // minDate={nextDay} // Set the minimum selectable date to be the next day
-          onChange={date => setInvoiceData({ ...invoiceData, invoiceDate: date })}
-          renderInput={params => <TextField {...params} required />}
-          disablePast
-        />
-        <DatePicker
-          className={styles.modalCardContentInputField}
-          label='Payment Due Date'
-          value={invoiceData.paymentDueDate}
-          // minDate={nextDay} // Set the minimum selectable date to be the next day
-          onChange={date => setInvoiceData({ ...invoiceData, paymentDueDate: date })}
-          renderInput={params => <TextField {...params} required />}
-          disablePast
-        />
-        <h3>Select Payment Status: </h3>
-        <select
-          className={styles.modalCardContentInputField}
-          name='status'
-          id='status'
-          value={invoiceData.status}
-          onChange={e => setInvoiceData({ ...invoiceData, status: e.target.value })}
-        >
-          <option value='unpaid' selected>
-            Unpaid
-          </option>
-          <option value='underReview'>Under Review</option>
-          <option value='paid'>Paid</option>
-        </select>
-        <TabButton className={styles.modalCardContentSaveButton}>Update</TabButton>
-      </form>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity='success' variant='filled' sx={{ width: '100%' }}>
-          Invoice Updated Successfully!
-        </Alert>
-      </Snackbar>
-    </LocalizationProvider>
-  )
-}
+//         <DatePicker
+//           className={styles.modalCardContentInputField}
+//           label='Invoice Date'
+//           value={invoiceData.invoiceDate}
+//           // minDate={nextDay} // Set the minimum selectable date to be the next day
+//           onChange={date => setInvoiceData({ ...invoiceData, invoiceDate: date })}
+//           renderInput={params => <TextField {...params} required />}
+//           disablePast
+//         />
+//         <DatePicker
+//           className={styles.modalCardContentInputField}
+//           label='Payment Due Date'
+//           value={invoiceData.paymentDueDate}
+//           // minDate={nextDay} // Set the minimum selectable date to be the next day
+//           onChange={date => setInvoiceData({ ...invoiceData, paymentDueDate: date })}
+//           renderInput={params => <TextField {...params} required />}
+//           disablePast
+//         />
+//         <h3>Select Payment Status: </h3>
+//         <select
+//           className={styles.modalCardContentInputField}
+//           name='status'
+//           id='status'
+//           value={invoiceData.status}
+//           onChange={e => setInvoiceData({ ...invoiceData, status: e.target.value })}
+//         >
+//           <option value='unpaid' selected>
+//             Unpaid
+//           </option>
+//           <option value='underReview'>Under Review</option>
+//           <option value='paid'>Paid</option>
+//         </select>
+//         <TabButton className={styles.modalCardContentSaveButton}>Update</TabButton>
+//       </form>
+//       <Snackbar
+//         open={open}
+//         autoHideDuration={6000}
+//         onClose={handleClose}
+//         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+//       >
+//         <Alert onClose={handleClose} severity='success' variant='filled' sx={{ width: '100%' }}>
+//           Invoice Updated Successfully!
+//         </Alert>
+//       </Snackbar>
+//     </LocalizationProvider>
+//   )
+// }
 
 Finance.authGuard = false
 Finance.guestGuard = false

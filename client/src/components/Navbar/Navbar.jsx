@@ -357,7 +357,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
                 checkActiveClass={checkActiveClass}
                 activeInputTab={activeInputTab}
                 label='Your Details'
-                slot={<UserDetailsForm user={user} />}
+                slot={<UserDetailsForm user={user} logout={logout} />}
                 popUpWidth={'250px'}
                 id={2}
                 setActiveInputTab={setActiveInputTab}
@@ -413,9 +413,9 @@ export const CustomDropdown = ({
     if (activeInputTab == 1) datePickerRef.current.focus()
   }, [activeInputTab])
 
-  useEffect(() => {
-    setOpen(openDropdown)
-  }, [openDropdown])
+  // useEffect(() => {
+  //   setOpen(openDropdown)
+  // }, [openDropdown])
 
   const items = [
     {
@@ -431,7 +431,7 @@ export const CustomDropdown = ({
   }
 
   const handleOpenChange = (nextOpen, info) => {
-    console.log(info)
+    console.log({ info, nextOpen })
     if (info.source === 'menu') return setOpen(true)
     if (info.source === 'trigger') return setOpen(nextOpen)
 
@@ -452,7 +452,7 @@ export const CustomDropdown = ({
         items,
         onClick: handleMenuClick
       }}
-      trigger={['click']}
+      trigger={['click', 'contextMenu']}
       getPopupContainer={() => datePickerRef.current}
       placement='bottom'
       arrow={{
@@ -471,7 +471,8 @@ export const CustomDropdown = ({
   )
 }
 
-export const UserDetailsForm = ({ user }) => {
+export const UserDetailsForm = ({ user, logout }) => {
+  if (!user) return logout()
   return (
     <div className={styles.userDetailForm}>
       <TextField

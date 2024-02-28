@@ -263,6 +263,7 @@ function NavBarBookingCard({
                       value={dayjs(formData.dateTimeRequested)}
                       disablePast
                       name='dateTimeRequested'
+                      autoFocus
                       // slotProps={{
                       //   field: { clearable: true, onClear: () => setCleared(true) }
                       // }}

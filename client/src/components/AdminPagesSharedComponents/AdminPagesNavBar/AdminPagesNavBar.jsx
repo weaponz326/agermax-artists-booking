@@ -24,7 +24,7 @@ export const ViewStyleTabs = ({ activeView, setActiveView, handleTabSelection })
     <div className={styles.viewStylesTabs}>
       <TabButton
         id={'1'}
-        onClick={() => setActiveView('Invoices')}
+        onClick={() => setActiveView('invoice')}
         className={activeView === 'Invoices' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
       >
         Invoices
@@ -33,7 +33,7 @@ export const ViewStyleTabs = ({ activeView, setActiveView, handleTabSelection })
 
       <TabButton
         id={'2'}
-        onClick={() => setActiveView('Payments')}
+        onClick={() => setActiveView('payments')}
         className={activeView === 'Payments' ? `${styles.listViewTab} ${styles.activeTab}` : styles.listViewTab}
       >
         Payments
