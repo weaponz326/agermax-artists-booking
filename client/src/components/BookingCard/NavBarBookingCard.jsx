@@ -4,6 +4,8 @@ import { LocalizationProvider, TimePicker, DatePicker } from '@mui/x-date-picker
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
+import TextField from '@mui/material/TextField'
+
 import dayjs from 'dayjs'
 // import moment from 'moment'
 
@@ -30,7 +32,9 @@ function NavBarBookingCard({
   setFormData,
   handleSetFormData,
   selectedArtist,
-  setSelectedArtist
+  setSelectedArtist,
+  setActiveInputTab,
+  activeInputTab
 }) {
   const router = useRouter()
 
@@ -39,13 +43,10 @@ function NavBarBookingCard({
     if (artist) setSelectedArtist(artist)
   }, [artist])
 
-  const { user, logout, loading } = useAuth()
+  const { user } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [getInTime, setGetInTime] = useState(null)
-  const [startTime, setStartTime] = useState(null)
-  const [endTime, setEndTime] = useState(null)
   const [disableNext, setDisableNext] = useState(true)
+  const [cleared, setCleared] = useState(false)
 
   const customTheme = createTheme({
     components: {
@@ -53,9 +54,21 @@ function NavBarBookingCard({
         styleOverrides: {
           root: {
             color: '#4B627F',
-            padding: '0',
+            // padding: '0',
             justifyContent: 'space-between',
             fontFamily: 'inherit'
+          }
+        }
+      },
+      MuiPickersDay: {
+        styleOverrides: {
+          today: {
+            color: '#bbdefb',
+            borderRadius: 19,
+            borderWidth: 4,
+            borderColor: '#2196f3',
+            border: '4px solid',
+            backgroundColor: '#0d47a1'
           }
         }
       },
@@ -90,20 +103,13 @@ function NavBarBookingCard({
         }
       },
 
-      // MuiButton: {
-      //   styleOverrides: {
-      //     root: {
-      //       padding: '5px  16px',
-      //       borderRadius: '9px',
-      //       background: '#FC8A5E',
-      //       '&.Mui-selected': {
-      //         backgroundColor: '#f07a4b'
-      //       },
-      //       color: 'white',
-      //       fontFamily: 'inherit'
-      //     }
-      //   }
-      // },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            margin: '0'
+          }
+        }
+      },
       MuiCard: {
         styleOverrides: {
           root: {
@@ -136,7 +142,6 @@ function NavBarBookingCard({
           root: {
             color: '#4B627F',
             fontFamily: 'inherit',
-            padding: '0',
             fontSize: '16px',
             '&:hover': {
               backgroundColor: '#B9FACF', // Example hover style
@@ -156,11 +161,12 @@ function NavBarBookingCard({
     }
   })
 
-  const handleChange = e => {
+  const handleChange = (name, value) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     })
+    console.log(formData)
   }
 
   const handleSubmit = async e => {
@@ -177,49 +183,26 @@ function NavBarBookingCard({
 
   //Handle Disable or Enable effects of buttons
   useEffect(() => {
-    if (!startTime || !endTime || !selectedDate || !getInTime) {
-      setDisableNext(true)
-    } else {
+    if (formData.getInTime && formData.startTime && formData.endTime && formData.dateTimeRequested) {
       setDisableNext(false)
+    } else {
+      setDisableNext(true)
     }
-    console.log(user)
-  }, [selectedDate, getInTime, startTime, endTime])
-
-  const steps = ['Select Date', 'Select Times', 'Summary']
+  }, [formData])
 
   //Handlers for Next and Back Buttons Click and Submission of Date
   const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-    //Handle Condition, Embed Artist ID and submit form
-    if (activeStep === 1) handleSubmit()
+    if (activeStep === 1) {
+      setActiveInputTab(2)
+    } else {
+      setActiveStep(prevActiveStep => prevActiveStep + 1)
+    }
   }
 
   const handleBack = () => {
     if (activeStep !== 0) setActiveStep(prevActiveStep => prevActiveStep - 1)
     if (activeStep === 0) setOpen(false)
     return
-  }
-
-  //Handlers for Form Data Input
-  const handleDateChange = date => {
-    setSelectedDate(date.format('YYYY-MM-DD'))
-    //Embed artistID and userID into the form data
-    date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artist._id, organizerID: user._id })
-  }
-
-  const handleChangeGetInTime = (time, timeString) => {
-    time && setFormData({ ...formData, getInTime: time.toDate() })
-    setGetInTime(time)
-  }
-
-  const handleChangeStartTime = (time, timeString) => {
-    time && setFormData({ ...formData, startTime: time.toDate() })
-    setStartTime(time)
-  }
-
-  const handleChangeEndTime = (time, timeString) => {
-    time && setFormData({ ...formData, endTime: time.toDate() })
-    setEndTime(time)
   }
 
   if (selectedArtist != null) {
@@ -238,11 +221,13 @@ function NavBarBookingCard({
             className='bookingCardWrapper'
           >
             <div style={{ height: '100%' }}>
+              {activeStep != 2 && (
+                <Typography fontSize='24px' fontWeight='500' gutterBottom>
+                  {selectedArtist.firstName} {selectedArtist.lastName}
+                </Typography>
+              )}
               {activeStep === 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  <div style={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
-                    {selectedArtist.fullName}
-                  </div>
                   <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
                     {selectedArtist.genre ? (
                       selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
@@ -255,7 +240,7 @@ function NavBarBookingCard({
                   </Typography>
                   <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
                     <DatePicker
-                      onChange={handleDateChange}
+                      onChange={date => handleChange('dateTimeRequested', dayjs(date))}
                       sx={{
                         width: '100%',
                         '& .MuiDayCalendar-header': {
@@ -275,8 +260,12 @@ function NavBarBookingCard({
                       }}
                       className={styles.modalCardContentInputField}
                       label='Select Event Date'
-                      value={formData.dateTimeRequested}
+                      value={dayjs(formData.dateTimeRequested)}
                       disablePast
+                      name='dateTimeRequested'
+                      // slotProps={{
+                      //   field: { clearable: true, onClear: () => setCleared(true) }
+                      // }}
                     />
                   </Grid>
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
@@ -288,13 +277,10 @@ function NavBarBookingCard({
                         Get In Time{' '}
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
                         name='getInTime'
-                        ampm={false}
+                        value={dayjs(formData.getInTime)}
                         minutesStep={15}
-                        // value={getInTime}
-                        onChange={handleChangeGetInTime}
-                        renderInput={params => <TextField {...params} />}
+                        onChange={time => handleChange('getInTime', dayjs(time))}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -315,6 +301,9 @@ function NavBarBookingCard({
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
                         format='HH:mm'
+                        disabled={!formData.dateTimeRequested}
+                        ampm={false}
+                        skipDisabled
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -322,12 +311,10 @@ function NavBarBookingCard({
                         Start Time
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
-                        ampm={false}
                         minutesStep={15}
-                        // value={startTime}
-                        onChange={handleChangeStartTime}
-                        renderInput={params => <TextField {...params} />}
+                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
+                        onChange={time => handleChange('startTime', dayjs(time))}
+                        value={dayjs(formData.startTime)}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -347,7 +334,11 @@ function NavBarBookingCard({
                           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
+                        name='startTIme'
                         format='HH:mm'
+                        disabled={!formData.getInTime}
+                        ampm={false}
+                        skipDisabled
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -355,12 +346,9 @@ function NavBarBookingCard({
                         End Time
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
-                        ampm={false}
                         minutesStep={15}
-                        // value={endTime}
-                        onChange={handleChangeEndTime}
-                        renderInput={params => <TextField {...params} />}
+                        minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
+                        value={formData.endTime}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -380,7 +368,11 @@ function NavBarBookingCard({
                           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
+                        onChange={time => handleChange('endTime', dayjs(time))}
                         format='HH:mm'
+                        disabled={!formData.startTime}
+                        skipDisabled
+                        ampm={false}
                       />
                     </Grid>
                   </Grid>
@@ -399,9 +391,6 @@ function NavBarBookingCard({
 
               {activeStep === 1 && (
                 <Grid height='100%' container flexDirection='column'>
-                  <Typography fontSize='24px' fontWeight='500' gutterBottom>
-                    {selectedArtist.firstName} {selectedArtist.lastName}
-                  </Typography>
                   <Grid container gap={1} marginBottom={4}>
                     {selectedArtist.genre.length ? (
                       selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
@@ -431,7 +420,7 @@ function NavBarBookingCard({
                         Date
                       </Typography>
                       <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                        {selectedDate ? selectedDate : '---'}
+                        {dayjs(formData.dateTimeRequested).format('YYYY-MM-DD')}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -445,7 +434,7 @@ function NavBarBookingCard({
                           Get In
                         </Typography>
                         <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {getInTime ? getInTime.format('HH:mm') : '---'}
+                          {dayjs(formData.getInTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                       <Grid item textAlign='center'>
@@ -453,7 +442,7 @@ function NavBarBookingCard({
                           Start
                         </Typography>
                         <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {startTime ? startTime.format('HH:mm') : '---'}
+                          {dayjs(formData.startTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                       <Grid item textAlign='center'>
@@ -461,23 +450,68 @@ function NavBarBookingCard({
                           End
                         </Typography>
                         <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {endTime ? endTime.format('HH:mm') : '---'}
+                          {dayjs(formData.endTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid container gap={4} marginTop={3}>
+                  {/* <Grid container gap={4} marginTop={3}>
                     <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>Your Details</Typography>
-                  </Grid>
-                  <Grid container direction='column' marginTop={3} color="'#4B627F'">
-                    <Typography>
-                      Name: {user.firstName} {user.lastName}
-                    </Typography>
-                    <Typography>User Type: {user.role}</Typography>
-                    <Typography>Contact: {user.contactPhone}</Typography>
-                    <Typography>Email: {user.email}</Typography>
-                    <Typography>Address: {user.address}</Typography>
-                  </Grid>
+                  </Grid> */}
+                  {/* <Grid container direction='column' marginTop={3} color='#4B627F' gap={1}>
+                    <TextField
+                      placeholder='First Name'
+                      className={styles.modalCardContentInputField}
+                      type='text'
+                      name='firstName'
+                      id='firstName'
+                      value={user.firstName}
+                      // onChange={handleChange}
+                      required
+                      variant='outlined'
+                      label='First Name'
+                      size='small'
+                    />
+                    <TextField
+                      placeholder='Last Name'
+                      className={styles.modalCardContentInputField}
+                      type='text'
+                      name='lastName'
+                      id='lastName'
+                      value={user.lastName}
+                      // onChange={handleChange}
+                      required
+                      variant='outlined'
+                      label='Last Name'
+                      size='small'
+                    />
+                    <TextField
+                      placeholder='Email'
+                      className={styles.modalCardContentInputField}
+                      type='email'
+                      name='email'
+                      id='email'
+                      value={user.email}
+                      // onChange={handleChange}
+                      required
+                      variant='outlined'
+                      label='Email ID'
+                      size='small'
+                    />
+                    <TextField
+                      placeholder='Phone'
+                      className={styles.modalCardContentInputField}
+                      type='tel'
+                      name='phoneContact'
+                      id='phoneContact'
+                      value={user.contactPhone}
+                      // onChange={handleChange}
+                      required
+                      variant='outlined'
+                      label='Phone'
+                      size='small'
+                    />
+                  </Grid> */}
                   <Grid marginTop='auto'>
                     <NavMobileStepper
                       activeStep={activeStep}
@@ -488,7 +522,7 @@ function NavBarBookingCard({
                   </Grid>
                 </Grid>
               )}
-              {activeStep === 2 && (
+              {/* {activeStep === 2 && (
                 <Grid textAlign='center' color='#183D4C'>
                   <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
                     Thank you!
@@ -527,7 +561,7 @@ function NavBarBookingCard({
                     View Booking
                   </Button>
                 </Grid>
-              )}
+              )} */}
             </div>
           </div>
         </ThemeProvider>
@@ -594,53 +628,5 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
     />
   )
 }
-
-// const BookingTimePicker = ({ getInTime, setGetInTime, startTime, setStartTime, endTime, setEndTime }) => {
-//   const labelField = () => {
-//     if (getInTime) return 'Get In Time'
-//     if (startTime) return 'Start Time'
-//     if (endTime) return 'End Time'
-//   }
-
-//   const onChangeTime = () => {
-//     if (getInTime) {
-//       return time => {
-//         setGetInTime(time)
-//       }
-//     }
-//     if (startTime) {
-//       return time => {
-//         setStartTime(time.format('HH:mm'))
-//       }
-//     }
-//     if (endTime) {
-//       return time => {
-//         setEndTime(time)
-//       }
-//     }
-//   }
-
-//   return (
-//     <Grid item xs={4} padding={1.5}>
-//       <Typography>{labelField()}</Typography>
-//       <TimePicker
-//         ampm={false}
-//         minutesStep={15}
-//         value={getInTime}
-//         onChange={onChangeTime}
-//         renderInput={params => <TextField {...params} />}
-//         sx={{
-//           '& .MuiOutlinedInput-input': {
-//             padding: '0',
-//             textAlign: 'center',
-//             fontSize: 'inherit'
-//           },
-//           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-//           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-//         }}
-//       />
-//     </Grid>
-//   )
-// }
 
 export default NavBarBookingCard
