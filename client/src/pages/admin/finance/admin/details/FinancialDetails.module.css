@@ -211,3 +211,28 @@
 .submitButton:hover {
   transform: scale(1.02);
 }
+
+/* //Rendered Table styles */
+.priceTotalTable {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  border-collapse: collapse;
+}
+
+.tableRow {
+  display: contents;
+  border-bottom: 1px solid #000;
+}
+
+.tableHeader,
+.tableCell {
+  padding: 8px;
+}
+
+.sectionUnderLined {
+  border-bottom: 2px solid #000;
+}
+
+.underlinedCell {
+  text-align: right;
+}

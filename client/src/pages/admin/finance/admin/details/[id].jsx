@@ -20,6 +20,7 @@ const FinancialDetailsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(router.query)
       setLoading(true)
       try {
         const response = await axios.get(`${baseUrl}/${type}/${id}`) // Ensure endpoint matches your API route
@@ -50,7 +51,7 @@ const FinancialDetailsPage = () => {
       }
     }
 
-    if (details !== null) fetchData()
+    if (details !== null && type === 'invoice') fetchData()
   }, [details])
 
   if (loading) return <div className={styles.loading}>Loading...</div>
@@ -58,59 +59,87 @@ const FinancialDetailsPage = () => {
   return (
     <InvoiceProvider>
       <div className={styles.financialDetailsPage}>
-        <div className={styles.financialDetailsPageInfo}>
-          <div className={styles.organizerDetails}>
-            <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
-            <p>
-              {details.organizerFirstName} {details.organizerLastName}
-            </p>
-            <p>Payment ID: {details._id}</p>
-          </div>
-          <div className={styles.paymentItemsDetails}>
-            <div className={styles.priceTotal}>
-              <table className={styles.priceTotalTable}>
-                <thead>
-                  <tr>
-                    <th className={styles.sectionUnderLined}>Item Name</th>
-                    <th className={styles.sectionUnderLined}></th>
-                    <th className={styles.sectionUnderLined}>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{bookingDetails.eventTitle}</td>
-                    <td className={styles.underlinedCell}>Sub-Total</td>
-                    <td className={styles.underlinedCell}>{details.amount}</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className={styles.underlinedCell}>Add Discount</td>
-                    <td className={styles.underlinedCell}></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className={styles.underlinedCell}>Add Tax</td>
-                    <td className={styles.underlinedCell}>{details.tax}</td>
-                  </tr>
-                </tbody>
-              </table>
+        {/* Condition Rendering of Preview and Details */}
+        {type === 'invoice' && (
+          <div className={styles.financialDetailsPageInfo}>
+            <div className={styles.organizerDetails}>
+              <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
+              <p>
+                {details.organizerFirstName} {details.organizerLastName}
+              </p>
+              <p>Payment ID: {details._id}</p>
+            </div>
+            <div className={styles.paymentItemsDetails}>
+              <div className={styles.priceTotal}>
+                <div className={styles.priceTotalTable}>
+                  {/* //Rendered Table */}
+                  <div className={styles.tableRow}>
+                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}>Item Name</div>
+                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}></div>
+                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}>Price</div>
+                  </div>
+                  <div className={styles.tableRow}>
+                    <div>{bookingDetails.eventTitle}</div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Sub-Total</div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>{details.amount}</div>
+                  </div>
+                  <div className={styles.tableRow}>
+                    <div></div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Add Discount</div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}></div>
+                  </div>
+                  <div className={styles.tableRow}>
+                    <div></div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Add Tax</div>
+                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>{details.tax}</div>
+                  </div>
+                </div>
+
+                {/* <table className={styles.priceTotalTable}>
+                  <thead>
+                    <tr>
+                      <th className={styles.sectionUnderLined}>Item Name</th>
+                      <th className={styles.sectionUnderLined}></th>
+                      <th className={styles.sectionUnderLined}>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{bookingDetails.eventTitle}</td>
+                      <td className={styles.underlinedCell}>Sub-Total</td>
+                      <td className={styles.underlinedCell}>{details.amount}</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className={styles.underlinedCell}>Add Discount</td>
+                      <td className={styles.underlinedCell}></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className={styles.underlinedCell}>Add Tax</td>
+                      <td className={styles.underlinedCell}>{details.tax}</td>
+                    </tr>
+                  </tbody>
+                </table> */}
+              </div>
+            </div>
+            <div className={styles.menuOptions}>
+              <CustomMenuItem
+                menuContainer={styles.customMenuItemContainer}
+                labelClassName={styles.customMenuItemLabel}
+                label='Payment Details'
+                subMenuItems={[<PaymentSubItems details={details} />]}
+              />
+              <CustomMenuItem
+                menuContainer={styles.customMenuItemContainer}
+                labelClassName={styles.customMenuItemLabel}
+                label='Advance Options'
+                subMenuItems={[<AdvancedOptionsSubItems details={details} />]}
+              />
             </div>
           </div>
-          <div className={styles.menuOptions}>
-            <CustomMenuItem
-              menuContainer={styles.customMenuItemContainer}
-              labelClassName={styles.customMenuItemLabel}
-              label='Payment Details'
-              subMenuItems={[<PaymentSubItems details={details} />]}
-            />
-            <CustomMenuItem
-              menuContainer={styles.customMenuItemContainer}
-              labelClassName={styles.customMenuItemLabel}
-              label='Advance Options'
-              subMenuItems={[<AdvancedOptionsSubItems details={details} />]}
-            />
-          </div>
-        </div>
+        )}
+
         <div className={styles.financialDetailsPagePreview}>
           <h3>Preview</h3>
           <div className={styles.previewHeader}>
@@ -150,7 +179,8 @@ const FinancialDetailsPage = () => {
                 </p>
               </div>
             </div>
-            <InvoiceTable details={details} />
+            {type === 'invoice' && <InvoiceTable details={details} bookingDetails={bookingDetails} />}
+            {type === 'payments' && <PaymentTable details={details} />}
             {/* <CustomMenuItem
               menuContainer={styles.customMenuItemContainer}
               labelClassName={styles.customMenuItemLabel}
@@ -207,7 +237,7 @@ export const AdvancedOptionsSubItems = ({ details }) => {
   )
 }
 
-export const InvoiceTable = ({ details }) => {
+export const InvoiceTable = ({ details, bookingDetails }) => {
   return (
     <table className={styles.invoiceTable}>
       <thead>
@@ -220,7 +250,41 @@ export const InvoiceTable = ({ details }) => {
       </thead>
       <tbody>
         <tr>
+          <td>{bookingDetails.eventTitle}</td>
+          <td className={styles.underlinedCell}>Subtotal</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>{details.amount}</td>
+        </tr>
+        <tr>
           <td></td>
+          <td className={styles.underlinedCell}>Total</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>{details.amount + details.tax}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td className={styles.underlinedCell}>Amount due</td>
+          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>$0.00</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
+export const PaymentTable = ({ details }) => {
+  return (
+    <table className={styles.invoiceTable}>
+      <thead>
+        <tr>
+          <th style={{ width: '30%' }}>Item</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>To be fetched later!</td>
           <td className={styles.underlinedCell}>Subtotal</td>
           <td className={styles.underlinedCell}></td>
           <td className={styles.underlinedCell}>{details.amount}</td>

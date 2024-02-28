@@ -531,6 +531,10 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   })
 
   useEffect(() => {
+    console.log(invoiceData)
+  }, [invoiceData])
+
+  useEffect(() => {
     if (!booking) return
     const fetchOrgData = async () => {
       const booker = await getUserById(booking.organizerID)
@@ -544,7 +548,9 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     e.preventDefault()
     try {
       const newInvoice = await createInvoice(invoiceData)
+      // setInvoiceData({ ...newInvoice })
       console.log('Invoice created Successfully! : ', newInvoice)
+      router.push({ pathname: `/admin/finance/admin/details/${newInvoice._id}`, query: { type: 'invoice' } })
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error creating invoice: ', error)
@@ -752,14 +758,11 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
         {/* *****Conditional Rendering for different bookings Status*** */}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
-            <form action='/admin/admin/finance' onSubmit={handleCreateInvoice}>
-              <Link
-                href={{ pathname: '/admin/finance/admin' }}
-                onClick={() => router.push('/admin/finance/admin')}
-                className={styles.modalCardContentSaveButton}
-              >
-                Create Invoice 👍
-              </Link>
+            <form
+              // action={`/admin/finance/admin/details/${invoiceData._id}`}
+              onSubmit={handleCreateInvoice}
+            >
+              <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
             </form>
             <form onSubmit={handleRejectBooking}>
               <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>

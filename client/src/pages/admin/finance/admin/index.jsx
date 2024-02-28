@@ -71,7 +71,7 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
-      sorter: (a, b) => a.amount.localeCompare(b.amount)
+      sorter: (a, b) => a.amount - b.amount
     },
     {
       title: 'Date',
@@ -89,7 +89,7 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (_, record) => <ViewDetailsAction id={record._id} type={activeView} />
+      render: (_, invoice) => <ViewDetailsAction id={invoice._id} type={activeView} />
     }
   ]
 
@@ -99,7 +99,7 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       dataIndex: 'organizerFirstName',
       key: '1',
       sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
-      render: (text, record) => `${record.organizerFirstName} ${record.organizerLastName}`
+      render: (text, payment) => `${payment.organizerFirstName} ${payment.organizerLastName}`
     },
 
     {
@@ -122,28 +122,11 @@ export const AdminFinance = ({ activeView, setActiveView }) => {
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
       render: text => dayjs(text).format('YYYY-MM-DD')
     },
-    {
-      title: 'Invoice',
-      key: '5',
-      render: (text, invoice) => (
-        <Space size='middle'>
-          <ViewInvoiceAction invoice={invoice} />
-        </Space>
-      )
-    },
-    {
-      title: 'Status',
-      key: '6',
-      render: (text, invoice) => (
-        <Space size='middle'>
-          <ViewInvoiceAction invoice={invoice} />
-        </Space>
-      )
-    },
+
     {
       title: 'Action',
       key: 'viewDetails',
-      render: (_, record) => <ViewDetailsAction id={record._id} type='payments' />
+      render: (_, payment) => <ViewDetailsAction id={payment._id} type={activeView} />
     }
   ]
 
