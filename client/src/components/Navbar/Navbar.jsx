@@ -425,6 +425,8 @@ export const CustomDropdown = ({
       const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
       const bookingCardWrapper = event.target.closest('.bookingCardWrapper')
       const muiPickersLayout = event.target.closest('.MuiPickersLayout-root')
+      const muiTypography = event.target.closest('.MuiTypography-root')
+      const muiButtonBase = event.target.closest('.MuiButtonBase-root')
 
       // if (navBarRef.current) return
       if (antDropdown) return
@@ -432,6 +434,8 @@ export const CustomDropdown = ({
       if (antDropdownPicker) return
       if (bookingCardWrapper) return
       if (muiPickersLayout) return
+      if (muiTypography) return
+      if (muiButtonBase) return
       if (menuWrapper == null) {
         // setActiveTab(null)
         setActiveInputTab(null)
@@ -474,7 +478,7 @@ export const CustomDropdown = ({
 
   const handleMenuClick = e => {
     console.log(e.key)
-    if (e.key !== '0' && open) setActiveInputTab(null)
+    // if (e.key !== '0' && open) setActiveInputTab(null)
     return
   }
 
