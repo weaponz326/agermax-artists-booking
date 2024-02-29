@@ -26,8 +26,8 @@
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  /* background-color: rgb(24, 61, 76); */
-  background-color: #e2e8ed;
+  /* background-color: #e2e8ed; */
+  background-color: var(--off-light-body-background);
   padding: 1rem 1.5rem;
 }
 
