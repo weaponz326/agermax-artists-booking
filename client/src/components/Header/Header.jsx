@@ -5,10 +5,25 @@ import Link from 'next/link'
 import { getAllArtists } from 'src/services/artists'
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
+import { useEffect, useState } from 'react'
 export default function Header() {
   const { user } = useAuth()
-
+  const [displayedArtists, setDisplayedArtists] = useState(null)
   const { artists } = useArtists()
+
+  useEffect(() => {
+    if (artists.length === 0) {
+      return // No need to proceed if artists array is empty
+    }
+
+    // Shuffle the artists array
+    const shuffledArtists = [...artists].sort(() => Math.random() - 0.5)
+
+    // Select the first 6 items
+    const selectedItems = shuffledArtists.slice(0, 6)
+
+    setDisplayedArtists(selectedItems)
+  }, [artists])
 
   const renderedItem = !user ? (
     <Link href='/register'>
@@ -33,7 +48,7 @@ export default function Header() {
       <HeaderCarouselContainer
         layout={styles['header-carousel-layout']}
         className={styles['header-carousel']}
-        artists={artists}
+        artists={displayedArtists}
       />
     </header>
   )

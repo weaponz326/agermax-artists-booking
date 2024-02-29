@@ -249,7 +249,7 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
           <Calendar />
         </div>
         <div className={styles.dateOfIssueText}>
-          <div>Date of Issue</div>
+          <div className={styles.dateFieldTitle}>Date of Issue</div>
           <input
             type='date'
             className={styles.dateField}
@@ -264,7 +264,7 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
           <Calendar />
         </div>
         <div className={styles.memoText}>
-          <div>Payment Due Date</div>
+          <div className={styles.dateFieldTitle}>Payment Due Date</div>
           <input
             type='date'
             className={styles.dateField}
