@@ -54,6 +54,27 @@ const FinancialDetailsPage = () => {
     if (details !== null && type === 'invoice') fetchData()
   }, [details])
 
+  /****************Invoice Data***************/
+  const [invoiceData, setInvoiceData] = useState({
+    booking: details?.booking,
+    amount: details?.amount || 0,
+    discount: details?.discount || 0,
+    tax: details?.tax || 0,
+    email: details?.email || '',
+    status: details?.status || 'unpaid',
+    invoiceDate: details?.invoiceDate || dayjs(),
+    paymentDueDate: details?.paymentDueDate || dayjs().add(14, 'day')
+  })
+
+  const handleChange = e => {
+    setInvoiceData({
+      ...invoiceData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  /****************Rendering***************/
+
   if (loading) return <div className={styles.loading}>Loading...</div>
   if (error) return <div className={styles.error}>Error: {error}</div>
   return (
@@ -71,31 +92,7 @@ const FinancialDetailsPage = () => {
             </div>
             <div className={styles.paymentItemsDetails}>
               <div className={styles.priceTotal}>
-                <div className={styles.priceTotalTable}>
-                  {/* //Rendered Table */}
-                  <div className={styles.tableRow}>
-                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}>Item Name</div>
-                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}></div>
-                    <div className={`${styles.tableHeader} ${styles.sectionUnderLined}`}>Price</div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div>{bookingDetails.eventTitle}</div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Sub-Total</div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>{details.amount}</div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div></div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Add Discount</div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}></div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div></div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>Add Tax</div>
-                    <div className={`${styles.tableCell} ${styles.underlinedCell}`}>{details.tax}</div>
-                  </div>
-                </div>
-
-                {/* <table className={styles.priceTotalTable}>
+                <table className={styles.priceTotalTable}>
                   <thead>
                     <tr>
                       <th className={styles.sectionUnderLined}>Item Name</th>
@@ -107,20 +104,47 @@ const FinancialDetailsPage = () => {
                     <tr>
                       <td>{bookingDetails.eventTitle}</td>
                       <td className={styles.underlinedCell}>Sub-Total</td>
-                      <td className={styles.underlinedCell}>{details.amount}</td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          type='number'
+                          min={0}
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.amount}
+                          name='amount'
+                          onChange={handleChange}
+                        />
+                      </td>
                     </tr>
                     <tr>
                       <td></td>
                       <td className={styles.underlinedCell}>Add Discount</td>
-                      <td className={styles.underlinedCell}></td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.discount}
+                          name='discount'
+                          onChange={handleChange}
+                          type='number'
+                          min={0}
+                        />
+                      </td>
                     </tr>
                     <tr>
                       <td></td>
                       <td className={styles.underlinedCell}>Add Tax</td>
-                      <td className={styles.underlinedCell}>{details.tax}</td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.tax}
+                          name='tax'
+                          onChange={handleChange}
+                          type='number'
+                          min={0}
+                        />
+                      </td>
                     </tr>
                   </tbody>
-                </table> */}
+                </table>
               </div>
             </div>
             <div className={styles.menuOptions}>
@@ -128,15 +152,18 @@ const FinancialDetailsPage = () => {
                 menuContainer={styles.customMenuItemContainer}
                 labelClassName={styles.customMenuItemLabel}
                 label='Payment Details'
-                subMenuItems={[<PaymentSubItems details={details} />]}
+                subMenuItems={[<PaymentSubItems details={details} invoiceData={invoiceData} />]}
               />
               <CustomMenuItem
                 menuContainer={styles.customMenuItemContainer}
                 labelClassName={styles.customMenuItemLabel}
                 label='Advance Options'
-                subMenuItems={[<AdvancedOptionsSubItems details={details} />]}
+                subMenuItems={[
+                  <AdvancedOptionsSubItems details={details} invoiceData={invoiceData} handleChange={handleChange} />
+                ]}
               />
             </div>
+            <TabButton className={styles.saveChangesBtn}>Save Changes</TabButton>
           </div>
         )}
 
@@ -155,17 +182,17 @@ const FinancialDetailsPage = () => {
             <div className={styles.previewDate}>
               <div className={styles.previewDateOfIssue}>
                 <p>Date of Issue</p>
-                <p>{dayjs(details.invoiceDate).format('YYYY-MM-DD')}</p>
+                <p>{dayjs(invoiceData.invoiceDate).format('YYYY-MM-DD')}</p>
               </div>
               <div className={styles.previewDueDate}>
                 <p> Date Due</p>
-                <p>{dayjs(details.paymentDueDate).format('YYYY-MM-DD')}</p>
+                <p>{dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}</p>
               </div>
             </div>
           </div>
           <div className={styles.previewSummary}>
             <h3>
-              {details.amount} due {dayjs(details.paymentDueDate).format('YYYY-MM-DD')}
+              {invoiceData.amount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
             </h3>
             <div className={styles.bill}>
               <div className={styles.billFrom}>
@@ -179,7 +206,9 @@ const FinancialDetailsPage = () => {
                 </p>
               </div>
             </div>
-            {type === 'invoice' && <InvoiceTable details={details} bookingDetails={bookingDetails} />}
+            {type === 'invoice' && (
+              <InvoiceTable details={details} bookingDetails={bookingDetails} invoiceData={invoiceData} />
+            )}
             {type === 'payments' && <PaymentTable details={details} />}
             {/* <CustomMenuItem
               menuContainer={styles.customMenuItemContainer}
@@ -194,11 +223,11 @@ const FinancialDetailsPage = () => {
   )
 }
 
-export const PaymentSubItems = ({ details }) => {
+export const PaymentSubItems = ({ details, invoiceData }) => {
   return (
     <div>
       <p>Due In</p>
-      <TabButton>In {dayjs(details.paymentDueDate).diff(dayjs(details.invoiceDate), 'day')} days</TabButton>
+      <TabButton>In {dayjs(invoiceData.paymentDueDate).diff(dayjs(invoiceData.invoiceDate), 'day')} days</TabButton>
       <h4>Payment Gateways</h4>
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
@@ -212,7 +241,7 @@ export const PaymentSubItems = ({ details }) => {
   )
 }
 
-export const AdvancedOptionsSubItems = ({ details }) => {
+export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) => {
   return (
     <div className={styles.dateOfIssueAndMemoWrapper}>
       <div className={styles.dateOfIssue}>
@@ -221,23 +250,36 @@ export const AdvancedOptionsSubItems = ({ details }) => {
         </div>
         <div className={styles.dateOfIssueText}>
           <div>Date of Issue</div>
-          <div>{dayjs(details.invoiceDate).format('YYYY-MM-DD')}</div>
+          <input
+            type='date'
+            className={styles.dateField}
+            value={dayjs(invoiceData.invoiceDate).format('YYYY-MM-DD')}
+            name='invoiceDate'
+            onChange={handleChange}
+          />
         </div>
       </div>
       <div className={styles.memo}>
         <div className={styles.memoIcon}>
-          <Note />
+          <Calendar />
         </div>
         <div className={styles.memoText}>
           <div>Payment Due Date</div>
-          <div>{dayjs(details.paymentDueDate).format('YYYY-MM-DD')}</div>
+          <input
+            type='date'
+            className={styles.dateField}
+            value={dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
+            name='paymentDueDate'
+            onChange={handleChange}
+            min={dayjs(invoiceData.invoiceDate).format('YYYY-MM-DD')}
+          />
         </div>
       </div>
     </div>
   )
 }
 
-export const InvoiceTable = ({ details, bookingDetails }) => {
+export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
   return (
     <table className={styles.invoiceTable}>
       <thead>
@@ -253,19 +295,19 @@ export const InvoiceTable = ({ details, bookingDetails }) => {
           <td>{bookingDetails.eventTitle}</td>
           <td className={styles.underlinedCell}>Subtotal</td>
           <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{details.amount}</td>
+          <td className={styles.underlinedCell}>{invoiceData.amount}</td>
         </tr>
         <tr>
           <td></td>
           <td className={styles.underlinedCell}>Total</td>
           <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{details.amount + details.tax}</td>
+          <td className={styles.underlinedCell}>{Number(invoiceData.amount) + Number(invoiceData.tax)}</td>
         </tr>
         <tr>
           <td></td>
           <td className={styles.underlinedCell}>Amount due</td>
           <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>$0.00</td>
+          <td className={styles.underlinedCell}>{Number(invoiceData.amount) + Number(invoiceData.tax)}</td>
         </tr>
       </tbody>
     </table>
@@ -403,7 +445,65 @@ export const EditSubItems = ({ invoiceID }) => {
     </form>
   )
 }
+export const ItemTable = () => {
+  return (
+    <div className={styles.priceTotalTable}>
+      {/* //Rendered Table */}
+      <div className={styles.itemsHeaderWrapper}>
+        <div className={`${styles.itemsHeader}`}>Item Name</div>
+        <div className={`${styles.itemsHeader}`}>Price</div>
+      </div>
+      <div className={styles.itemsWrapper}>
+        <div className={styles.itemName}>{bookingDetails.eventTitle}</div>
+        <input
+          type='number'
+          min={0}
+          className={`${styles.itemName} ${styles.itemPrice}`}
+          value={invoiceData.amount}
+          name='amount'
+          onChange={handleChange}
+        />
+      </div>
+      {/* ///Dynamically render more items here! */}
 
+      <div className={styles.itemsWrapper}>
+        <div className={`${styles.itemName} ${styles.addItemBtn}`}>Add Item ...</div>
+        <div className={`${styles.itemName} ${styles.itemSubTitle}`}>Sub-total</div>
+        <input
+          type='number'
+          min={0}
+          className={`${styles.itemName} ${styles.itemPrice}`}
+          value={invoiceData.amount}
+          name='amount'
+          onChange={handleChange}
+          readOnly
+        />
+      </div>
+      <div className={styles.itemsWrapper}>
+        <div className={`${styles.itemName} ${styles.addItemBtn}`}></div>
+        <div className={`${styles.itemName} ${styles.itemSubTitle}`}>Discount(%)</div>
+        <input
+          className={`${styles.itemName} ${styles.itemPrice}`}
+          value={invoiceData.discount}
+          name='discount'
+          type='number'
+          onChange={handleChange}
+        />
+      </div>
+      <div className={styles.itemsWrapper}>
+        <div className={`${styles.itemName} ${styles.addItemBtn}`}></div>
+        <div className={`${styles.itemName} ${styles.itemSubTitle}`}>Tax(%)</div>
+        <input
+          className={`${styles.itemName} ${styles.itemPrice}`}
+          value={invoiceData.tax}
+          name='tax'
+          onChange={handleChange}
+          type='number'
+        />
+      </div>
+    </div>
+  )
+}
 export default FinancialDetailsPage
 
 FinancialDetailsPage.authGuard = false

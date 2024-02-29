@@ -2,6 +2,7 @@
   display: flex;
   gap: 2rem;
   height: 100%;
+  max-width: 120rem;
   color: var(--main-heading-color);
   background-color: var(--off-light-body-background);
 }
@@ -86,6 +87,49 @@
   flex: 1;
   text-align: right;
 }
+.itemsHeaderWrapper,
+.itemsWrapper {
+  display: flex;
+  align-items: center;
+  /* padding: 0.5rem 0; */
+  border-bottom: 1px solid #000;
+}
+.itemsHeader,
+.itemName {
+  flex: 1;
+  font-weight: 900;
+}
+
+.itemsHeader:nth-of-type(2),
+.itemPrice {
+  text-align: right;
+  /* flex: 0.4; */
+  width: 5rem;
+  outline: none;
+  border: none;
+}
+.itemsHeader:nth-of-type(2) {
+  padding-right: 17px;
+}
+.itemsWrapper {
+  border: none;
+}
+.itemName {
+  font-weight: normal;
+}
+.addItemBtn {
+  color: rgba(128, 128, 128, 0.514);
+  cursor: pointer;
+  flex: 0.5;
+}
+.itemSubTitle {
+  flex: 1;
+  text-align: right;
+}
+
+.itemPrice {
+  flex: 0.6;
+}
 
 .priceTotal {
   display: flex;
@@ -112,16 +156,38 @@
 .underlinedCell {
   border-bottom: 1px solid var(--off-light-body-background);
 }
+
+.dateField {
+  border: none;
+  padding: 0.5rem 0;
+}
+.saveChangesBtn {
+  background-color: var(--main-heading-color);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-top: auto;
+  /* flex: 1; */
+  width: 100%;
+}
+
+.saveChangesBtn:hover {
+  transform: scale(1.01);
+}
+
 .financialDetailsPagePreview h2,
 .financialDetailsPagePreview p,
 .financialDetailsPagePreview h4 {
   margin: 0;
 }
 .invoiceTable {
+  border-spacing: 0;
   width: 100%;
   text-align: left;
   margin-bottom: 1rem;
 }
+
 .financialDetailsPagePreview h3 {
   margin: 0.2rem;
 }
@@ -214,9 +280,7 @@
 
 /* //Rendered Table styles */
 .priceTotalTable {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .tableRow {
@@ -227,6 +291,12 @@
 .tableHeader,
 .tableCell {
   padding: 8px;
+  /* border: none; */
+  outline: none;
+  /* width: 40%; */
+}
+.tableCell input {
+  width: 50%;
 }
 
 .sectionUnderLined {
@@ -235,4 +305,5 @@
 
 .underlinedCell {
   text-align: right;
+  border-bottom: 1px solid #000;
 }
