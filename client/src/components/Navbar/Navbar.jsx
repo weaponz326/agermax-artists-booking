@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import styles from './navbar.module.css'
 import { CSSTransition } from 'react-transition-group'
@@ -271,6 +272,11 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     return option.value.toLowerCase().includes(inputValue.toLowerCase())
   }
 
+  const handleClear = () => {
+    setSelectedArtist(null)
+    setActiveInputTab(0)
+  }
+
   return (
     <CSSTransition
       timeout={40}
@@ -307,7 +313,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
               <AutoComplete
                 autoFocus
                 // onClick={e => setActiveInputTab(0)}
-                onChange={e => setActiveInputTab(1)}
+                // onChange={e => setActiveInputTab(1)}
                 onFocus={e => setActiveInputTab(0)}
                 className={`${styles.searchWrapper} ${checkActiveClass(0)}`}
                 style={{
@@ -326,8 +332,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
                 filterOption={filterOption}
                 onSelect={handleChangeArtist}
                 id={0}
-                onBlur={() => setActiveInputTab(null)}
-                onClear={() => setSelectedArtist(null)}
+                onClear={handleClear}
                 ref={selectArtistRef}
               />
               <div className={styles['search-item-divider']}></div>
@@ -407,14 +412,41 @@ export const CustomDropdown = ({
   id,
   setActiveInputTab
 }) => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
+
+  // Click Event handler
+  useEffect(() => {
+    //Listen to a click event outside the searchBarContainer ref and set activeTab to null
+    const handleClickOutsideSearch = event => {
+      event.stopPropagation()
+      const menuWrapper = event.target.closest('.menu-bar-wrapper')
+      const antDropdown = event.target.closest('.ant-select-dropdown')
+      const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
+      const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
+      const bookingCardWrapper = event.target.closest('.bookingCardWrapper')
+      const muiPickersLayout = event.target.closest('.MuiPickersLayout-root')
+
+      // if (navBarRef.current) return
+      if (antDropdown) return
+      if (antDropdownMenu) return
+      if (antDropdownPicker) return
+      if (bookingCardWrapper) return
+      if (muiPickersLayout) return
+      if (menuWrapper == null) {
+        // setActiveTab(null)
+        setActiveInputTab(null)
+      }
+    }
+    document.addEventListener('click', handleClickOutsideSearch)
+    return () => {
+      document.removeEventListener('click', handleClickOutsideSearch)
+    }
+  }, [])
 
   const datePickerRef = useRef(null)
   useEffect(() => {
-    if (activeInputTab == 1) {
-      datePickerRef.current.focus()
-      setOpen(true)
-    }
+    if (activeInputTab === id) return setOpen(true)
+    else setOpen(false)
   }, [activeInputTab])
 
   // useEffect(() => {
@@ -429,28 +461,49 @@ export const CustomDropdown = ({
   ]
 
   const handleVisibleChange = visible => {
-    setOpen(visible)
+    // setOpen(visible)
+    if (open) return
     setOpen(true)
     setActiveInputTab(id)
   }
 
   const handleOpenChange = (nextOpen, info) => {
-    if (info.source === 'menu') {
-      setOpen(true)
-      return
-    } else if (info.source === 'trigger') {
-      setOpen(false)
-    }
+    if (info.source === 'menu' && open) return
+    // if (info.source !== 'menu' && open) setActiveInputTab(null)
   }
 
   const handleMenuClick = e => {
-    setOpen(true)
+    console.log(e.key)
+    if (e.key !== '0' && open) setActiveInputTab(null)
+    return
   }
 
   return (
+    // <Dropdown
+    //   menu={{
+    //     items
+    //   }}
+    //   dropdownRender={menu => (
+    //     <div>
+    //       {React.cloneElement(menu, {
+    //         style: { boxShadow: 'none' }
+    //       })}
+
+    //       <Space
+    //         style={{
+    //           padding: 8
+    //         }}
+    //       ></Space>
+    //     </div>
+    //   )}
+    // >
+    //   <a onClick={e => e.preventDefault()}>
+    //     <Space>Hover me</Space>
+    //   </a>
+    // </Dropdown>
     <Dropdown
       // disabled={open}
-      open={activeInputTab === id && open === true}
+      open={open}
       onOpenChange={handleOpenChange}
       menu={{
         items,

@@ -16,6 +16,7 @@ import CheckCircle from '@material-ui/icons/CheckCircle'
 import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -314,6 +315,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
                         format='HH:mm'
+                        disabled={!formData.dateTimeRequested}
+                        skipDisabled
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -347,6 +350,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
                         format='HH:mm'
+                        disabled={!formData.getInTime}
+                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
+                        skipDisabled
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -358,6 +364,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         ampm={false}
                         minutesStep={15}
                         // value={endTime}
+                        minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
                         onChange={handleChangeEndTime}
                         renderInput={params => <TextField {...params} />}
                         sx={{
@@ -380,6 +387,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
                         format='HH:mm'
+                        disabled={!formData.startTime}
+                        skipDisabled
                       />
                     </Grid>
                   </Grid>

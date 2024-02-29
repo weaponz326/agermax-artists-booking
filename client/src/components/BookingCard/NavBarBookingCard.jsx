@@ -222,19 +222,28 @@ function NavBarBookingCard({
           >
             <div style={{ height: '100%' }}>
               {activeStep != 2 && (
-                <Typography fontSize='24px' fontWeight='500' gutterBottom>
-                  {selectedArtist.firstName} {selectedArtist.lastName}
-                </Typography>
+                <div>
+                  <Typography fontSize='24px' fontWeight='500' gutterBottom>
+                    {selectedArtist.firstName} {selectedArtist.lastName}
+                  </Typography>
+                  <Grid container gap={1} marginBottom={4}>
+                    {selectedArtist.genre.length ? (
+                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                    ) : (
+                      <Tag>No genre provided yet.</Tag>
+                    )}
+                  </Grid>
+                </div>
               )}
               {activeStep === 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
+                  {/* <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
                     {selectedArtist.genre ? (
                       selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
                     ) : (
                       <Tag>No genre provided yet.</Tag>
                     )}
-                  </div>
+                  </div> */}
                   <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
                     Choose When 👇
                   </Typography>
@@ -303,8 +312,8 @@ function NavBarBookingCard({
                         }}
                         format='HH:mm'
                         disabled={!formData.dateTimeRequested}
-                        ampm={false}
                         skipDisabled
+                        ampm={false}
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -392,13 +401,6 @@ function NavBarBookingCard({
 
               {activeStep === 1 && (
                 <Grid height='100%' container flexDirection='column'>
-                  <Grid container gap={1} marginBottom={4}>
-                    {selectedArtist.genre.length ? (
-                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-                    ) : (
-                      <Tag>No genre provided yet.</Tag>
-                    )}
-                  </Grid>
                   <Grid container justifyContent='space-between' alignItems='center'>
                     <Typography fontSize='19px' fontWeight='450'>
                       Summary
