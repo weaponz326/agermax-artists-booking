@@ -88,6 +88,11 @@ const TabAccount = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
+  // const handleFileChange = e => {
+  //   const file = e.target.files[0]
+  //   setFormData({ ...formData, profilePhoto: file })
+  // }
+
   const steps = ['Basic Info', 'Additional Info']
 
   return (
@@ -108,7 +113,9 @@ const TabAccount = () => {
           {activeStep === 0 && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <ImageUpload />
+                {/* <input type='file' id='profilePhoto' name='profilePhoto' onChange={handleFileChange} accept='image/*' /> */}
+
+                <ImageUpload formData={formData} setFormData={setFormData} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField

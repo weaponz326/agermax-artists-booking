@@ -88,11 +88,24 @@ const TabAccount = () => {
       eventsHosted: additionalFormData.eventsHosted.filter(item => item),
       gallery: additionalFormData.gallery.filter(item => item) // Assuming you handle file uploads separately and have their references here
     }
+    // Create a new FormData object
+    const formDataToSend = new FormData()
 
+    // Append all form data fields to formDataToSend
+    for (const key in combinedData) {
+      formDataToSend.append(key, combinedData[key])
+    }
+    for (const key in combinedData) {
+      formDataToSend.append(key, combinedData[key])
+    }
+    console.log('Form Data to Send:', formDataToSend.append('name', formData.lastName))
+
+    // Append profile photo if it exists
+    formDataToSend.append('profilePhoto', profilePhoto)
     console.log('Combined Form Data:', combinedData)
 
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, combinedData, {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formDataToSend, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setSnackbarMessage('Profile updated successfully.')
@@ -111,7 +124,10 @@ const TabAccount = () => {
     }
     setSnackbarOpen(false)
   }
-
+  // const handleFileChange = e => {
+  //   const file = e.target.files[0]
+  //   setFormData({ ...formData, profilePhoto: file })
+  // }
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -119,10 +135,19 @@ const TabAccount = () => {
           {/* Profile Photo Upload */}
           <Grid item container spacing={2} alignItems='flex-end' sx={{ mb: 4 }}>
             <Grid item xs={4}>
-              <Typography sx={{mb:12}}>Profile Photo</Typography>
+              <Typography sx={{ mb: 12 }}>Profile Photo</Typography>
             </Grid>
             <Grid item xs={6}>
-              <ImageUpload image={profilePhoto} onImageUpload={handleProfilePhotoChange} />
+              {/* <input type='file' id='profilePhoto' name='profilePhoto' onChange={handleFileChange} accept='image/*' /> */}
+
+              <ImageUpload
+                image={profilePhoto}
+                onImageUpload={handleProfilePhotoChange}
+                profilePhoto={profilePhoto}
+                setProfilePhoto={setProfilePhoto}
+                formData={formData}
+                setFormData={setFormData}
+              />
             </Grid>
             <Divider sx={{ width: '100%', m: 4 }} />
           </Grid>
@@ -131,7 +156,7 @@ const TabAccount = () => {
           {Object.entries(formData).map(([field, value]) => (
             <Grid item container spacing={2} key={field} alignItems='flex-end' sx={{ mb: 4 }}>
               <Grid item xs={4}>
-                <Typography sx={{mb:2}}>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
+                <Typography sx={{ mb: 2 }}>{field.charAt(0).toUpperCase() + field.slice(1)}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <CustomTextField

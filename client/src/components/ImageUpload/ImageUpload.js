@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styles from './ImageUpload.module.css'
 
-const ImageUpload = () => {
+const ImageUpload = ({ formData, setFormData, profilePhoto, setProfilePhoto }) => {
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [loading, setLoading] = useState(false)
@@ -50,6 +50,9 @@ const ImageUpload = () => {
   const onFileChange = event => {
     const chosenFile = event.target.files[0]
     setFile(chosenFile)
+    setProfilePhoto(chosenFile)
+    setFormData({ ...formData, profilePhoto: chosenFile })
+    console.log(formData)
   }
   const resetUploader = () => {
     setFile(null)
@@ -92,8 +95,9 @@ const ImageUpload = () => {
           <div className={styles.uploadedFileInfo}>
             <span className={styles.fileName}>{file ? file.name : ''}</span>
             <span className={`${styles.uploadedFileCounter} ${file ? styles.uploadedFileCounterActive : ''}`}>
-            {file ? '100%' : '0%'} {/* Dynamic percentage */}
-          </span>          </div>
+              {file ? '100%' : '0%'} {/* Dynamic percentage */}
+            </span>{' '}
+          </div>
           <strong className={styles.tooltip}>
             <span className={styles.tooltipData}>{imagesTypes.join(', .')}</span>
           </strong>

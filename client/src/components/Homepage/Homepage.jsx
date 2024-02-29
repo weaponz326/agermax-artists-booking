@@ -136,7 +136,7 @@ export const FaqSection = () => {
 export const SubscriptionSection = () => {
   return (
     <section className={styles['subscription']}>
-      <div className={styles.subscriptionWrapper}>
+      {/* <div className={styles.subscriptionWrapper}>
         <div className={styles['subscription-details']}>
           <div className={styles['join-agermax']}>Haven’t joined Agermax yet?</div>
           <div className={styles['get-started']}>Let’s get you started.</div>
@@ -149,7 +149,7 @@ export const SubscriptionSection = () => {
             <p>Subscribe to receive event and promotion notifications.</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }

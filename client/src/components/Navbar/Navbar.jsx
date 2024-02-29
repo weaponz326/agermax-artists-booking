@@ -307,6 +307,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
               <AutoComplete
                 autoFocus
                 // onClick={e => setActiveInputTab(0)}
+                onChange={e => setActiveInputTab(1)}
                 onFocus={e => setActiveInputTab(0)}
                 className={`${styles.searchWrapper} ${checkActiveClass(0)}`}
                 style={{
@@ -406,11 +407,14 @@ export const CustomDropdown = ({
   id,
   setActiveInputTab
 }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   const datePickerRef = useRef(null)
   useEffect(() => {
-    if (activeInputTab == 1) datePickerRef.current.focus()
+    if (activeInputTab == 1) {
+      datePickerRef.current.focus()
+      setOpen(true)
+    }
   }, [activeInputTab])
 
   // useEffect(() => {
@@ -419,7 +423,7 @@ export const CustomDropdown = ({
 
   const items = [
     {
-      label: <div style={{ width: popUpWidth ? popUpWidth : '450px' }}>{slot}</div>,
+      label: <div style={{ width: popUpWidth ? popUpWidth : '550px' }}>{slot}</div>,
       key: '0'
     }
   ]
@@ -431,12 +435,12 @@ export const CustomDropdown = ({
   }
 
   const handleOpenChange = (nextOpen, info) => {
-    console.log({ info, nextOpen })
-    if (info.source === 'menu') return setOpen(true)
-    if (info.source === 'trigger') return setOpen(nextOpen)
-
-    //After Booking validation
-    // setOpen(true)
+    if (info.source === 'menu') {
+      setOpen(true)
+      return
+    } else if (info.source === 'trigger') {
+      setOpen(false)
+    }
   }
 
   const handleMenuClick = e => {
@@ -446,13 +450,13 @@ export const CustomDropdown = ({
   return (
     <Dropdown
       // disabled={open}
-      open={activeInputTab === id}
+      open={activeInputTab === id && open === true}
       onOpenChange={handleOpenChange}
       menu={{
         items,
         onClick: handleMenuClick
       }}
-      trigger={['click', 'contextMenu']}
+      trigger={['click']}
       getPopupContainer={() => datePickerRef.current}
       placement='bottom'
       arrow={{
