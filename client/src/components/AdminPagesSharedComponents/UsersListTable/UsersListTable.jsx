@@ -1,6 +1,16 @@
+import React, { useState, useEffect } from 'react'
+
 import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { deleteUserById } from 'src/services/users'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Button from '@mui/material/Button'
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 
 const UsersListTable = ({
   hideModal,
@@ -12,6 +22,18 @@ const UsersListTable = ({
   setSelectedUser
 }) => {
   const data = usersList
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+  const [userToDelete, setUserToDelete] = useState(null)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success')
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
 
   const columns = [
     {
@@ -66,15 +88,43 @@ const UsersListTable = ({
     unhideModal(true)
   }
 
-  const handleDelete = async userId => {
-    // Implement delete logic here
+  const promptDelete = userId => {
+    setUserToDelete(userId)
+    setOpenDeleteDialog(true)
+  }
+
+  const fetchUsers = async () => {
     try {
-      const response = await deleteUserById(userId)
-      console.log('User deleted successfully:', response)
-      // Handle success, e.g., show success message to the user
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      setUsersList(response.data.users); // Assuming your API responds with an array of users
     } catch (error) {
-      console.error('Failed to delete user:', error.message)
-      // Handle error, e.g., show error message to the user
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const confirmDelete = async () => {
+    if (userToDelete) {
+      try {
+        const response = await deleteUserById(userToDelete)
+        console.log('User deleted successfully:', response)
+        setUsersList(usersList.filter(user => user._id !== userToDelete))
+        setSnackbarMessage('User deleted successfully.')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
+        fetchUsers();
+      } catch (error) {
+        console.error('Failed to delete user:', error.message)
+        setSnackbarMessage('Failed to delete user. Please try again.')
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
+      } finally {
+        setOpenDeleteDialog(false)
+        setUserToDelete(null)
+      }
     }
   }
 
@@ -84,7 +134,7 @@ const UsersListTable = ({
       <Menu.Item key='edit' onClick={() => handleEdit(record._id)}>
         Edit
       </Menu.Item>
-      <Menu.Item key='delete' onClick={() => handleDelete(record._id)}>
+      <Menu.Item key='delete' onClick={() => promptDelete(record._id)}>
         Delete
       </Menu.Item>
     </Menu>
@@ -93,6 +143,30 @@ const UsersListTable = ({
   return (
     <div>
       <Table dataSource={usersList} columns={columns} />
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{'Confirm Deletion'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
+          <Button onClick={confirmDelete} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant='filled' onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   )
 }
