@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 // import { Avatar } from 'antd'
 
 import UsersListTable from 'src/components/AdminPagesSharedComponents/UsersListTable/UsersListTable'
-
+import axios from 'axios'
 import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import styles from './users.module.css'
@@ -28,6 +28,16 @@ const UsersListPage = () => {
   const [activeView, setActiveView] = useState('1')
   const [modalType, setModalType] = useState('Add User')
   const [selectedUser, setSelectedUser] = useState('')
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
 
   /* **********
    * Functions *
@@ -116,16 +126,34 @@ const UsersListPage = () => {
         unhideModal={unhideModal}
         hideModal={hideModal}
         modalContent={
-          modalType === 'Add User' ? <AddUserModalContent /> : <EditUserModalContent selectedUser={selectedUser} />
+          modalType === 'Add User' ? (
+            <AddUserModalContent
+              setUsersList={setUsersList}
+              setSnackbarOpen={setSnackbarOpen}
+              setSnackbarMessage={setSnackbarMessage}
+              setSnackbarSeverity={setSnackbarSeverity}
+              hideModal={hideModal}
+            />
+          ) : (
+            <EditUserModalContent selectedUser={selectedUser} />
+          )
         }
       />
     </div>
   )
 }
 
-export const AddUserModalContent = () => {
+const AddUserModalContent = ({ setUsersList,hideModal }) => {
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
   const auth = useAuth()
 
   // ** Router for redirection after successful registration
@@ -134,7 +162,6 @@ export const AddUserModalContent = () => {
     profilePhoto: '',
     firstName: '',
     lastName: '',
-    password: '123456789',
     role: '',
     email: '',
     contactPhone: '',
@@ -156,18 +183,31 @@ export const AddUserModalContent = () => {
   const handleCreateUser = async e => {
     e.preventDefault()
     setSubmitting(true)
-    setError('')
 
-    auth.register(userData, err => {
-      setSubmitting(false)
-      if (err) {
-        setError(err.response.data.message || 'An error occurred. Please try again.')
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/add-user`, userData)
+      if (response.status === 201) {
+        // Assuming response.data.userData contains the newly added user
+        setUsersList(prevUsers => [...prevUsers, response.data.userData])
+        setSnackbarMessage('User added successfully')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
+        hideModal() // Close the modal on success
       } else {
-        router.push('/admin/users') // Or redirect to a 'success' page
+        console.error('Failed to add user', response.data.message)
+        setSnackbarMessage('Failed to add user')
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
       }
-    })
+    } catch (err) {
+      console.error('An error occurred while adding the user', err.response?.data?.message || err.message)
+      setSnackbarMessage(err.response?.data?.message )
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    } finally {
+      setSubmitting(false)
+    }
   }
-
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
@@ -280,6 +320,16 @@ export const AddUserModalContent = () => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Add New User</TabButton>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </form>
     </>
   )
@@ -459,7 +509,12 @@ export const EditUserModalContent = ({ selectedUser }) => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
-        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
+        >
           <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>

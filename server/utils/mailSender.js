@@ -14,16 +14,16 @@ const mailSender = nodemailer.createTransport({
 const sendEmail = async ({ to, subject, text, html }) => {
   try {
     await mailSender.sendMail({
-      from: '"Agermax" <no-reply@agermax.com>', // Sender address
+      from: `"Agermax" <${process.env.SMTP_USER}>`,
       to,
-      subject, 
-      text, 
-      html, 
+      subject,
+      text,
+      html,
     });
     console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
-    throw error; 
+    throw error;
   }
 };
 

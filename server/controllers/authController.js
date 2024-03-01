@@ -4,6 +4,7 @@ const User = require("../models/User");
 const sendEmail = require("../utils/mailSender");
 const generateResetToken = require("../utils/generateResetToken");
 const bcrypt = require("bcryptjs");
+const crypto = require('crypto');
 
 const registerUser = async (req, res) => {
   const {
@@ -85,6 +86,72 @@ const registerUser = async (req, res) => {
     }
   } catch (error) {
     console.error("Registration error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const addUser = async (req, res) => {
+  const { firstName, lastName, email, role, ...additionalFields } = req.body;
+
+  try {
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Generate a placeholder password, which will be hashed automatically by your model's pre-save hook
+    const placeholderPassword = `Placeholder-${Date.now()}`;
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: placeholderPassword,
+      role,
+      ...additionalFields,
+    });
+
+    if (user) {
+      // Generate reset token without hashing it here, as the hash will be stored in the database
+      const { resetToken, hash, resetTokenExpire } = generateResetToken();
+
+      // Store the hashed version of the token and its expiration in the database
+      user.resetPasswordToken = hash;
+      user.resetPasswordExpire = resetTokenExpire;
+      await user.save();
+
+      // Construct the reset password URL with the unhashed token
+      const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+      const subject = "Complete Your Registration";
+      const text = `Welcome to our platform! Please complete your registration by setting your password. Click the link below to set up your password: ${resetUrl}`;
+      const html = `<p>Welcome to our platform!</p><p>Please complete your registration by setting your password. Click the link below to set up your password:</p><p><a href="${resetUrl}">Set Your Password</a></p>`;
+
+      sendEmail({
+        to: email,
+        subject: subject,
+        text: text,
+        html: html,
+      }).catch((error) => {
+        console.error("Failed to send password reset email:", error);
+      });
+
+      res.status(201).json({
+        message:
+          "User added successfully. A link to set your password has been sent via email.",
+        userData: {
+          _id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+          ...additionalFields,
+        },
+      });
+    } else {
+      res.status(400).json({ message: "Invalid user data" });
+    }
+  } catch (error) {
+    console.error("Error adding user:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -182,19 +249,21 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+
 const resetPassword = async (req, res) => {
   const { resetToken, newPassword } = req.body;
 
+  // Hash the provided resetToken for comparison
+  const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
   try {
     const user = await User.findOne({
-      resetPasswordToken: resetToken,
+      resetPasswordToken: hashedToken, // Use the hashed token for comparison
       resetPasswordExpire: { $gt: Date.now() },
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Invalid or expired password reset token" });
+      return res.status(400).json({ message: "Invalid or expired password reset token" });
     }
 
     user.password = newPassword;
@@ -205,9 +274,7 @@ const resetPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred", error: error.message });
+    res.status(500).json({ message: "An error occurred", error: error.message });
   }
 };
 
@@ -285,6 +352,7 @@ const resetPasswordByAdmin = async (req, res) => {
 
 module.exports = {
   registerUser,
+  addUser,
   loginUser,
   forgotPassword,
   resetPassword,
