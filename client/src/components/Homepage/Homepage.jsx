@@ -58,7 +58,7 @@ export const EventsSection = () => {
   }
 
   return (
-    <section className={styles['events']}>
+    <section className={styles['events']} id='events'>
       <div className={styles.eventsWrapper}>
         <div className={styles['upcoming-events']}>
           <span className={`${styles['events-nav']} ${styles['upcoming']}`}>Upcoming Events 🎉</span>

@@ -90,19 +90,29 @@ const TabAccount = () => {
     }
     // Create a new FormData object
     const formDataToSend = new FormData()
+    //Append the profile photo this formDataToSend
+    if (!!profilePhoto && !!profilePhoto.file) {
+      formDataToSend.append('photo  ', profilePhoto.file)
+    }
+    Object.keys(combinedData).forEach(key => {
+      if (Array.isArray(combinedData[key])) {
+        for (let i = 0; i < combinedData[key].length; i++) {
+          formDataToSend.append(`${key}[${i}]`, combinedData[key][i])
+        }
+      } else {
+        formDataToSend.append(key, combinedData[key])
+      }
+    })
 
     // Append all form data fields to formDataToSend
     for (const key in combinedData) {
       formDataToSend.append(key, combinedData[key])
     }
-    for (const key in combinedData) {
-      formDataToSend.append(key, combinedData[key])
-    }
-    console.log('Form Data to Send:', formDataToSend.append('name', formData.lastName))
 
     // Append profile photo if it exists
     formDataToSend.append('profilePhoto', profilePhoto)
     console.log('Combined Form Data:', combinedData)
+    console.log('Form Data to send:', formDataToSend)
 
     try {
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formDataToSend, {

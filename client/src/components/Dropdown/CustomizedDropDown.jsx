@@ -1,56 +1,180 @@
 import React from 'react'
 import { Button, Dropdown } from 'antd'
-import { HambergerMenu, User } from 'iconsax-react'
+import { HambergerMenu } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { Avatar, Space } from 'antd'
-import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 
 // import { useAuth } from 'src/providers/AuthProvider'
 
 import { useRouter } from 'next/router'
+import {
+  BiCalendarEvent,
+  BiHelpCircle,
+  BiHome,
+  BiLogInCircle,
+  BiLogOut,
+  BiMicrophone,
+  BiSolidDashboard,
+  BiUserPlus
+} from 'react-icons/bi'
 
 const CustomizedDropdown = ({ className, user, logout }) => {
-  const UserAccountLink = () => {
-    if (user.role === 'artist') return <Link href='admin/home/artist'>My Account</Link>
-    if (user.role === 'admin') return <Link href='admin/home/admin'>My Account</Link>
-    if (user.role === 'organizer') return <Link href='admin/home/organizer'>My Account</Link>
+  const UserAccountLink = ({ children }) => {
+    if (user.role === 'artist') return <Link href='admin/home/artist'>{children}</Link>
+    if (user.role === 'admin') return <Link href='admin/home/admin'>{children}</Link>
+    if (user.role === 'organizer') return <Link href='admin/home/organizer'>{children}</Link>
   }
 
   const isLoggedInItems = [
     {
       key: '1',
-      label: <Link href='/artists'>Book Artists</Link>
+      label: (
+        <UserAccountLink>
+          <div className={styles.menuItem}>
+            <BiSolidDashboard size={20} />
+            Dashboard
+          </div>
+        </UserAccountLink>
+      )
+    },
+
+    {
+      type: 'divider'
     },
     {
       key: '2',
-      label: <UserAccountLink />
+      label: (
+        <Link href='/'>
+          <div className={styles.menuItem}>
+            <BiHome size={20} /> Home
+          </div>
+        </Link>
+      )
     },
     {
       key: '3',
-      label: <Link href='#'>View Events</Link>
+      label: (
+        <Link href='/artists'>
+          <div className={styles.menuItem}>
+            <BiMicrophone size={20} /> Artists
+          </div>
+        </Link>
+      )
     },
     {
       key: '4',
-      label: <Link href='#'>Help Center</Link>
+      label: (
+        <Link href='#events'>
+          <div className={styles.menuItem}>
+            <BiCalendarEvent size={20} />
+            Events
+          </div>
+        </Link>
+      )
     },
     {
       key: '5',
-      label: <Link href='/'>Log Out</Link>
+      label: (
+        <Link href='/about'>
+          <div className={styles.menuItem}>
+            <BiHelpCircle size={20} />
+            About
+          </div>
+        </Link>
+      )
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: '6',
+      label: (
+        <div onClick={() => logout()}>
+          <div className={styles.menuItem}>
+            <BiLogOut size={20} />
+            Sign Out
+          </div>
+        </div>
+      )
     }
   ]
 
-  const buttonStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '1.5rem 0.7rem',
-    borderRadius: '1.5rem',
-    justifyContent: 'space-between',
-    color: '#183d4c',
-    border: '0.5px solid #183d4c'
-  }
+  const isLoggedOutItems = [
+    {
+      key: '1',
+      label: (
+        <Link href='/'>
+          <div className={styles.menuItem}>
+            <BiHome size={20} /> Home
+          </div>
+        </Link>
+      )
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: '2',
+      label: (
+        <Link href='/artists'>
+          <div className={styles.menuItem}>
+            <BiMicrophone size={20} /> Artists
+          </div>
+        </Link>
+      )
+    },
+    {
+      key: '3',
+      label: (
+        <Link href='#events'>
+          <div className={styles.menuItem}>
+            <BiCalendarEvent size={20} />
+            Events
+          </div>
+        </Link>
+      )
+    },
+    {
+      key: '4',
+      label: (
+        <Link href='/about'>
+          <div className={styles.menuItem}>
+            <BiHelpCircle size={20} />
+            About
+          </div>
+        </Link>
+      )
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: '5',
+      label: (
+        <Link href='/login'>
+          <div className={styles.menuItem}>
+            <BiLogInCircle size={20} />
+            Sign In
+          </div>
+        </Link>
+      )
+    },
+    {
+      key: '6',
+      label: (
+        <Link href='/register'>
+          <div className={styles.menuItem}>
+            <BiUserPlus size={20} />
+            Sign Up
+          </div>
+        </Link>
+      )
+    }
+  ]
+
   const router = useRouter()
   const onClick = ({ key }) => {
     if (key === '5') logout()
@@ -58,7 +182,10 @@ const CustomizedDropdown = ({ className, user, logout }) => {
 
   if (user) {
     return (
-      <div className={className}>
+      <div className={`${styles.userActionsButtons} ${className}`}>
+        <UserAccountLink>
+          <TabButton className={styles.userMenuSignInButton}>Dashboard</TabButton>
+        </UserAccountLink>
         <Dropdown
           menu={{
             items: isLoggedInItems,
@@ -68,15 +195,17 @@ const CustomizedDropdown = ({ className, user, logout }) => {
           arrow={{
             pointAtCenter: false
           }}
+          trigger={['click']}
+          overlayClassName={styles.dropdown}
         >
-          <Button style={buttonStyle} className={styles.userMenuButton}>
+          <Button className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
               <div className={styles.userImage}>
                 {user.profilePhoto ? user.profilePhoto : <Avatar icon={<UserOutlined size={36} />} />}
               </div>
             </div>
-            <HambergerMenu size={'35'} />
+            <HambergerMenu />
           </Button>
         </Dropdown>
       </div>
@@ -87,9 +216,27 @@ const CustomizedDropdown = ({ className, user, logout }) => {
         <TabButton className={styles.userMenuSignInButton} onClick={() => router.push('/login')}>
           Sign In
         </TabButton>
-        <Link href={'/register'}>
-          <TabButton className={styles.userMenuSignUpButton}>Sign Up</TabButton>
+        <Link href='/register'>
+          <div className={styles.userMenuButton}>
+            <BiUserPlus size={20} />
+          </div>
         </Link>
+        <Dropdown
+          menu={{
+            items: isLoggedOutItems,
+            onClick
+          }}
+          placement='topRight'
+          arrow={{
+            pointAtCenter: false
+          }}
+          trigger={['click']}
+          overlayClassName={styles.dropdown}
+        >
+          <Button className={styles.userMenuButton}>
+            <HambergerMenu />
+          </Button>
+        </Dropdown>
       </div>
     )
   }
