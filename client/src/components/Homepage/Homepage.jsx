@@ -9,6 +9,7 @@ import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
 
 const HomePage = () => {
@@ -174,17 +175,27 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
   }
 
   return (
-    <div className={styles['events-genre-buttons']}>
-      {genreList.map((genre, index) => (
-        <div
-          key={index}
-          className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
-          onClick={() => handleGenreFilter(genre)}
+    <>
+      <div className={styles.seeAllGenreButton}>
+        <TabButton
+          className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
+          onClick={() => setSelectedGenre(null)}
         >
-          🎸{genre}
-        </div>
-      ))}
-    </div>
+          All Genre
+        </TabButton>
+      </div>
+      <div className={styles['events-genre-buttons']}>
+        {genreList.map((genre, index) => (
+          <div
+            key={index}
+            className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
+            onClick={() => handleGenreFilter(genre)}
+          >
+            🎸{genre}
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
 

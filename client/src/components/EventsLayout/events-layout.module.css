@@ -15,6 +15,31 @@
   cursor: pointer;
   align-self: flex-end;
 }
+.genre-btn,
+.activeGenre {
+  color: #183d4c;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: #fff;
+  border-radius: 50px;
+  padding: 0.1rem 0.6rem;
+  box-shadow: 0 3px 10px rgba(24, 61, 76, 0.15);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: 0.2s ease-in-out;
+}
+
+.activeGenre {
+  /* background-image: linear-gradient(to right, #ffa34f, #ff5e4b); */
+  /* background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  background-color: #ffa34f;
+  color: white;
+  cursor: pointer;
+}
 .see-all:hover {
   text-decoration: underline;
 }

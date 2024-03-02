@@ -50,9 +50,6 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
   } else {
     return (
       <div className={styles['main-events']}>
-        <TabButton className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
-          See All Genre
-        </TabButton>
         <div className={styles['events-preview']}>
           {bookingsList.map((booking, index) => (
             <Fragment key={index}>

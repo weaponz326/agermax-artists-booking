@@ -55,12 +55,20 @@
   margin: 0 auto;
 }
 .events-genre-buttons {
-  margin-top: 1rem;
+  margin: 0.5rem 0;
   padding: 0;
   display: flex;
   justify-content: flex-start;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.seeAllGenreButton {
+  display: flex;
+  justify-content: flex-end;
+}
+.seeAllGenreButton button {
+  border: none;
 }
 
 .genre-btn,
@@ -78,7 +86,6 @@
   align-items: center;
   gap: 5px;
   transition: 0.2s ease-in-out;
-  inset: 0;
 }
 
 .activeGenre {
