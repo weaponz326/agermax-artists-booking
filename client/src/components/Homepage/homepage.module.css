@@ -85,8 +85,9 @@
   /* background-image: linear-gradient(to right, #ffa34f, #ff5e4b); */
   /* background-clip: text; */
   /* -webkit-text-fill-color: transparent; */
-  background-color: var(--main-heading-color);
+  background-color: #ffa34f;
   color: white;
+  cursor: pointer;
 }
 
 .genre-btn::-webkit-scrollbar {
