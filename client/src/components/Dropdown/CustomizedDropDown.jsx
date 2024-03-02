@@ -67,7 +67,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
     {
       key: '4',
       label: (
-        <Link href='#events'>
+        <Link href='/events'>
           <div className={styles.menuItem}>
             <BiCalendarEvent size={20} />
             Events
@@ -129,7 +129,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
     {
       key: '3',
       label: (
-        <Link href='#events'>
+        <Link href='/events'>
           <div className={styles.menuItem}>
             <BiCalendarEvent size={20} />
             Events
@@ -176,9 +176,9 @@ const CustomizedDropdown = ({ className, user, logout }) => {
   ]
 
   const router = useRouter()
-  const onClick = ({ key }) => {
-    if (key === '5') logout()
-  }
+  // const onClick = ({ key }) => {
+  //   if (key === '5') logout()
+  // }
 
   if (user) {
     return (
@@ -188,8 +188,8 @@ const CustomizedDropdown = ({ className, user, logout }) => {
         </UserAccountLink>
         <Dropdown
           menu={{
-            items: isLoggedInItems,
-            onClick
+            items: isLoggedInItems
+            // onClick
           }}
           placement='topRight'
           arrow={{
@@ -223,8 +223,8 @@ const CustomizedDropdown = ({ className, user, logout }) => {
         </Link>
         <Dropdown
           menu={{
-            items: isLoggedOutItems,
-            onClick
+            items: isLoggedOutItems
+            // onClick
           }}
           placement='topRight'
           arrow={{

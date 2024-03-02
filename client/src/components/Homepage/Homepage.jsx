@@ -10,6 +10,8 @@ import FaqAccordion from '../FaqAccordion/FaqAccordion'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import Skeleton from '@mui/material/Skeleton'
+
 import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
 
 const HomePage = () => {
@@ -171,9 +173,45 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
 
   const handleGenreFilter = genre => {
     setSelectedGenre(genre)
-    console.log(genre)
   }
 
+  const skeletonCarouselDetail = {
+    background: 'rgb(219, 224, 228)'
+  }
+
+  if (!bookings) {
+    return (
+      <>
+        <div className={styles.seeAllGenreButton}>
+          <div className={styles.skeletonGenreButton}>
+            <Skeleton
+              animation='wave'
+              variant='rounded'
+              height='100%'
+              className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
+              sx={{ borderRadius: 'inherit', ...skeletonCarouselDetail }}
+            >
+              All Genre
+            </Skeleton>
+          </div>
+        </div>
+        <div className={styles.skeletonGenre}>
+          {Array.from({ length: 13 }).map((genre, index) => (
+            <div className={styles.skeletonGenreButton} key={index}>
+              <Skeleton
+                width={70}
+                animation='wave'
+                variant='rounded'
+                height={22}
+                className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
+                sx={{ borderRadius: 'inherit', height: '100%', ...skeletonCarouselDetail }}
+              />
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
   return (
     <>
       <div className={styles.seeAllGenreButton}>

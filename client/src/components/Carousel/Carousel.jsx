@@ -102,17 +102,26 @@ export const Tag = ({ children }) => {
 }
 
 export const SkeletonCarousel = () => {
+  const skeletonCarouselDetail = {
+    background: 'rgb(219, 224, 228)'
+  }
+
   return (
     <div className={styles['carousel-skeleton-container']}>
-      <div className={styles['carousel-img']}>
-        <Skeleton animation='wave' variant='rounded' height='100%' sx={{ borderRadius: 'inherit' }} />
+      <div className={styles['skeleton-carousel-img']}>
+        <Skeleton
+          animation='wave'
+          variant='rounded'
+          height='100%'
+          sx={{ borderRadius: 'inherit', ...skeletonCarouselDetail }}
+        />
       </div>
       <div className={styles['skeleton-carousel-title-text']}>
-        <Skeleton animation='wave' height={32} width='60%' variant='text' />
+        <Skeleton animation='wave' height={32} width='60%' variant='text' sx={{ ...skeletonCarouselDetail }} />
       </div>
       <div className={styles['skeleton-carousel-genre']}>
-        {Array.from({ length: 3 }).map((genre, index) => (
-          <Skeleton key={index} animation='wave' height={32}>
+        {Array.from({ length: 4 }).map((genre, index) => (
+          <Skeleton key={index} animation='wave' height={32} sx={{ ...skeletonCarouselDetail }}>
             <Tag>Genre</Tag>
           </Skeleton>
         ))}
@@ -121,7 +130,7 @@ export const SkeletonCarousel = () => {
         <Skeleton
           width='100%'
           height='2rem'
-          sx={{ borderRadius: 'inherit' }}
+          sx={{ borderRadius: 'inherit', ...skeletonCarouselDetail }}
           variant='rounded'
           className={styles.skeletonButton}
         />

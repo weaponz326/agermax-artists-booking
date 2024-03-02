@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Fragment, useEffect, useState } from 'react'
 import styles from './events-layout.module.css'
 import Image from 'next/image'
@@ -6,9 +5,7 @@ import Skeleton from '@mui/material/Skeleton'
 import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
-import { getArtistById } from 'src/services/artists'
 import { getUserById } from 'src/services/users'
-import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()
@@ -23,41 +20,48 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
     }
   }, [bookings, numOfBookings, loading])
 
+  const skeletonCarouselDetail = {
+    background: 'rgb(219, 224, 228)'
+  }
+
   if (loading) {
     return (
-      <div className={styles['main-events']}>
-        <TabButton className={`${styles['events-nav']} ${styles['see-all']}`} onClick={() => setSelectedGenre(null)}>
-          See all
-        </TabButton>
-        <div className={styles['events-preview']}>
-          {Array.from({ length: numOfBookings }).map((img, index) => (
-            <Fragment key={index}>
-              <div className={styles['skeleton-container']}>
-                <div className={styles.skeletonCalendarIcon}>
-                  <Skeleton animation='wave' variant='rounded' width={40} height={40} />
-                </div>
-                <div>
-                  <Skeleton variant='text' width='40%' height={25} />
-                  <Skeleton variant='text' width='55%' height={25} />
-                  <Skeleton variant='text' width='45%' height={25} />
-                </div>
+      // <div className={styles['main-events']}>
+      <div className={styles['events-preview']}>
+        {Array.from({ length: numOfBookings }).map((img, index) => (
+          <Fragment key={index}>
+            <div className={styles['skeleton-container']}>
+              <div className={styles.skeletonCalendarIcon}>
+                <Skeleton
+                  animation='wave'
+                  variant='rounded'
+                  width={40}
+                  height={40}
+                  sx={{ ...skeletonCarouselDetail }}
+                />
               </div>
-            </Fragment>
-          ))}
-        </div>
+              <div>
+                <Skeleton variant='text' width='40%' height={25} sx={{ ...skeletonCarouselDetail }} />
+                <Skeleton variant='text' width='55%' height={25} sx={{ ...skeletonCarouselDetail }} />
+                <Skeleton variant='text' width='45%' height={25} sx={{ ...skeletonCarouselDetail }} />
+              </div>
+            </div>
+          </Fragment>
+        ))}
       </div>
+      // </div>
     )
   } else {
     return (
-      <div className={styles['main-events']}>
-        <div className={styles['events-preview']}>
-          {bookingsList.map((booking, index) => (
-            <Fragment key={index}>
-              <EventCard booking={booking} />
-            </Fragment>
-          ))}
-        </div>
+      // <div className={styles['main-events']}>
+      <div className={styles['events-preview']}>
+        {bookingsList.map((booking, index) => (
+          <Fragment key={index}>
+            <EventCard booking={booking} />
+          </Fragment>
+        ))}
       </div>
+      // </div>
     )
   }
 }

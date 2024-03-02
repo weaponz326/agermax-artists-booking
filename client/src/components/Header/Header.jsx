@@ -12,7 +12,7 @@ export default function Header() {
   const { artists } = useArtists()
 
   useEffect(() => {
-    if (artists.length === 0) {
+    if (!artists) {
       return // No need to proceed if artists array is empty
     }
 
