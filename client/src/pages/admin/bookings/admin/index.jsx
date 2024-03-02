@@ -24,6 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
+import { Modal } from '@mui/base/Modal'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -42,6 +43,8 @@ import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
 import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
 import { getUserById } from 'src/services/users'
+import { BiTrash } from 'react-icons/bi'
+import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -493,7 +496,8 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
   const [bookingOrganizer, setBookingOrganizer] = useState([])
-  const { updateBooking } = useBookings()
+  const { updateBooking, deleteBooking } = useBookings()
+  const [open, setOpen] = useState(false)
 
   /****************Form Data***************/
   const [formData, setFormData] = useState({
@@ -604,9 +608,25 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     try {
       const newBooking = await updateBooking(formData)
       console.log('Booking Updated Successfully! : ', newBooking)
+      hideModal()
+
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error updating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+    }
+  }
+
+  const handleDelete = async booking => {
+    try {
+      const newBooking = await deleteBooking(booking)
+      console.log('Booking deleted Successfully! : ', newBooking)
+      setOpen(false)
+      hideModal()
+
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error deleted booking: ', error)
       // Handle error, e.g., display an error message to the user
     }
   }
@@ -731,6 +751,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             placeholder='Any Comments...'
             onChange={handleChange}
             value={formData.otherComments}
+            rows={5}
           />
           <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
             Add Gallery <Upload />
@@ -754,6 +775,24 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
           {/* ********************************** */}
           <TabButton className={styles.modalCardContentSaveButton}>{booking ? 'Update' : 'Book Now'}</TabButton>
         </form>
+        {booking && booking.status === 'cancelled' && (
+          <div className={styles.bookingActionButtons}>
+            <TabButton
+              className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}
+              onClick={() => setOpen(true)}
+            >
+              Delete Booking Permanently <BiTrash />
+            </TabButton>
+            <ServerActionModal
+              titleText={'Confirm Delete'}
+              open={open}
+              setOpen={setOpen}
+              okText={'Yes, delete'}
+              onOk={() => handleDelete(booking)}
+              modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
+            />
+          </div>
+        )}
 
         {/* *****Conditional Rendering for different bookings Status*** */}
         {booking && booking.status === 'pending' && (

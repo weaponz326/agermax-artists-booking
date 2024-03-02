@@ -11,8 +11,7 @@ import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import Skeleton from '@mui/material/Skeleton'
-
-import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
+import { BiLoader } from 'react-icons/bi'
 
 const HomePage = () => {
   const [artistsList, setArtistsList] = useState([])
@@ -39,14 +38,35 @@ export const EventsSection = () => {
   const [events, setEvents] = useState([])
   const [numOfBookings, setNumberOfBookings] = useState(9)
   const currentDate = new Date()
+  const [genreList, setGenreList] = useState([])
+
+  /*********Set Genre Buttons and List*******/
+  useEffect(() => {
+    if (bookings) {
+      const upcomingEvents = bookings.filter(booking => {
+        const bookingDate = new Date(booking.dateTimeRequested)
+        return bookingDate >= currentDate && booking.status === 'approved' // Compare booking date with current date
+      })
+
+      // Collect all genres from the list of bookings into a single array
+      const allGenres = upcomingEvents.reduce((accumulator, event) => {
+        // Concatenate genres of each booking into the accumulator array
+        return accumulator.concat(event.genre)
+      }, [])
+
+      setGenreList([...new Set(allGenres)])
+    }
+  }, [bookings])
+
+  /*********Set Filtered Events List*******/
 
   useEffect(() => {
     if (bookings) {
       const upcomingEvents = bookings.filter(booking => {
         const bookingDate = new Date(booking.dateTimeRequested)
-        return bookingDate >= currentDate // Compare booking date with current date
+        return bookingDate >= currentDate && booking.status === 'approved' // Compare booking date with current date
       })
-      // console.log(upcomingEvents)
+
       if (selectedGenre === null) {
         setEvents(upcomingEvents)
       } else if (selectedGenre) {
@@ -60,6 +80,7 @@ export const EventsSection = () => {
     setNumberOfBookings(current => current + 3)
   }
 
+  /**************Rendering*************/
   return (
     <section className={styles['events']} id='events'>
       <div className={styles.eventsWrapper}>
@@ -69,9 +90,10 @@ export const EventsSection = () => {
         <EventsGenreButtons
           events={events}
           setEvents={setEvents}
-          bookings={bookings}
+          // bookings={events}
           selectedGenre={selectedGenre}
           setSelectedGenre={setSelectedGenre}
+          genreList={genreList}
         />
         <EventsLayout
           numOfBookings={numOfBookings}
@@ -82,7 +104,8 @@ export const EventsSection = () => {
         {/* <div className={styles['events-load-more']}> */}
         {events && events.length > numOfBookings ? (
           <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
-            Load More ...🌟
+            Load More ...
+            <BiLoader />
           </button>
         ) : null}
         {/* </div> */}
@@ -157,20 +180,7 @@ export const SubscriptionSection = () => {
   )
 }
 
-export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre, setSelectedGenre }) => {
-  const [genreList, setGenreList] = useState([])
-
-  useEffect(() => {
-    if (!bookings) return
-    // Collect all genres from the list of bookings into a single array
-    const allGenres = bookings.reduce((accumulator, booking) => {
-      // Concatenate genres of each booking into the accumulator array
-      return accumulator.concat(booking.genre)
-    }, [])
-
-    setGenreList([...new Set(allGenres)])
-  }, [bookings])
-
+export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre, setSelectedGenre, genreList }) => {
   const handleGenreFilter = genre => {
     setSelectedGenre(genre)
   }
@@ -179,7 +189,7 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
     background: 'rgb(219, 224, 228)'
   }
 
-  if (!bookings) {
+  if (!genreList) {
     return (
       <>
         <div className={styles.seeAllGenreButton}>

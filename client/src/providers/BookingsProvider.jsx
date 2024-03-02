@@ -32,9 +32,14 @@ const BookingsProvider = ({ children }) => {
       })
     )
   }
+  const deleteBooking = async booking => {
+    const deletedBooking = await services.deleteBookingById(booking._id)
+    // Update local state to remove deleted booking
+    setBookings(bookings.filter(b => b._id !== booking._id))
+  }
 
   return (
-    <BookingContext.Provider value={{ bookings, setBookings, loading, error, updateBooking }}>
+    <BookingContext.Provider value={{ bookings, setBookings, loading, error, updateBooking, deleteBooking }}>
       {children}
     </BookingContext.Provider>
   )
