@@ -158,24 +158,29 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
   const [genreList, setGenreList] = useState([])
 
   useEffect(() => {
-    if (!events) return
+    if (!bookings) return
     // Collect all genres from the list of bookings into a single array
-    const allGenres = events.reduce((accumulator, event) => {
+    const allGenres = bookings.reduce((accumulator, booking) => {
       // Concatenate genres of each booking into the accumulator array
-      return accumulator.concat(event.genre)
+      return accumulator.concat(booking.genre)
     }, [])
 
     setGenreList([...new Set(allGenres)])
-  }, [events, selectedGenre, bookings])
+  }, [bookings])
 
   const handleGenreFilter = genre => {
     setSelectedGenre(genre)
+    console.log(genre)
   }
 
   return (
     <div className={styles['events-genre-buttons']}>
       {genreList.map((genre, index) => (
-        <div key={index} className={styles['genre-btn']} onClick={() => handleGenreFilter(genre)}>
+        <div
+          key={index}
+          className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
+          onClick={() => handleGenreFilter(genre)}
+        >
           🎸{genre}
         </div>
       ))}

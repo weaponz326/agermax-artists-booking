@@ -63,7 +63,8 @@
   flex-wrap: wrap;
 }
 
-.genre-btn {
+.genre-btn,
+.activeGenre {
   color: #183d4c;
   font-size: 0.95rem;
   font-weight: 500;
@@ -77,6 +78,15 @@
   align-items: center;
   gap: 5px;
   transition: 0.2s ease-in-out;
+  inset: 0;
+}
+
+.activeGenre {
+  /* background-image: linear-gradient(to right, #ffa34f, #ff5e4b); */
+  /* background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  background-color: var(--main-heading-color);
+  color: white;
 }
 
 .genre-btn::-webkit-scrollbar {
