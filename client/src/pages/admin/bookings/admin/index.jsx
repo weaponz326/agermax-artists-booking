@@ -45,6 +45,7 @@ import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDe
 import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
+import SnackbarAlert from 'src/views/components/snackbar/SnackbarAlert'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -496,7 +497,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
   const [bookingOrganizer, setBookingOrganizer] = useState([])
-  const { updateBooking, deleteBooking } = useBookings()
+  const { updateBooking, deleteBooking, loading } = useBookings()
   const [open, setOpen] = useState(false)
 
   /****************Form Data***************/
@@ -617,16 +618,22 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     }
   }
 
+  const confirmDelete = () => {
+    if (!loading) {
+      setOpen(false)
+      hideModal()
+    }
+  }
+
   const handleDelete = async booking => {
     try {
       const newBooking = await deleteBooking(booking)
       console.log('Booking deleted Successfully! : ', newBooking)
-      setOpen(false)
-      hideModal()
+      confirmDelete()
 
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
-      console.error('Error deleted booking: ', error)
+      console.error('Error deleting booking: ', error)
       // Handle error, e.g., display an error message to the user
     }
   }
@@ -667,7 +674,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             id='organizerID'
             options={organizersOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Organizer' required />}
+            renderInput={params => <TextField {...params} label='Organizer' />}
             size='small'
             sx={{ padding: '0' }}
             value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
@@ -680,7 +687,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             id='artistID'
             options={artistsOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Artist' required />}
+            renderInput={params => <TextField {...params} label='Artist' />}
             size='small'
             sx={{ padding: '0' }}
             value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
@@ -699,6 +706,10 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             value={formData.getInTime}
             onChange={time => setFormData({ ...formData, getInTime: time })}
             minutesStep={15}
+            format='HH:mm'
+            ampm={false}
+            skipDisabled
+            disabled={!formData.dateTimeRequested}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -707,7 +718,11 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
             minutesStep={15}
             slots={params => <TextField {...params} required />}
-            minTime={formData.getInTime ? formData.getInTime : undefined}
+            minTime={formData.getInTime ? dayjs(formData.getInTime).add(15, 'minute') : undefined}
+            format='HH:mm'
+            ampm={false}
+            skipDisabled
+            disabled={!formData.dateTimeRequested || !formData.getInTime}
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -716,7 +731,11 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
             slots={params => <TextField {...params} required />}
             minutesStep={15}
-            minTime={formData.startTime ? formData.startTime : undefined}
+            minTime={formData.startTime ? dayjs(formData.startTime).add(30, 'minute') : undefined}
+            format='HH:mm'
+            ampm={false}
+            skipDisabled
+            disabled={!formData.startTime}
           />
 
           <TextField
@@ -791,6 +810,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
               onOk={() => handleDelete(booking)}
               modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
             />
+            <SnackbarAlert />
           </div>
         )}
 

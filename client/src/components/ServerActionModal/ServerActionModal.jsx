@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'antd'
+
 const ServerActionModal = ({ open, setOpen, modalText, okText, titleText, onOk }) => {
   const [confirmLoading, setConfirmLoading] = useState(false)
   // const [modalText, setModalText] = useState('Content of the modal')
@@ -15,7 +16,7 @@ const ServerActionModal = ({ open, setOpen, modalText, okText, titleText, onOk }
     }, 2000)
   }
   const handleCancel = () => {
-    console.log('Clicked cancel button')
+    // console.log('Clicked cancel button')
     setOpen(false)
   }
   return (
