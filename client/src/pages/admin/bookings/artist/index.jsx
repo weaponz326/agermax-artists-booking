@@ -195,14 +195,14 @@ export const EventsListView = ({
           className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Approved
-          {events && <div className={styles.statusCount}>{approvedCount}</div>}
+          {events.length > 0 && <div className={styles.statusCount}>{approvedCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('cancelled')}
           className={eventsStatusView === 'cancelled' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Cancelled
-          {events && <div className={styles.statusCount}>{cancelledCount}</div>}
+          {/* {events && <div className={styles.statusCount}>{cancelledCount}</div>} */}
         </TabButton>
       </div>
       <EventsList events={events} eventsStatusView={eventsStatusView} />
