@@ -125,7 +125,8 @@ function NavBarBookingCard({
           root: {
             boxShadow: 'none',
             padding: '0',
-            fontFamily: 'inherit'
+            fontFamily: 'inherit',
+            overflow: 'auto'
           }
         }
       },
@@ -144,6 +145,8 @@ function NavBarBookingCard({
             color: '#4B627F',
             fontFamily: 'inherit',
             fontSize: '16px',
+            overflow: 'auto',
+
             '&:hover': {
               backgroundColor: '#B9FACF', // Example hover style
               borderRadius: '9px'

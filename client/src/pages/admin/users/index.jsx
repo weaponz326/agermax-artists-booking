@@ -69,19 +69,24 @@ const UsersListPage = () => {
   }
 
   function handleQueryChange(e) {
-    setQuery(e.target.value)
+    const value = e.target.value
+    setQuery(value)
+
     if (users) {
-      if (!query || query === '') {
+      if (!value.trim()) {
+        // If query is empty, show all users
         setUsersList(users)
       } else {
-        setActiveView('1')
+        // Otherwise, filter users based on the query
         const filteredList = users.filter(
           user =>
-            user.firstName.toLowerCase().includes(query.toLowerCase()) ||
-            user.lastName.toLowerCase().includes(query.toLowerCase())
+            user.firstName.toLowerCase().includes(value.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(value.toLowerCase())
         )
         setUsersList(filteredList)
       }
+      // Set active view to '1' if there are users to display
+      setActiveView(users.length > 0 && '1')
     }
   }
 
@@ -165,17 +170,16 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-      setUsersList(response.data.users); // Assuming your API responds with an array of users
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
+      setUsersList(response.data.users) // Assuming your API responds with an array of users
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error('Failed to fetch users:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
-
+    fetchUsers()
+  }, [])
 
   // ** Router for redirection after successful registration
   const router = useRouter()
@@ -214,7 +218,7 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
         setSnackbarMessage('User added successfully')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        fetchUsers();
+        fetchUsers()
       } else {
         console.error('Failed to add user', response.data.message)
         setSnackbarMessage('Failed to add user')
@@ -394,16 +398,16 @@ export const EditUserModalContent = ({ selectedUser, hideModal }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-      setUsersList(response.data.users); // Assuming your API responds with an array of users
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
+      setUsersList(response.data.users) // Assuming your API responds with an array of users
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error('Failed to fetch users:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
 
   const handleUpdateUser = async e => {
     e.preventDefault()
@@ -415,7 +419,7 @@ export const EditUserModalContent = ({ selectedUser, hideModal }) => {
         setSnackbarMessage('User updated successfully')
         setSnackbarSeverity('success')
         setUserData(response.data)
-        fetchUsers();
+        fetchUsers()
       } else {
         console.log('Update failed:', response.data)
         setSnackbarMessage('Failed to update user')

@@ -106,18 +106,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     setOpen(false)
   }
 
-  const datePickerRef = useRef(null)
-  const getInTimeRef = useRef(null)
-  const startTimeRef = useRef(null)
-  const endTimeRef = useRef(null)
   const selectArtistRef = useRef(null)
-
-  useEffect(() => {
-    // if (activeInputTab == 1) datePickerRef.current.focus()
-    // if (activeInputTab == 2) getInTimeRef.current.focus()
-    // if (activeInputTab == 3) startTimeRef.current.focus()
-    // if (activeInputTab == 4) endTimeRef.current.focus()
-  }, [activeInputTab])
 
   useEffect(() => {
     //Get All Artists Lists
@@ -125,19 +114,19 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   }, [artists])
 
   //Effects from scroll and click events
-  useEffect(() => {
-    const handleScroll = () => {
-      setHideMenuItems(true)
-      // setActiveTab(null)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [hideMenuItems])
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setHideMenuItems(true)
+  //     // setActiveTab(null)
+  //   }
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll)
+  //   }
+  // }, [hideMenuItems])
 
-  //*********** */
-  //Click Event handler
+  // *********** */
+  // Click Event handler
   // useEffect(() => {
   //   //Listen to a click event outside the searchBarContainer ref and set activeTab to null
   //   const handleClickOutsideSearch = event => {
@@ -154,7 +143,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   //     if (antDropdownPicker) return
   //     if (bookingCardWrapper) return
   //     if (menuWrapper == null) {
-  //       // setActiveTab(null)
+  //       setActiveInputTab(null)
   //       setHideMenuItems(true)
   //     }
   //   }
@@ -163,11 +152,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   //     document.removeEventListener('click', handleClickOutsideSearch)
   //   }
   // }, [])
-  //************** */
-
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
 
   const [submittable, setSubmittable] = useState(false)
 
@@ -483,28 +467,6 @@ export const CustomDropdown = ({
   }
 
   return (
-    // <Dropdown
-    //   menu={{
-    //     items
-    //   }}
-    //   dropdownRender={menu => (
-    //     <div>
-    //       {React.cloneElement(menu, {
-    //         style: { boxShadow: 'none' }
-    //       })}
-
-    //       <Space
-    //         style={{
-    //           padding: 8
-    //         }}
-    //       ></Space>
-    //     </div>
-    //   )}
-    // >
-    //   <a onClick={e => e.preventDefault()}>
-    //     <Space>Hover me</Space>
-    //   </a>
-    // </Dropdown>
     <Dropdown
       // disabled={open}
       open={open}

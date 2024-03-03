@@ -24,24 +24,47 @@ import { updateInvoice } from 'src/services/invoice'
 
 const Finance = () => {
   const [activeView, setActiveView] = useState('invoice')
+  const { invoiceData } = useInvoiceContext()
+  const { paymentsData } = usePaymentsContext()
+  const [invoiceDataSource, setInvoiceDataSource] = useState([])
+  const [paymentsDataSource, setPaymentsDataSource] = useState([])
+
   return (
-    <InvoiceProvider>
-      <PaymentsProvider>
-        <AdminPagesNavBar activeView={activeView} setActiveView={setActiveView} />
-        <AdminFinance activeView={activeView} setActiveView={setActiveView} />
-      </PaymentsProvider>
-    </InvoiceProvider>
+    <>
+      <AdminPagesNavBar
+        activeView={activeView}
+        setActiveView={setActiveView}
+        invoiceDataSource={invoiceDataSource}
+        setInvoiceDataSource={setInvoiceDataSource}
+        paymentsDataSource={paymentsDataSource}
+        setPaymentsDataSource={setPaymentsDataSource}
+      />
+      <AdminFinance
+        activeView={activeView}
+        setActiveView={setActiveView}
+        invoiceData={invoiceData}
+        paymentsData={paymentsData}
+        invoiceDataSource={invoiceDataSource}
+        setInvoiceDataSource={setInvoiceDataSource}
+        paymentsDataSource={paymentsDataSource}
+        setPaymentsDataSource={setPaymentsDataSource}
+      />
+    </>
   )
 }
 
 export default Finance
 
-export const AdminFinance = ({ activeView, setActiveView }) => {
-  const [invoiceDataSource, setInvoiceDataSource] = useState([])
-  const [paymentsDataSource, setPaymentsDataSource] = useState([])
-  const { invoiceData } = useInvoiceContext()
-  const { paymentsData } = usePaymentsContext()
-
+export const AdminFinance = ({
+  activeView,
+  setActiveView,
+  invoiceData,
+  paymentsData,
+  invoiceDataSource,
+  setInvoiceDataSource,
+  paymentsDataSource,
+  setPaymentsDataSource
+}) => {
   /****************Fetch Details for table display***************/
   useEffect(() => {
     if (invoiceData) {

@@ -224,38 +224,19 @@ export const AdminPagesNavBar = ({
   //Search
   const [query, setQuery] = useState('')
 
-  useEffect(() => {
-    // if (events.length && query) {
-    //   const filteredEventTitles = events.filter(event => {
-    //     if (event.eventTitle) {
-    //       return event.eventTitle.toLowerCase().includes(query.toLowerCase())
-    //     }
-    //   })
-    //   setEvents(filteredEventTitles)
-    // } else {
-    //   setEvents(bookings)
-    // }
-    if (!query || query === '') {
+  // Function to handle query changes
+  function handleQuery(e) {
+    const value = e.target.value
+    setQuery(value)
+
+    // Filter bookings based on the query
+    if (!value.trim()) {
+      // If query is empty, show all bookings
       setEvents(bookings)
     } else {
-    }
-  }, [query])
-
-  function handleQuery(e) {
-    setQuery(e.target.value)
-    setEventsStatusView('all')
-    if (events) {
-      if (!query || query === '') {
-        setEvents(bookings)
-      } else {
-        const filteredList = events.filter(
-          event => {
-            if (event.eventTitle) event.eventTitle.toLowerCase().includes(query.toLowerCase())
-          }
-          //  || event.lastName.toLowerCase().includes(query.toLowerCase())
-        )
-        setEvents(filteredList)
-      }
+      // Otherwise, filter bookings based on the query
+      const filteredList = bookings.filter(booking => booking.eventTitle.toLowerCase().includes(value.toLowerCase()))
+      setEvents(filteredList)
     }
   }
 
@@ -727,7 +708,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
           <TimePicker
             className={styles.modalCardContentInputField}
             label='Event End Time'
-            value={formData.startTime}
+            value={formData.endTime}
             onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
             slots={params => <TextField {...params} required />}
             minutesStep={15}
