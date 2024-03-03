@@ -21,6 +21,7 @@ import { createBooking } from 'src/services/bookings'
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
 import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
+import useBookingFormData from 'src/hooks/useBookingFormData'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -73,24 +74,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   const searchBarContainerRef = useRef()
 
   /************************Form Data ************************** */
-  const [formData, setFormData] = useState({
-    // Initialize form data
-    status: 'pending',
-    organizerID: '',
-    eventTitle: '',
-    dateTimeRequested: '',
-    startTime: '',
-    endTime: '',
-    getInTime: '',
-    numberOfGuests: '',
-    ageRange: '',
-    locationVenue: '',
-    artistID: '',
-    availableTechnology: '',
-    otherComments: '',
-    gallery: [],
-    genre: []
-  })
+  const { formData, setFormData } = useBookingFormData()
 
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
@@ -175,7 +159,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
     setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
-    console.log(index)
   }
 
   const handleSubmit = async e => {
@@ -202,24 +185,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     setHideMenuItems(false)
   }
 
-  const navMenu = (
-    <h3 className={styles['nav-menu-bar']}>Booking Entertainment</h3>
-    // <ul className={styles['nav-menu-bar']}>
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Artists</span>
-    //   </li>
-    //   <div className={styles['search-item-divider']}></div>
-
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Anywhere</span>
-    //   </li>
-    //   <div className={styles['search-item-divider']}></div>
-
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Anytime</span>
-    //   </li>
-    // </ul>
-  )
+  const navMenu = <h3 className={styles['nav-menu-bar']}>Booking Entertainment</h3>
   const artistsDropdownDisplay = artist => (
     <div className={styles.artistsListPreview}>
       <div className={styles.searchInputFieldPictureContainer}>

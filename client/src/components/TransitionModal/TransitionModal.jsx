@@ -25,9 +25,10 @@ const style = {
 export default function TransitionsModal({ modalContent, btnClassName, open, setOpen }) {
   const { user, logout, loading, login } = useAuth()
   const handleOpen = () => {
-    // if (user)
-    setOpen(true)
-    // logout()
+    if (user) setOpen(true)
+    else {
+      logout()
+    }
   }
   const handleClose = () => setOpen(false)
 

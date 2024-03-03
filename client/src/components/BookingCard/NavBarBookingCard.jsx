@@ -254,6 +254,12 @@ function NavBarBookingCard({
                   <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
                     <DatePicker
                       onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+                      className={styles.modalCardContentInputField}
+                      label='Select Event Date'
+                      value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
+                      disablePast
+                      name='dateTimeRequested'
+                      autoFocus
                       sx={{
                         width: '100%',
                         '& .MuiDayCalendar-header': {
@@ -271,15 +277,6 @@ function NavBarBookingCard({
                           fontSize: '16px'
                         }
                       }}
-                      className={styles.modalCardContentInputField}
-                      label='Select Event Date'
-                      value={dayjs(formData.dateTimeRequested)}
-                      disablePast
-                      name='dateTimeRequested'
-                      autoFocus
-                      // slotProps={{
-                      //   field: { clearable: true, onClear: () => setCleared(true) }
-                      // }}
                     />
                   </Grid>
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>

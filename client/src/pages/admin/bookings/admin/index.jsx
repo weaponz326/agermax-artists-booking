@@ -46,6 +46,7 @@ import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import SnackbarAlert from 'src/views/components/snackbar/SnackbarAlert'
+import useBookingFormData from 'src/hooks/useBookingFormData'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -187,21 +188,21 @@ export const EventsListView = ({
           className={eventsStatusView === 'pending' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Pending
-          {events && <div className={styles.statusCount}>{pendingCount}</div>}
+          {events.length > 0 && <div className={styles.statusCount}>{pendingCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('approved')}
           className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Approved
-          {events && <div className={styles.statusCount}>{approvedCount}</div>}
+          {/* {events && <div className={styles.statusCount}>{approvedCount}</div>} */}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('cancelled')}
           className={eventsStatusView === 'cancelled' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Cancelled
-          {events && <div className={styles.statusCount}>{cancelledCount}</div>}
+          {/* {events && <div className={styles.statusCount}>{cancelledCount}</div>} */}
         </TabButton>
       </div>
       <EventsList events={events} eventsStatusView={eventsStatusView} />
@@ -482,25 +483,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const [open, setOpen] = useState(false)
 
   /****************Form Data***************/
-  const [formData, setFormData] = useState({
-    // Initialize form data
-    _id: booking && booking._id,
-    status: booking?.status || 'pending',
-    organizerID: booking?.organizerID || '',
-    eventTitle: booking?.eventTitle || '',
-    dateTimeRequested: booking ? dayjs(booking.dateTimeRequested) : '',
-    startTime: booking ? dayjs(booking.startTime) : '',
-    endTime: booking ? dayjs(booking.endTime) : '',
-    getInTime: booking ? dayjs(booking.getInTime) : '',
-    numberOfGuests: booking?.numberOfGuests || '',
-    ageRange: booking?.ageRange || '',
-    locationVenue: booking?.locationVenue || '',
-    artistID: booking?.artistID || '',
-    availableTechnology: booking?.availableTechnology || '',
-    otherComments: booking?.otherComments || '',
-    gallery: booking?.gallery || [],
-    genre: booking?.genre || []
-  })
+  const { formData, setFormData } = useBookingFormData(booking)
 
   /****************Gallery********************/
   const [fileList, setFileList] = useState(formData.gallery)
