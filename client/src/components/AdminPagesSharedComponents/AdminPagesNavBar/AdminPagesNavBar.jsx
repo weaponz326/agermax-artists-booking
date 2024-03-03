@@ -15,6 +15,7 @@ const AdminPagesNavBar = ({
 }) => {
   const [query, setQuery] = useState('')
 
+  /*********Handle Search Query************** */
   function handleQueryChange(e) {
     const value = e.target.value
     setQuery(value)

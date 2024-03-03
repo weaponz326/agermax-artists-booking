@@ -18,9 +18,8 @@ import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 
 //Import Providers & services
-import PaymentsProvider, { usePaymentsContext } from 'src/providers/PaymentsProvider'
-import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
-import { updateInvoice } from 'src/services/invoice'
+import { usePaymentsContext } from 'src/providers/PaymentsProvider'
+import { useInvoiceContext } from 'src/providers/InvoiceProvider'
 
 const Finance = () => {
   const [activeView, setActiveView] = useState('invoice')

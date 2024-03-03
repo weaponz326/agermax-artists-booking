@@ -2,98 +2,178 @@ import styles from './OrganizerFinance.module.css'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Avatar, Table, Space, Dropdown } from 'antd'
+import { useAuth } from 'src/hooks/useAuth'
 
-const OrganizerFinance = () => {
-  const initialData = [
-    {
-      paymentId: 'P001',
-      payeeFirstName: 'Aka',
-      payeeLastName: 'Ebenezer',
-      payeeContact: '+233 544803023',
-      amount: '1500',
-      date: '2024-01-30',
-      status: 'Paid'
-    },
-    {
-      paymentId: 'P002',
-      payeeFirstName: 'Kojo ',
-      payeeLastName: 'Appiah',
-      payeeContact: '+233 48235694',
-      amount: '700',
-      date: '2024-01-30',
-      status: 'Pending'
+const Finance = () => {
+  const { user } = useAuth()
+  const [activeView, setActiveView] = useState('invoice')
+  const { invoiceData } = useInvoiceContext()
+  const { paymentsData } = usePaymentsContext()
+  const [invoiceDataSource, setInvoiceDataSource] = useState([])
+  const [paymentsDataSource, setPaymentsDataSource] = useState([])
+
+  return (
+    <>
+      <AdminPagesNavBar
+        activeView={activeView}
+        setActiveView={setActiveView}
+        invoiceDataSource={invoiceDataSource}
+        setInvoiceDataSource={setInvoiceDataSource}
+        paymentsDataSource={paymentsDataSource}
+        setPaymentsDataSource={setPaymentsDataSource}
+      />
+      <OrganizerFinance
+        activeView={activeView}
+        setActiveView={setActiveView}
+        invoiceData={invoiceData}
+        paymentsData={paymentsData}
+        invoiceDataSource={invoiceDataSource}
+        setInvoiceDataSource={setInvoiceDataSource}
+        paymentsDataSource={paymentsDataSource}
+        setPaymentsDataSource={setPaymentsDataSource}
+        user={user}
+      />
+    </>
+  )
+}
+
+export default Finance
+
+export const OrganizerFinance = ({
+  user,
+  activeView,
+  setActiveView,
+  invoiceData,
+  paymentsData,
+  invoiceDataSource,
+  setInvoiceDataSource,
+  paymentsDataSource,
+  setPaymentsDataSource
+}) => {
+  /****************Fetch Details for table display***************/
+  useEffect(() => {
+    if (invoiceData) {
+      const filteredInvoiceData = invoiceData.filter(invoice => invoice.booking.organizerID === user._id)
+      setInvoiceDataSource(filteredInvoiceData)
     }
-    // add more payment objects here
-  ]
-  const columns = [
+    if (paymentsData) {
+      const filteredPaymentsData = paymentsData.filter(payment => payment.organizer._id === user._id)
+      setPaymentsDataSource(filteredPaymentsData)
+    }
+  }, [invoiceData, paymentsData])
+
+  const invoicesColumns = [
     {
-      title: 'Payee',
-      dataIndex: 'payeeFirstName',
-      key: 'paymentId',
-      sorter: (a, b) => b.payeeFirstName.localeCompare(a.payeeFirstName),
-      render: (text, record) => `${record.payeeFirstName} ${record.payeeLastName}`
+      title: 'Organizer',
+      dataIndex: 'organizerFirstName',
+      key: 'booker',
+      sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
+      render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
     },
 
     {
       title: 'Phone',
-      dataIndex: 'payeeContact',
-      key: 'payeeContact',
-      sorter: (a, b) => a.payeeContact.localeCompare(b.payeeContact)
+      dataIndex: 'organizerContactPhone',
+      key: 'organizerContactPhone',
+      sorter: (a, b) => a.organizerContactPhone.localeCompare(b.organizerContactPhone)
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
-      key: 'paymentId',
-      sorter: (a, b) => a.amount.localeCompare(b.amount)
+      key: 'amount',
+      sorter: (a, b) => a.amount - b.amount
     },
     {
       title: 'Date',
-      dataIndex: 'date',
-      key: 'paymentId',
-      sorter: (a, b) => a.date.localeCompare(b.date)
+      dataIndex: 'invoiceDate',
+      key: 'date',
+      sorter: (a, b) => new Date(b.invoiceDate) - new Date(a.invoiceDate),
+      render: text => dayjs(text).format('YYYY-MM-DD')
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a, b) => a.status.localeCompare(b.status)
     },
     {
       title: 'Action',
-      key: 'paymentId',
-      render: (text, record) => (
-        <Space size='middle'>
-          <ViewDetailsAction
-            id={record.paymentId}
-            payee={`${record.payeeFirstName} ${record.payeeLastName}`}
-            amount={record.amount}
-            status={record.status}
-          />
-        </Space>
-      )
+      key: 'viewDetails',
+      render: (_, invoice) => <ViewDetailsAction id={invoice._id} type={activeView} />
     }
   ]
 
-  return (
-    <div className={styles.financePage}>
-      <Table columns={columns} dataSource={initialData} />
-    </div>
-  )
+  const paymentsColumns = [
+    {
+      title: 'Organizer',
+      dataIndex: 'organizerFirstName',
+      key: '1',
+      sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
+      render: (text, payment) => `${payment.organizerFirstName} ${payment.organizerLastName}`
+    },
+
+    {
+      title: 'Phone',
+      dataIndex: 'organizerContactPhone',
+      key: '2',
+      sorter: (a, b) => a.organizerContactPhone.localeCompare(b.organizerContactPhone)
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: '3',
+      sorter: (a, b) => a.amount - b.amount,
+      render: amount => `${(amount / 100).toFixed(2)}`
+    },
+    {
+      title: 'Date',
+      dataIndex: 'createdAt',
+      key: '4',
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      render: text => dayjs(text).format('YYYY-MM-DD')
+    },
+
+    {
+      title: 'Action',
+      key: 'viewDetails',
+      render: (_, payment) => <ViewDetailsAction id={payment._id} type={activeView} />
+    }
+  ]
+
+  if (activeView === 'invoice') {
+    return (
+      <div className={styles.financePage}>
+        <h4>Invoices</h4>
+        <Table columns={invoicesColumns} dataSource={invoiceDataSource} />
+      </div>
+    )
+  } else if (activeView === 'payments') {
+    return (
+      <div className={styles.financePage}>
+        <h4>Payments</h4>
+        <Table columns={paymentsColumns} dataSource={paymentsDataSource} />
+      </div>
+    )
+  }
 }
 
-export default OrganizerFinance
-
-export const ViewDetailsAction = ({ id, payee, amount, date, status }) => {
+export const ViewDetailsAction = ({ id, type }) => {
   const router = useRouter()
+
+  const handleViewDetails = () => {
+    router.push(`/admin/finance/organizer/details/${id}?type=${type}`)
+  }
+
   return (
-    <div
-      onClick={() =>
-        router.push({ pathname: `/admin/finance/organizer/details/${id}`, query: { payee, amount, date, status } })
-      }
-      className={styles.viewDetailsActionWrapper}
-    >
+    <div onClick={handleViewDetails} className={styles.viewDetailsActionWrapper}>
       View Details
     </div>
   )
 }
 
-OrganizerFinance.authGuard = false
-OrganizerFinance.guestGuard = false
-OrganizerFinance.acl = {
+Finance.authGuard = false
+Finance.guestGuard = false
+Finance.acl = {
   action: 'manage',
   subject: 'all' // Adjust the permissions as per your application's ACL configuration
 }
