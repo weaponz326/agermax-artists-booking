@@ -15,6 +15,7 @@ import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { useAuth } from 'src/hooks/useAuth'
 
 function ArtistProfile() {
   const router = useRouter()
@@ -22,26 +23,32 @@ function ArtistProfile() {
   const [artist, setArtist] = useState(null)
   const [openSideDrawer, setOpenSideDrawer] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const fetchArtistID = async () => {
       try {
-        console.log({ id })
         const artist = await getUserById(id)
-
         setArtist(artist)
       } catch (error) {
         console.log('failed to fetch user')
       }
     }
-    fetchArtistID()
-  }, [])
+    if (id) fetchArtistID()
+  }, [id])
 
   function drawerState(value) {
     setOpenDrawer(value)
   }
 
-  // if (artist === null) return <FallbackSpinner />
+  if (artist === null)
+    return (
+      <div>
+        <h2>Loading ...</h2>
+        <FallbackSpinner />
+      </div>
+    )
+
   return (
     <CustomPagesLayout>
       <main>
@@ -53,6 +60,8 @@ function ArtistProfile() {
               setOpenSideDrawer={setOpenSideDrawer}
               drawerState={drawerState}
               artist={artist}
+              user={user}
+              logout={logout}
             />
             <EventsSection artist={artist} />
           </div>
@@ -182,8 +191,16 @@ const TabView = ({ config }) => {
   )
 }
 
-const ArtisteProfileSection = ({ artist }) => {
+const ArtisteProfileSection = ({ artist, user, logout }) => {
   const [open, setOpen] = useState(false)
+
+  const handleOpenBookingCard = () => {
+    if (user) {
+      setOpen(true)
+    } else {
+      logout()
+    }
+  }
 
   return (
     <section>

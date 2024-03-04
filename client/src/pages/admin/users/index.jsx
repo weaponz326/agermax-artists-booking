@@ -69,19 +69,24 @@ const UsersListPage = () => {
   }
 
   function handleQueryChange(e) {
-    setQuery(e.target.value)
+    const value = e.target.value
+    setQuery(value)
+
     if (users) {
-      if (!query || query === '') {
+      if (!value.trim()) {
+        // If query is empty, show all users
         setUsersList(users)
       } else {
-        setActiveView('1')
+        // Otherwise, filter users based on the query
         const filteredList = users.filter(
           user =>
-            user.firstName.toLowerCase().includes(query.toLowerCase()) ||
-            user.lastName.toLowerCase().includes(query.toLowerCase())
+            user.firstName.toLowerCase().includes(value.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(value.toLowerCase())
         )
         setUsersList(filteredList)
       }
+      // Set active view to '1' if there are users to display
+      setActiveView(users.length > 0 && '1')
     }
   }
 
@@ -509,7 +514,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           open={snackbarOpen}
           autoHideDuration={6000}
           onClose={handleCloseSnackbar}
-          style={{ zIndex: 1400 }} 
+          style={{ zIndex: 1400 }}
         >
           <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}

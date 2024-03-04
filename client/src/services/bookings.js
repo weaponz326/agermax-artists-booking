@@ -39,3 +39,12 @@ export async function updateBooking(bookingData) {
     throw error // Re-throwing the error so that it can be handled where the function is called
   }
 }
+
+export async function deleteBookingById(id) {
+  try {
+    const { data } = await axios.delete(`${baseUrl}/bookings/${id}`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}

@@ -237,6 +237,17 @@ export const PaymentSubItems = ({ details, invoiceData }) => {
       <p>Due In</p>
       <TabButton>In {dayjs(invoiceData.paymentDueDate).diff(dayjs(invoiceData.invoiceDate), 'day')} days</TabButton>
       <h4>Payment Gateways</h4>
+      <span
+        onClick={() =>
+          router.push({
+            pathname: `/admin/finance/organizer/details/stripe-payment/${invoiceData._id}`,
+            query: details
+          })
+        }
+        className={styles.stripePaymentGateway}
+      >
+        Stripe Payment
+      </span>
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Credit Card</span>

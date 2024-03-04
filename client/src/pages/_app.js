@@ -59,6 +59,8 @@ import 'src/iconify-bundle/icons-bundle-react'
 import '../../styles/globals.css'
 import ArtistsProvider from 'src/providers/ArtistsProvider'
 import OrganizersProvider from 'src/providers/OrganizersProvider'
+import InvoiceProvider from 'src/providers/InvoiceProvider'
+import PaymentsProvider from 'src/providers/PaymentsProvider'
 const clientSideEmotionCache = createEmotionCache()
 
 // ** Pace Loader
@@ -104,38 +106,42 @@ const App = props => {
         <ArtistsProvider>
           <OrganizersProvider>
             <BookingsProvider>
-              <CacheProvider value={emotionCache}>
-                <Head>
-                  <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
-                  <meta name='description' content={`${themeConfig.templateName} –Artist Booking Platform`} />
-                  <meta name='keywords' content='' />
-                  <meta name='viewport' content='initial-scale=1, width=device-width' />
-                </Head>
+              <InvoiceProvider>
+                <PaymentsProvider>
+                  <CacheProvider value={emotionCache}>
+                    <Head>
+                      <title>{`${themeConfig.templateName} -Artist Booking Platform`}</title>
+                      <meta name='description' content={`${themeConfig.templateName} –Artist Booking Platform`} />
+                      <meta name='keywords' content='' />
+                      <meta name='viewport' content='initial-scale=1, width=device-width' />
+                    </Head>
 
-                <AuthProvider>
-                  <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                    <SettingsConsumer>
-                      {({ settings }) => {
-                        return (
-                          <ThemeComponent settings={settings}>
-                            <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                              {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
-                              {getLayout(<Component {...pageProps} />)}
-                              {/* </AclGuard> */}
-                            </Guard>
-                            <ReactHotToast>
-                              <Toaster
-                                position={settings.toastPosition}
-                                toastOptions={{ className: 'react-hot-toast' }}
-                              />
-                            </ReactHotToast>
-                          </ThemeComponent>
-                        )
-                      }}
-                    </SettingsConsumer>
-                  </SettingsProvider>
-                </AuthProvider>
-              </CacheProvider>
+                    <AuthProvider>
+                      <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                        <SettingsConsumer>
+                          {({ settings }) => {
+                            return (
+                              <ThemeComponent settings={settings}>
+                                <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                                  {/*   <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                                  {getLayout(<Component {...pageProps} />)}
+                                  {/* </AclGuard> */}
+                                </Guard>
+                                <ReactHotToast>
+                                  <Toaster
+                                    position={settings.toastPosition}
+                                    toastOptions={{ className: 'react-hot-toast' }}
+                                  />
+                                </ReactHotToast>
+                              </ThemeComponent>
+                            )
+                          }}
+                        </SettingsConsumer>
+                      </SettingsProvider>
+                    </AuthProvider>
+                  </CacheProvider>
+                </PaymentsProvider>
+              </InvoiceProvider>
             </BookingsProvider>
           </OrganizersProvider>
         </ArtistsProvider>

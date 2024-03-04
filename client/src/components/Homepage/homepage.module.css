@@ -55,7 +55,7 @@
   margin: 0 auto;
 }
 .events-genre-buttons {
-  margin-top: 1rem;
+  margin: 0.5rem 0;
   padding: 0;
   display: flex;
   justify-content: flex-start;
@@ -63,7 +63,17 @@
   flex-wrap: wrap;
 }
 
-.genre-btn {
+.seeAllGenreButton {
+  display: flex;
+  justify-content: flex-end;
+}
+.seeAllGenreButton button {
+  border: none;
+}
+
+.genre-btn,
+.skeletonGenreButton,
+.activeGenre {
   color: #183d4c;
   font-size: 0.95rem;
   font-weight: 500;
@@ -77,6 +87,24 @@
   align-items: center;
   gap: 5px;
   transition: 0.2s ease-in-out;
+}
+.skeletonGenre {
+  display: flex;
+  gap: 10px;
+  margin: 0.5rem 0;
+}
+
+.skeletonGenreButton {
+  padding: 0;
+  box-shadow: none;
+}
+.activeGenre {
+  /* background-image: linear-gradient(to right, #ffa34f, #ff5e4b); */
+  /* background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  background-color: #ffa34f;
+  color: white;
+  cursor: pointer;
 }
 
 .genre-btn::-webkit-scrollbar {

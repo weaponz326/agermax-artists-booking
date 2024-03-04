@@ -9,7 +9,9 @@ import styles from './homepage.module.css'
 import FaqAccordion from '../FaqAccordion/FaqAccordion'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { getOnlyArtistsList, getEventsPhotos } from 'src/services/artists'
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import Skeleton from '@mui/material/Skeleton'
+import { BiLoader } from 'react-icons/bi'
 
 const HomePage = () => {
   const [artistsList, setArtistsList] = useState([])
@@ -36,14 +38,35 @@ export const EventsSection = () => {
   const [events, setEvents] = useState([])
   const [numOfBookings, setNumberOfBookings] = useState(9)
   const currentDate = new Date()
+  const [genreList, setGenreList] = useState([])
+
+  /*********Set Genre Buttons and List*******/
+  useEffect(() => {
+    if (bookings) {
+      const upcomingEvents = bookings.filter(booking => {
+        const bookingDate = new Date(booking.dateTimeRequested)
+        return bookingDate >= currentDate && booking.status === 'approved' // Compare booking date with current date
+      })
+
+      // Collect all genres from the list of bookings into a single array
+      const allGenres = upcomingEvents.reduce((accumulator, event) => {
+        // Concatenate genres of each booking into the accumulator array
+        return accumulator.concat(event.genre)
+      }, [])
+
+      setGenreList([...new Set(allGenres)])
+    }
+  }, [bookings])
+
+  /*********Set Filtered Events List*******/
 
   useEffect(() => {
     if (bookings) {
       const upcomingEvents = bookings.filter(booking => {
         const bookingDate = new Date(booking.dateTimeRequested)
-        return bookingDate >= currentDate // Compare booking date with current date
+        return bookingDate >= currentDate && booking.status === 'approved' // Compare booking date with current date
       })
-      // console.log(upcomingEvents)
+
       if (selectedGenre === null) {
         setEvents(upcomingEvents)
       } else if (selectedGenre) {
@@ -57,6 +80,7 @@ export const EventsSection = () => {
     setNumberOfBookings(current => current + 3)
   }
 
+  /**************Rendering*************/
   return (
     <section className={styles['events']} id='events'>
       <div className={styles.eventsWrapper}>
@@ -66,9 +90,10 @@ export const EventsSection = () => {
         <EventsGenreButtons
           events={events}
           setEvents={setEvents}
-          bookings={bookings}
+          // bookings={events}
           selectedGenre={selectedGenre}
           setSelectedGenre={setSelectedGenre}
+          genreList={genreList}
         />
         <EventsLayout
           numOfBookings={numOfBookings}
@@ -79,7 +104,8 @@ export const EventsSection = () => {
         {/* <div className={styles['events-load-more']}> */}
         {events && events.length > numOfBookings ? (
           <button onClick={handleLoadMoreEvents} className={styles['events-load-more-btn']}>
-            Load More ...🌟
+            Load More ...
+            <BiLoader />
           </button>
         ) : null}
         {/* </div> */}
@@ -154,32 +180,70 @@ export const SubscriptionSection = () => {
   )
 }
 
-export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre, setSelectedGenre }) => {
-  const [genreList, setGenreList] = useState([])
-
-  useEffect(() => {
-    if (!events) return
-    // Collect all genres from the list of bookings into a single array
-    const allGenres = events.reduce((accumulator, event) => {
-      // Concatenate genres of each booking into the accumulator array
-      return accumulator.concat(event.genre)
-    }, [])
-
-    setGenreList([...new Set(allGenres)])
-  }, [events, selectedGenre, bookings])
-
+export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre, setSelectedGenre, genreList }) => {
   const handleGenreFilter = genre => {
     setSelectedGenre(genre)
   }
 
-  return (
-    <div className={styles['events-genre-buttons']}>
-      {genreList.map((genre, index) => (
-        <div key={index} className={styles['genre-btn']} onClick={() => handleGenreFilter(genre)}>
-          🎸{genre}
+  const skeletonCarouselDetail = {
+    background: 'rgb(219, 224, 228)'
+  }
+
+  if (!genreList) {
+    return (
+      <>
+        <div className={styles.seeAllGenreButton}>
+          <div className={styles.skeletonGenreButton}>
+            <Skeleton
+              animation='wave'
+              variant='rounded'
+              height='100%'
+              className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
+              sx={{ borderRadius: 'inherit', ...skeletonCarouselDetail }}
+            >
+              All Genre
+            </Skeleton>
+          </div>
         </div>
-      ))}
-    </div>
+        <div className={styles.skeletonGenre}>
+          {Array.from({ length: 13 }).map((genre, index) => (
+            <div className={styles.skeletonGenreButton} key={index}>
+              <Skeleton
+                width={70}
+                animation='wave'
+                variant='rounded'
+                height={22}
+                className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
+                sx={{ borderRadius: 'inherit', height: '100%', ...skeletonCarouselDetail }}
+              />
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
+  return (
+    <>
+      <div className={styles.seeAllGenreButton}>
+        <TabButton
+          className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
+          onClick={() => setSelectedGenre(null)}
+        >
+          All Genre
+        </TabButton>
+      </div>
+      <div className={styles['events-genre-buttons']}>
+        {genreList.map((genre, index) => (
+          <div
+            key={index}
+            className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
+            onClick={() => handleGenreFilter(genre)}
+          >
+            🎸{genre}
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
 

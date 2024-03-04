@@ -21,6 +21,7 @@ import { createBooking } from 'src/services/bookings'
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
 import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
+import useBookingFormData from 'src/hooks/useBookingFormData'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -73,24 +74,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   const searchBarContainerRef = useRef()
 
   /************************Form Data ************************** */
-  const [formData, setFormData] = useState({
-    // Initialize form data
-    status: 'pending',
-    organizerID: '',
-    eventTitle: '',
-    dateTimeRequested: '',
-    startTime: '',
-    endTime: '',
-    getInTime: '',
-    numberOfGuests: '',
-    ageRange: '',
-    locationVenue: '',
-    artistID: '',
-    availableTechnology: '',
-    otherComments: '',
-    gallery: [],
-    genre: []
-  })
+  const { formData, setFormData } = useBookingFormData()
 
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
@@ -106,18 +90,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     setOpen(false)
   }
 
-  const datePickerRef = useRef(null)
-  const getInTimeRef = useRef(null)
-  const startTimeRef = useRef(null)
-  const endTimeRef = useRef(null)
   const selectArtistRef = useRef(null)
-
-  useEffect(() => {
-    // if (activeInputTab == 1) datePickerRef.current.focus()
-    // if (activeInputTab == 2) getInTimeRef.current.focus()
-    // if (activeInputTab == 3) startTimeRef.current.focus()
-    // if (activeInputTab == 4) endTimeRef.current.focus()
-  }, [activeInputTab])
 
   useEffect(() => {
     //Get All Artists Lists
@@ -125,19 +98,19 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   }, [artists])
 
   //Effects from scroll and click events
-  useEffect(() => {
-    const handleScroll = () => {
-      setHideMenuItems(true)
-      // setActiveTab(null)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [hideMenuItems])
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setHideMenuItems(true)
+  //     // setActiveTab(null)
+  //   }
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll)
+  //   }
+  // }, [hideMenuItems])
 
-  //*********** */
-  //Click Event handler
+  // *********** */
+  // Click Event handler
   // useEffect(() => {
   //   //Listen to a click event outside the searchBarContainer ref and set activeTab to null
   //   const handleClickOutsideSearch = event => {
@@ -154,7 +127,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   //     if (antDropdownPicker) return
   //     if (bookingCardWrapper) return
   //     if (menuWrapper == null) {
-  //       // setActiveTab(null)
+  //       setActiveInputTab(null)
   //       setHideMenuItems(true)
   //     }
   //   }
@@ -163,11 +136,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   //     document.removeEventListener('click', handleClickOutsideSearch)
   //   }
   // }, [])
-  //************** */
-
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
 
   const [submittable, setSubmittable] = useState(false)
 
@@ -191,7 +159,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     const index = parseInt(id) + 1
     setActiveInputTab(index)
     setFormData(oldValue => ({ ...oldValue, [name]: value, organizerID: user._id }))
-    console.log(index)
   }
 
   const handleSubmit = async e => {
@@ -218,24 +185,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
     setHideMenuItems(false)
   }
 
-  const navMenu = (
-    <h3 className={styles['nav-menu-bar']}>Booking Entertainment</h3>
-    // <ul className={styles['nav-menu-bar']}>
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Artists</span>
-    //   </li>
-    //   <div className={styles['search-item-divider']}></div>
-
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Anywhere</span>
-    //   </li>
-    //   <div className={styles['search-item-divider']}></div>
-
-    //   <li className={styles['nav-menu-bar-item']}>
-    //     <span>Anytime</span>
-    //   </li>
-    // </ul>
-  )
+  const navMenu = <h3 className={styles['nav-menu-bar']}>Booking Entertainment</h3>
   const artistsDropdownDisplay = artist => (
     <div className={styles.artistsListPreview}>
       <div className={styles.searchInputFieldPictureContainer}>
@@ -483,28 +433,6 @@ export const CustomDropdown = ({
   }
 
   return (
-    // <Dropdown
-    //   menu={{
-    //     items
-    //   }}
-    //   dropdownRender={menu => (
-    //     <div>
-    //       {React.cloneElement(menu, {
-    //         style: { boxShadow: 'none' }
-    //       })}
-
-    //       <Space
-    //         style={{
-    //           padding: 8
-    //         }}
-    //       ></Space>
-    //     </div>
-    //   )}
-    // >
-    //   <a onClick={e => e.preventDefault()}>
-    //     <Space>Hover me</Space>
-    //   </a>
-    // </Dropdown>
     <Dropdown
       // disabled={open}
       open={open}

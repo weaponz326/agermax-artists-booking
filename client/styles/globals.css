@@ -15,6 +15,8 @@
   --box-shadow: 0px 6px 12px rgba(19, 41, 104, 0.1);
   --card-overlay-box: white;
   --main-font-family: 'Inter', Arial, sans-serif;
+  --skeleton-container-color: '#e9ebec';
+  --skeleton-detail-element-color: 'rgb(219, 224, 228)';
 
   /* artist-profile */
   --main-background-color: #edf1f4;

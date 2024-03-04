@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-// import dayjs from 'dayjs'
-// import moment from 'moment'
 
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
-import { Tag } from 'src/pages/artist-profile'
+import { Tag } from 'src/pages/artists/[id]'
 import { Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
 import CheckCircle from '@material-ui/icons/CheckCircle'
@@ -17,6 +15,7 @@ import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import useBookingFormData from 'src/hooks/useBookingFormData'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -30,26 +29,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
   const [startTime, setStartTime] = useState(null)
   const [endTime, setEndTime] = useState(null)
   const [disableNext, setDisableNext] = useState(true)
-  const [formData, setFormData] = useState({
-    // Initialize form data
-    // Example:
-    status: 'pending',
-    organizerID: '',
-    eventTitle: 'Not Provided',
-    dateTimeRequested: '',
-    startTime: '',
-    endTime: '',
-    getInTime: '',
-    numberOfGuests: '',
-    ageRange: '',
-    locationVenue: '',
-    artistID: '',
-    availableTechnology: '',
-    otherComments: '',
-    gallery: []
 
-    // Add other fields as needed
-  })
+  /************************Form Data ***************************/
+  const { formData, setFormData } = useBookingFormData()
 
   const customTheme = createTheme({
     components: {
@@ -160,13 +142,6 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     }
   })
 
-  const handleChange = e => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
   const handleSubmit = async e => {
     // e.preventDefault()
     try {
@@ -181,14 +156,12 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
 
   //Handle Disable or Enable effects of buttons
   useEffect(() => {
-    if (!startTime || !endTime || !selectedDate || !getInTime) {
-      setDisableNext(true)
+    if (!formData.startTime || !formData.endTime || formData.dateTimeRequested || !formData.getInTime) {
+      setDisableNext(false)
     } else {
       setDisableNext(false)
     }
-  }, [selectedDate, getInTime, startTime, endTime])
-
-  const steps = ['Select Date', 'Select Times', 'Summary']
+  }, [formData])
 
   //Handlers for Next and Back Buttons Click and Submission of Date
   const handleNext = () => {
@@ -203,26 +176,12 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     return
   }
 
-  //Handlers for Form Data Input
-  const handleDateChange = date => {
-    setSelectedDate(date.format('YYYY-MM-DD'))
-    //Embed artistID and userID into the form data
-    date && setFormData({ ...formData, dateTimeRequested: date.toDate(), artistID: artist._id, organizerID: user._id })
-  }
-
-  const handleChangeGetInTime = (time, timeString) => {
-    time && setFormData({ ...formData, getInTime: time.toDate() })
-    setGetInTime(time)
-  }
-
-  const handleChangeStartTime = (time, timeString) => {
-    time && setFormData({ ...formData, startTime: time.toDate() })
-    setStartTime(time)
-  }
-
-  const handleChangeEndTime = (time, timeString) => {
-    time && setFormData({ ...formData, endTime: time.toDate() })
-    setEndTime(time)
+  const handleChange = (name, value) => {
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+    console.log(formData)
   }
 
   if (artist) {
@@ -275,8 +234,12 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           fontSize: '16px'
                         }
                       }}
+                      onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+                      // className={styles.modalCardContentInputField}
+                      label='Select Event Date'
+                      value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
                       disablePast
-                      onChange={handleDateChange}
+                      name='dateTimeRequested'
                     />
                   </Grid>
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
@@ -288,13 +251,10 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         Get In Time{' '}
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
                         name='getInTime'
-                        ampm={false}
+                        value={dayjs(formData.getInTime)}
                         minutesStep={15}
-                        // value={getInTime}
-                        onChange={handleChangeGetInTime}
-                        renderInput={params => <TextField {...params} />}
+                        onChange={time => handleChange('getInTime', dayjs(time))}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -317,6 +277,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         format='HH:mm'
                         disabled={!formData.dateTimeRequested}
                         skipDisabled
+                        ampm={false}
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -324,12 +285,10 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         Start Time
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
-                        ampm={false}
                         minutesStep={15}
-                        // value={startTime}
-                        onChange={handleChangeStartTime}
-                        renderInput={params => <TextField {...params} />}
+                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
+                        onChange={time => handleChange('startTime', dayjs(time))}
+                        value={dayjs(formData.startTime)}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -349,9 +308,10 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
+                        name='startTIme'
                         format='HH:mm'
                         disabled={!formData.getInTime}
-                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
+                        ampm={false}
                         skipDisabled
                       />
                     </Grid>
@@ -360,13 +320,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         End Time
                       </Typography>
                       <TimePicker
-                        // defaultValue={new Date().getHours()}
-                        ampm={false}
                         minutesStep={15}
-                        // value={endTime}
                         minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
-                        onChange={handleChangeEndTime}
-                        renderInput={params => <TextField {...params} />}
+                        value={formData.endTime}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -386,9 +342,11 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
+                        onChange={time => handleChange('endTime', dayjs(time))}
                         format='HH:mm'
                         disabled={!formData.startTime}
                         skipDisabled
+                        ampm={false}
                       />
                     </Grid>
                   </Grid>
@@ -406,7 +364,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               )}
 
               {activeStep === 1 && (
-                <Grid height='100%' container flexDirection='column'>
+                <Grid height='100%' container direction='column' overflow={'auto'}>
                   <Typography fontSize='24px' fontWeight='500' gutterBottom>
                     {artist.firstName} {artist.lastName}
                   </Typography>
@@ -604,53 +562,5 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
     />
   )
 }
-
-// const BookingTimePicker = ({ getInTime, setGetInTime, startTime, setStartTime, endTime, setEndTime }) => {
-//   const labelField = () => {
-//     if (getInTime) return 'Get In Time'
-//     if (startTime) return 'Start Time'
-//     if (endTime) return 'End Time'
-//   }
-
-//   const onChangeTime = () => {
-//     if (getInTime) {
-//       return time => {
-//         setGetInTime(time)
-//       }
-//     }
-//     if (startTime) {
-//       return time => {
-//         setStartTime(time.format('HH:mm'))
-//       }
-//     }
-//     if (endTime) {
-//       return time => {
-//         setEndTime(time)
-//       }
-//     }
-//   }
-
-//   return (
-//     <Grid item xs={4} padding={1.5}>
-//       <Typography>{labelField()}</Typography>
-//       <TimePicker
-//         ampm={false}
-//         minutesStep={15}
-//         value={getInTime}
-//         onChange={onChangeTime}
-//         renderInput={params => <TextField {...params} />}
-//         sx={{
-//           '& .MuiOutlinedInput-input': {
-//             padding: '0',
-//             textAlign: 'center',
-//             fontSize: 'inherit'
-//           },
-//           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-//           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-//         }}
-//       />
-//     </Grid>
-//   )
-// }
 
 export default BookingCard

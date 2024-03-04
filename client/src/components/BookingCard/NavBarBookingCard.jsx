@@ -13,7 +13,8 @@ import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
-import { Tag } from 'src/pages/artist-profile'
+// import { Tag } from 'src/pages/artist-profile'
+import { Tag } from 'src/pages/artists/[id]'
 import { Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
 import CheckCircle from '@material-ui/icons/CheckCircle'
@@ -124,7 +125,8 @@ function NavBarBookingCard({
           root: {
             boxShadow: 'none',
             padding: '0',
-            fontFamily: 'inherit'
+            fontFamily: 'inherit',
+            overflow: 'auto'
           }
         }
       },
@@ -143,6 +145,8 @@ function NavBarBookingCard({
             color: '#4B627F',
             fontFamily: 'inherit',
             fontSize: '16px',
+            overflow: 'auto',
+
             '&:hover': {
               backgroundColor: '#B9FACF', // Example hover style
               borderRadius: '9px'
@@ -250,6 +254,12 @@ function NavBarBookingCard({
                   <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
                     <DatePicker
                       onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+                      className={styles.modalCardContentInputField}
+                      label='Select Event Date'
+                      value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
+                      disablePast
+                      name='dateTimeRequested'
+                      autoFocus
                       sx={{
                         width: '100%',
                         '& .MuiDayCalendar-header': {
@@ -267,15 +277,6 @@ function NavBarBookingCard({
                           fontSize: '16px'
                         }
                       }}
-                      className={styles.modalCardContentInputField}
-                      label='Select Event Date'
-                      value={dayjs(formData.dateTimeRequested)}
-                      disablePast
-                      name='dateTimeRequested'
-                      autoFocus
-                      // slotProps={{
-                      //   field: { clearable: true, onClear: () => setCleared(true) }
-                      // }}
                     />
                   </Grid>
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
