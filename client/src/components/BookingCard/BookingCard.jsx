@@ -364,7 +364,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               )}
 
               {activeStep === 1 && (
-                <Grid height='100%' container direction='column' overflow={'auto'}>
+                <Grid container direction='column' overflow={'auto'}>
                   <Typography fontSize='24px' fontWeight='500' gutterBottom>
                     {artist.firstName} {artist.lastName}
                   </Typography>
@@ -396,8 +396,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                       <Typography fontSize='15px' color='#4B627F'>
                         Date
                       </Typography>
-                      <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                        {selectedDate ? selectedDate : '---'}
+                      <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                        {dayjs(formData.dateTimeRequested).format('YYYY-MM-DD')}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -410,24 +410,24 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         <Typography fontSize='15px' color='#4B627F'>
                           Get In
                         </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {getInTime ? getInTime.format('HH:mm') : '---'}
+                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                          {dayjs(formData.getInTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                       <Grid item textAlign='center'>
                         <Typography fontSize='15px' color='#4B627F'>
                           Start
                         </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {startTime ? startTime.format('HH:mm') : '---'}
+                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                          {dayjs(formData.startTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                       <Grid item textAlign='center'>
                         <Typography fontSize='15px' color='#4B627F'>
                           End
                         </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>
-                          {endTime ? endTime.format('HH:mm') : '---'}
+                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                          {dayjs(formData.endTime).format('HH:mm')}
                         </Typography>
                       </Grid>
                     </Grid>
