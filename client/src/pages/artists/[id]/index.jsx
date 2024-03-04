@@ -142,7 +142,7 @@ export const VideoItem = ({ artist }) => {
             <div key={index}>
               <PlayCircle size={80} className={styles['play-icon']} color='white' />
               <div className={styles.videoImage}>{gallery}</div>
-              <img src={gallery.urls.regular} alt='event-video' />
+              {/* <img src={gallery.urls.regular} alt='event-video' /> */}
             </div>
           </div>
         ))}
