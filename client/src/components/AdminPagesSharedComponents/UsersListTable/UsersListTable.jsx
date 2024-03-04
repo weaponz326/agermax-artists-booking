@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
+import axios from 'axios' // Import axios here
 import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { deleteUserById } from 'src/services/users'
@@ -94,35 +94,37 @@ const UsersListTable = ({
     setOpenDeleteDialog(true)
   }
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
-  //     setUsersList(response.data.users) // Assuming your API responds with an array of users
-  //   } catch (error) {
-  //     console.error('Failed to fetch users:', error)
-  //   }
-  // }
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
+      setUsersList(response.data.users) // Assuming your API responds with an array of users
+    } catch (error) {
+      console.error('Failed to fetch users:', error)
+    }
+  }
 
-  // useEffect(() => {
-  //   fetchUsers()
-  // }, [])
+  useEffect(() => {
+    fetchUsers()
+  }, [])
 
   const confirmDelete = async () => {
     if (userToDelete) {
       try {
         const response = await deleteUserById(userToDelete)
         console.log('User deleted successfully:', response)
-        setUsersList(usersList.filter(user => user._id !== userToDelete))
+        setUsersList(currentUsersList => currentUsersList.filter(user => user._id !== userToDelete))
         setSnackbarMessage('User deleted successfully.')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
         fetchUsers()
       } catch (error) {
+        // This block will execute if there's an error with the deletion process.
         console.error('Failed to delete user:', error.message)
         setSnackbarMessage('Failed to delete user. Please try again.')
         setSnackbarSeverity('error')
-        setSnackbarOpen(true)
       } finally {
+        // This block executes after try/catch, regardless of the outcome.
+        setSnackbarOpen(true)
         setOpenDeleteDialog(false)
         setUserToDelete(null)
       }

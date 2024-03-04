@@ -156,7 +156,7 @@ const UsersListPage = () => {
   )
 }
 
-const AddUserModalContent = ({ setUsersList, hideModal }) => {
+export const AddUserModalContent = ({ setUsersList, hideModal }) => {
   const [submitting, setSubmitting] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -169,25 +169,13 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
   }
   const auth = useAuth()
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
-  //     setUsersList(response.data.users) // Assuming your API responds with an array of users
-  //   } catch (error) {
-  //     console.error('Failed to fetch users:', error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchUsers()
-  // }, [])
-
   // ** Router for redirection after successful registration
   const router = useRouter()
   const [userData, setUserData] = useState({
     profilePhoto: '',
     firstName: '',
     lastName: '',
+    password: 'admin',
     role: '',
     email: '',
     contactPhone: '',
@@ -219,15 +207,11 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
         setSnackbarMessage('User added successfully')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        fetchUsers()
       } else {
-        console.error('Failed to add user', response.data.message)
-        setSnackbarMessage('Failed to add user')
-        setSnackbarSeverity('error')
-        setSnackbarOpen(true)
+        router.push('/admin/users') // Or redirect to a 'success' page
       }
     } catch (err) {
-      console.error('An error occurred while adding the user', err.response?.data?.message || err.message)
+      console.error('An error occurred while adding th user', err.response?.data?.message || err.message)
       setSnackbarMessage(err.response?.data?.message)
       setSnackbarSeverity('error')
       setSnackbarOpen(true)
@@ -235,6 +219,7 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
       setSubmitting(false)
     }
   }
+
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
@@ -347,22 +332,12 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Add New User</TabButton>
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
       </form>
     </>
   )
 }
 
-export const EditUserModalContent = ({ selectedUser, hideModal }) => {
+export const EditUserModalContent = ({ selectedUser }) => {
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',
     firstName: selectedUser?.firstName || '',
@@ -397,30 +372,15 @@ export const EditUserModalContent = ({ selectedUser, hideModal }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState('info')
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
-      setUsersList(response.data.users) // Assuming your API responds with an array of users
-    } catch (error) {
-      console.error('Failed to fetch users:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
   const handleUpdateUser = async e => {
     e.preventDefault()
     try {
       const response = await updateUserDetailsById(selectedUser, userData) // Ensure correct ID usage
       if (response.status === 200) {
         console.log('User updated successfully:', response.data)
-        hideModal()
         setSnackbarMessage('User updated successfully')
         setSnackbarSeverity('success')
-        setUserData(response.data)
-        fetchUsers()
+        setUserData(response.data) // Update userData with the response
       } else {
         console.log('Update failed:', response.data)
         setSnackbarMessage('Failed to update user')
