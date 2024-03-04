@@ -156,8 +156,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
 
   //Handle Disable or Enable effects of buttons
   useEffect(() => {
-    if (!formData.startTime || !formData.endTime || formData.dateTimeRequested || !formData.getInTime) {
-      setDisableNext(false)
+    if (!formData.startTime || !formData.endTime || !formData.dateTimeRequested || !formData.getInTime) {
+      setDisableNext(true)
     } else {
       setDisableNext(false)
     }
