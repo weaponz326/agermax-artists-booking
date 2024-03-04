@@ -19,7 +19,8 @@ const UsersListTable = ({
   setUsersList,
   setModalType,
   selectedUser,
-  setSelectedUser
+  setSelectedUser,
+  users
 }) => {
   const data = usersList
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
@@ -93,18 +94,18 @@ const UsersListTable = ({
     setOpenDeleteDialog(true)
   }
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-      setUsersList(response.data.users); // Assuming your API responds with an array of users
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-    }
-  };
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
+  //     setUsersList(response.data.users) // Assuming your API responds with an array of users
+  //   } catch (error) {
+  //     console.error('Failed to fetch users:', error)
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   fetchUsers()
+  // }, [])
 
   const confirmDelete = async () => {
     if (userToDelete) {
@@ -115,7 +116,7 @@ const UsersListTable = ({
         setSnackbarMessage('User deleted successfully.')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        fetchUsers();
+        fetchUsers()
       } catch (error) {
         console.error('Failed to delete user:', error.message)
         setSnackbarMessage('Failed to delete user. Please try again.')
@@ -140,6 +141,7 @@ const UsersListTable = ({
     </Menu>
   )
 
+  if (!users) return <div>Loading...</div>
   return (
     <div>
       <Table dataSource={usersList} columns={columns} />

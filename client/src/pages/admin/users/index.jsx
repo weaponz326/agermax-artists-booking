@@ -44,7 +44,7 @@ const UsersListPage = () => {
    ********** */
 
   useEffect(() => {
-    if (users !== undefined) {
+    if (users) {
       setUsersList(users)
     }
   }, [users])
@@ -121,6 +121,7 @@ const UsersListPage = () => {
         unhideModal={unhideModal}
         hideModal={hideModal}
         usersList={usersList}
+        users={users}
         setUsersList={setUsersList}
         setModalType={setModalType}
         selectedUser={selectedUser}
@@ -168,18 +169,18 @@ const AddUserModalContent = ({ setUsersList, hideModal }) => {
   }
   const auth = useAuth()
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
-      setUsersList(response.data.users) // Assuming your API responds with an array of users
-    } catch (error) {
-      console.error('Failed to fetch users:', error)
-    }
-  }
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
+  //     setUsersList(response.data.users) // Assuming your API responds with an array of users
+  //   } catch (error) {
+  //     console.error('Failed to fetch users:', error)
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchUsers()
-  }, [])
+  // useEffect(() => {
+  //   fetchUsers()
+  // }, [])
 
   // ** Router for redirection after successful registration
   const router = useRouter()

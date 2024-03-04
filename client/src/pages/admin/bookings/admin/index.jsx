@@ -320,9 +320,11 @@ export const AdminPagesNavBar = ({
           <div className={styles.searchBar}>
             <SearchBar placeholder='Search bookings ...' value={query} onChange={handleQuery} />
           </div>
-          <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
-            Add Bookings
-          </TabButton>
+          {user && user.role != 'artist' && (
+            <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
+              Add Bookings
+            </TabButton>
+          )}
           <SlideInModal
             openModal={openModal}
             unhideModal={unhideModal}
