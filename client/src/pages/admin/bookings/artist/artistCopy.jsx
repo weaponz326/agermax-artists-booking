@@ -1,7 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 //**Import Components */
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
@@ -24,7 +23,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
-import { Modal } from '@mui/base/Modal'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -32,7 +30,7 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 //Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { createBooking } from 'src/services/bookings'
+import { createBooking, updateBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
@@ -41,12 +39,6 @@ import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
-import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
-import { getUserById } from 'src/services/users'
-import { BiTrash } from 'react-icons/bi'
-import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
-import SnackbarAlert from 'src/views/components/snackbar/SnackbarAlert'
-import useBookingFormData from 'src/hooks/useBookingFormData'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -58,23 +50,22 @@ const BookingPage = () => {
   const [approvedCount, setApprovedCount] = useState(null)
   const [cancelledCount, setCancelledCount] = useState(null)
 
-  /****************Booking States Depending Different Users************/
-  const [userBookings, setUserBookings] = useState([])
+  /*****************Fetch Artist Bookings ******************/
+  const [artistBookings, setArtistBookings] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [approvedArtistBookings, setApprovedArtistBookings] = useState([])
 
   useEffect(() => {
     if (bookings && user) {
-      if (user.role === 'admin') {
-        setUserBookings(bookings)
-      } else if (user.role === 'organizer') {
-        const userBookings = bookings.filter(booking => booking.organizerID === user._id)
-        setUserBookings(userBookings)
-      } else if (user.role === 'artist') {
-        const userBookings = bookings.filter(booking => booking.artistID === user._id)
-        setUserBookings(userBookings)
-      }
+      const userBookings = bookings.filter(booking => booking.artistID === user._id)
+      setArtistBookings(userBookings)
+      const readyBookings = bookings.filter(booking => booking.status === 'approved')
+      setApprovedArtistBookings(readyBookings)
+      setLoading(false)
     }
   }, [bookings, user])
 
+  /*****************Render ******************/
   return (
     <main className={styles.bookingsPage}>
       <AdminPagesNavBar
@@ -85,12 +76,12 @@ const BookingPage = () => {
         setActiveEventsView={setActiveEventsView}
         eventsStatusView={eventsStatusView}
         setEventsStatusView={setEventsStatusView}
-        bookings={userBookings}
+        bookings={artistBookings}
         logout={logout}
       />
       {activeEventsView === 'ListView' && (
         <EventsListView
-          bookings={userBookings}
+          bookings={artistBookings}
           events={events}
           setEvents={setEvents}
           eventsStatusView={eventsStatusView}
@@ -104,9 +95,9 @@ const BookingPage = () => {
         />
       )}
       <div className={styles.threeDCalendar}>
-        {activeEventsView === 'ThreeDView' && <CustomFullCalendar view={'timeGridDay'} userBookings={userBookings} />}
-        {activeEventsView === 'MonthView' && <CustomFullCalendar view={'dayGridMonth'} userBookings={userBookings} />}
-        {activeEventsView === 'WeekView' && <CustomFullCalendar view={'dayGridWeek'} userBookings={userBookings} />}
+        {activeEventsView === 'ThreeDView' && <CustomFullCalendar view={'timeGridDay'} userBookings={artistBookings} />}
+        {activeEventsView === 'MonthView' && <CustomFullCalendar view={'dayGridMonth'} userBookings={artistBookings} />}
+        {activeEventsView === 'WeekView' && <CustomFullCalendar view={'dayGridWeek'} userBookings={artistBookings} />}
       </div>
     </main>
   )
@@ -197,14 +188,14 @@ export const EventsListView = ({
           className={eventsStatusView === 'pending' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Pending
-          {pendingCount && <div className={styles.statusCount}>{pendingCount}</div>}
+          {events && <div className={styles.statusCount}>{pendingCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('approved')}
           className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Approved
-          {/* {events && <div className={styles.statusCount}>{approvedCount}</div>} */}
+          {events.length > 0 && <div className={styles.statusCount}>{approvedCount}</div>}
         </TabButton>
         <TabButton
           onClick={() => setEventsStatusView('cancelled')}
@@ -234,24 +225,47 @@ export const AdminPagesNavBar = ({
   //Search
   const [query, setQuery] = useState('')
 
-  // Function to handle query changes
-  function handleQuery(e) {
-    const value = e.target.value
-    setQuery(value)
-
-    // Filter bookings based on the query
-    if (!value.trim()) {
-      // If query is empty, show all bookings
+  useEffect(() => {
+    // if (events.length && query) {
+    //   const filteredEventTitles = events.filter(event => {
+    //     if (event.eventTitle) {
+    //       return event.eventTitle.toLowerCase().includes(query.toLowerCase())
+    //     }
+    //   })
+    //   setEvents(filteredEventTitles)
+    // } else {
+    //   setEvents(bookings)
+    // }
+    if (!query || query === '') {
       setEvents(bookings)
     } else {
-      // Otherwise, filter bookings based on the query
-      const filteredList = bookings.filter(booking => booking.eventTitle.toLowerCase().includes(value.toLowerCase()))
-      setEvents(filteredList)
+    }
+  }, [query])
+
+  function handleQuery(e) {
+    setQuery(e.target.value)
+    setEventsStatusView('all')
+    if (events) {
+      if (!query || query === '') {
+        setEvents(bookings)
+      } else {
+        const filteredList = events.filter(
+          event => {
+            if (event.eventTitle) event.eventTitle.toLowerCase().includes(query.toLowerCase())
+          }
+          //  || event.lastName.toLowerCase().includes(query.toLowerCase())
+        )
+        setEvents(filteredList)
+      }
     }
   }
 
   function unhideModal() {
+    // if (user) {
     setOpenModal(true)
+    // } else {
+    //   logout()
+    // }
   }
 
   function hideModal() {
@@ -268,9 +282,9 @@ export const AdminPagesNavBar = ({
         <div className={styles.calendarViewTabs}>
           <div className={styles.dateFilter}>
             <TabButton className={styles.selectMonth}>
-              <div className={styles.selectMonthContent}>
-                <AntDesignDatePicker />
-              </div>
+              {/* <div className={styles.selectMonthContent}>
+                <DatePicker style={{ border: 'none' }} />
+              </div> */}
             </TabButton>
             <TabButton className={styles.filterTab}>
               <div className={styles.filterTabContent}>
@@ -320,9 +334,7 @@ export const AdminPagesNavBar = ({
           <div className={styles.searchBar}>
             <SearchBar placeholder='Search bookings ...' value={query} onChange={handleQuery} />
           </div>
-          <TabButton onClick={unhideModal} className={styles.addBookingsButton}>
-            Add Bookings
-          </TabButton>
+
           <SlideInModal
             openModal={openModal}
             unhideModal={unhideModal}
@@ -451,12 +463,13 @@ export const EventsListItem = ({ event }) => {
             Details
           </TabButton>
         )}
+        {/* {event.status === 'cancelled' && <TabButton buttonStyle={eventStatus.buttonStyle}>Cancelled</TabButton>} */}
       </div>
       <SlideInModal
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<BookingsModalContent booking={event} hideModal={hideModal} unhideModal={unhideModal} />}
+        modalContent={<BookingsModalContent booking={event} />}
         SubmitButton={'Submit'}
       />
     </div>
@@ -478,9 +491,8 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
-export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
+export const BookingsModalContent = ({ booking }) => {
   const router = useRouter()
-  const { user } = useAuth()
 
   /****************Generic States***************/
   const [artistsOptions, setArtistsOptions] = useState([])
@@ -488,71 +500,52 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const { artists } = useArtists()
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
-  const [bookingOrganizer, setBookingOrganizer] = useState([])
-  const { updateBooking, deleteBooking, loading } = useBookings()
-  const [open, setOpen] = useState(false)
+  const [bookingOrganizer, setBookingOrganizer] = useState('')
+  const { user, logout } = useAuth()
 
   /****************Form Data***************/
-  const { formData, setFormData } = useBookingFormData(booking)
+  const [formData, setFormData] = useState({
+    // Initialize form data
+    _id: booking && booking._id,
+    status: booking?.status || 'pending',
+    organizerID: booking?.organizerID || '',
+    eventTitle: booking?.eventTitle || '',
+    dateTimeRequested: booking ? dayjs(booking.dateTimeRequested) : '',
+    startTime: booking ? dayjs(booking.startTime) : '',
+    endTime: booking ? dayjs(booking.endTime) : '',
+    getInTime: booking ? dayjs(booking.getInTime) : '',
+    numberOfGuests: booking?.numberOfGuests || '',
+    ageRange: booking?.ageRange || '',
+    locationVenue: booking?.locationVenue || '',
+    artistID: user._id,
+    availableTechnology: booking?.availableTechnology || '',
+    otherComments: booking?.otherComments || '',
+    gallery: booking?.gallery || [],
+    genre: booking?.genre || []
+  })
 
-  /****************Gallery********************/
+  /****************Gallery***************/
   const [fileList, setFileList] = useState(formData.gallery)
-
-  /****************Save Button Text********************/
-  const [saveButtonText, setSaveButtonText] = useState('')
-  useEffect(() => {
-    if (!booking) {
-      setSaveButtonText('Create Booking')
-    }
-    if ((booking && user && user.role === 'admin') || 'organizer') {
-      setSaveButtonText('Update')
-    }
-    if (booking && user && user.role === 'artist') {
-      setSaveButtonText('Accept & Submit for Approval')
-    }
-  }, [user, booking])
 
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
     booking: booking && booking._id,
-    amount: 0,
-    tax: 0,
-    email: '',
-    status: 'unpaid',
-    invoiceDate: dayjs(),
-    paymentDueDate: dayjs().add(14, 'day')
+    amount: booking?.amount || 0,
+    tax: booking?.tax || 0,
+    email: booking?.email || 'tobeLinked@gmail.com',
+    status: booking?.status || '',
+    invoiceDate: dayjs(booking?.invoiceDate) || '',
+    paymentDueDate: dayjs(booking?.paymentDueDate) || ''
   })
-
-  useEffect(() => {
-    if (!booking) return
-    const fetchOrgData = async () => {
-      const booker = await getUserById(booking.organizerID)
-      setBookingOrganizer(booker)
-      setInvoiceData({ ...invoiceData, email: booker.email })
-    }
-    fetchOrgData()
-  }, [booking])
-
-  const handleCreateInvoice = async e => {
-    e.preventDefault()
-    try {
-      const newInvoice = await createInvoice(invoiceData)
-      // setInvoiceData({ ...newInvoice })
-      console.log('Invoice created Successfully! : ', newInvoice)
-      router.push({ pathname: `/admin/finance/admin/details/${newInvoice._id}`, query: { type: 'invoice' } })
-      // Optionally, you can redirect or perform any other action after successful booking creation
-    } catch (error) {
-      console.error('Error creating invoice: ', error)
-      // Handle error, e.g., display an error message to the user
-    }
-  }
 
   /****************Both Invoice & FormData Actions***************/
   useEffect(() => {
-    if (!artists && !organizers) return
-    setArtistsOptions(artists)
-    setOrganizersOptions(organizers)
-  }, [artists, organizers])
+    if (user && artists && organizers) {
+      setArtistsOptions(artists.find(artist => artist._id === user._id))
+      setOrganizersOptions(organizers)
+      setBookingOrganizer(organizers.find(org => org._id === formData.organizerID))
+    }
+  }, [artists, organizers, user])
 
   const handleChange = e => {
     setFormData({
@@ -567,8 +560,6 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
       try {
         const newBooking = await createBooking(formData)
         console.log('New booking created: ', newBooking)
-        hideModal()
-
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
         console.error('Error creating booking: ', error)
@@ -578,8 +569,6 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
       try {
         const newBooking = await updateBooking(formData)
         console.log('Booking Updated Successfully! : ', newBooking)
-        hideModal()
-
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
         console.error('Error updating booking: ', error)
@@ -593,31 +582,9 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     try {
       const newBooking = await updateBooking(formData)
       console.log('Booking Updated Successfully! : ', newBooking)
-      hideModal()
-
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error updating booking: ', error)
-      // Handle error, e.g., display an error message to the user
-    }
-  }
-
-  const confirmDelete = () => {
-    if (!loading) {
-      setOpen(false)
-      hideModal()
-    }
-  }
-
-  const handleDelete = async booking => {
-    try {
-      const newBooking = await deleteBooking(booking)
-      console.log('Booking deleted Successfully! : ', newBooking)
-      confirmDelete()
-
-      // Optionally, you can redirect or perform any other action after successful booking creation
-    } catch (error) {
-      console.error('Error deleting booking: ', error)
       // Handle error, e.g., display an error message to the user
     }
   }
@@ -631,7 +598,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     setFormData({ ...formData, status: 'cancelled' })
   }
 
-  /*********************Rendering**********************/
+  /*****************Rendering***************/
   if (modalContentView === 'details') {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -649,36 +616,33 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             label="Event's Title"
             size='small'
             spellCheck
-            disabled={user && user.role === 'artist'}
+            disabled
           />
-          <Autocomplete
+          <TextField
+            placeholder='Organizer'
             className={styles.modalCardContentInputField}
-            onChange={(event, organizer) => {
-              if (organizer) setFormData({ ...formData, organizerID: organizer._id })
-            }}
-            id='organizerID'
-            options={organizersOptions}
-            getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Organizer' />}
+            type='text'
+            name='organizer'
+            id='organizer'
+            value={bookingOrganizer.fullName}
+            label='Organizer'
             size='small'
-            sx={{ padding: '0' }}
-            value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
-            readOnly={user && user.role === 'artist'}
+            spellCheck
+            disabled
           />
-          <Autocomplete
+          <TextField
+            placeholder='Artist'
             className={styles.modalCardContentInputField}
-            onChange={(event, artist) => {
-              if (artist) setFormData({ ...formData, artistID: artist._id })
-            }}
-            id='artistID'
-            options={artistsOptions}
-            getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Artist' />}
+            type='text'
+            name='artist'
+            id='artist'
+            value={artistsOptions.fullName}
+            label='Artist'
             size='small'
-            sx={{ padding: '0' }}
-            value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
-            readOnly={user && user.role === 'artist'}
+            spellCheck
+            disabled
           />
+
           <DatePicker
             className={styles.modalCardContentInputField}
             label='Select Event Date'
@@ -686,7 +650,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             onChange={date => setFormData({ ...formData, dateTimeRequested: dayjs(date) })}
             slots={params => <TextField {...params} required />}
             disablePast
-            readOnly={user && user.role === 'artist'}
+            disabled
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -694,11 +658,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             value={formData.getInTime}
             onChange={time => setFormData({ ...formData, getInTime: time })}
             minutesStep={15}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.dateTimeRequested}
-            readOnly={user && user.role === 'artist'}
+            disabled
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -707,26 +667,16 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
             minutesStep={15}
             slots={params => <TextField {...params} required />}
-            minTime={formData.getInTime ? dayjs(formData.getInTime).add(15, 'minute') : undefined}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.dateTimeRequested || !formData.getInTime}
-            readOnly={user && user.role === 'artist'}
+            disabled
           />
           <TimePicker
             className={styles.modalCardContentInputField}
             label='Event End Time'
-            value={formData.endTime}
+            value={formData.startTime}
             onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
             slots={params => <TextField {...params} required />}
             minutesStep={15}
-            minTime={formData.startTime ? dayjs(formData.startTime).add(30, 'minute') : undefined}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.startTime}
-            readOnly={user && user.role === 'artist'}
+            disabled
           />
 
           <TextField
@@ -741,7 +691,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             variant='outlined'
             label='Venue'
             size='small'
-            disabled={user && user.role === 'artist'}
+            disabled
           />
           <TextField
             placeholder='Expected Number of Guests'
@@ -753,9 +703,9 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             onChange={handleChange}
             label='Number of Guests'
             size='small'
-            disabled={user && user.role === 'artist'}
+            disabled
           />
-          <LimitTags formData={formData} setFormData={setFormData} />
+          <LimitTags formData={formData} setFormData={setFormData} disabled={true} />
           <textarea
             className={styles.modalCardContentInputField}
             name='otherComments'
@@ -763,22 +713,13 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             placeholder='Any Comments...'
             onChange={handleChange}
             value={formData.otherComments}
-            rows={5}
           />
-
-          {user && user.role != 'artist' && (
-            <button
-              disabled={user && user.role === 'artist'}
-              type='button'
-              className={styles.addGalleryButton}
-              onClick={() => setModalContentView('gallery')}
-            >
-              Add Gallery <Upload />
-            </button>
-          )}
+          <button type='button' className={styles.addGalleryButton} onClick={() => setModalContentView('gallery')}>
+            Add Gallery <Upload />
+          </button>
 
           {/* ****Conditional Rendering for different bookings Status ****/}
-          {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
+          {booking && booking.status === 'cancelled' && (
             <select
               className={styles.modalCardContentInputField}
               name='status'
@@ -793,48 +734,20 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             </select>
           )}
           {/* ********************************** */}
-
-          <TabButton className={styles.modalCardContentSaveButton}>{saveButtonText}</TabButton>
+          <TabButton className={styles.modalCardContentSaveButton}>{'Accept Booking 👍'}</TabButton>
         </form>
-        {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
-          <div className={styles.bookingActionButtons}>
-            <TabButton
-              className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}
-              onClick={() => setOpen(true)}
-            >
-              Delete Booking Permanently <BiTrash />
-            </TabButton>
-            <ServerActionModal
-              titleText={'Confirm Delete'}
-              open={open}
-              setOpen={setOpen}
-              okText={'Yes, delete'}
-              onOk={() => handleDelete(booking)}
-              modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
-            />
-            <SnackbarAlert />
-          </div>
-        )}
 
         {/* *****Conditional Rendering for different bookings Status*** */}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
-            {user && user.role === 'admin' && (
-              <form
-                // action={`/admin/finance/admin/details/${invoiceData._id}`}
-                onSubmit={handleCreateInvoice}
-              >
-                <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
-              </form>
-            )}
             <form onSubmit={handleRejectBooking}>
               <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
-                {user.role === 'admin' || 'artist' ? 'Reject Booking 👎' : 'Cancel Booking'}
+                Reject Booking 👎
               </TabButton>
             </form>
           </div>
         )}
-        {/* ***********************************/}
+        {/* ********************************** */}
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {
