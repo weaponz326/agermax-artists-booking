@@ -25,7 +25,6 @@ const BookingsProvider = ({ children }) => {
 
   const updateBooking = async booking => {
     const updatedBooking = await services.updateBooking(booking)
-    console.log(updatedBooking)
     setBookings(
       bookings.map(booking => {
         if (booking._id === updatedBooking._id) return updatedBooking

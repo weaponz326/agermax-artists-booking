@@ -49,8 +49,9 @@ const ImageUpload = ({ formData, setFormData, profilePhoto, setProfilePhoto }) =
 
   const onFileChange = event => {
     const chosenFile = event.target.files[0]
+    console.log(chosenFile)
     setFile(chosenFile)
-    setProfilePhoto(chosenFile)
+    // setProfilePhoto(chosenFile)
     setFormData({ ...formData, profilePhoto: chosenFile })
     console.log(formData)
   }

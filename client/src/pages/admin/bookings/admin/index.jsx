@@ -409,11 +409,7 @@ export const EventsListItem = ({ event }) => {
   /************* */
   //Modal Functions
   function unhideModal() {
-    // if (user) {
     setOpenModal(true)
-    // } else {
-    //   logout()
-    // }
   }
 
   function hideModal() {
