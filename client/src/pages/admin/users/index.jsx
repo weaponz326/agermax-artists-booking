@@ -511,7 +511,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
-        <Snackbar
+        {/* <Snackbar
           open={snackbarOpen}
           autoHideDuration={6000}
           onClose={handleCloseSnackbar}
@@ -521,7 +521,7 @@ export const EditUserModalContent = ({ selectedUser }) => {
           <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
       </form>
     </>
   )
