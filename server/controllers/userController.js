@@ -136,8 +136,11 @@ const updateUserDetailsById = async (req, res) => {
     }
 
     // Update the user's details
-    await User.findByIdAndUpdate(targetUserId, updateData, { new: true });
-    res.json({ message: "User details updated successfully" });
+    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
+      new: true,
+    });
+    // res.json({ message: "User details updated successfully" });
+    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
