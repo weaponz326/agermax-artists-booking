@@ -114,13 +114,15 @@ const updateUserDetails = async (req, res) => {
 
   try {
     // Directly update the user document with provided data
-    await User.findByIdAndUpdate(userId, updateData, { new: true });
-    res.json({ message: "User details updated successfully" });
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
+    // res.json({ message: "User details updated successfully" });
+    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
@@ -140,8 +142,6 @@ const updateUserDetailsById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
-
 
 const deleteUser = async (req, res) => {
   try {
