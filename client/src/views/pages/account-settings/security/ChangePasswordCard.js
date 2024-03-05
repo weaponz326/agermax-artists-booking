@@ -1,5 +1,7 @@
-// ** React Imports
 import { useState } from 'react'
+import axios from 'axios'
+import { useForm, Controller } from 'react-hook-form'
+import { useAuth } from 'src/hooks/useAuth'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -7,10 +9,11 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import InputAdornment from '@mui/material/InputAdornment'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -18,65 +21,53 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Third Party Imports
-import * as yup from 'yup'
-import toast from 'react-hot-toast'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-
-const defaultValues = {
-  newPassword: '',
-  currentPassword: '',
-  confirmNewPassword: ''
-}
-
-const schema = yup.object().shape({
-  currentPassword: yup.string().min(8).required(),
-  newPassword: yup
-    .string()
-    .min(8)
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      'Must contain 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special case character'
-    )
-    .required(),
-  confirmNewPassword: yup
-    .string()
-    .required()
-    .oneOf([yup.ref('newPassword')], 'Passwords must match')
-})
-
 const ChangePasswordCard = () => {
-  // ** States
-  const [values, setValues] = useState({
-    showNewPassword: false,
-    showCurrentPassword: false,
-    showConfirmNewPassword: false
+  const { token } = useAuth()
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success') // Can be 'error', 'warning', 'info', 'success'
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: ''
+    }
   })
 
-  // ** Hooks
-  const {
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues, resolver: yupResolver(schema) })
-
-  const handleClickShowCurrentPassword = () => {
-    setValues({ ...values, showCurrentPassword: !values.showCurrentPassword })
+  // Function to handle Snackbar close
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false)
   }
 
-  const handleClickShowNewPassword = () => {
-    setValues({ ...values, showNewPassword: !values.showNewPassword })
-  }
+  // Function to submit form data
+  const onPasswordFormSubmit = async data => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/change-password`,
+        {
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
 
-  const handleClickShowConfirmNewPassword = () => {
-    setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
-  }
-
-  const onPasswordFormSubmit = () => {
-    toast.success('Password Changed Successfully')
-    reset(defaultValues)
+      if (response.status === 200) {
+        setSnackbarMessage('Password Changed Successfully')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
+        reset()
+      }
+    } catch (error) {
+      console.error('Error changing password:', error)
+      // Assuming the API returns an error response you can display to the user
+      setSnackbarMessage(error.response?.data?.message || 'An error occurred, please try again.')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    }
   }
 
   return (
@@ -89,30 +80,18 @@ const ChangePasswordCard = () => {
               <Controller
                 name='currentPassword'
                 control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
+                render={({ field }) => (
                   <CustomTextField
                     fullWidth
-                    value={value}
-                    onChange={onChange}
                     label='Current Password'
                     placeholder='············'
-                    id='input-current-password'
-                    error={Boolean(errors.currentPassword)}
-                    type={values.showCurrentPassword ? 'text' : 'password'}
-                    {...(errors.currentPassword && { helperText: errors.currentPassword.message })}
+                    type='password'
+                    {...field}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onMouseDown={e => e.preventDefault()}
-                            onClick={handleClickShowCurrentPassword}
-                          >
-                            <Icon
-                              fontSize='1.25rem'
-                              icon={values.showCurrentPassword ? 'tabler:eye' : 'tabler:eye-off'}
-                            />
+                          <IconButton onClick={() => {}} onMouseDown={e => e.preventDefault()}>
+                            <Icon fontSize='small' icon='visibility' />
                           </IconButton>
                         </InputAdornment>
                       )
@@ -121,33 +100,21 @@ const ChangePasswordCard = () => {
                 )}
               />
             </Grid>
-          </Grid>
-          <Grid container spacing={5} sx={{ mt: 0 }}>
             <Grid item xs={12} sm={6}>
               <Controller
                 name='newPassword'
                 control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
+                render={({ field }) => (
                   <CustomTextField
                     fullWidth
-                    value={value}
-                    onChange={onChange}
                     label='New Password'
-                    id='input-new-password'
-                    placeholder='············'
-                    error={Boolean(errors.newPassword)}
-                    type={values.showNewPassword ? 'text' : 'password'}
-                    {...(errors.newPassword && { helperText: errors.newPassword.message })}
+                    type='password'
+                    {...field}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onClick={handleClickShowNewPassword}
-                            onMouseDown={e => e.preventDefault()}
-                          >
-                            <Icon fontSize='1.25rem' icon={values.showNewPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                          <IconButton onClick={() => {}} onMouseDown={e => e.preventDefault()}>
+                            <Icon fontSize='small' icon='visibility' />
                           </IconButton>
                         </InputAdornment>
                       )
@@ -160,30 +127,17 @@ const ChangePasswordCard = () => {
               <Controller
                 name='confirmNewPassword'
                 control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
+                render={({ field }) => (
                   <CustomTextField
                     fullWidth
-                    value={value}
-                    onChange={onChange}
-                    placeholder='············'
                     label='Confirm New Password'
-                    id='input-confirm-new-password'
-                    error={Boolean(errors.confirmNewPassword)}
-                    type={values.showConfirmNewPassword ? 'text' : 'password'}
-                    {...(errors.confirmNewPassword && { helperText: errors.confirmNewPassword.message })}
+                    type='password'
+                    {...field}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onMouseDown={e => e.preventDefault()}
-                            onClick={handleClickShowConfirmNewPassword}
-                          >
-                            <Icon
-                              fontSize='1.25rem'
-                              icon={values.showConfirmNewPassword ? 'tabler:eye' : 'tabler:eye-off'}
-                            />
+                          <IconButton onClick={() => {}} onMouseDown={e => e.preventDefault()}>
+                            <Icon fontSize='small' icon='visibility' />
                           </IconButton>
                         </InputAdornment>
                       )
@@ -192,24 +146,22 @@ const ChangePasswordCard = () => {
                 )}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant='h6'>Password Requirements:</Typography>
-              <Box component='ul' sx={{ pl: 6, mb: 0, '& li': { mb: 1.5, color: 'text.secondary' } }}>
-                <li>Minimum 8 characters long - the more, the better</li>
-                <li>At least one lowercase & one uppercase character</li>
-                <li>At least one number, symbol, or whitespace character</li>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant='contained' type='submit' sx={{ mr: 4 }}>
-                Save Changes
-              </Button>
-              <Button type='reset' variant='tonal' color='secondary' onClick={() => reset()}>
-                Reset
-              </Button>
-            </Grid>
           </Grid>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Button type='submit' variant='contained' sx={{ mr: 1 }}>
+              Save Changes
+            </Button>
+            <Button variant='outlined' onClick={() => reset()}>
+              Reset
+            </Button>
+          </Box>
         </form>
+
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </CardContent>
     </Card>
   )

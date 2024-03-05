@@ -4,7 +4,7 @@ const User = require("../models/User");
 const sendEmail = require("../utils/mailSender");
 const generateResetToken = require("../utils/generateResetToken");
 const bcrypt = require("bcryptjs");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const registerUser = async (req, res) => {
   const {
@@ -249,12 +249,14 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-
 const resetPassword = async (req, res) => {
   const { resetToken, newPassword } = req.body;
 
   // Hash the provided resetToken for comparison
-  const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   try {
     const user = await User.findOne({
@@ -263,7 +265,9 @@ const resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid or expired password reset token" });
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired password reset token" });
     }
 
     user.password = newPassword;
@@ -274,7 +278,9 @@ const resetPassword = async (req, res) => {
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred", error: error.message });
+    res
+      .status(500)
+      .json({ message: "An error occurred", error: error.message });
   }
 };
 
@@ -282,26 +288,44 @@ const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   const userId = req.user._id;
 
+  // Basic validation
+  if (!currentPassword || !newPassword) {
+    return res
+      .status(400)
+      .json({ message: "Please provide both current and new password." });
+  }
+
+  // Optionally, enforce password policy for the new password
+  if (newPassword.length < 4) {
+    return res
+      .status(400)
+      .json({ message: "New password must be at least 4 characters long." });
+  }
+
+
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Current password is incorrect" });
+      return res
+        .status(401)
+        .json({ message: "Current password is incorrect." });
     }
 
+    // Set the new password directly, assuming pre-save hook in User model takes care of hashing
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({ message: "Password changed successfully" });
+    res.status(200).json({ message: "Password changed successfully." });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ message: "An error occurred", error: error.message });
+      .json({ message: "An error occurred.", error: error.message });
   }
 };
 
