@@ -31,12 +31,12 @@ export async function deleteUserById(id) {
   }
 }
 
-export async function updateUserDetailsById(id, userData) {
+export async function updateUserById(userID, userData) {
   try {
-    const response = await axios.put(`${baseUrl}/users/${id}`, userData);
-    return response; // Return the whole response
+    const response = await axios.put(`${baseUrl}/users/${userID}`, userData)
+    return response // Return the whole response data
   } catch (error) {
-    console.log('Error: ', error.response || error.message);
-    throw error;
+    console.log('Error: ', error.response || error.message)
+    throw error
   }
 }
