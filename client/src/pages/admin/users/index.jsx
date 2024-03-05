@@ -13,7 +13,7 @@ import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal
 import { AdminUsersPageViewStyleTabs } from 'src/components/AdminPagesSharedComponents/AdminUsersPageNavBar/AdminUsersPageNavBar'
 import ImageUpload from 'src/components/ImageUpload/ImageUpload'
 import { useUsers } from 'src/providers/UsersProvider'
-import { getUserById, updateUserDetailsById } from 'src/services/users'
+import { getUserById, updateUserById, updateUserDetailsById } from 'src/services/users'
 import { useAuth } from 'src/hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Snackbar, Alert } from '@mui/material'
@@ -24,10 +24,11 @@ const UsersListPage = () => {
   const [openModal, setOpenModal] = useState(false)
   const [usersList, setUsersList] = useState([])
   const [query, setQuery] = useState('')
-  const { users } = useUsers()
+  const { users, updateUser } = useUsers()
   const [activeView, setActiveView] = useState('1')
   const [modalType, setModalType] = useState('Add User')
   const [selectedUser, setSelectedUser] = useState('')
+
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState('info')
@@ -48,12 +49,6 @@ const UsersListPage = () => {
       setUsersList(users)
     }
   }, [users])
-  useEffect(() => {
-    if (!query || query === '') {
-      setUsersList(users)
-    } else {
-    }
-  }, [query])
 
   function unhideModal() {
     setOpenModal(true)
@@ -86,7 +81,7 @@ const UsersListPage = () => {
         setUsersList(filteredList)
       }
       // Set active view to '1' if there are users to display
-      setActiveView(users.length > 0 && '1')
+      // setActiveView(users.length > 0 && '1')
     }
   }
 
@@ -148,26 +143,37 @@ const UsersListPage = () => {
               setSnackbarOpen={setSnackbarOpen}
               setSnackbarMessage={setSnackbarMessage}
               setSnackbarSeverity={setSnackbarSeverity}
+              updateUser={updateUser}
             />
           )
         }
       />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        hideModal={hideModal}
+        anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+        // style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
 
-export const AddUserModalContent = ({ setUsersList, hideModal }) => {
+export const AddUserModalContent = ({
+  setUsersList,
+  hideModal,
+  snackbarMessage,
+  setSnackbarMessage,
+  snackbarSeverity,
+  setSnackbarSeverity,
+  setSnackbarOpen
+}) => {
   const [submitting, setSubmitting] = useState(false)
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setSnackbarOpen(false)
-  }
-  const auth = useAuth()
 
   // ** Router for redirection after successful registration
   const router = useRouter()
@@ -337,7 +343,16 @@ export const AddUserModalContent = ({ setUsersList, hideModal }) => {
   )
 }
 
-export const EditUserModalContent = ({ selectedUser }) => {
+export const EditUserModalContent = ({
+  selectedUser,
+  snackbarMessage,
+  setSnackbarMessage,
+  snackbarSeverity,
+  setSnackbarSeverity,
+  setSnackbarOpen,
+  hideModal,
+  updateUser
+}) => {
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',
     firstName: selectedUser?.firstName || '',
@@ -366,26 +381,18 @@ export const EditUserModalContent = ({ selectedUser }) => {
 
   const handleChange = (name, value) => {
     setUserData({ ...userData, [name]: value })
-    console.log(userData)
   }
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
 
   const handleUpdateUser = async e => {
     e.preventDefault()
     try {
-      const response = await updateUserDetailsById(selectedUser, userData) // Ensure correct ID usage
-      if (response.status === 200) {
-        console.log('User updated successfully:', response.data)
-        setSnackbarMessage('User updated successfully')
-        setSnackbarSeverity('success')
-        setUserData(response.data) // Update userData with the response
-      } else {
-        console.log('Update failed:', response.data)
-        setSnackbarMessage('Failed to update user')
-        setSnackbarSeverity('error')
-      }
+      const response = await updateUser(selectedUser, userData) // Ensure correct ID usage
+      setSnackbarMessage('User updated successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      hideModal()
+      // setUserData(response.data) // Update userData with the response
+
       setSnackbarOpen(true)
     } catch (error) {
       console.error('Failed to update user:', error.response?.data?.message || error.message)
@@ -511,17 +518,6 @@ export const EditUserModalContent = ({ selectedUser }) => {
           </select>
         </div>
         <TabButton className={styles.modalCardContentSaveButton}>Update Now</TabButton>
-        {/* <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          hideModal={hideModal}
-          style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar> */}
       </form>
     </>
   )

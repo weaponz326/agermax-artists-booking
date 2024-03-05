@@ -814,7 +814,6 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
               onOk={() => handleDelete(booking)}
               modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
             />
-            <SnackbarAlert />
           </div>
         )}
 

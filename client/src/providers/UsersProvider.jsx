@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
-import { getAllUsers } from 'src/services/users'
+import * as services from 'src/services/users'
 
 const UserContext = createContext()
 
@@ -11,8 +11,8 @@ const UsersProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const UsersList = await getAllUsers()
-        setUsers(UsersList)
+        const usersList = await services.getAllUsers()
+        setUsers(usersList)
       } catch (error) {
         setError(error)
       } finally {
@@ -21,9 +21,21 @@ const UsersProvider = ({ children }) => {
     }
 
     fetchData()
-  }, [])
+  }, [users])
 
-  return <UserContext.Provider value={{ users, setUsers, loading, error }}>{children}</UserContext.Provider>
+  const updateUser = async (userID, userData) => {
+    const updatedUser = await services.updateUserById(userID, userData)
+    console.log(`updatedUser:`, updatedUser)
+
+    setUsers(
+      users.map(user => {
+        if (user._id === updatedUser._id) return updatedUser
+        else return user
+      })
+    )
+  }
+
+  return <UserContext.Provider value={{ users, setUsers, loading, error, updateUser }}>{children}</UserContext.Provider>
 }
 
 export default UsersProvider
