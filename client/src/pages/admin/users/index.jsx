@@ -24,7 +24,7 @@ const UsersListPage = () => {
   const [openModal, setOpenModal] = useState(false)
   const [usersList, setUsersList] = useState([])
   const [query, setQuery] = useState('')
-  const { users, updateUser } = useUsers()
+  const { users, updateUser, setUsers, deleteUser } = useUsers()
   const [activeView, setActiveView] = useState('1')
   const [modalType, setModalType] = useState('Add User')
   const [selectedUser, setSelectedUser] = useState('')
@@ -33,22 +33,22 @@ const UsersListPage = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState('info')
 
+  useEffect(() => {
+    if (users) {
+      console.log('Updated!')
+      setUsersList(users)
+    }
+  }, [users])
+
+  /* **********
+   * Functions *
+   ********** */
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return
     }
     setSnackbarOpen(false)
   }
-
-  /* **********
-   * Functions *
-   ********** */
-
-  useEffect(() => {
-    if (users) {
-      setUsersList(users)
-    }
-  }, [])
 
   /************Modal Controllers****** */
   function unhideModal() {
@@ -84,7 +84,7 @@ const UsersListPage = () => {
         setUsersList(filteredList)
       }
       // Set active view to '1' if there are users to display
-      // setActiveView(users.length > 0 && '1')
+      setActiveView(users.length > 0 && '1')
     }
   }
 
@@ -93,17 +93,9 @@ const UsersListPage = () => {
   return (
     <div className={styles.usersListPage}>
       <nav className={styles.usersListPageNavBar}>
-        <SearchBar
-          usersList={usersList}
-          setUsersList={setUsersList}
-          usersData={users}
-          query={query}
-          setQuery={setQuery}
-          onChange={handleQueryChange}
-          value={query}
-        />
+        <SearchBar query={query} setQuery={setQuery} onChange={handleQueryChange} value={query} />
         <AdminUsersPageViewStyleTabs
-          usersData={users}
+          users={users}
           usersList={usersList}
           setUsersList={setUsersList}
           query={query}
@@ -126,6 +118,7 @@ const UsersListPage = () => {
         setModalType={setModalType}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
+        deleteUser={deleteUser}
       />
       <SlideInModal
         openModal={openModal}
@@ -149,6 +142,8 @@ const UsersListPage = () => {
               setSnackbarMessage={setSnackbarMessage}
               setSnackbarSeverity={setSnackbarSeverity}
               updateUser={updateUser}
+              setUsers={setUsers}
+              users={users}
             />
           )
         }
@@ -356,7 +351,9 @@ export const EditUserModalContent = ({
   setSnackbarSeverity,
   setSnackbarOpen,
   hideModal,
-  updateUser
+  updateUser,
+  setUsers,
+  users
 }) => {
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',

@@ -21,21 +21,36 @@ const UsersProvider = ({ children }) => {
     }
 
     fetchData()
-  }, [users])
+  }, [])
 
   const updateUser = async (userID, userData) => {
-    const updatedUser = await services.updateUserById(userID, userData)
-    console.log(`updatedUser:`, updatedUser)
+    try {
+      const { data } = await services.updateUserById(userID, userData)
+      const updatedUser = data
 
-    setUsers(
-      users.map(user => {
-        if (user._id === updatedUser._id) return updatedUser
-        else return user
-      })
-    )
+      setUsers(
+        users.map(user => {
+          if (user._id === updatedUser._id) return updatedUser
+          else return user
+        })
+      )
+    } catch (error) {
+      // Handle error
+      console.error('Error updating user:', error)
+    }
   }
 
-  return <UserContext.Provider value={{ users, setUsers, loading, error, updateUser }}>{children}</UserContext.Provider>
+  const deleteUser = async userID => {
+    const deletedUser = await services.deleteUserById(userID)
+    // Update local state to remove deleted booking
+    setUsers(users.filter(u => u._id !== userID))
+  }
+
+  return (
+    <UserContext.Provider value={{ users, setUsers, loading, error, updateUser, deleteUser }}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export default UsersProvider
