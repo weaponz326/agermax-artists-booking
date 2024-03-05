@@ -19,6 +19,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
+import Link from 'next/link'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -36,33 +37,31 @@ const MenuItemStyled = styled(MenuItem)(({ theme }) => ({
 }))
 
 const UserDropdown = props => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const router = useRouter();
-  const { user, logout } = useAuth(); // Access user data from the auth context
+  const [anchorEl, setAnchorEl] = useState(null)
+  const router = useRouter()
+  const { user, logout } = useAuth() // Access user data from the auth context
 
   const handleDropdownOpen = event => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleDropdownClose = url => {
     if (url) {
-      router.push(url);
+      router.push(url)
     }
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLogout = () => {
-    logout();
-    handleDropdownClose();
-  };
+    logout()
+    handleDropdownClose()
+  }
 
   // ** Props
   const { settings } = props
 
-
   // ** Vars
   const { direction } = settings
-
 
   const styles = {
     px: 4,
@@ -78,7 +77,6 @@ const UserDropdown = props => {
       color: 'text.secondary'
     }
   }
-
 
   return (
     <Fragment>
@@ -108,30 +106,39 @@ const UserDropdown = props => {
         transformOrigin={{ vertical: 'top', horizontal: direction === 'ltr' ? 'right' : 'left' }}
       >
         <Box sx={{ py: 1.75, px: 6 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Badge
-          overlap='circular'
-          badgeContent={<BadgeContentSpan />}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-        >
-          <Avatar alt={user?.firstName || 'User'} src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
-        </Badge>
-        <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
-          <Typography sx={{ fontWeight: 500 }}>{user?.firstName} {user?.lastName}</Typography>
-          <Typography variant='body2'>{user?.role}</Typography>
-        </Box>
-      </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Badge
+              overlap='circular'
+              badgeContent={<BadgeContentSpan />}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
+              }}
+            >
+              <Avatar
+                alt={user?.firstName || 'User'}
+                src='/images/avatars/1.png'
+                sx={{ width: '2.5rem', height: '2.5rem' }}
+              />
+            </Badge>
+            <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography sx={{ fontWeight: 500 }}>
+                {user?.firstName} {user?.lastName}
+              </Typography>
+              <Typography variant='body2'>{user?.role}</Typography>
+            </Box>
+          </Box>
         </Box>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles} href='/admin/account'>
+          <Box sx={styles}>
             <Icon icon='tabler:user-check' />
-            My Profile
+            <Link href='/admin/account/account'>
+              <Typography component='span'>My Profile</Typography>
+            </Link>
           </Box>
         </MenuItemStyled>
+
         <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <Icon icon='tabler:settings' />

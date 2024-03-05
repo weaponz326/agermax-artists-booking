@@ -134,7 +134,7 @@ const AuthProvider = ({ children }) => {
       window.localStorage.setItem('userData', JSON.stringify(userData))
       setUser(userData)
 
-      const returnUrl = router.query.returnUrl || '/admin/account' // Default to '/admin/account' if `returnUrl` isn't specified
+      const returnUrl = router.query.returnUrl || '/admin/account/account' // Default to '/admin/account' if `returnUrl` isn't specified
       const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/home'
       router.replace(redirectURL)
     } catch (err) {

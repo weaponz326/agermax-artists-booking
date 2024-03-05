@@ -80,7 +80,7 @@ const Register = () => {
       if (err) {
         setError(err.response.data.message || 'An error occurred. Please try again.')
       } else {
-        router.push('/admin/account') // Or redirect to a 'success' page
+        router.push('/admin/account/account') // Or redirect to a 'success' page
       }
     })
   }
