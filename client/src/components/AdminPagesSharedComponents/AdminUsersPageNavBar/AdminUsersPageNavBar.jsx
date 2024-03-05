@@ -3,7 +3,6 @@ import TabButton from '../ViewTab/TabButton'
 import SearchBar from '../SearchBar/SearchBar'
 import styles from './AdminUsersPageNavBar.module.css'
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { useState } from 'react'
 
 const AdminUsersPageNavBar = ({ setActiveEventsView, activeEventsView }) => {
   function handleTabSelection(e) {

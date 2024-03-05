@@ -48,8 +48,9 @@ const UsersListPage = () => {
     if (users) {
       setUsersList(users)
     }
-  }, [users])
+  }, [])
 
+  /************Modal Controllers****** */
   function unhideModal() {
     setOpenModal(true)
   }
@@ -62,6 +63,8 @@ const UsersListPage = () => {
     setModalType('Add User')
     setOpenModal(true)
   }
+
+  /************Query Handler****** */
 
   function handleQueryChange(e) {
     const value = e.target.value
@@ -84,6 +87,8 @@ const UsersListPage = () => {
       // setActiveView(users.length > 0 && '1')
     }
   }
+
+  /************Render****** */
 
   return (
     <div className={styles.usersListPage}>

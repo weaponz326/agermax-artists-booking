@@ -94,19 +94,6 @@ const UsersListTable = ({
     setOpenDeleteDialog(true)
   }
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`)
-  //     setUsersList(response.data.users) // Assuming your API responds with an array of users
-  //   } catch (error) {
-  //     console.error('Failed to fetch users:', error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchUsers()
-  // }, [])
-
   const confirmDelete = async () => {
     if (userToDelete) {
       try {
