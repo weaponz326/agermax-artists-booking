@@ -30,7 +30,6 @@ const UsersProvider = ({ children }) => {
 
       setUsers(
         users.map(user => {
-          console.log(user._id, updatedUser._id)
           if (user._id === updatedUser._id) return updatedUser
           else return user
         })
@@ -41,7 +40,17 @@ const UsersProvider = ({ children }) => {
     }
   }
 
-  return <UserContext.Provider value={{ users, setUsers, loading, error, updateUser }}>{children}</UserContext.Provider>
+  const deleteUser = async userID => {
+    const deletedUser = await services.deleteUserById(userID)
+    // Update local state to remove deleted booking
+    setUsers(users.filter(u => u._id !== userID))
+  }
+
+  return (
+    <UserContext.Provider value={{ users, setUsers, loading, error, updateUser, deleteUser }}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export default UsersProvider

@@ -20,7 +20,8 @@ const UsersListTable = ({
   setModalType,
   selectedUser,
   setSelectedUser,
-  users
+  users,
+  deleteUser
 }) => {
   const data = usersList
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
@@ -97,13 +98,11 @@ const UsersListTable = ({
   const confirmDelete = async () => {
     if (userToDelete) {
       try {
-        const response = await deleteUserById(userToDelete)
+        const response = await deleteUser(userToDelete)
         console.log('User deleted successfully:', response)
-        setUsersList(usersList.filter(user => user._id !== userToDelete))
-        setSnackbarMessage('User deleted successfully.')
+        setSnackbarMessage('User deleted successfully!')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        fetchUsers()
       } catch (error) {
         console.error('Failed to delete user:', error.message)
         setSnackbarMessage('Failed to delete user. Please try again.')

@@ -24,7 +24,7 @@ const UsersListPage = () => {
   const [openModal, setOpenModal] = useState(false)
   const [usersList, setUsersList] = useState([])
   const [query, setQuery] = useState('')
-  const { users, updateUser, setUsers } = useUsers()
+  const { users, updateUser, setUsers, deleteUser } = useUsers()
   const [activeView, setActiveView] = useState('1')
   const [modalType, setModalType] = useState('Add User')
   const [selectedUser, setSelectedUser] = useState('')
@@ -118,6 +118,7 @@ const UsersListPage = () => {
         setModalType={setModalType}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
+        deleteUser={deleteUser}
       />
       <SlideInModal
         openModal={openModal}
