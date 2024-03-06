@@ -37,6 +37,9 @@ const bookingSchema = new mongoose.Schema({
   locationVenue: {
     type: String,
   },
+  streetAddress: {
+    type: String,
+  },
   availableTechnology: {
     type: String,
   },
@@ -50,6 +53,10 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     default: "pending",
     enum: ["pending", "approved", "cancelled"],
+  },
+  invoiced: {
+    type: Boolean,
+    default: false,
   },
   gallery: {
     type: [String],
