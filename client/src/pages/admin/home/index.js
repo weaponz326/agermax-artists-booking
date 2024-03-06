@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useAuth } from 'src/hooks/useAuth'
 import {
   Box,
   Grid,
@@ -23,7 +24,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'space-between',
   height: 140, // Adjust the height as per your design
-  marginBottom: 12,
+  marginBottom: 12
 }))
 
 const ChartCard = styled(StyledCard)(({ theme }) => ({
@@ -46,7 +47,8 @@ const StyledList = styled(List)(({ theme }) => ({
 }))
 
 const Dashboard = () => {
-  // Example data for recent bookings and users
+  const { user } = useAuth()
+
   const recentBookings = [
     { name: 'Mike Eriksson', role: 'Artist' },
     { name: 'Anna Johnsson', role: 'Organizer' }
@@ -59,7 +61,7 @@ const Dashboard = () => {
         {/* Greeting and Notifications */}
         <Grid item xs={12}>
           <Typography variant='h4' gutterBottom>
-            Hey John! 👋
+            Hey {user.role}, {user.firstName}! 👋
           </Typography>
           <Typography variant='subtitle1'>You have 4 pending bookings and 2 unread messages.</Typography>
         </Grid>

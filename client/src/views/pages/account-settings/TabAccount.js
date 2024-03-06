@@ -115,7 +115,7 @@ const TabAccount = () => {
     console.log('Form Data to send:', formDataToSend)
 
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/artists/${user._id}`, formDataToSend, {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, formDataToSend, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       })
       setSnackbarMessage('Profile updated successfully.')

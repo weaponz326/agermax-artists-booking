@@ -23,7 +23,7 @@ const LinkStyled = styled(Link)(({ theme }) => ({
   cursor: 'pointer'
 }))
 
-const ResetPassword = () => {
+const OriginalResetPassword = () => {
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -134,7 +134,7 @@ const ResetPassword = () => {
   )
 }
 
-ResetPassword.getLayout = page => <BlankLayout>{page}</BlankLayout>
-ResetPassword.guestGuard = true
+OriginalResetPassword.getLayout = page => <BlankLayout>{page}</BlankLayout>
+OriginalResetPassword.guestGuard = true
 
-export default ResetPassword
+export default OriginalResetPassword
