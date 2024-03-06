@@ -535,8 +535,11 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     e.preventDefault()
     try {
       const newInvoice = await createInvoice(invoiceData)
+      setFormData({ ...formData, invoiced: true })
+      const updatedBooking = await updateBooking(formData)
       // setInvoiceData({ ...newInvoice })
       console.log('Invoice created Successfully! : ', newInvoice)
+      console.log('Booking invoiced Successfully! : ', updatedBooking)
       router.push({ pathname: `/admin/finance/admin/details/${newInvoice._id}`, query: { type: 'invoice' } })
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
@@ -697,6 +700,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             skipDisabled
             disabled={!formData.dateTimeRequested}
             readOnly={user && user.role === 'artist'}
+            name='getInTIme'
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -711,6 +715,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             skipDisabled
             disabled={!formData.dateTimeRequested || !formData.getInTime}
             readOnly={user && user.role === 'artist'}
+            name='startTime'
           />
           <TimePicker
             className={styles.modalCardContentInputField}
@@ -725,6 +730,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             skipDisabled
             disabled={!formData.startTime}
             readOnly={user && user.role === 'artist'}
+            name='endTime'
           />
 
           <TextField
@@ -777,18 +783,21 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
 
           {/* ****Conditional Rendering for different bookings Status ****/}
           {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
-            <select
-              className={styles.modalCardContentInputField}
-              name='status'
-              id='status'
-              value={formData.status}
-              onChange={e => setFormData({ ...formData, status: e.target.value })}
-            >
-              <option value='cancelled' selected>
-                Cancelled
-              </option>
-              <option value='pending'>Pending</option>
-            </select>
+            <div>
+              <label htmlFor='status'>Status:</label>
+              <select
+                className={styles.modalCardContentInputField}
+                name='status'
+                id='status'
+                value={formData.status}
+                onChange={e => setFormData({ ...formData, status: e.target.value })}
+              >
+                <option value='cancelled' selected>
+                  Cancelled
+                </option>
+                <option value='pending'>Pending</option>
+              </select>
+            </div>
           )}
           {/* ********************************** */}
 

@@ -5,6 +5,7 @@ import Skeleton from '@mui/material/Skeleton'
 import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
+import Link from 'next/link'
 import { getUserById } from 'src/services/users'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
@@ -92,6 +93,7 @@ const EventsDetails = ({ booking }) => {
   // Fetch artist name from API if it is not provided in the data from the server
   useEffect(() => {
     if (booking) {
+      console.log(booking.artistID.firstName)
       const fetchArtistID = async () => {
         try {
           const artist = await getUserById(booking.artistID)
@@ -123,7 +125,12 @@ const EventsDetails = ({ booking }) => {
   return (
     <div className={styles.eventDetailsWrapper}>
       <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>
-        {artistName ? artistName : 'Not Provided'}
+        <Link
+          className={`${styles['event-prev-detail']} ${styles['artist-name']}`}
+          href={`/artists/${booking.artistID}`}
+        >
+          {artistName ? artistName : 'Not Provided'}
+        </Link>
       </div>
       <div className={styles['event-prev-detail']}>
         {booking.locationVenue ? booking.locationVenue : 'Location not specified'}

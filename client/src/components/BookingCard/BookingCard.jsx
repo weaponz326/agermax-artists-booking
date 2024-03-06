@@ -11,27 +11,28 @@ import { Tag } from 'src/pages/artists/[id]'
 import { Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
 import CheckCircle from '@material-ui/icons/CheckCircle'
-import { createBooking } from 'src/services/bookings'
+// import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import useBookingFormData from 'src/hooks/useBookingFormData'
+import { useRouter } from 'next/router'
+import { useBookings } from 'src/providers/BookingsProvider'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
 }
 
 function BookingCard({ open, setOpen, artist, allowCancel }) {
+  const { createBooking } = useBookings()
+  const router = useRouter()
   const { user, logout, loading } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [getInTime, setGetInTime] = useState(null)
-  const [startTime, setStartTime] = useState(null)
-  const [endTime, setEndTime] = useState(null)
+
   const [disableNext, setDisableNext] = useState(true)
 
   /************************Form Data ***************************/
-  const { formData, setFormData } = useBookingFormData()
+  const { formData, handleChangeFormData } = useBookingFormData()
 
   const customTheme = createTheme({
     components: {
@@ -176,14 +177,6 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     return
   }
 
-  const handleChange = (name, value) => {
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-    console.log(formData)
-  }
-
   if (artist) {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={customLocale}>
@@ -202,9 +195,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
             <div style={{ height: '100%' }}>
               {activeStep === 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  <div style={{ fontSize: '24px', fontWeight: '500' }} gutterBottom>
+                  <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
                     {artist && artist.firstName} {artist && artist.lastName}
-                  </div>
+                  </Typography>
                   <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
                     {artist ? (
                       artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
@@ -234,7 +227,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           fontSize: '16px'
                         }
                       }}
-                      onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+                      // onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+                      onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
                       // className={styles.modalCardContentInputField}
                       label='Select Event Date'
                       value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
@@ -248,13 +242,14 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                   <Grid container border='1px solid #CBD4DC' borderRadius='12px'>
                     <Grid item xs={4} padding={1.5}>
                       <Typography color='#4B627F' fontSize='13px'>
-                        Get In Time{' '}
+                        Get In Time
                       </Typography>
                       <TimePicker
                         name='getInTime'
                         value={dayjs(formData.getInTime)}
                         minutesStep={15}
-                        onChange={time => handleChange('getInTime', dayjs(time))}
+                        // onChange={time => handleChange('getInTime', dayjs(time))}
+                        onChange={time => handleChangeFormData('getInTime', dayjs(time))}
                         sx={{
                           '& .MuiTextField-root': {
                             paddingRight: '12px'
@@ -287,7 +282,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                       <TimePicker
                         minutesStep={15}
                         minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
-                        onChange={time => handleChange('startTime', dayjs(time))}
+                        // onChange={time => handleChange('startTime', dayjs(time))}
+                        onChange={time => handleChangeFormData('startTime', dayjs(time))}
                         value={dayjs(formData.startTime)}
                         sx={{
                           '& .MuiTextField-root': {
@@ -342,11 +338,13 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                         }}
-                        onChange={time => handleChange('endTime', dayjs(time))}
+                        // onChange={time => handleChange('endTime', dayjs(time))}
+                        onChange={time => handleChangeFormData('endTime', dayjs(time))}
                         format='HH:mm'
                         disabled={!formData.startTime}
                         skipDisabled
                         ampm={false}
+                        name='endTime'
                       />
                     </Grid>
                   </Grid>
@@ -365,18 +363,18 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
 
               {activeStep === 1 && (
                 <Grid container direction='column' overflow={'auto'}>
-                  <Typography fontSize='24px' fontWeight='500' gutterBottom>
-                    {artist.firstName} {artist.lastName}
+                  <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
+                    {artist && artist.firstName} {artist && artist.lastName}
                   </Typography>
                   <Grid container gap={1} marginBottom={4}>
                     {artist.genre.length ? (
-                      artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
+                      artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)
                     ) : (
                       <Tag>No genre provided yet.</Tag>
                     )}
                   </Grid>
                   <Grid container justifyContent='space-between' alignItems='center'>
-                    <Typography fontSize='19px' fontWeight='450'>
+                    <Typography fontSize='19px' fontWeight='600'>
                       Summary
                     </Typography>
                     <Typography
@@ -433,7 +431,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     </Grid>
                   </Grid>
                   <Grid container gap={4} marginTop={3}>
-                    <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>Your Details</Typography>
+                    <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>Your Details</Typography>
                   </Grid>
                   <Grid container direction='column' marginTop={3} color="'#4B627F'">
                     <Typography>
@@ -475,6 +473,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     />
                   </Grid>
                   <Button
+                    onClick={() => router.push(`/admin/bookings/${user.role}`)}
                     sx={{
                       background: '#FC8A5E',
                       width: '70%',

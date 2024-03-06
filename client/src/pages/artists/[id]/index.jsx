@@ -74,34 +74,49 @@ function ArtistProfile() {
 export default ArtistProfile
 
 const EventsSection = ({ artist }) => {
-  const [numberOfUpcomingEvents, setNumberOfUpcomingEvents] = useState(2)
-  const [numberOfPastEvents, setNumberOfPastEvents] = useState(2)
+  const { bookings } = useBookings()
+  const [numberOfUpcomingEvents, setNumberOfUpcomingEvents] = useState(4)
+  const [numberOfPastEvents, setNumberOfPastEvents] = useState(5)
   const [artistsUpcomingEvents, setArtistsUpcomingEvents] = useState([])
   const [artistsPastEvents, setArtistsPastEvents] = useState([])
 
+  /******************Configure Events***************/
   useEffect(() => {
-    setArtistsUpcomingEvents(Array.from({ length: numberOfUpcomingEvents }))
-  }, [numberOfUpcomingEvents])
+    if (!bookings) return
+    // Get upcoming events for the current artist.
+    let artistsFutureEvents = bookings.filter(
+      booking => booking.artistID === artist._id && new Date(booking.dateTimeRequested) > new Date().getDate()
+    )
+    // .sort((a, b) => a.dateTimeRequested - b.dateTimeRequested)
+    setArtistsUpcomingEvents(artistsFutureEvents.slice(0, numberOfUpcomingEvents))
 
-  useEffect(() => {
-    setArtistsPastEvents(Array.from({ length: numberOfPastEvents }))
-  }, [numberOfPastEvents])
+    // Get past events for the current artist.
+    let artistsPastEvents = bookings
+      .filter(booking => booking.artistID === artist._id && new Date(booking.dateTimeRequested) < new Date().getDate())
+      .reverse()
+    setArtistsPastEvents(artistsPastEvents.slice(0, numberOfPastEvents))
+  }, [bookings, numberOfUpcomingEvents, numberOfPastEvents])
 
+  /******************Configure Tab ***************/
   const tabConfig = {
     'Upcoming Events': (
-      <UpcomingEventsTable
+      <EventsTable
         artist={artist}
-        artistsUpcomingEvents={artistsUpcomingEvents}
+        artistEvents={artistsUpcomingEvents}
         setArtistsUpcomingEvents={setArtistsUpcomingEvents}
-        handleLoadMoreUpcomingEvents={handleLoadMoreUpcomingEvents}
+        onLoadMore={handleLoadMoreUpcomingEvents}
+        title={'Upcoming Events'}
+        numberOfEvents={numberOfUpcomingEvents}
       />
     ),
     'Past Events': (
-      <PastEventsTable
+      <EventsTable
         artist={artist}
-        artistsPastEvents={artistsPastEvents}
+        artistEvents={artistsPastEvents}
         setArtistsPastEvents={setArtistsPastEvents}
-        handleLoadPastEvents={handleLoadPastEvents}
+        onLoadMore={handleLoadMorePastEvents}
+        title={'Past Events'}
+        numberOfEvents={numberOfPastEvents}
       />
     )
   }
@@ -110,7 +125,7 @@ const EventsSection = ({ artist }) => {
     //Add Conditionals for a dding more depending on artist details length
     setNumberOfUpcomingEvents(current => current + 5)
   }
-  function handleLoadPastEvents() {
+  function handleLoadMorePastEvents() {
     //Add Conditionals for a dding more depending on artist details length
     setNumberOfPastEvents(current => current + 5)
   }
@@ -238,31 +253,47 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>{artist ? artist.bio : 'No bio provided yet!'}</p>
+          <p className={styles['body']}>{artist.bio ? artist.bio : 'No bio provided yet!'}</p>
         </div>
       </Card>
     </section>
   )
 }
 
-const UpcomingEventsTable = ({ artist, artistsUpcomingEvents, handleLoadMoreUpcomingEvents }) => {
+const EventsTable = ({ artist, artistEvents, title, onLoadMore, numberOfEvents }) => {
+  const dateTimeFormat = (dateTime, format) => {
+    const options = { month: 'short' }
+    if (format === 'month') return new Date(dateTime).toLocaleString('en-US', options)
+    if (format === 'day') {
+      if (new Date(dateTime).getDate() < 10) return '0' + new Date(dateTime).getDate()
+      return new Date(dateTime).getDate()
+    }
+    if (format === 'UTCHours') {
+      if (new Date(dateTime).getUTCHours() < 10) return '0' + new Date(dateTime).getUTCHours()
+      return new Date(dateTime).getUTCHours()
+    }
+    if (format === 'UTCMinutes') {
+      if (new Date(dateTime).getUTCMinutes() < 10) return '0' + new Date(dateTime).getUTCMinutes()
+      return new Date(dateTime).getUTCMinutes()
+    }
+  }
+
+  if (!artistEvents.length) return <p>No {title} to display for this artist now.</p>
   return (
     <>
       <div className={styles['events-table']}>
-        {artistsUpcomingEvents.map((num, index) => (
+        {artistEvents.map((event, index) => (
           <div key={`event-tile-${index}`} className={styles['event-tile']}>
             <div className={styles['date']}>
-              <p>Dec</p>
-              <h5>18</h5>
+              <p>{dateTimeFormat(event.dateTimeRequested, 'month')}</p>
+              <h5>{dateTimeFormat(event.dateTimeRequested, 'day')}</h5>
             </div>
             <div className={styles['event-name']}>
               <div className={styles['name']}>
-                <h5 className={styles['event-text']}>
-                  {artist && artist.firstName} {artist && artist.lastName}
-                </h5>
+                <h5 className={styles['event-text']}>{event.eventTitle}</h5>
                 <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
               </div>
-              <p className={styles['location-name']}>Stockholm Music Stadium</p>
+              <p className={styles['location-name']}>{event.locationVenue ? event.locationVenue : 'Location TBA'}</p>
             </div>
             <div className={styles['event-location']}>
               <Link href='#' className={styles.openMap}>
@@ -272,20 +303,25 @@ const UpcomingEventsTable = ({ artist, artistsUpcomingEvents, handleLoadMoreUpco
                 Street address 18 <Location variant='Bold' size={12} />
               </p>
               <p className={styles['event-text']}>
-                20:00 - 01:00 <Clock size={12} variant='Bold' />
+                {dateTimeFormat(event.startTime, 'UTCHours')}:{dateTimeFormat(event.startTime, 'UTCMinutes')} -{' '}
+                {dateTimeFormat(event.endTime, 'UTCHours')}:{dateTimeFormat(event.endTime, 'UTCMinutes')}{' '}
+                <Clock size={12} variant='Bold' />
               </p>
             </div>
           </div>
         ))}
       </div>
-      <div onClick={handleLoadMoreUpcomingEvents} className={styles.moreBtn}>
-        More
-      </div>
+      {numberOfEvents === artistEvents.length && (
+        <div onClick={onLoadMore} className={styles.moreBtn}>
+          More
+        </div>
+      )}
     </>
   )
 }
 
 const PastEventsTable = ({ artist, artistsPastEvents, handleLoadPastEvents }) => {
+  if (artistsPastEvents === null) return <div>No Past Events to display for this artist.</div>
   return (
     <>
       <div className={styles['events-table']}>

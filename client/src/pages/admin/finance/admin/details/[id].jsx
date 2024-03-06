@@ -83,97 +83,91 @@ const FinancialDetailsPage = () => {
     <InvoiceProvider>
       <div className={styles.financialDetailsPage}>
         {/* Condition Rendering of Preview and Details */}
-        {type === 'invoice' &&
-          user.role ===
-            'admin'(
-              <div className={styles.financialDetailsPageInfo}>
-                <div className={styles.organizerDetails}>
-                  <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
-                  <p>
-                    {details.organizerFirstName} {details.organizerLastName}
-                  </p>
-                  <p>Payment ID: {details._id}</p>
-                </div>
-                <div className={styles.paymentItemsDetails}>
-                  <div className={styles.priceTotal}>
-                    <table className={styles.priceTotalTable}>
-                      <thead>
-                        <tr>
-                          <th className={styles.sectionUnderLined}>Item Name</th>
-                          <th className={styles.sectionUnderLined}></th>
-                          <th className={styles.sectionUnderLined}>Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{bookingDetails.eventTitle}</td>
-                          <td className={styles.underlinedCell}>Sub-Total</td>
-                          <td className={styles.underlinedCell}>
-                            <input
-                              type='number'
-                              min={0}
-                              className={`${styles.itemName} ${styles.itemPrice}`}
-                              value={invoiceData.amount}
-                              name='amount'
-                              onChange={handleChange}
-                            />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td className={styles.underlinedCell}>Add Discount</td>
-                          <td className={styles.underlinedCell}>
-                            <input
-                              className={`${styles.itemName} ${styles.itemPrice}`}
-                              value={invoiceData.discount}
-                              name='discount'
-                              onChange={handleChange}
-                              type='number'
-                              min={0}
-                            />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td className={styles.underlinedCell}>Add Tax</td>
-                          <td className={styles.underlinedCell}>
-                            <input
-                              className={`${styles.itemName} ${styles.itemPrice}`}
-                              value={invoiceData.tax}
-                              name='tax'
-                              onChange={handleChange}
-                              type='number'
-                              min={0}
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className={styles.menuOptions}>
-                  <CustomMenuItem
-                    menuContainer={styles.customMenuItemContainer}
-                    labelClassName={styles.customMenuItemLabel}
-                    label='Payment Details'
-                    subMenuItems={[<PaymentSubItems details={details} invoiceData={invoiceData} />]}
-                  />
-                  <CustomMenuItem
-                    menuContainer={styles.customMenuItemContainer}
-                    labelClassName={styles.customMenuItemLabel}
-                    label='Advance Options'
-                    subMenuItems={[
-                      <AdvancedOptionsSubItems
-                        details={details}
-                        invoiceData={invoiceData}
-                        handleChange={handleChange}
-                      />
-                    ]}
-                  />
-                </div>
-                <TabButton className={styles.saveChangesBtn}>Save Changes</TabButton>
+        {type === 'invoice' && user.role === 'admin' && (
+          <div className={styles.financialDetailsPageInfo}>
+            <div className={styles.organizerDetails}>
+              <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
+              <p>
+                {details.organizerFirstName} {details.organizerLastName}
+              </p>
+              <p>Payment ID: {details._id}</p>
+            </div>
+            <div className={styles.paymentItemsDetails}>
+              <div className={styles.priceTotal}>
+                <table className={styles.priceTotalTable}>
+                  <thead>
+                    <tr>
+                      <th className={styles.sectionUnderLined}>Item Name</th>
+                      <th className={styles.sectionUnderLined}></th>
+                      <th className={styles.sectionUnderLined}>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{bookingDetails.eventTitle}</td>
+                      <td className={styles.underlinedCell}>Sub-Total</td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          type='number'
+                          min={0}
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.amount}
+                          name='amount'
+                          onChange={handleChange}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className={styles.underlinedCell}>Add Discount</td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.discount}
+                          name='discount'
+                          onChange={handleChange}
+                          type='number'
+                          min={0}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className={styles.underlinedCell}>Add Tax</td>
+                      <td className={styles.underlinedCell}>
+                        <input
+                          className={`${styles.itemName} ${styles.itemPrice}`}
+                          value={invoiceData.tax}
+                          name='tax'
+                          onChange={handleChange}
+                          type='number'
+                          min={0}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
+            <div className={styles.menuOptions}>
+              <CustomMenuItem
+                menuContainer={styles.customMenuItemContainer}
+                labelClassName={styles.customMenuItemLabel}
+                label='Payment Details'
+                subMenuItems={[<PaymentSubItems details={details} invoiceData={invoiceData} />]}
+              />
+              <CustomMenuItem
+                menuContainer={styles.customMenuItemContainer}
+                labelClassName={styles.customMenuItemLabel}
+                label='Advance Options'
+                subMenuItems={[
+                  <AdvancedOptionsSubItems details={details} invoiceData={invoiceData} handleChange={handleChange} />
+                ]}
+              />
+            </div>
+            <TabButton className={styles.saveChangesBtn}>Save Changes</TabButton>
+          </div>
+        )}
 
         <div className={styles.financialDetailsPagePreview}>
           <h3>Preview</h3>
