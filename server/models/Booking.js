@@ -61,6 +61,14 @@ const bookingSchema = new mongoose.Schema({
   gallery: {
     type: [String],
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  isNew: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 bookingSchema.plugin(AutoIncrement, { inc_field: "bookingID" });

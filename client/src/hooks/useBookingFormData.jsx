@@ -24,7 +24,9 @@ function useBookingFormData(booking) {
     otherComments: booking?.otherComments || '',
     gallery: booking?.gallery || [],
     genre: booking?.genre || [],
-    invoiced: booking?.invoiced || false
+    invoiced: booking?.invoiced || false,
+    createdAt: booking?.createdAt || '',
+    isNew: booking?.isNew || true
   })
 
   const handleChangeFormData = (name, value, artist) => {

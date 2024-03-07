@@ -896,6 +896,7 @@ export const BookingsModalContent = ({
             </button>
           )}
 
+          <div className={styles.actionButtonsSection}></div>
           {/* ****Conditional Rendering for different bookings Status ****/}
           {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
             <div>
