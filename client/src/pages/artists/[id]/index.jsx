@@ -293,14 +293,14 @@ const EventsTable = ({ artist, artistEvents, title, onLoadMore, numberOfEvents }
                 <h5 className={styles['event-text']}>{event.eventTitle}</h5>
                 <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
               </div>
-              <p className={styles['location-name']}>{event.locationVenue ? event.locationVenue : 'Location TBA'}</p>
+              <p className={styles['location-name']}>{event.locationVenue}</p>
             </div>
             <div className={styles['event-location']}>
               <Link href='#' className={styles.openMap}>
                 Open Map <ExportSquare size={13} />
               </Link>
               <p className={styles['event-text']}>
-                Street address 18 <Location variant='Bold' size={12} />
+                {event.streetAddress} <Location variant='Bold' size={12} />
               </p>
               <p className={styles['event-text']}>
                 {dateTimeFormat(event.startTime, 'UTCHours')}:{dateTimeFormat(event.startTime, 'UTCMinutes')} -{' '}

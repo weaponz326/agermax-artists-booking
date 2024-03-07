@@ -45,8 +45,8 @@ import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDe
 import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
-import SnackbarAlert from 'src/views/components/snackbar/SnackbarAlert'
 import useBookingFormData from 'src/hooks/useBookingFormData'
+import { Snackbar, Alert } from '@mui/material'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -231,6 +231,17 @@ export const AdminPagesNavBar = ({
 }) => {
   const [openModal, setOpenModal] = useState(false)
 
+  /****************SnackBar Options***************/
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
+
   //Search
   const [query, setQuery] = useState('')
 
@@ -329,9 +340,29 @@ export const AdminPagesNavBar = ({
             openModal={openModal}
             unhideModal={unhideModal}
             hideModal={hideModal}
-            modalContent={<BookingsModalContent user={user} />}
+            modalContent={
+              <BookingsModalContent
+                user={user}
+                setSnackbarMessage={setSnackbarMessage}
+                setSnackbarOpen={setSnackbarOpen}
+                setSnackbarSeverity={setSnackbarSeverity}
+                hideModal={hideModal}
+                unhideModal={unhideModal}
+              />
+            }
             SubmitButton={'Submit'}
           />
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            hideModal={hideModal}
+            anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       </nav>
     </LocalizationProvider>
@@ -398,6 +429,17 @@ export const EventsListItem = ({ event }) => {
   const { artists } = useArtists()
   const [openModal, setOpenModal] = useState(false)
 
+  /****************SnackBar Options***************/
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
+
   useEffect(() => {
     if (artists && event) {
       const artist = artists.find(a => a._id === event.artistID)
@@ -435,9 +477,7 @@ export const EventsListItem = ({ event }) => {
         <EventStatusIcon event={event} />
         <CalendarIcon booking={event} />
         <div className={styles.event}>
-          <div className={styles.eventTitle}>
-            {event.eventTitle ? event.eventTitle : 'Event Title Not Provided Yet'}
-          </div>
+          <div className={styles.eventTitle}>{event.eventTitle}</div>
           <div className={styles.eventArtist}>{artistName}</div>
         </div>
       </div>
@@ -454,9 +494,29 @@ export const EventsListItem = ({ event }) => {
         openModal={openModal}
         unhideModal={unhideModal}
         hideModal={hideModal}
-        modalContent={<BookingsModalContent booking={event} hideModal={hideModal} unhideModal={unhideModal} />}
+        modalContent={
+          <BookingsModalContent
+            booking={event}
+            hideModal={hideModal}
+            unhideModal={unhideModal}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+            setSnackbarSeverity={setSnackbarSeverity}
+          />
+        }
         SubmitButton={'Submit'}
       />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        hideModal={hideModal}
+        anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
@@ -476,7 +536,13 @@ export const EventStatusIcon = ({ style, className, event }) => {
   return <div style={{ background: statusIconColor() }} className={styles.statusIcon}></div>
 }
 
-export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
+export const BookingsModalContent = ({
+  booking,
+  hideModal,
+  setSnackbarMessage,
+  setSnackbarOpen,
+  setSnackbarSeverity
+}) => {
   const router = useRouter()
   const { user } = useAuth()
 
@@ -489,9 +555,10 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   const [bookingOrganizer, setBookingOrganizer] = useState([])
   const { updateBooking, deleteBooking, loading } = useBookings()
   const [open, setOpen] = useState(false)
+  const [invoicedState, setInvoicedState] = useState(false)
 
   /****************Form Data***************/
-  const { formData, setFormData } = useBookingFormData(booking)
+  const { formData, setFormData, handleChangeFormData, handleChangeWithEvent } = useBookingFormData(booking)
 
   /****************Gallery********************/
   const [fileList, setFileList] = useState(formData.gallery)
@@ -499,20 +566,19 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
   /****************Save Button Text********************/
   const [saveButtonText, setSaveButtonText] = useState('')
   useEffect(() => {
-    if (!booking) {
+    if (booking === undefined) {
       setSaveButtonText('Create Booking')
-    }
-    if ((booking && user && user.role === 'admin') || 'organizer') {
+    } else if ((booking != undefined && user && user.role === 'admin') || 'organizer') {
       setSaveButtonText('Update')
-    }
-    if (booking && user && user.role === 'artist') {
+    } else if (booking != undefined && user && user.role === 'artist') {
       setSaveButtonText('Accept & Submit for Approval')
     }
+    console.log('booking is: ', booking)
   }, [user, booking])
 
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
-    booking: booking && booking._id,
+    booking: booking,
     amount: 0,
     tax: 0,
     email: '',
@@ -533,17 +599,28 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
 
   const handleCreateInvoice = async e => {
     e.preventDefault()
+
+    // Update formData with invoiced: true
+    const updatedFormData = { ...formData, invoiced: true }
+
     try {
-      const newInvoice = await createInvoice(invoiceData)
-      setFormData({ ...formData, invoiced: true })
-      const updatedBooking = await updateBooking(formData)
-      // setInvoiceData({ ...newInvoice })
-      console.log('Invoice created Successfully! : ', newInvoice)
+      // Update the booking first
+      const updatedBooking = await updateBooking(updatedFormData)
       console.log('Booking invoiced Successfully! : ', updatedBooking)
+
+      // If the booking is successfully updated, proceed to create the invoice
+      const newInvoice = await createInvoice(invoiceData)
+      console.log('Invoice created Successfully! : ', newInvoice)
+      setSnackbarMessage('Booking invoiced Successfully! Redirecting to invoice details..')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+
       router.push({ pathname: `/admin/finance/admin/details/${newInvoice._id}`, query: { type: 'invoice' } })
-      // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error creating invoice: ', error)
+      setSnackbarMessage('Booking invoicing failed!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
       // Handle error, e.g., display an error message to the user
     }
   }
@@ -555,36 +632,41 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     setOrganizersOptions(organizers)
   }, [artists, organizers])
 
-  const handleChange = e => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
   const handleSubmit = async e => {
     e.preventDefault()
     if (!booking) {
       try {
         const newBooking = await createBooking(formData)
+        setSnackbarMessage('New Booking Created Successfully!')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
         console.log('New booking created: ', newBooking)
         hideModal()
 
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
-        console.error('Error creating booking: ', error)
         // Handle error, e.g., display an error message to the user
+        console.error('Error creating booking: ', error)
+        setSnackbarMessage('Error creating booking!')
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
       }
     } else {
       try {
         const newBooking = await updateBooking(formData)
         console.log('Booking Updated Successfully! : ', newBooking)
+        setSnackbarMessage('Booking Updated Successfully!')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
         hideModal()
 
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
         console.error('Error updating booking: ', error)
         // Handle error, e.g., display an error message to the user
+        setSnackbarMessage('Error updating booking!')
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
       }
     }
   }
@@ -594,12 +676,18 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     try {
       const newBooking = await updateBooking(formData)
       console.log('Booking Updated Successfully! : ', newBooking)
+      setSnackbarMessage('Booking rejected successfully and set to cancelled!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
       hideModal()
 
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error updating booking: ', error)
       // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error rejecting booking!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
     }
   }
 
@@ -614,12 +702,18 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
     try {
       const newBooking = await deleteBooking(booking)
       console.log('Booking deleted Successfully! : ', newBooking)
+      setSnackbarMessage('Booking deleted permanently success!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
       confirmDelete()
 
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
       console.error('Error deleting booking: ', error)
       // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error deleting booking!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
     }
   }
 
@@ -645,7 +739,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             name='eventTitle'
             id='eventTitle'
             value={formData.eventTitle}
-            onChange={handleChange}
+            onChange={handleChangeWithEvent}
             required
             label="Event's Title"
             size='small'
@@ -660,7 +754,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             id='organizerID'
             options={organizersOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Organizer' />}
+            renderInput={params => <TextField {...params} label='Organizer' required />}
             size='small'
             sx={{ padding: '0' }}
             value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
@@ -674,7 +768,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             id='artistID'
             options={artistsOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Artist' />}
+            renderInput={params => <TextField {...params} label='Artist' required />}
             size='small'
             sx={{ padding: '0' }}
             value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
@@ -693,7 +787,8 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             className={styles.modalCardContentInputField}
             label='Get In Time'
             value={formData.getInTime}
-            onChange={time => setFormData({ ...formData, getInTime: time })}
+            // onChange={time => setFormData({ ...formData, getInTime: time })}
+            onChange={time => handleChangeFormData('getInTime', time)}
             minutesStep={15}
             format='HH:mm'
             ampm={false}
@@ -706,7 +801,8 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             className={styles.modalCardContentInputField}
             label='Event Start Time'
             value={formData.startTime}
-            onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
+            // onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
+            onChange={time => handleChangeFormData('startTime', time)}
             minutesStep={15}
             slots={params => <TextField {...params} required />}
             minTime={formData.getInTime ? dayjs(formData.getInTime).add(15, 'minute') : undefined}
@@ -721,7 +817,8 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             className={styles.modalCardContentInputField}
             label='Event End Time'
             value={formData.endTime}
-            onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
+            // onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
+            onChange={time => handleChangeFormData('endTime', time)}
             slots={params => <TextField {...params} required />}
             minutesStep={15}
             minTime={formData.startTime ? dayjs(formData.startTime).add(30, 'minute') : undefined}
@@ -734,16 +831,33 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
           />
 
           <TextField
-            placeholder='Venue'
+            placeholder='City/Venue'
             className={styles.modalCardContentInputField}
             type='text'
             name='locationVenue'
             id='locationVenue'
             value={formData.locationVenue}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange={handleChangeWithEvent}
+            // onChange={venue => handleChangeFormData('locationVenue', venue)}
             required
             variant='outlined'
-            label='Venue'
+            label='City/Venue'
+            size='small'
+            disabled={user && user.role === 'artist'}
+          />
+          <TextField
+            placeholder='Street Address'
+            className={styles.modalCardContentInputField}
+            type='text'
+            name='streetAddress'
+            id='streetAddress'
+            value={formData.streetAddress}
+            // onChange={address => handleChangeFormData('streetAddress', address)}
+            onChange={handleChangeWithEvent}
+            required
+            variant='outlined'
+            label='Street Address'
             size='small'
             disabled={user && user.role === 'artist'}
           />
@@ -754,7 +868,8 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             name='numberOfGuests'
             id='numberOfGuests'
             value={formData.numberOfGuests}
-            onChange={handleChange}
+            // onChange={guests => handleChangeFormData('numberOfGuests', guests)}
+            onChange={handleChangeWithEvent}
             label='Number of Guests'
             size='small'
             disabled={user && user.role === 'artist'}
@@ -765,7 +880,7 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
             name='otherComments'
             id='otherComments'
             placeholder='Any Comments...'
-            onChange={handleChange}
+            onChange={handleChangeWithEvent}
             value={formData.otherComments}
             rows={5}
           />
@@ -825,22 +940,37 @@ export const BookingsModalContent = ({ booking, unhideModal, hideModal }) => {
         {/* *****Conditional Rendering for different bookings Status*** */}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
-            {user && user.role === 'admin' && (
+            {user && user.role === 'admin' && !booking.invoiced ? (
               <form
                 // action={`/admin/finance/admin/details/${invoiceData._id}`}
                 onSubmit={handleCreateInvoice}
               >
                 <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
               </form>
+            ) : (
+              <div style={{ flex: 1 }}>
+                <TabButton
+                  // onClick={router.push({
+                  //   pathname: `/admin/finance/admin/details/${newInvoice._id}`,
+                  //   query: { type: 'invoice' }
+                  // })}
+                  className={`${styles.modalCardContentSaveButton} ${styles.modalCardContentInvoicedButton}`}
+                  disabled={true}
+                >
+                  Invoiced! Awaiting Payment.👌
+                </TabButton>
+              </div>
             )}
-            <form onSubmit={handleRejectBooking}>
-              <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
-                {user.role === 'admin' || 'artist' ? 'Reject Booking 👎' : 'Cancel Booking'}
-              </TabButton>
-            </form>
+            {!booking.invoiced && (
+              <form onSubmit={handleRejectBooking}>
+                <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
+                  {user.role === 'admin' || 'artist' ? 'Reject Booking 👎' : 'Cancel Booking'}
+                </TabButton>
+              </form>
+            )}
           </div>
         )}
-        {/* ***********************************/}
+        {/* ******************SnackBar****************/}
       </LocalizationProvider>
     )
   } else if (modalContentView === 'gallery') {
