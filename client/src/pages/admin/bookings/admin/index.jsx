@@ -287,7 +287,7 @@ export const AdminPagesNavBar = ({
 
   const handleDateFilter = date => {
     console.log(dateToFilterBy)
-    setEventsStatusView('Filtered')
+    setEventsStatusView('filtered')
     // setDateToFilterBy(date)
     if (dateToFilterBy && events)
       setEvents(bookings.filter(event => dayjs(event.dateTimeRequested) >= dayjs(dateToFilterBy)))
@@ -310,7 +310,7 @@ export const AdminPagesNavBar = ({
               />
             </TabButton>
             <TabButton
-              className={eventsStatusView === 'Filtered' ? `${styles.bookingStatusFilterButton}` : styles.filterTab}
+              className={eventsStatusView === 'filtered' ? `${styles.bookingStatusFilterButton}` : styles.filterTab}
               onClick={handleDateFilter}
             >
               <GridFilterAltIcon />
