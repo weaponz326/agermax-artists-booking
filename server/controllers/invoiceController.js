@@ -12,13 +12,19 @@ exports.getAllInvoice = async (req, res) => {
     });
 
     const transformedInvoices = invoices.map((invoice) => {
+      // Check if booking exists
+      const booking = invoice.booking || {};
+
+      // Safely attempt to access organizerID properties
+      const organizer = booking.organizerID || {};
       const {
-        _id: organizerId,
-        firstName,
-        lastName,
-        email,
-        contactPhone,
-      } = invoice.booking.organizerID;
+        _id: organizerId = '',
+        firstName = '',
+        lastName = '',
+        email = '',
+        contactPhone = '',
+      } = organizer;
+
       return {
         _id: invoice._id,
         amount: invoice.amount,
@@ -33,8 +39,8 @@ exports.getAllInvoice = async (req, res) => {
         organizerLastName: lastName,
         organizerEmail: email,
         organizerContactPhone: contactPhone,
-        booking: invoice.booking._id,
-        bookingId2: invoice.booking.bookingID,
+        booking: booking._id || 'N/A', // Fallback to 'N/A' if booking doesn't exist
+        bookingId2: booking.bookingID || 'N/A',
       };
     });
 
@@ -43,6 +49,7 @@ exports.getAllInvoice = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 exports.getInvoiceById = async (req, res) => {
   try {
@@ -59,13 +66,19 @@ exports.getInvoiceById = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found" });
     }
 
+    // Check if booking exists
+    const booking = invoice.booking || {};
+
+    // Safely attempt to access organizerID properties
+    const organizer = booking.organizerID || {};
     const {
-      _id: organizerId,
-      firstName,
-      lastName,
-      email,
-      contactPhone,
-    } = invoice.booking.organizerID;
+      _id: organizerId = '',
+      firstName = '',
+      lastName = '',
+      email = '',
+      contactPhone = '',
+    } = organizer;
+
     const transformedInvoice = {
       _id: invoice._id,
       amount: invoice.amount,
@@ -80,8 +93,8 @@ exports.getInvoiceById = async (req, res) => {
       organizerLastName: lastName,
       organizerEmail: email,
       organizerContactPhone: contactPhone,
-      booking: invoice.booking._id,
-      bookingId2: invoice.booking.bookingID,
+      booking: booking._id || 'N/A', // Fallback to 'N/A' if booking doesn't exist
+      bookingId2: booking.bookingID || 'N/A',
     };
 
     res.json(transformedInvoice);
@@ -89,6 +102,7 @@ exports.getInvoiceById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 exports.createInvoice = async (req, res) => {
   const invoice = new Invoice(req.body);
