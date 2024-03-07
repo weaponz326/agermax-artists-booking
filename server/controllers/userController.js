@@ -107,34 +107,29 @@ const getUserById = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   const userId = req.user._id;
-  const { password, ...updateData } = req.body; 
+  const { password, ...updateData } = req.body; // Exclude password from update data if present
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+    const userData = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
-    }).select('-password'); // Exclude password field in the response
+    }).select("-password"); // Exclude password field in the response
 
-    if (!updatedUser) {
+    if (!userData) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const userData = updatedUser.toObject();
-
-    delete userData.password;
-
     res.json({
       message: "User details updated successfully",
-      ...userData, 
+      userData,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
-  const { password, ...updateData } = req.body; 
+  const { password, ...updateData } = req.body; // Exclude password from update data if present
 
   try {
     const userExists = await User.exists({ _id: targetUserId });
@@ -144,21 +139,16 @@ const updateUserDetailsById = async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
       new: true,
-    }).select('-password'); // Exclude password field in the response
-
-    const userData = updatedUser.toObject();
-
-    delete userData.password;
+    }).select("-password"); // Exclude password field in the response
 
     res.json({
       message: "User details updated successfully",
-      ...userData, 
+      userData,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 const deleteUser = async (req, res) => {
   try {
