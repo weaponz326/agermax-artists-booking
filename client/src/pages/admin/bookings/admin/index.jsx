@@ -538,7 +538,6 @@ export const EventStatusIcon = ({ style, className, event }) => {
 
 export const BookingsModalContent = ({
   booking,
-  unhideModal,
   hideModal,
   setSnackbarMessage,
   setSnackbarOpen,
@@ -579,7 +578,7 @@ export const BookingsModalContent = ({
 
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({
-    booking: booking && booking._id,
+    booking: booking,
     amount: 0,
     tax: 0,
     email: '',
