@@ -68,7 +68,7 @@
 }
 
 .profile-card .avatar-container {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   border: none;
   list-style: none;
@@ -76,6 +76,9 @@
   display: grid;
   padding: 0;
   place-items: center;
+  width: 100px;
+  aspect-ratio: 1;
+  margin-bottom: 1rem;
 }
 
 .profile-card .avatar-container img,
@@ -111,7 +114,7 @@
   position: relative;
   gap: 0.5rem;
   display: flex;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
   flex-wrap: wrap;
   height: max-content;
   justify-content: center;

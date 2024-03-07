@@ -3,6 +3,8 @@ import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
 import { Drawer, ConfigProvider, Avatar } from 'antd'
+import Image from 'next/image'
+
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
 
 import { useRouter } from 'next/router'
@@ -30,6 +32,7 @@ function ArtistProfile() {
       try {
         const artist = await getUserById(id)
         setArtist(artist)
+        console.log(artist)
       } catch (error) {
         console.log('failed to fetch user')
       }
@@ -222,14 +225,21 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
           {artist ? (
-            <div>
-              {artist.profilePhoto ? artist.profilePhoto : <Avatar size={60} icon={<UserOutlined size={100} />} />}
-            </div>
+            <Image
+              // className={styles['evt-img']}
+              src={artist.picture ? artist.picture : '/images/artist-1.jpg'}
+              alt='artistImg'
+              loading='eager'
+              fill
+            />
           ) : (
+            // <div>
+            //   {artist.profilePhoto ? artist.profilePhoto : <Avatar size={60} icon={<UserOutlined size={100} />} />}
+            // </div>
             <Skeleton
               animation='wave'
               variant='rounded'
-              height={80}
+              height={100}
               sx={{ borderRadius: '50%' }}
               className={styles['skeletonImg']}
             />
@@ -237,7 +247,7 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
         </div>
         <h5 id={styles['username']}>{artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'}</h5>
         <div className={styles['tags-container']}>
-          {artist ? (
+          {artist && artist.genre.length > 0 ? (
             artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
           ) : (
             <Tag>No genre provided yet.</Tag>
