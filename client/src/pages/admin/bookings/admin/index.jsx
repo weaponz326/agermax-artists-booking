@@ -346,10 +346,23 @@ export const AdminPagesNavBar = ({
                 setSnackbarMessage={setSnackbarMessage}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarSeverity={setSnackbarSeverity}
+                hideModal={hideModal}
+                unhideModal={unhideModal}
               />
             }
             SubmitButton={'Submit'}
           />
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            hideModal={hideModal}
+            anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       </nav>
     </LocalizationProvider>
@@ -554,15 +567,14 @@ export const BookingsModalContent = ({
   /****************Save Button Text********************/
   const [saveButtonText, setSaveButtonText] = useState('')
   useEffect(() => {
-    if (!booking) {
+    if (booking === undefined) {
       setSaveButtonText('Create Booking')
-    }
-    if ((booking && user && user.role === 'admin') || 'organizer') {
+    } else if ((booking != undefined && user && user.role === 'admin') || 'organizer') {
       setSaveButtonText('Update')
-    }
-    if (booking && user && user.role === 'artist') {
+    } else if (booking != undefined && user && user.role === 'artist') {
       setSaveButtonText('Accept & Submit for Approval')
     }
+    console.log('booking is: ', booking)
   }, [user, booking])
 
   /****************Invoice Data***************/
@@ -743,7 +755,7 @@ export const BookingsModalContent = ({
             id='organizerID'
             options={organizersOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Organizer' />}
+            renderInput={params => <TextField {...params} label='Organizer' required />}
             size='small'
             sx={{ padding: '0' }}
             value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
@@ -757,7 +769,7 @@ export const BookingsModalContent = ({
             id='artistID'
             options={artistsOptions}
             getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Artist' />}
+            renderInput={params => <TextField {...params} label='Artist' required />}
             size='small'
             sx={{ padding: '0' }}
             value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
