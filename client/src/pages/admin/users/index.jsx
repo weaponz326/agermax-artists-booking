@@ -154,7 +154,6 @@ const UsersListPage = () => {
         onClose={handleCloseSnackbar}
         hideModal={hideModal}
         anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
-        // style={{ zIndex: 1400 }} // Ensure this is higher than the modal's z-index
       >
         <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
           {snackbarMessage}
