@@ -25,6 +25,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 import { Modal } from '@mui/base/Modal'
+import { Snackbar, Alert } from '@mui/material'
+import Upload from '@mui/icons-material/Upload'
+import LimitTags from './LimitTagComponent'
+import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 // import CalendarBookingCard from 'src/components/CalendarBookingCard/CalendarBookingCard'
 import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/CustomFullCalendar/CustomFullCalendar'
@@ -34,11 +38,8 @@ import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import { createBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
-import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 import { useAuth } from 'src/hooks/useAuth'
-import Upload from '@mui/icons-material/Upload'
-import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
 import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
@@ -46,17 +47,17 @@ import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import { Snackbar, Alert } from '@mui/material'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
   const { bookings } = useBookings()
   const { user, logout } = useAuth()
   const [events, setEvents] = useState([])
-  const [eventsStatusView, setEventsStatusView] = useState('all')
+  const [eventsStatusView, setEventsStatusView] = useState('pending')
   const [pendingCount, setPendingCount] = useState(null)
   const [approvedCount, setApprovedCount] = useState(null)
   const [cancelledCount, setCancelledCount] = useState(null)
+  const [dateToFilterBy, setDateToFilterBy] = useState('')
 
   /****************Booking States Depending Different Users************/
   const [userBookings, setUserBookings] = useState([])
@@ -87,6 +88,8 @@ const BookingPage = () => {
         setEventsStatusView={setEventsStatusView}
         bookings={userBookings}
         logout={logout}
+        dateToFilterBy={dateToFilterBy}
+        setDateToFilterBy={setDateToFilterBy}
       />
       {activeEventsView === 'ListView' && (
         <EventsListView
@@ -101,6 +104,7 @@ const BookingPage = () => {
           setApprovedCount={setApprovedCount}
           cancelledCount={cancelledCount}
           setCancelledCount={setCancelledCount}
+          setDateToFilterBy={setDateToFilterBy}
         />
       )}
       <div className={styles.threeDCalendar}>
@@ -125,7 +129,8 @@ export const EventsListView = ({
   cancelledCount,
   setCancelledCount,
   events,
-  setEvents
+  setEvents,
+  setDateToFilterBy
 }) => {
   function groupBy(array, keyGetter) {
     const map = new Map()
@@ -183,31 +188,36 @@ export const EventsListView = ({
     }
   }, [bookings, eventsStatusView, pendingCount, approvedCount, cancelledCount])
 
+  const handleEventsStatusView = statusView => {
+    setEventsStatusView(statusView)
+    setDateToFilterBy('')
+  }
+
   return (
     <section className={styles.bookingStatusSection}>
       <div className={styles.bookingStatus}>
         <TabButton
-          onClick={() => setEventsStatusView('all')}
+          onClick={() => handleEventsStatusView('all')}
           className={eventsStatusView === 'all' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           All
         </TabButton>
         <TabButton
-          onClick={() => setEventsStatusView('pending')}
+          onClick={() => handleEventsStatusView('pending')}
           className={eventsStatusView === 'pending' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Pending
           {pendingCount && <div className={styles.statusCount}>{pendingCount}</div>}
         </TabButton>
         <TabButton
-          onClick={() => setEventsStatusView('approved')}
+          onClick={() => handleEventsStatusView('approved')}
           className={eventsStatusView === 'approved' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Approved
           {/* {events && <div className={styles.statusCount}>{approvedCount}</div>} */}
         </TabButton>
         <TabButton
-          onClick={() => setEventsStatusView('cancelled')}
+          onClick={() => handleEventsStatusView('cancelled')}
           className={eventsStatusView === 'cancelled' ? `${styles.bookingStatusActiveButton}` : styles.listViewTab}
         >
           Cancelled
@@ -227,7 +237,9 @@ export const AdminPagesNavBar = ({
   setEvents,
   eventsStatusView,
   setEventsStatusView,
-  bookings
+  bookings,
+  dateToFilterBy,
+  setDateToFilterBy
 }) => {
   const [openModal, setOpenModal] = useState(false)
 
@@ -273,21 +285,36 @@ export const AdminPagesNavBar = ({
     setActiveEventsView(e.target.id)
   }
 
+  const handleDateFilter = date => {
+    console.log(dateToFilterBy)
+    setEventsStatusView('Filtered')
+    // setDateToFilterBy(date)
+    if (dateToFilterBy && events)
+      setEvents(bookings.filter(event => dayjs(event.dateTimeRequested) >= dayjs(dateToFilterBy)))
+    if (date) {
+      // setDateToFilterBy(new Date(date))
+      setEvents(bookings.filter(event => dayjs(event.dateTimeRequested) >= dayjs(date)))
+    }
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <nav className={styles.navigationPanel}>
         <div className={styles.calendarViewTabs}>
           <div className={styles.dateFilter}>
             <TabButton className={styles.selectMonth}>
-              <div className={styles.selectMonthContent}>
-                <AntDesignDatePicker />
-              </div>
+              <AntDesignDatePicker
+                handleDateFilter={handleDateFilter}
+                dateToFilterBy={dateToFilterBy}
+                setDateToFilterBy={setDateToFilterBy}
+              />
             </TabButton>
-            <TabButton className={styles.filterTab}>
-              <div className={styles.filterTabContent}>
-                <GridFilterAltIcon />
-                <span>Filter</span>
-              </div>
+            <TabButton
+              className={eventsStatusView === 'Filtered' ? `${styles.bookingStatusFilterButton}` : styles.filterTab}
+              onClick={handleDateFilter}
+            >
+              <GridFilterAltIcon />
+              <span>Filter</span>
             </TabButton>
           </div>
           <div className={styles.viewStylesTabs}>
@@ -352,18 +379,18 @@ export const AdminPagesNavBar = ({
             }
             SubmitButton={'Submit'}
           />
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleCloseSnackbar}
-            hideModal={hideModal}
-            anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
-          >
-            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
         </div>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          hideModal={hideModal}
+          anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </nav>
     </LocalizationProvider>
   )
@@ -573,7 +600,6 @@ export const BookingsModalContent = ({
     } else if (booking != undefined && user && user.role === 'artist') {
       setSaveButtonText('Accept & Submit for Approval')
     }
-    console.log('booking is: ', booking)
   }, [user, booking])
 
   /****************Invoice Data***************/
@@ -653,12 +679,12 @@ export const BookingsModalContent = ({
       }
     } else {
       try {
-        const newBooking = await updateBooking(formData)
-        console.log('Booking Updated Successfully! : ', newBooking)
+        const updatedBooking = await updateBooking(formData)
+        console.log('Booking Updated Successfully! : ', updatedBooking)
         setSnackbarMessage('Booking Updated Successfully!')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        hideModal()
+        // hideModal()
 
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
@@ -673,13 +699,17 @@ export const BookingsModalContent = ({
 
   const handleRejectBooking = async e => {
     e.preventDefault()
+
+    // Update formData with status: cancelled
+    const updatedFormData = { ...formData, status: 'cancelled' }
+
     try {
-      const newBooking = await updateBooking(formData)
-      console.log('Booking Updated Successfully! : ', newBooking)
+      const rejectedBooking = await updateBooking(updatedFormData)
+      console.log('Booking Updated Successfully! : ', rejectedBooking)
       setSnackbarMessage('Booking rejected successfully and set to cancelled!')
       setSnackbarSeverity('success')
       setSnackbarOpen(true)
-      hideModal()
+      // hideModal()
 
       // Optionally, you can redirect or perform any other action after successful booking creation
     } catch (error) {
@@ -700,8 +730,8 @@ export const BookingsModalContent = ({
 
   const handleDelete = async booking => {
     try {
-      const newBooking = await deleteBooking(booking)
-      console.log('Booking deleted Successfully! : ', newBooking)
+      const deletedBooking = await deleteBooking(booking)
+      console.log('Booking deleted Successfully! : ', deletedBooking)
       setSnackbarMessage('Booking deleted permanently success!')
       setSnackbarSeverity('success')
       setSnackbarOpen(true)
@@ -720,10 +750,6 @@ export const BookingsModalContent = ({
   const handleBackToDetails = () => {
     setModalContentView('details')
     // setFormData({ ...formData, gallery: fileList })
-  }
-
-  const onReject = () => {
-    setFormData({ ...formData, status: 'cancelled' })
   }
 
   /*********************Rendering**********************/
@@ -896,8 +922,8 @@ export const BookingsModalContent = ({
             </button>
           )}
 
-          <div className={styles.actionButtonsSection}></div>
-          {/* ****Conditional Rendering for different bookings Status ****/}
+          {/* ****Conditional Rendering for different bookings Status --- CANCELLED ****/}
+
           {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
             <div>
               <label htmlFor='status'>Status:</label>
@@ -919,6 +945,9 @@ export const BookingsModalContent = ({
 
           <TabButton className={styles.modalCardContentSaveButton}>{saveButtonText}</TabButton>
         </form>
+
+        {/* ****Conditional Rendering for different bookings Status --- CANCELLED ****/}
+
         {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
           <div className={styles.bookingActionButtons}>
             <TabButton
@@ -938,7 +967,7 @@ export const BookingsModalContent = ({
           </div>
         )}
 
-        {/* *****Conditional Rendering for different bookings Status*** */}
+        {/* ****Conditional Rendering for different bookings Status --- PENDING ****/}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
             {user && user.role === 'admin' && !booking.invoiced ? (
@@ -964,7 +993,7 @@ export const BookingsModalContent = ({
             )}
             {!booking.invoiced && (
               <form onSubmit={handleRejectBooking}>
-                <TabButton onClick={onReject} className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
+                <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
                   {user.role === 'admin' || 'artist' ? 'Reject Booking 👎' : 'Cancel Booking'}
                 </TabButton>
               </form>

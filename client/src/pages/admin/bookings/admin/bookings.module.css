@@ -39,10 +39,22 @@
   background-color: #efefef;
 }
 
-.filterTab {
+.filterTab,
+.bookingStatusFilterButton {
   padding: 0.3rem 1.3rem;
   border-radius: 0.5rem;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.bookingStatusFilterButton {
+  background-color: #4328f21c;
+  border: 1px solid #4428f2;
+  color: #4428f2;
 }
 
 .filterTabContent {
@@ -129,6 +141,9 @@
   font-size: 0.85rem;
   cursor: pointer;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .addGalleryContainer {
