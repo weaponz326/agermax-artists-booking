@@ -33,7 +33,6 @@ const galleryUpload = multer({ storage: galleryStorage });
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
-router.get("/users", userController.getAllUsers);
 router.route("/profile").get(protect, userController.getUserProfile);
 router
   .route("/profile")
@@ -44,8 +43,14 @@ router
     userController.updateUserDetails
   );
 
-router.get("/users/:id", userController.getUserById);
-router.put("/users/:id", userController.updateUserDetailsById);
+router.route("/users").get(userController.getAllUsers);
+
+router.route("/users/:id").get(userController.getUserById);
+router.route("/users/:id").put(
+  profilePhotoUpload.single("profilePhoto"),
+  galleryUpload.array("gallery", 10),
+  userController.updateUserDetailsById
+);
 
 router.delete("/users/:id", userController.deleteUser);
 
