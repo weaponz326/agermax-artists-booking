@@ -73,7 +73,7 @@ const EventCard = ({ booking }) => {
     <div className={styles['events-preview-container']}>
       <Image
         className={styles['evt-img']}
-        src={booking.picture ? booking.picture : '#'}
+        src={booking.picture ? booking.picture : '/images/artist-1.jpg'}
         alt='BookingImg'
         loading='eager'
         fill
@@ -93,7 +93,6 @@ const EventsDetails = ({ booking }) => {
   // Fetch artist name from API if it is not provided in the data from the server
   useEffect(() => {
     if (booking) {
-      console.log(booking.artistID.firstName)
       const fetchArtistID = async () => {
         try {
           const artist = await getUserById(booking.artistID)
