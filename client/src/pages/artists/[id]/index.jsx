@@ -88,14 +88,22 @@ const EventsSection = ({ artist }) => {
     if (!bookings) return
     // Get upcoming events for the current artist.
     let artistsFutureEvents = bookings.filter(
-      booking => booking.artistID === artist._id && new Date(booking.dateTimeRequested) > new Date().getDate()
+      booking =>
+        booking.status === 'approved' &&
+        booking.artistID === artist._id &&
+        new Date(booking.dateTimeRequested) > new Date().getDate()
     )
     // .sort((a, b) => a.dateTimeRequested - b.dateTimeRequested)
     setArtistsUpcomingEvents(artistsFutureEvents.slice(0, numberOfUpcomingEvents))
 
     // Get past events for the current artist.
     let artistsPastEvents = bookings
-      .filter(booking => booking.artistID === artist._id && new Date(booking.dateTimeRequested) < new Date().getDate())
+      .filter(
+        booking =>
+          booking.status === 'approved' &&
+          booking.artistID === artist._id &&
+          new Date(booking.dateTimeRequested) < new Date().getDate()
+      )
       .reverse()
     setArtistsPastEvents(artistsPastEvents.slice(0, numberOfPastEvents))
   }, [bookings, numberOfUpcomingEvents, numberOfPastEvents])

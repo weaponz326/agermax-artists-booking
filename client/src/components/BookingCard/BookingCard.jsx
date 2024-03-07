@@ -362,7 +362,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               )}
 
               {activeStep === 1 && (
-                <Grid container direction='column' overflow={'auto'}>
+                <Grid container direction='column' overflow={'auto'} height='100%'>
                   <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
                     {artist && artist.firstName} {artist && artist.lastName}
                   </Typography>
@@ -547,7 +547,7 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           onClick={handleBack}
           sx={{
             background: '#D5DFEC',
-            display: !allowCancel && 'none',
+            // display: !allowCancel && 'none',
             color: '#4B627F',
             borderRadius: '9px',
             padding: '8px 10px',

@@ -16,6 +16,7 @@ const style = {
   border: 'none',
   borderRadius: '36px',
   height: '95%',
+  maxHeight: '65rem',
   boxShadow: 24,
   boxShadow: '0px 10px 30px #183D4C',
   p: 5,
