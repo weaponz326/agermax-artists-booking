@@ -1,8 +1,5 @@
 // controllers/userController.js
 const User = require("../models/User");
-const Artist = require("../models/Artist");
-const EventOrganizer = require("../models/EventOrganizer");
-const Admin = require("../models/Admin");
 
 // Create User is handled by the register function in authController.js)
 
@@ -110,41 +107,58 @@ const getUserById = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   const userId = req.user._id;
-  const updateData = req.body;
+  const { password, ...updateData } = req.body; 
 
   try {
-    // Directly update the user document with provided data
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
+    }).select('-password'); // Exclude password field in the response
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userData = updatedUser.toObject();
+
+    delete userData.password;
+
+    res.json({
+      message: "User details updated successfully",
+      ...userData, 
     });
-    // res.json({ message: "User details updated successfully" });
-    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
+
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
-  const updateData = req.body;
+  const { password, ...updateData } = req.body; 
 
   try {
-    // Ensure the user exists before attempting to update
     const userExists = await User.exists({ _id: targetUserId });
     if (!userExists) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the user's details
     const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
       new: true,
+    }).select('-password'); // Exclude password field in the response
+
+    const userData = updatedUser.toObject();
+
+    delete userData.password;
+
+    res.json({
+      message: "User details updated successfully",
+      ...userData, 
     });
-    // res.json({ message: "User details updated successfully" });
-    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 const deleteUser = async (req, res) => {
   try {
