@@ -4,26 +4,38 @@ exports.getAllInvoice = async (req, res) => {
   try {
     const invoices = await Invoice.find().populate({
       path: "booking",
-      populate: {
-        path: "organizerID",
-        model: "User",
-        select: "firstName lastName email contactPhone _id",
-      },
+      populate: [
+        {
+          path: "organizerID",
+          model: "User",
+          select: "firstName lastName email contactPhone _id",
+        },
+        {
+          path: "artistID",
+          model: "User",
+          select: "firstName lastName _id",
+        },
+      ],
     });
 
     const transformedInvoices = invoices.map((invoice) => {
-      // Check if booking exists
       const booking = invoice.booking || {};
-
-      // Safely attempt to access organizerID properties
       const organizer = booking.organizerID || {};
+      const artist = booking.artistID || {};
+
       const {
-        _id: organizerId = '',
-        firstName = '',
-        lastName = '',
-        email = '',
-        contactPhone = '',
+        _id: organizerId = "",
+        firstName: organizerFirstName = "",
+        lastName: organizerLastName = "",
+        email: organizerEmail = "",
+        contactPhone: organizerContactPhone = "",
       } = organizer;
+
+      const {
+        _id: artistId = "",
+        firstName: artistFirstName = "",
+        lastName: artistLastName = "",
+      } = artist;
 
       return {
         _id: invoice._id,
@@ -34,13 +46,16 @@ exports.getAllInvoice = async (req, res) => {
         invoiceDate: invoice.invoiceDate,
         paymentDueDate: invoice.paymentDueDate,
         __v: invoice.__v,
+        booking: booking._id || "N/A",
+        bookingId2: booking.bookingID || "N/A",
         organizerId,
-        organizerFirstName: firstName,
-        organizerLastName: lastName,
-        organizerEmail: email,
-        organizerContactPhone: contactPhone,
-        booking: booking._id || 'N/A', // Fallback to 'N/A' if booking doesn't exist
-        bookingId2: booking.bookingID || 'N/A',
+        organizerFirstName,
+        organizerLastName,
+        organizerEmail,
+        organizerContactPhone,
+        artistId,
+        artistFirstName,
+        artistLastName,
       };
     });
 
@@ -50,34 +65,45 @@ exports.getAllInvoice = async (req, res) => {
   }
 };
 
-
 exports.getInvoiceById = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate({
       path: "booking",
-      populate: {
-        path: "organizerID",
-        model: "User",
-        select: "firstName lastName email contactPhone _id",
-      },
+      populate: [
+        {
+          path: "organizerID",
+          model: "User",
+          select: "firstName lastName email contactPhone _id",
+        },
+        {
+          path: "artistID",
+          model: "User",
+          select: "firstName lastName _id",
+        },
+      ],
     });
 
     if (!invoice) {
       return res.status(404).json({ message: "Invoice not found" });
     }
 
-    // Check if booking exists
     const booking = invoice.booking || {};
-
-    // Safely attempt to access organizerID properties
     const organizer = booking.organizerID || {};
+    const artist = booking.artistID || {};
+
     const {
-      _id: organizerId = '',
-      firstName = '',
-      lastName = '',
-      email = '',
-      contactPhone = '',
+      _id: organizerId = "",
+      firstName: organizerFirstName = "",
+      lastName: organizerLastName = "",
+      email: organizerEmail = "",
+      contactPhone: organizerContactPhone = "",
     } = organizer;
+
+    const {
+      _id: artistId = "",
+      firstName: artistFirstName = "",
+      lastName: artistLastName = "",
+    } = artist;
 
     const transformedInvoice = {
       _id: invoice._id,
@@ -88,13 +114,16 @@ exports.getInvoiceById = async (req, res) => {
       invoiceDate: invoice.invoiceDate,
       paymentDueDate: invoice.paymentDueDate,
       __v: invoice.__v,
+      booking: booking._id || "N/A",
+      bookingId2: booking.bookingID || "N/A",
       organizerId,
-      organizerFirstName: firstName,
-      organizerLastName: lastName,
-      organizerEmail: email,
-      organizerContactPhone: contactPhone,
-      booking: booking._id || 'N/A', // Fallback to 'N/A' if booking doesn't exist
-      bookingId2: booking.bookingID || 'N/A',
+      organizerFirstName,
+      organizerLastName,
+      organizerEmail,
+      organizerContactPhone,
+      artistId,
+      artistFirstName,
+      artistLastName,
     };
 
     res.json(transformedInvoice);
@@ -102,7 +131,6 @@ exports.getInvoiceById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.createInvoice = async (req, res) => {
   const invoice = new Invoice(req.body);

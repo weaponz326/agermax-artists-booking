@@ -16,11 +16,17 @@ exports.getAllPayments = async (req, res) => {
         select: "booking",
         populate: {
           path: "booking",
-          select: "artistID",
-          populate: {
-            path: "artistID",
-            select: "_id name",
-          },
+          select: "artistID organizerID",
+          populate: [
+            {
+              path: "artistID",
+              select: "_id name",
+            },
+            {
+              path: "organizerID",
+              select: "_id firstName lastName email contactPhone",
+            },
+          ],
         },
       });
 
@@ -30,18 +36,33 @@ exports.getAllPayments = async (req, res) => {
 
     const paymentsWithDetails = payments.map((payment) => {
       const { organizer, invoice, ...paymentDetails } = payment.toObject();
-      const artistID =
+
+      // Handling potential null values for artistID and organizerID
+      const artist =
         invoice && invoice.booking && invoice.booking.artistID
-          ? invoice.booking.artistID._id
-          : null;
+          ? invoice.booking.artistID
+          : { _id: null, name: null };
+      const bookingOrganizer =
+        invoice && invoice.booking && invoice.booking.organizerID
+          ? invoice.booking.organizerID
+          : {
+              _id: null,
+              firstName: null,
+              lastName: null,
+              email: null,
+              contactPhone: null,
+            };
+
       return {
         ...paymentDetails,
-        organizer: organizer._id,
-        organizerFirstName: organizer.firstName,
-        organizerLastName: organizer.lastName,
-        organizerEmail: organizer.email,
-        organizerContactPhone: organizer.contactPhone,
-        artistID,
+        organizerId: organizer ? organizer._id : null,
+        organizerFirstName: organizer ? organizer.firstName : null,
+        organizerLastName: organizer ? organizer.lastName : null,
+        organizerEmail: organizer ? organizer.email : null,
+        organizerContactPhone: organizer ? organizer.contactPhone : null,
+        artistId: artist._id,
+        artistName: artist.name,
+        bookingOrganizerId: bookingOrganizer._id, // Optional: Include if you need booking's organizer details as well
       };
     });
 
@@ -68,11 +89,17 @@ exports.getPaymentById = async (req, res) => {
         select: "booking",
         populate: {
           path: "booking",
-          select: "artistID",
-          populate: {
-            path: "artistID",
-            select: "_id name",
-          },
+          select: "artistID organizerID",
+          populate: [
+            {
+              path: "artistID",
+              select: "_id name",
+            },
+            {
+              path: "organizerID",
+              select: "_id firstName lastName email contactPhone",
+            },
+          ],
         },
       });
 
@@ -81,18 +108,33 @@ exports.getPaymentById = async (req, res) => {
     }
 
     const { organizer, invoice, ...paymentDetails } = payment.toObject();
-    const artistID =
+
+    // Handling potential null values for artistID and organizerID
+    const artist =
       invoice && invoice.booking && invoice.booking.artistID
-        ? invoice.booking.artistID._id
-        : null;
+        ? invoice.booking.artistID
+        : { _id: null, name: null };
+    const bookingOrganizer =
+      invoice && invoice.booking && invoice.booking.organizerID
+        ? invoice.booking.organizerID
+        : {
+            _id: null,
+            firstName: null,
+            lastName: null,
+            email: null,
+            contactPhone: null,
+          };
+
     const paymentWithDetails = {
       ...paymentDetails,
-      organizer: organizer._id,
-      organizerFirstName: organizer.firstName,
-      organizerLastName: organizer.lastName,
-      organizerEmail: organizer.email,
-      organizerContactPhone: organizer.contactPhone,
-      artistID,
+      organizerId: organizer ? organizer._id : null,
+      organizerFirstName: organizer ? organizer.firstName : null,
+      organizerLastName: organizer ? organizer.lastName : null,
+      organizerEmail: organizer ? organizer.email : null,
+      organizerContactPhone: organizer ? organizer.contactPhone : null,
+      artistId: artist._id,
+      artistName: artist.name,
+      bookingOrganizerId: bookingOrganizer._id, // Optional: Include if you need booking's organizer details as well
     };
 
     res.json(paymentWithDetails);
