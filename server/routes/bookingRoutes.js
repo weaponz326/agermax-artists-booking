@@ -44,6 +44,6 @@ router.put(
 );
 router.delete("/bookings/:id", bookingController.deleteBooking);
 
-router.get("/total", bookingController.getTotalBookings);
+router.get("/total-bookings", bookingController.getTotalBookings);
 
 module.exports = router;
