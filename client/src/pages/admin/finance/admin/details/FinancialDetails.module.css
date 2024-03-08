@@ -129,6 +129,7 @@
 
 .itemPrice {
   flex: 0.6;
+  background-color: aquamarine;
 }
 
 .priceTotal {
@@ -141,6 +142,7 @@
 .priceTotalTable {
   flex: 1;
   text-align: left;
+  width: 100%;
 }
 .priceTotalTable th {
   font-size: 1.17em;

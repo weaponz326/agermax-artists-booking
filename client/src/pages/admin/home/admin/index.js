@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from 'src/hooks/useAuth'
 import {
   Box,
@@ -46,8 +46,26 @@ const StyledList = styled(List)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper
 }))
 
-const Dashboard = () => {
+const MainDashboard = () => {
   const { user } = useAuth()
+
+  /******************States for Data Rendering *****************/
+  /****************Booking States Depending Different Users************/
+  const [userBookings, setUserBookings] = useState([])
+
+  useEffect(() => {
+    if (bookings && user) {
+      if (user.role === 'admin') {
+        setUserBookings(bookings)
+      } else if (user.role === 'organizer') {
+        const userBookings = bookings.filter(booking => booking.organizerID === user._id)
+        setUserBookings(userBookings)
+      } else if (user.role === 'artist') {
+        const userBookings = bookings.filter(booking => booking.artistID === user._id)
+        setUserBookings(userBookings)
+      }
+    }
+  }, [bookings, user])
 
   const recentBookings = [
     { name: 'Mike Eriksson', role: 'Artist' },
@@ -63,7 +81,9 @@ const Dashboard = () => {
           <Typography variant='h4' gutterBottom>
             Hey {user.role}, {user.firstName}! 👋
           </Typography>
-          <Typography variant='subtitle1'>You have 4 pending bookings and 2 unread messages.</Typography>
+          <Typography variant='subtitle1'>
+            You have {userBookings.length} pending bookings and 2 unread messages.
+          </Typography>
         </Grid>
 
         {/* Cards Grid */}
@@ -75,7 +95,7 @@ const Dashboard = () => {
               <Typography variant='h6' sx={{ my: 2 }}>
                 Total bookings
               </Typography>
-              <Box sx={{ height: 300 }}></Box>
+              <Box sx={{ height: 300 }}>45</Box>
             </ChartCard>
           </Grid>
 
@@ -169,4 +189,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default MainDashboard

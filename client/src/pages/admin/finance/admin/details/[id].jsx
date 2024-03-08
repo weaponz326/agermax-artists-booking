@@ -283,33 +283,29 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
 
 export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
   return (
-    <table className={styles.invoiceTable}>
+    <table className={styles.priceTotalTable}>
       <thead>
         <tr>
-          <th style={{ width: '30%' }}>Item</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Amount</th>
+          <th className={styles.sectionUnderLined}>Item Name</th>
+          <th className={styles.sectionUnderLined}></th>
+          <th className={styles.sectionUnderLined}>Price</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>{bookingDetails.eventTitle}</td>
-          <td className={styles.underlinedCell}>Subtotal</td>
-          <td className={styles.underlinedCell}></td>
+          <td className={styles.underlinedCell}>Sub-Total</td>
           <td className={styles.underlinedCell}>{invoiceData.amount}</td>
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Total</td>
-          <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{Number(invoiceData.amount) + Number(invoiceData.tax)}</td>
+          <td className={styles.underlinedCell}>Add Discount</td>
+          <td className={styles.underlinedCell}>{invoiceData.discount}</td>
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Amount due</td>
-          <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{Number(invoiceData.amount) + Number(invoiceData.tax)}</td>
+          <td className={styles.underlinedCell}>Add Tax</td>
+          <td className={styles.underlinedCell}>{invoiceData.tax}</td>
         </tr>
       </tbody>
     </table>

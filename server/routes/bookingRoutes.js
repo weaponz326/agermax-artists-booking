@@ -44,4 +44,8 @@ router.put(
 );
 router.delete("/bookings/:id", bookingController.deleteBooking);
 
+/*******************Matrix Routes  ********************/
+// Route for getting the total number of bookings
+router.get("/bookings/total-bookings", bookingController.getTotalBookings);
+
 module.exports = router;

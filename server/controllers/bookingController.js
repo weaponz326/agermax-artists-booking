@@ -1,5 +1,5 @@
 // controllers/bookingController.js
-const Booking = require('../models/Booking');
+const Booking = require("../models/Booking");
 
 exports.getAllBookings = async (req, res) => {
   try {
@@ -45,8 +45,20 @@ exports.updateBooking = async (req, res) => {
 exports.deleteBooking = async (req, res) => {
   try {
     await Booking.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Booking deleted successfully' });
+    res.json({ message: "Booking deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+/**********************Matrix Controllers ******************/
+
+exports.getTotalBookings = async (req, res) => {
+  try {
+    const totalBookings = await Booking.countDocuments();
+    res.status(200).json({ totalBookings });
+  } catch (error) {
+    console.error("Error retrieving total bookings:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
