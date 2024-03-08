@@ -160,6 +160,45 @@ const deleteUser = async (req, res) => {
   }
 };
 
+//Get Total Number of Artists
+const getTotalArtists = async (req, res) => {
+  try {
+    const totalArtists = await User.countDocuments({ role: "artist" });
+    res.status(200).json({ totalArtists });
+  } catch (error) {
+    console.error("Error retrieving total artists:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//Get Total Number of organizers
+const getTotalOrganizers = async (req, res) => {
+  try {
+    const totalOrganizers = await User.countDocuments({ role: "organizer" });
+    res.status(200).json({ totalOrganizers });
+  } catch (error) {
+    console.error("Error retrieving total organizers:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getRecentUsers = async (req, res) => {
+  try {
+    const recentUsers = await User.find({}, { password: 0 }) // Excluding password field
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    if (!recentUsers || recentUsers.length === 0) {
+      return res.status(404).json({ message: "No recent users found" });
+    }
+
+    res.status(200).json({ recentUsers });
+  } catch (error) {
+    console.error("Error retrieving recent users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserProfile,
@@ -167,4 +206,7 @@ module.exports = {
   updateUserDetails,
   updateUserDetailsById,
   deleteUser,
+  getTotalArtists,
+  getTotalOrganizers,
+  getRecentUsers,
 };

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import styles from './MainDashboard.module.css'
+
 import { useAuth } from 'src/hooks/useAuth'
 import {
   Box,
@@ -14,6 +16,11 @@ import {
   Avatar
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { getRecentBookings, getTotalBookings, getTotalPendingBookings } from 'src/services/bookings'
+import { getRecentUsers, getTotalArtists, getTotalOrganizers } from 'src/services/users'
+import { getTotalUnpaidInvoices } from 'src/services/invoice'
+import { EventsListItem } from '../../bookings/admin'
+import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 
 // Define styled components
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -51,27 +58,47 @@ const MainDashboard = () => {
 
   /******************States for Data Rendering *****************/
   /****************Booking States Depending Different Users************/
-  const [userBookings, setUserBookings] = useState([])
+  const [userBookingsCount, setUserBookingsCount] = useState(null)
+  const [artistsCount, setArtistsCount] = useState(null)
+  const [organizersCount, setOrganizersCount] = useState(null)
+  const [unpaidInvoiceCount, setUnpaidInvoiceCount] = useState(null)
+  const [pendingBookingsCount, setPendingBookingsCount] = useState(null)
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(null)
+  const [recentBookings, setRecentBookings] = useState(null)
+  const [recentUsers, setRecentUsers] = useState(null)
 
   useEffect(() => {
-    if (bookings && user) {
+    const fetchData = async () => {
       if (user.role === 'admin') {
-        setUserBookings(bookings)
-      } else if (user.role === 'organizer') {
-        const userBookings = bookings.filter(booking => booking.organizerID === user._id)
-        setUserBookings(userBookings)
-      } else if (user.role === 'artist') {
-        const userBookings = bookings.filter(booking => booking.artistID === user._id)
-        setUserBookings(userBookings)
+        try {
+          //Getters
+          const { totalBookings } = await getTotalBookings()
+          const { totalArtists } = await getTotalArtists()
+          const { totalOrganizers } = await getTotalOrganizers()
+          const { totalPendingBookings } = await getTotalPendingBookings()
+          const { totalUnpaidInvoices } = await getTotalUnpaidInvoices()
+          const { recentBookings } = await getRecentBookings()
+          const { recentUsers } = await getRecentUsers()
+
+          //Setters
+          setUserBookingsCount(totalBookings)
+          setArtistsCount(totalArtists)
+          setOrganizersCount(totalOrganizers)
+          setPendingBookingsCount(totalPendingBookings)
+          setUnpaidInvoiceCount(totalUnpaidInvoices)
+          setRecentBookings(recentBookings)
+          setRecentUsers(recentUsers)
+          console.log({
+            recentUsers
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
-  }, [bookings, user])
 
-  const recentBookings = [
-    { name: 'Mike Eriksson', role: 'Artist' },
-    { name: 'Anna Johnsson', role: 'Organizer' }
-    // ... more items
-  ]
+    fetchData()
+  }, [user])
 
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -82,7 +109,7 @@ const MainDashboard = () => {
             Hey {user.role}, {user.firstName}! 👋
           </Typography>
           <Typography variant='subtitle1'>
-            You have {userBookings.length} pending bookings and 2 unread messages.
+            You have {pendingBookingsCount} pending bookings and 2* unread messages.
           </Typography>
         </Grid>
 
@@ -95,7 +122,7 @@ const MainDashboard = () => {
               <Typography variant='h6' sx={{ my: 2 }}>
                 Total bookings
               </Typography>
-              <Box sx={{ height: 300 }}>45</Box>
+              <Box sx={{ height: 300 }}>{userBookingsCount}</Box>
             </ChartCard>
           </Grid>
 
@@ -103,13 +130,13 @@ const MainDashboard = () => {
           <Grid item xs={12} sm={6} md={4} lg={2}>
             <StyledCard>
               <Typography variant='subtitle1'>Total Artists</Typography>
-              <Typography variant='h4'>24</Typography>
+              <Typography variant='h4'>{artistsCount}</Typography>
               <Typography variant='h4'></Typography>
               <Typography variant='h4'></Typography>
             </StyledCard>
             <StyledCard>
               <Typography variant='subtitle1'>Total Organizers</Typography>
-              <Typography variant='h4'>13</Typography>
+              <Typography variant='h4'>{organizersCount}</Typography>
               <Typography variant='h4'></Typography>
               <Typography variant='h4'></Typography>
             </StyledCard>
@@ -117,20 +144,20 @@ const MainDashboard = () => {
           <Grid item xs={12} sm={6} md={4} lg={2}>
             <StyledCard>
               <Typography variant='subtitle1'>Pending bookings</Typography>
-              <Typography variant='h4'>4</Typography>
+              <Typography variant='h4'>{pendingBookingsCount}</Typography>
               <StyledButton size='small'>Bookings</StyledButton>
             </StyledCard>
 
             <StyledCard>
               <Typography variant='subtitle1'>Unread Messages</Typography>
-              <Typography variant='h4'>1</Typography>
+              <Typography variant='h4'>1*</Typography>
               <StyledButton size='small'>Inbox</StyledButton>
             </StyledCard>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
             <StyledCard>
               <Typography variant='subtitle1'>Unpaid Invoices</Typography>
-              <Typography variant='h4'>1</Typography>
+              <Typography variant='h4'>{unpaidInvoiceCount}</Typography>
               <StyledButton size='small'>Invoice</StyledButton>
             </StyledCard>
           </Grid>
@@ -139,7 +166,7 @@ const MainDashboard = () => {
 
         {/* Recent Bookings and Users List */}
         <Grid container item spacing={2}>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={6}>
             <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
               <CardContent>
                 <Typography variant='h6' sx={{ mb: 2 }}>
@@ -150,30 +177,34 @@ const MainDashboard = () => {
                 </Typography>
 
                 <StyledList>
-                  {recentBookings.map((booking, index) => (
-                    <ListItem key={index}>
-                      <ListItemAvatar>
-                        <Avatar>{booking.name[0]}</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={booking.name} secondary={booking.role} />
-                    </ListItem>
-                  ))}
+                  {recentBookings &&
+                    recentBookings.map((booking, index) => (
+                      <ListItem key={index}>
+                        <ListItemAvatar>
+                          <Avatar>{booking.eventTitle}</Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={booking.eventTitle} secondary={booking.organizerID} />
+                      </ListItem>
+                    ))}
                 </StyledList>
               </CardContent>
             </Card>
           </Grid>
 
           {/* Recent Users List */}
-          <Grid item xs={12} md={3}>
-            <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
-              <CardContent>
-                <Typography variant='h6' sx={{ mb: 2 }}>
-                  Recent users <Button size='small'>See all</Button>
-                </Typography>
-                {/* List of users */}
-              </CardContent>
-            </Card>
-          </Grid>
+          {user && user.role && (
+            <Grid item xs={12} md={6}>
+              <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
+                <CardContent>
+                  <Typography variant='h6' sx={{ mb: 2 }}>
+                    Recent users <Button size='small'>See all</Button>
+                  </Typography>
+                  {/* List of Recent Users */}
+                  {recentUsers && recentUsers.map(user => <UsersDashboardListItem user={user} />)}
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
           <Grid item xs={12} md={6}>
             <ChartCard>
               {/* Replace with your actual chart */}
@@ -190,3 +221,15 @@ const MainDashboard = () => {
 }
 
 export default MainDashboard
+
+const UsersDashboardListItem = ({ user }) => {
+  return (
+    <div className={styles.usersListItemWrapper}>
+      <div className={styles.userProfile}>
+        <img className={styles.userImg} src={user ? user.profilePhoto : 'N/A'} alt='' />
+        <div>{user ? `${user.firstName} ${user.lastName}` : 'N/A'}</div>
+      </div>
+      <TabButton className={styles.userRole}>{user && user.role}</TabButton>
+    </div>
+  )
+}

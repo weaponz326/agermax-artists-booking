@@ -1,0 +1,38 @@
+.usersListItemWrapper {
+  width: 100%;
+  /* background-color: blueviolet; */
+  border-radius: 9px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7ea;
+  justify-content: space-between;
+}
+
+.usersListItemArtistWrapper {
+  border: none;
+  background-color: #f5f5f5;
+}
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userImg {
+  width: 20px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.userRole {
+  background-color: white;
+  padding: 0.5rem 1rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid #e6e6e6;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #747474;
+  position: relative;
+}

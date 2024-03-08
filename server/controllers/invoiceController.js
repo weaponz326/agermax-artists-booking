@@ -163,3 +163,16 @@ exports.deleteInvoice = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+//Total Invoices
+exports.getTotalUnpaidInvoices = async (req, res) => {
+  try {
+    const totalUnpaidInvoices = await Invoice.countDocuments({
+      status: "unpaid",
+    });
+    res.status(200).json({ totalUnpaidInvoices });
+  } catch (error) {
+    console.error("Error retrieving total unpaid invoices:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

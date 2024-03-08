@@ -7,24 +7,38 @@ const multer = require("multer");
 // Multer configuration for handling file uploads
 const profilePhotoStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/user/profile_photo/');
+    cb(null, "uploads/user/profile_photo/");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.originalname.split('.').pop());
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname +
+        "-" +
+        uniqueSuffix +
+        "." +
+        file.originalname.split(".").pop()
+    );
+  },
 });
 
 const profilePhotoUpload = multer({ storage: profilePhotoStorage });
 
 const galleryStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/user/artist_gallery/');
+    cb(null, "uploads/user/artist_gallery/");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.originalname.split('.').pop());
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname +
+        "-" +
+        uniqueSuffix +
+        "." +
+        file.originalname.split(".").pop()
+    );
+  },
 });
 
 const galleryUpload = multer({ storage: galleryStorage });
@@ -46,12 +60,21 @@ router
 router.route("/users").get(userController.getAllUsers);
 
 router.route("/users/:id").get(userController.getUserById);
-router.route("/users/:id").put(
-  profilePhotoUpload.single("profilePhoto"),
-  galleryUpload.array("gallery", 10),
-  userController.updateUserDetailsById
-);
+router
+  .route("/users/:id")
+  .put(
+    profilePhotoUpload.single("profilePhoto"),
+    galleryUpload.array("gallery", 10),
+    userController.updateUserDetailsById
+  );
 
 router.delete("/users/:id", userController.deleteUser);
+
+// Route for getting the total number of users by user role
+router.get("/total-artists", userController.getTotalArtists);
+router.get("/total-organizers", userController.getTotalOrganizers);
+
+// Route for getting the three most recent users
+router.get("/recent-users", userController.getRecentUsers);
 
 module.exports = router;

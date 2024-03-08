@@ -39,3 +39,13 @@ export async function updateInvoice(invoiceData) {
     throw error // Re-throwing the error so that it can be handled where the function is called
   }
 }
+
+//Total Invoices
+export async function getTotalUnpaidInvoices() {
+  try {
+    const { data } = await axios.get(`${baseUrl}/invoice/unpaid/total`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}

@@ -44,6 +44,28 @@ router.put(
 );
 router.delete("/bookings/:id", bookingController.deleteBooking);
 
+//************Matrix Routes*******************//
+// Route for getting all bookings created by an organizer
 router.get("/total-bookings", bookingController.getTotalBookings);
+
+// Route for getting all bookings created by an organizer
+router.get(
+  "/bookings/organizer/:organizerId",
+  bookingController.getBookingsByOrganizer
+);
+
+// Route for getting the total number of bookings created by an organizer
+router.get(
+  "/bookings/organizer/:organizerId/total",
+  bookingController.getTotalBookingsByOrganizer
+);
+
+// Route for getting the total number of pending bookings
+router.get(
+  "/bookings/pending/total",
+  bookingController.getTotalPendingBookings
+);
+// Route for getting the three most recent bookings
+router.get("/recent-bookings", bookingController.getRecentBookings);
 
 module.exports = router;
