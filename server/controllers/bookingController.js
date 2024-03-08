@@ -51,8 +51,6 @@ exports.deleteBooking = async (req, res) => {
   }
 };
 
-/**********************Matrix Controllers ******************/
-
 exports.getTotalBookings = async (req, res) => {
   try {
     const totalBookings = await Booking.countDocuments();
