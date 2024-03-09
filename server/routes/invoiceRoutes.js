@@ -11,4 +11,10 @@ router.delete("/invoice/:id", invoiceController.deleteInvoice);
 //Unpaid  Invoices
 router.get("/invoice/unpaid/total", invoiceController.getTotalUnpaidInvoices);
 
+// Route for getting total invoices by user
+router.get(
+  "/invoice/organizer/:organizerID/total-unpaid",
+  invoiceController.getTotalUnpaidInvoicesByOrganizer
+);
+
 module.exports = router;

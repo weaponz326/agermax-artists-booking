@@ -25,7 +25,7 @@ function useBookingFormData(booking) {
     gallery: booking?.gallery || [],
     genre: booking?.genre || [],
     invoiced: booking?.invoiced || false,
-    createdAt: booking?.createdAt || '',
+    createdAt: booking?.createdAt || dayjs(),
     isNew: booking?.isNew || true
   })
 

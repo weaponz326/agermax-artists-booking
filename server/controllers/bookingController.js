@@ -1,5 +1,6 @@
 // controllers/bookingController.js
 const Booking = require("../models/Booking");
+const dayjs = require("dayjs");
 
 exports.getAllBookings = async (req, res) => {
   try {
@@ -97,6 +98,20 @@ exports.getTotalBookingsByOrganizer = async (req, res) => {
   }
 };
 
+//Total Number of Bookings by a specific Artist
+exports.getTotalBookingsByArtist = async (req, res) => {
+  const { artistId } = req.query;
+
+  try {
+    const totalBookings = await Booking.countDocuments({ artistID: artistId });
+
+    res.status(200).json({ totalBookings });
+  } catch (error) {
+    console.error("Error retrieving total bookings by artist:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 //Total Pending Bookings
 exports.getTotalPendingBookings = async (req, res) => {
   try {
@@ -106,6 +121,25 @@ exports.getTotalPendingBookings = async (req, res) => {
     res.status(200).json({ totalPendingBookings });
   } catch (error) {
     console.error("Error retrieving total pending bookings:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getTotalPendingBookingsByOrganizer = async (req, res) => {
+  const { organizerID } = req.params;
+
+  try {
+    const totalPendingBookings = await Booking.countDocuments({
+      organizerID: organizerID,
+      status: "pending",
+    });
+
+    res.status(200).json({ totalPendingBookings });
+  } catch (error) {
+    console.error(
+      "Error retrieving total pending bookings by organizer:",
+      error
+    );
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -125,6 +159,54 @@ exports.getRecentBookings = async (req, res) => {
     res.status(200).json({ recentBookings });
   } catch (error) {
     console.error("Error retrieving recent bookings:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getRecentBookingsByOrganizer = async (req, res) => {
+  const { organizerID } = req.params;
+
+  try {
+    const recentBookings = await Booking.find({ organizerID: organizerID })
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    res.status(200).json({ recentBookings });
+  } catch (error) {
+    console.error("Error retrieving recent bookings by organizer:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getAllApprovedBookings = async (req, res) => {
+  try {
+    // Find all bookings with status 'approved'
+    const approvedBookings = await Booking.find({ status: "approved" });
+
+    res.status(200).json({ approvedBookings });
+  } catch (error) {
+    console.error("Error retrieving all approved bookings:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getApprovedBookingsByOrganizer = async (req, res) => {
+  const { organizerID } = req.params;
+
+  try {
+    // Get the current date
+    const currentDate = dayjs();
+
+    // Find bookings by the organizer with status 'approved' and date requested after the current date
+    const approvedBookings = await Booking.find({
+      organizerID: organizerID,
+      status: "approved",
+      dateTimeRequested: { $lte: currentDate.toDate() },
+    });
+
+    res.status(200).json({ approvedBookings });
+  } catch (error) {
+    console.error("Error retrieving approved bookings by organizer:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

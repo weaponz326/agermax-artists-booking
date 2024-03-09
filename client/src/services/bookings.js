@@ -50,9 +50,15 @@ export async function deleteBookingById(id) {
 }
 
 //Bookings Matrix Getters
-export async function getTotalBookings() {
+export async function getTotalBookings(user) {
+  let url
+  if (user.role === 'admin') {
+    url = 'total-bookings'
+  } else {
+    url = `bookings/${user.role}/${user._id}/total`
+  }
   try {
-    const { data } = await axios.get(`${baseUrl}/total-bookings`)
+    const { data } = await axios.get(`${baseUrl}/${url}`)
     return data
   } catch (error) {
     console.log('Error: ', error)
@@ -60,9 +66,15 @@ export async function getTotalBookings() {
 }
 
 //Pending Books
-export async function getTotalPendingBookings() {
+export async function getTotalPendingBookings(user) {
+  let url
+  if (user.role === 'admin') {
+    url = 'bookings/pending/total'
+  } else {
+    url = `bookings/${user.role}/${user._id}/total-pending`
+  }
   try {
-    const { data } = await axios.get(`${baseUrl}/bookings/pending/total`)
+    const { data } = await axios.get(`${baseUrl}/${url}`)
     return data
   } catch (error) {
     console.log('Error: ', error)
@@ -70,9 +82,30 @@ export async function getTotalPendingBookings() {
 }
 
 //Recent Bookings
-export async function getRecentBookings() {
+export async function getRecentBookings(user) {
+  let url
+  if (user.role === 'admin') {
+    url = 'recent-bookings'
+  } else {
+    url = `bookings/${user.role}/${user._id}/recent`
+  }
   try {
-    const { data } = await axios.get(`${baseUrl}/recent-bookings`)
+    const { data } = await axios.get(`${baseUrl}/${url}`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
+export async function getUpcomingBookings(user) {
+  let url
+  if (user.role === 'admin') {
+    url = 'approved-bookings'
+  } else {
+    url = `bookings/${user.role}/${user._id}/upcoming-approved`
+  }
+  try {
+    const { data } = await axios.get(`${baseUrl}/${url}`)
     return data
   } catch (error) {
     console.log('Error: ', error)

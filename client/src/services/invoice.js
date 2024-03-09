@@ -41,9 +41,15 @@ export async function updateInvoice(invoiceData) {
 }
 
 //Total Invoices
-export async function getTotalUnpaidInvoices() {
+export async function getTotalUnpaidInvoices(user) {
+  let url
+  if (user.role === 'admin') {
+    url = 'invoice/unpaid/total'
+  } else {
+    url = `invoice/${user.role}/${user._id}/total-unpaid`
+  }
   try {
-    const { data } = await axios.get(`${baseUrl}/invoice/unpaid/total`)
+    const { data } = await axios.get(`${baseUrl}/${url}`)
     return data
   } catch (error) {
     console.log('Error: ', error)

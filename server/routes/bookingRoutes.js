@@ -60,12 +60,40 @@ router.get(
   bookingController.getTotalBookingsByOrganizer
 );
 
+// Route for getting total bookings by artist
+router.get(
+  "/bookings/artist/:artistId/total",
+  bookingController.getTotalBookingsByArtist
+);
+
 // Route for getting the total number of pending bookings
 router.get(
   "/bookings/pending/total",
   bookingController.getTotalPendingBookings
 );
+
+// Route for getting total pending bookings by organizer
+router.get(
+  "/bookings/organizer/:organizerID/total-pending",
+  bookingController.getTotalPendingBookingsByOrganizer
+);
+
 // Route for getting the three most recent bookings
 router.get("/recent-bookings", bookingController.getRecentBookings);
+
+// Route for getting recent bookings by organizer
+router.get(
+  "/bookings/organizer/:organizerID/recent",
+  bookingController.getRecentBookingsByOrganizer
+);
+
+// Route for getting all approved bookings
+router.get("/approved-bookings", bookingController.getAllApprovedBookings);
+
+// Route for getting upcoming approved bookings by organizer
+router.get(
+  "/bookings/organizer/:organizerID/upcoming-approved",
+  bookingController.getApprovedBookingsByOrganizer
+);
 
 module.exports = router;

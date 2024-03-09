@@ -176,3 +176,22 @@ exports.getTotalUnpaidInvoices = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getTotalUnpaidInvoicesByOrganizer = async (req, res) => {
+  const { organizerID } = req.params;
+
+  try {
+    const totalUnpaidInvoices = await Invoice.countDocuments({
+      organizerID: organizerID,
+      status: "unpaid",
+    });
+
+    res.status(200).json({ totalUnpaidInvoices });
+  } catch (error) {
+    console.error(
+      "Error retrieving total unpaid invoices by organizer:",
+      error
+    );
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

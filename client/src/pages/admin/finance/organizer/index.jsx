@@ -60,7 +60,7 @@ export const OrganizerFinance = ({
       setInvoiceDataSource(filteredInvoiceData)
     }
     if (paymentsData) {
-      const filteredPaymentsData = paymentsData.filter(payment => payment.organizer._id === user._id)
+      const filteredPaymentsData = paymentsData.filter(payment => payment.organizerID === user._id)
       setPaymentsDataSource(filteredPaymentsData)
     }
   }, [invoiceData, paymentsData])
