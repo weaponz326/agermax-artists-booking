@@ -130,3 +130,34 @@ export async function getTotalBookingsByOrganizer() {
     console.log('Error: ', error)
   }
 }
+
+export async function getTop10BookedArtists() {
+  try {
+    const { data } = await axios.get(`${baseUrl}/top-artists`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
+export async function getOrganizersByArtistID(user) {
+  let url = `bookings/${user.role}/${user._id}/organizers-by-artist`
+  console.log(url)
+  try {
+    const { data } = await axios.get(`${baseUrl}/${url}`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
+export async function getVenuesByArtistID(user) {
+  let url = `bookings/${user.role}/${user._id}/venues`
+  console.log(url)
+  try {
+    const { data } = await axios.get(`${baseUrl}/${url}`)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
