@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import { useAuth } from 'src/hooks/useAuth'
 import { updateInvoice } from 'src/services/invoice'
 import { Snackbar, Alert } from '@mui/material'
+import Link from 'next/link'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
@@ -249,17 +250,28 @@ const FinancialDetailsPage = () => {
               </p>
             </div>
           </div>
+
+          {/* Which Table to display  here depending on the type */}
           {type === 'invoice' && (
             <InvoiceTable details={details} bookingDetails={bookingDetails} invoiceData={invoiceData} />
           )}
           {type === 'payments' && <PaymentTable details={details} />}
-          {/* <CustomMenuItem
-              menuContainer={styles.customMenuItemContainer}
-              labelClassName={styles.customMenuItemLabel}
-              label='Edit Payment Details'
-              subMenuItems={[<EditSubItems invoiceID={details._id} />]}
-            /> */}
         </div>
+        {user.role === 'organizer' && (
+          <div>
+            <h4>Payment Gateways</h4>
+            <ul>
+              <li>
+                <Link
+                  className={styles.paymentGatewayLink}
+                  href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
+                >
+                  Stripe Payment
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )

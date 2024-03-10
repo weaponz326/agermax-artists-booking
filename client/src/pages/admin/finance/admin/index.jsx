@@ -1,21 +1,12 @@
 import styles from './AdminFinance.module.css'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Table, Space } from 'antd'
-import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
+import { Table } from 'antd'
 
 //Import Internal COmponents
-import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import AdminPagesNavBar from 'src/components/AdminPagesSharedComponents/AdminPagesNavBar/AdminPagesNavBar'
 
-//Import from Material UI Components
-import TextField from '@mui/material/TextField'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
 
 //Import Providers & services
 import { usePaymentsContext } from 'src/providers/PaymentsProvider'
@@ -57,11 +48,7 @@ const Finance = () => {
         activeView={activeView}
         setActiveView={setActiveView}
         invoiceDataSource={invoiceDataSource}
-        setInvoiceDataSource={setInvoiceDataSource}
         paymentsDataSource={paymentsDataSource}
-        setPaymentsDataSource={setPaymentsDataSource}
-        queriedInvoiceData={queriedInvoiceData}
-        queriedPaymentData={queriedPaymentData}
         setQueriedInvoiceData={setQueriedInvoiceData}
         setQueriedPaymentData={setQueriedPaymentData}
       />
