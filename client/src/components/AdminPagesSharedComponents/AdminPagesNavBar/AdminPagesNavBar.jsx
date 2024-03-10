@@ -9,18 +9,11 @@ const AdminPagesNavBar = ({
   setActiveView,
   activeView,
   invoiceDataSource,
-  setInvoiceDataSource,
   paymentsDataSource,
-  setPaymentsDataSource
+  setQueriedInvoiceData,
+  setQueriedPaymentData
 }) => {
   const [query, setQuery] = useState('')
-  const [queriedInvoiceData, setQueriedInvoiceData] = useState(null)
-  const [queriedPaymentData, setQueriedPaymentData] = useState(null)
-
-  useEffect(() => {
-    setQueriedInvoiceData(invoiceDataSource)
-    setQueriedPaymentData(paymentsDataSource)
-  }, [paymentsDataSource, invoiceDataSource])
 
   /*********Handle Search Query************** */
   function handleQueryChange(e) {
@@ -30,22 +23,23 @@ const AdminPagesNavBar = ({
     if (activeView === 'invoice' && invoiceDataSource) {
       if (!value.trim()) {
         // If query is empty, show all invoiceDataSource
-        setInvoiceDataSource(invoiceDataSource)
+        setQueriedInvoiceData(invoiceDataSource)
       } else {
         // Otherwise, filter invoiceDataSource based on the query
         const filteredList = invoiceDataSource.filter(
           invoice =>
+            invoice.eventTitle.toLowerCase().includes(value.toLowerCase()) ||
             invoice.email.toLowerCase().includes(value.toLowerCase()) ||
             invoice.organizerFirstName.toLowerCase().includes(value.toLowerCase()) ||
             invoice.organizerLastName.toLowerCase().includes(value.toLowerCase())
         )
-        setInvoiceDataSource(filteredList)
+        setQueriedInvoiceData(filteredList)
       }
     }
     if (activeView === 'payments' && paymentsDataSource) {
       if (!value.trim()) {
         // If query is empty, show all paymentsDataSource
-        setPaymentsDataSource(paymentsDataSource)
+        setQueriedPaymentData(paymentsDataSource)
       } else {
         // Otherwise, filter paymentsDataSource based on the query
         const filteredList = paymentsDataSource.filter(
@@ -54,7 +48,7 @@ const AdminPagesNavBar = ({
             payment.organizerFirstName.toLowerCase().includes(value.toLowerCase()) ||
             payment.organizerLastName.toLowerCase().includes(value.toLowerCase())
         )
-        setPaymentsDataSource(filteredList)
+        setQueriedPaymentData(filteredList)
       }
     }
   }

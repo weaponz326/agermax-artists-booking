@@ -29,6 +29,13 @@ const Finance = () => {
   const { paymentsData } = usePaymentsContext()
   const [invoiceDataSource, setInvoiceDataSource] = useState([])
   const [paymentsDataSource, setPaymentsDataSource] = useState([])
+  const [queriedInvoiceData, setQueriedInvoiceData] = useState(null)
+  const [queriedPaymentData, setQueriedPaymentData] = useState(null)
+
+  useEffect(() => {
+    setQueriedInvoiceData(invoiceDataSource)
+    setQueriedPaymentData(paymentsDataSource)
+  }, [paymentsDataSource, invoiceDataSource])
 
   useEffect(() => {
     if (user && invoiceData && paymentsData) {
@@ -53,16 +60,17 @@ const Finance = () => {
         setInvoiceDataSource={setInvoiceDataSource}
         paymentsDataSource={paymentsDataSource}
         setPaymentsDataSource={setPaymentsDataSource}
+        queriedInvoiceData={queriedInvoiceData}
+        queriedPaymentData={queriedPaymentData}
+        setQueriedInvoiceData={setQueriedInvoiceData}
+        setQueriedPaymentData={setQueriedPaymentData}
       />
       <AdminFinance
         activeView={activeView}
-        setActiveView={setActiveView}
-        invoiceData={invoiceData}
-        paymentsData={paymentsData}
-        invoiceDataSource={invoiceDataSource}
-        setInvoiceDataSource={setInvoiceDataSource}
-        paymentsDataSource={paymentsDataSource}
-        setPaymentsDataSource={setPaymentsDataSource}
+        queriedInvoiceData={queriedInvoiceData}
+        queriedPaymentData={queriedPaymentData}
+        setQueriedInvoiceData={setQueriedInvoiceData}
+        setQueriedPaymentData={setQueriedPaymentData}
       />
     </>
   )
@@ -70,18 +78,8 @@ const Finance = () => {
 
 export default Finance
 
-export const AdminFinance = ({
-  activeView,
-  setActiveView,
-  invoiceData,
-  paymentsData,
-  invoiceDataSource,
-  setInvoiceDataSource,
-  paymentsDataSource,
-  setPaymentsDataSource
-}) => {
-  /****************Fetch Details for table display***************/
-
+export const AdminFinance = ({ activeView, queriedInvoiceData, queriedPaymentData }) => {
+  /****************Set up columns for table display***************/
   const invoicesColumns = [
     {
       title: 'Event',
@@ -170,14 +168,14 @@ export const AdminFinance = ({
     return (
       <div className={styles.financePage}>
         <h4>Invoices</h4>
-        <Table columns={invoicesColumns} dataSource={invoiceDataSource} />
+        <Table columns={invoicesColumns} dataSource={queriedInvoiceData} />
       </div>
     )
   } else if (activeView === 'payments') {
     return (
       <div className={styles.financePage}>
         <h4>Payments</h4>
-        <Table columns={paymentsColumns} dataSource={paymentsDataSource} />
+        <Table columns={paymentsColumns} dataSource={queriedPaymentData} />
       </div>
     )
   }
