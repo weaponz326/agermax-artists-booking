@@ -84,13 +84,19 @@ export const AdminFinance = ({
 
   const invoicesColumns = [
     {
+      title: 'Event',
+      dataIndex: 'eventTitle',
+      key: 'eventTitle',
+      sorter: (a, b) => b.eventTitle.localeCompare(a.eventTitle),
+      render: (text, event) => text
+    },
+    {
       title: 'Organizer',
       dataIndex: 'organizerFirstName',
       key: 'booker',
       sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
       render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
     },
-
     {
       title: 'Phone',
       dataIndex: 'organizerContactPhone',

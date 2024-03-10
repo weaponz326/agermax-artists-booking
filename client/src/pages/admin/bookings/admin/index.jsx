@@ -24,7 +24,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
-import { Modal } from '@mui/base/Modal'
 import { Snackbar, Alert } from '@mui/material'
 import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
@@ -36,7 +35,6 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 //Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { createBooking } from 'src/services/bookings'
 import { ArrowBack } from '@material-ui/icons'
 
 import { useAuth } from 'src/hooks/useAuth'
@@ -580,7 +578,7 @@ export const BookingsModalContent = ({
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
   const [bookingOrganizer, setBookingOrganizer] = useState([])
-  const { updateBooking, deleteBooking, loading } = useBookings()
+  const { updateBooking, createBooking, deleteBooking, loading } = useBookings()
   const [open, setOpen] = useState(false)
   const [invoicedState, setInvoicedState] = useState(false)
 

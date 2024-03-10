@@ -44,7 +44,6 @@ const BookingsProvider = ({ children }) => {
     const createdBooking = await services.createBooking(booking)
     // Update local state to add created booking
     setBookings([createdBooking, ...bookings])
-    console.log(bookings.length)
     return createdBooking
   }
 

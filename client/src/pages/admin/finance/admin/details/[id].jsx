@@ -35,16 +35,7 @@ const FinancialDetailsPage = () => {
   }
 
   /****************Invoice Data***************/
-  const [invoiceData, setInvoiceData] = useState({
-    // booking: details?.booking,
-    // amount: details ? details.amount : 0,
-    // discount: details?.discount || 0,
-    // tax: details?.tax || 0,
-    // email: details?.email || '',
-    // status: details?.status || 'unpaid',
-    // invoiceDate: details?.invoiceDate || dayjs(),
-    // paymentDueDate: details?.paymentDueDate || dayjs().add(14, 'day')
-  })
+  const [invoiceData, setInvoiceData] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +75,8 @@ const FinancialDetailsPage = () => {
     if (details !== null && type === 'invoice') fetchData()
     // console.log(details)
   }, [details, type])
+
+  /***********Invoice Data Changes handlers ************/
 
   const handleChange = e => {
     setInvoiceData({

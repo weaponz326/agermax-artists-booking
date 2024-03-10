@@ -3,7 +3,7 @@ import TabButton from '../ViewTab/TabButton'
 import SearchBar from '../SearchBar/SearchBar'
 import styles from './AdminPagesNavBar.module.css'
 import { GridFilterAltIcon } from '@mui/x-data-grid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const AdminPagesNavBar = ({
   setActiveView,
@@ -14,6 +14,13 @@ const AdminPagesNavBar = ({
   setPaymentsDataSource
 }) => {
   const [query, setQuery] = useState('')
+  const [queriedInvoiceData, setQueriedInvoiceData] = useState(null)
+  const [queriedPaymentData, setQueriedPaymentData] = useState(null)
+
+  useEffect(() => {
+    setQueriedInvoiceData(invoiceDataSource)
+    setQueriedPaymentData(paymentsDataSource)
+  }, [paymentsDataSource, invoiceDataSource])
 
   /*********Handle Search Query************** */
   function handleQueryChange(e) {
@@ -30,8 +37,7 @@ const AdminPagesNavBar = ({
           invoice =>
             invoice.email.toLowerCase().includes(value.toLowerCase()) ||
             invoice.organizerFirstName.toLowerCase().includes(value.toLowerCase()) ||
-            invoice.organizerLastName.toLowerCase().includes(value.toLowerCase()) ||
-            invoice.amount.toLowerCase().includes(value.toLowerCase())
+            invoice.organizerLastName.toLowerCase().includes(value.toLowerCase())
         )
         setInvoiceDataSource(filteredList)
       }
@@ -46,8 +52,7 @@ const AdminPagesNavBar = ({
           payment =>
             payment.email.toLowerCase().includes(value.toLowerCase()) ||
             payment.organizerFirstName.toLowerCase().includes(value.toLowerCase()) ||
-            payment.organizerLastName.toLowerCase().includes(value.toLowerCase()) ||
-            payment.amount.toLowerCase().includes(value.toLowerCase())
+            payment.organizerLastName.toLowerCase().includes(value.toLowerCase())
         )
         setPaymentsDataSource(filteredList)
       }
