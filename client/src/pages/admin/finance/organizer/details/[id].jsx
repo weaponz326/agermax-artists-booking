@@ -34,6 +34,7 @@ const FinancialDetailsPage = () => {
         setLoading(false)
       }
     }
+    console.log(details)
 
     if (id && type) fetchData()
   }, [id, type, baseUrl])

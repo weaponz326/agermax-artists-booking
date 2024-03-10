@@ -19,6 +19,23 @@ import { useBookings } from 'src/providers/BookingsProvider'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { useAuth } from 'src/hooks/useAuth'
 
+export const dateTimeFormat = (dateTime, format) => {
+  const options = { month: 'short' }
+  if (format === 'month') return new Date(dateTime).toLocaleString('en-US', options)
+  if (format === 'day') {
+    if (new Date(dateTime).getDate() < 10) return '0' + new Date(dateTime).getDate()
+    return new Date(dateTime).getDate()
+  }
+  if (format === 'UTCHours') {
+    if (new Date(dateTime).getUTCHours() < 10) return '0' + new Date(dateTime).getUTCHours()
+    return new Date(dateTime).getUTCHours()
+  }
+  if (format === 'UTCMinutes') {
+    if (new Date(dateTime).getUTCMinutes() < 10) return '0' + new Date(dateTime).getUTCMinutes()
+    return new Date(dateTime).getUTCMinutes()
+  }
+}
+
 function ArtistProfile() {
   const router = useRouter()
   const { id } = router.query
@@ -279,23 +296,6 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
 }
 
 const EventsTable = ({ artist, artistEvents, title, onLoadMore, numberOfEvents }) => {
-  const dateTimeFormat = (dateTime, format) => {
-    const options = { month: 'short' }
-    if (format === 'month') return new Date(dateTime).toLocaleString('en-US', options)
-    if (format === 'day') {
-      if (new Date(dateTime).getDate() < 10) return '0' + new Date(dateTime).getDate()
-      return new Date(dateTime).getDate()
-    }
-    if (format === 'UTCHours') {
-      if (new Date(dateTime).getUTCHours() < 10) return '0' + new Date(dateTime).getUTCHours()
-      return new Date(dateTime).getUTCHours()
-    }
-    if (format === 'UTCMinutes') {
-      if (new Date(dateTime).getUTCMinutes() < 10) return '0' + new Date(dateTime).getUTCMinutes()
-      return new Date(dateTime).getUTCMinutes()
-    }
-  }
-
   if (!artistEvents.length) return <p>No {title} to display for this artist now.</p>
   return (
     <>

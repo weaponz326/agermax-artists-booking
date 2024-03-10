@@ -98,12 +98,28 @@ exports.getTotalBookingsByOrganizer = async (req, res) => {
   }
 };
 
-//Total Number of Bookings by a specific Artist
-exports.getTotalBookingsByArtist = async (req, res) => {
-  const { artistId } = req.query;
+exports.getAllBookingsWithArtist = async (req, res) => {
+  const { artistId } = req.params;
 
   try {
-    const totalBookings = await Booking.countDocuments({ artistID: artistId });
+    const totalBookings = await Booking.countDocuments({
+      artistID: artistId,
+    });
+
+    res.status(200).json({ totalBookings });
+  } catch (error) {
+    console.error("Error retrieving total bookings by artist:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//Total Number of Bookings by a specific Artist
+exports.getTotalBookingsByArtist = async (req, res) => {
+  const { artistID } = req.query;
+
+  try {
+    // Get the total number of bookings with the specific artistID
+    const totalBookings = await Booking.countDocuments({ artistID: artistID });
 
     res.status(200).json({ totalBookings });
   } catch (error) {
@@ -207,6 +223,83 @@ exports.getApprovedBookingsByOrganizer = async (req, res) => {
     res.status(200).json({ approvedBookings });
   } catch (error) {
     console.error("Error retrieving approved bookings by organizer:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getTop10BookedArtists = async (req, res) => {
+  try {
+    // Aggregate bookings by artist ID and count the number of bookings
+    const top10BookedArtists = await Booking.aggregate([
+      { $group: { _id: "$artistID", totalBookings: { $sum: 1 } } },
+      { $sort: { totalBookings: -1 } },
+      { $limit: 10 },
+      {
+        $lookup: {
+          from: "users", // Assuming the artist details are stored in a collection named 'users'
+          localField: "_id",
+          foreignField: "_id",
+          as: "artist",
+        },
+      },
+      {
+        $unwind: "$artist",
+      },
+      {
+        $project: {
+          _id: 0,
+          artistID: "$_id",
+          totalBookings: 1,
+          firstName: "$artist.firstName",
+          lastName: "$artist.lastName",
+          genre: "$artist.genre",
+          profilePhoto: "$artist.profilePhoto",
+        },
+      },
+    ]);
+
+    res.status(200).json({ top10BookedArtists });
+  } catch (error) {
+    console.error("Error retrieving top 10 booked artists:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//Get list of bookings that contains artist with specific id and same organizer
+exports.getOrganizersByArtistID = async (req, res) => {
+  const { artistID } = req.query;
+
+  try {
+    // Find bookings with the specified artistID
+    const bookings = await Booking.find({ artistID });
+
+    // Extract unique organizerIDs from the bookings
+    const artistOrganizers = [
+      ...new Set(bookings.map((booking) => booking.organizerID)),
+    ];
+
+    res.status(200).json({ artistOrganizers });
+  } catch (error) {
+    console.error("Error retrieving organizers by artistID:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getVenuesByArtistID = async (req, res) => {
+  const { artistID } = req.query;
+
+  try {
+    // Find bookings with the specified artistID
+    const bookings = await Booking.find({ artistID });
+
+    // Extract unique locationVenues from the bookings
+    const venues = [
+      ...new Set(bookings.map((booking) => booking.locationVenue)),
+    ];
+
+    res.status(200).json({ venues });
+  } catch (error) {
+    console.error("Error retrieving venues by artistID:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
