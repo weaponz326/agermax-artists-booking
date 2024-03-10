@@ -319,3 +319,6 @@
 .paymentGatewayLink:hover {
   text-decoration: underline;
 }
+.currencyField {
+  margin-top: 0.5rem;
+}

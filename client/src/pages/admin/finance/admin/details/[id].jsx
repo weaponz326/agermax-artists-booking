@@ -24,6 +24,24 @@ const FinancialDetailsPage = () => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const { setIsUpdated } = useInvoiceContext()
 
+  // State to store the selected currency
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR') // Default currency for Greece is Euro (EUR)
+  const [selectedCurrencySymbol, setSelectedCurrencySymbol] = useState('€')
+  // Function to handle currency change
+
+  // Define currency symbols
+  const currencySymbols = {
+    EUR: '€', // Euro
+    USD: '$', // US Dollar
+    GBP: '£', // British Pound
+    JPY: '¥', // Japanese Yen
+    AUD: 'A$', // Australian Dollar
+    CAD: 'C$', // Canadian Dollar
+    CHF: 'Fr', // Swiss Franc
+    CNY: '¥', // Chinese Yuan
+    NZD: 'NZ$', // New Zealand Dollar
+    INR: '₹' // Indian Rupee
+  }
   /****************SnackBar Options***************/
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -37,6 +55,17 @@ const FinancialDetailsPage = () => {
 
   /****************Invoice Data***************/
   const [invoiceData, setInvoiceData] = useState({})
+  const [grandTotalAmount, setGrandTotalAmount] = useState('')
+
+  //Grand Total Calculations
+  useEffect(() => {
+    const calculatedAmt =
+      Number(invoiceData?.amount || 0) -
+      Number(invoiceData?.amount || 0) * Number(invoiceData?.discount / 100 || 0) +
+      Number(invoiceData?.amount || 0) * Number(invoiceData?.tax / 100 || 0)
+    setGrandTotalAmount(Number(calculatedAmt.toFixed(2)))
+    setSelectedCurrencySymbol(currencySymbols[selectedCurrency])
+  }, [invoiceData, selectedCurrency])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,7 +118,8 @@ const FinancialDetailsPage = () => {
 
   const handleInvoiceUpdate = async () => {
     try {
-      const updatedInvoice = await updateInvoice(invoiceData)
+      const updatedInvoicedData = { ...invoiceData, amount: grandTotalAmount, currency: selectedCurrency }
+      const updatedInvoice = await updateInvoice(updatedInvoicedData)
       console.log('Invoice Updated Successfully! : ', updatedInvoice)
       setSnackbarMessage('Invoice Updated Successfully!')
       setSnackbarSeverity('success')
@@ -104,6 +134,10 @@ const FinancialDetailsPage = () => {
     } finally {
       setIsUpdated(false)
     }
+  }
+
+  const handleCurrencyChange = event => {
+    setSelectedCurrency(event.target.value)
   }
 
   /****************Rendering***************/
@@ -135,7 +169,7 @@ const FinancialDetailsPage = () => {
                 <tbody>
                   <tr>
                     <td>{bookingDetails.eventTitle}</td>
-                    <td className={styles.underlinedCell}>Sub-Total</td>
+                    <td className={styles.underlinedCell}>Sub-Total {`(${selectedCurrency})`} </td>
                     <td className={styles.underlinedCell}>
                       <input
                         type='number'
@@ -149,31 +183,40 @@ const FinancialDetailsPage = () => {
                   </tr>
                   <tr>
                     <td></td>
-                    <td className={styles.underlinedCell}>Add Discount</td>
+                    <td className={styles.underlinedCell}>Discount (%)</td>
                     <td className={styles.underlinedCell}>
                       <input
                         className={`${styles.itemName} ${styles.itemPrice}`}
-                        value={invoiceData.discount}
+                        value={Number(invoiceData.discount)}
                         name='discount'
                         onChange={handleChange}
                         type='number'
                         min={0}
+                        max={100}
+                        defaultValue={Number(0)}
                       />
                     </td>
                   </tr>
                   <tr>
                     <td></td>
-                    <td className={styles.underlinedCell}>Add Tax</td>
+                    <td className={styles.underlinedCell}>Add Tax (%)</td>
                     <td className={styles.underlinedCell}>
                       <input
                         className={`${styles.itemName} ${styles.itemPrice}`}
-                        value={invoiceData.tax}
+                        value={Number(invoiceData?.tax || 0)}
                         name='tax'
                         onChange={handleChange}
                         type='number'
                         min={0}
+                        max={100}
+                        defaultValue={Number(0)}
                       />
                     </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td className={styles.underlinedCell}>Grand Total {`(${selectedCurrency})`}</td>
+                    <td className={styles.underlinedCell}>{grandTotalAmount}</td>
                   </tr>
                 </tbody>
               </table>
@@ -184,7 +227,16 @@ const FinancialDetailsPage = () => {
               menuContainer={styles.customMenuItemContainer}
               labelClassName={styles.customMenuItemLabel}
               label='Payment Details'
-              subMenuItems={[<PaymentSubItems details={details} invoiceData={invoiceData} />]}
+              subMenuItems={[
+                <PaymentSubItems
+                  details={details}
+                  invoiceData={invoiceData}
+                  handleCurrencyChange={handleCurrencyChange}
+                  selectedCurrency={selectedCurrency}
+                  setSelectedCurrency={setSelectedCurrency}
+                  currencySymbols={currencySymbols}
+                />
+              ]}
             />
             <CustomMenuItem
               menuContainer={styles.customMenuItemContainer}
@@ -236,7 +288,7 @@ const FinancialDetailsPage = () => {
         </div>
         <div className={styles.previewSummary}>
           <h3>
-            {invoiceData.amount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
+            {selectedCurrencySymbol} {grandTotalAmount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
           </h3>
           <div className={styles.bill}>
             <div className={styles.billFrom}>
@@ -277,12 +329,23 @@ const FinancialDetailsPage = () => {
   )
 }
 
-export const PaymentSubItems = ({ details, invoiceData }) => {
+export const PaymentSubItems = ({
+  details,
+  invoiceData,
+  selectedCurrency,
+  setSelectedCurrency,
+  handleCurrencyChange,
+  currencySymbols
+}) => {
   return (
     <div>
       <p>Due In</p>
       <TabButton>In {dayjs(invoiceData.paymentDueDate).diff(dayjs(invoiceData.invoiceDate), 'day')} days</TabButton>
       <h4>Payment Gateways</h4>
+      <div className={styles.paymentGateway}>
+        <input type='checkbox' name='' id='' checked />
+        <span>Stripe Payment</span>
+      </div>
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Credit Card</span>
@@ -290,6 +353,17 @@ export const PaymentSubItems = ({ details, invoiceData }) => {
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Bank Transfer</span>
+      </div>
+      {/* Currency select field */}
+      <div className={styles.currencyField}>
+        <label htmlFor='currency'>Select Currency: </label>
+        <select id='currency' value={selectedCurrency} onChange={handleCurrencyChange}>
+          {Object.entries(currencySymbols).map(([currencyCode, currencySymbol]) => (
+            <option key={currencyCode} value={currencyCode}>
+              {currencySymbol} {currencyCode}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   )
@@ -351,13 +425,18 @@ export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Add Discount</td>
+          <td className={styles.underlinedCell}>Discount(%)</td>
           <td className={styles.underlinedCell}>{details.discount}</td>
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Add Tax</td>
+          <td className={styles.underlinedCell}>Add Tax (%)</td>
           <td className={styles.underlinedCell}>{details.tax}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td className={styles.underlinedCell}>Grand Total {`(${details.currency ? details.currency : 'N/A'})`}</td>
+          <td className={styles.underlinedCell}>{details.amount}</td>
         </tr>
       </tbody>
     </table>

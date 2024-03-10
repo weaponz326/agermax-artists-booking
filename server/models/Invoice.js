@@ -10,6 +10,11 @@ const InvoiceSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  currency: {
+    type: String,
+    required: true,
+    default: "€",
+  },
   tax: {
     type: Number,
     required: true,

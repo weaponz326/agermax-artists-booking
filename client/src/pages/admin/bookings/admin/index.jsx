@@ -606,6 +606,7 @@ export const BookingsModalContent = ({
     amount: 0,
     tax: 0,
     email: '',
+    currency: '€',
     status: 'unpaid',
     invoiceDate: dayjs(),
     paymentDueDate: dayjs().add(14, 'day')
