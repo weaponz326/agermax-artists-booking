@@ -7,6 +7,7 @@ const InvoiceProvider = ({ children }) => {
   const [invoiceData, setInvoiceData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isUpdated, setIsUpdated] = useState(null)
 
   /****************Fetch Invoice Data***************/
   useEffect(() => {
@@ -22,14 +23,14 @@ const InvoiceProvider = ({ children }) => {
     }
 
     fetchData()
-  }, [])
+  }, [isUpdated])
 
   const updateInvoiceData = newData => {
     setInvoiceData(newData)
   }
 
   return (
-    <InvoiceContext.Provider value={{ invoiceData, updateInvoiceData, setInvoiceData }}>
+    <InvoiceContext.Provider value={{ invoiceData, updateInvoiceData, setInvoiceData, setIsUpdated }}>
       {children}
     </InvoiceContext.Provider>
   )
