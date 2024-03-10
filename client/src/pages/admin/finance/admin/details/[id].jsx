@@ -5,10 +5,12 @@ import styles from './FinancialDetails.module.css'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import { Calendar, Note } from 'iconsax-react'
-import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
+import { useInvoiceContext } from 'src/providers/InvoiceProvider'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { useAuth } from 'src/hooks/useAuth'
+import { updateInvoice } from 'src/services/invoice'
+import { Snackbar, Alert } from '@mui/material'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
@@ -19,6 +21,30 @@ const FinancialDetailsPage = () => {
   const [error, setError] = useState('')
   const { user } = useAuth()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const { setIsUpdated } = useInvoiceContext()
+
+  /****************SnackBar Options***************/
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
+
+  /****************Invoice Data***************/
+  const [invoiceData, setInvoiceData] = useState({
+    // booking: details?.booking,
+    // amount: details ? details.amount : 0,
+    // discount: details?.discount || 0,
+    // tax: details?.tax || 0,
+    // email: details?.email || '',
+    // status: details?.status || 'unpaid',
+    // invoiceDate: details?.invoiceDate || dayjs(),
+    // paymentDueDate: details?.paymentDueDate || dayjs().add(14, 'day')
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +53,7 @@ const FinancialDetailsPage = () => {
       try {
         const { data } = await axios.get(`${baseUrl}/${type}/${id}`) // Ensure endpoint matches your API route
         setDetails(data)
+        setInvoiceData({ ...data })
       } catch (err) {
         console.error('Error fetching details:', err)
         setError('Failed to fetch details')
@@ -36,7 +63,8 @@ const FinancialDetailsPage = () => {
     }
 
     if (id && type) fetchData()
-  }, [id, type, baseUrl])
+    console.log(invoiceData)
+  }, [id, type, baseUrl, snackbarOpen])
 
   /***********Fetch Booking Details ************/
   useEffect(() => {
@@ -54,26 +82,34 @@ const FinancialDetailsPage = () => {
     }
 
     if (details !== null && type === 'invoice') fetchData()
-    console.log(details)
+    // console.log(details)
   }, [details, type])
-
-  /****************Invoice Data***************/
-  const [invoiceData, setInvoiceData] = useState({
-    booking: details?.booking,
-    amount: details?.amount || 0,
-    discount: details?.discount || 0,
-    tax: details?.tax || 0,
-    email: details?.email || '',
-    status: details?.status || 'unpaid',
-    invoiceDate: details?.invoiceDate || dayjs(),
-    paymentDueDate: details?.paymentDueDate || dayjs().add(14, 'day')
-  })
 
   const handleChange = e => {
     setInvoiceData({
       ...invoiceData,
       [e.target.name]: e.target.value
     })
+    console.log(invoiceData)
+  }
+
+  const handleInvoiceUpdate = async () => {
+    try {
+      const updatedInvoice = await updateInvoice(invoiceData)
+      console.log('Invoice Updated Successfully! : ', updatedInvoice)
+      setSnackbarMessage('Invoice Updated Successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsUpdated(true)
+    } catch (error) {
+      console.error('Error updating invoice: ', error)
+      // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error updating invoice!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    } finally {
+      setIsUpdated(false)
+    }
   }
 
   /****************Rendering***************/
@@ -81,7 +117,6 @@ const FinancialDetailsPage = () => {
   if (loading) return <div className={styles.loading}>Loading...</div>
   if (error) return <div className={styles.error}>Error: {error}</div>
   return (
-    // <InvoiceProvider>
     <div className={styles.financialDetailsPage}>
       {/* Condition Rendering of Preview and Details */}
       {type === 'invoice' && user.role === 'admin' && (
@@ -89,9 +124,9 @@ const FinancialDetailsPage = () => {
           <div className={styles.organizerDetails}>
             <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
             <p>
-              {details.organizerFirstName} {details.organizerLastName}
+              {invoiceData.organizerFirstName} {invoiceData.organizerLastName}
             </p>
-            <p>Payment ID: {details._id}</p>
+            <p>Invoice ID: {invoiceData._id}</p>
           </div>
           <div className={styles.paymentItemsDetails}>
             <div className={styles.priceTotal}>
@@ -166,7 +201,19 @@ const FinancialDetailsPage = () => {
               ]}
             />
           </div>
-          <TabButton className={styles.saveChangesBtn}>Save Changes</TabButton>
+          <TabButton className={styles.saveChangesBtn} onClick={handleInvoiceUpdate}>
+            Save Changes
+          </TabButton>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       )}
 
@@ -222,7 +269,6 @@ const FinancialDetailsPage = () => {
         </div>
       </div>
     </div>
-    // </InvoiceProvider>
   )
 }
 
