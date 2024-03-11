@@ -44,8 +44,8 @@ const galleryStorage = multer.diskStorage({
 const galleryUpload = multer({ storage: galleryStorage });
 
 // Middleware for parsing JSON and multipart form data
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+router.use(express.json({ limit: '50mb' }));
+router.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 router.route("/profile").get(protect, userController.getUserProfile);
 router

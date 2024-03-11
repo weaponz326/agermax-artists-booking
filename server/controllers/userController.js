@@ -110,45 +110,53 @@ const updateUserDetails = async (req, res) => {
   const { password, profilePhoto, gallery, ...updateData } = req.body;
 
   try {
-    updateData.profilePhoto = req.file.filename;
-    updateData.gallery = req.files.map(file => file.filename);
+      const userData = await User.findByIdAndUpdate(userId, {
+          ...updateData,
+          profilePhoto: profilePhoto || undefined, // Update profile photo if provided
+          gallery: gallery || undefined, // Update gallery if provided
+      }, { new: true }).select("-password");
 
-    const userData = await User.findByIdAndUpdate(userId, updateData, {
-      new: true,
-    }).select("-password");
+      if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+      }
 
-    if (!userData) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json({
-      message: "User details updated successfully",
-      userData,
-    });
+      res.json({
+          message: "User details updated successfully",
+          userData,
+      });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
-  const { password, ...updateData } = req.body; // Exclude password from update data if present
+  const { password, profilePhoto, gallery, ...updateData } = req.body;
 
   try {
-    const userExists = await User.exists({ _id: targetUserId });
-    if (!userExists) {
-      return res.status(404).json({ message: "User not found" });
-    }
+      const userExists = await User.exists({ _id: targetUserId });
+      if (!userExists) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
-      new: true,
-    }).select("-password"); // Exclude password field in the response
+      // Update user details in the database
+      const updatedUser = await User.findByIdAndUpdate(
+        targetUserId,
+        {
+            ...updateData,
+            profilePhoto: profilePhoto || undefined, // Update profile photo if provided
+            gallery: gallery || undefined, // Update gallery if provided
+        },
+        { new: true }
+      ).select("-password"); // Exclude password field in the response
 
-    res.json({
-      message: "User details updated successfully",
-      updatedUser,
-    });
+      res.json({
+        message: "User details updated successfully",
+        updatedUser,
+      });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
