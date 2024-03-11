@@ -120,11 +120,10 @@ const addUser = async (req, res) => {
       user.resetPasswordExpire = resetTokenExpire;
       await user.save();
 
-      // Construct the reset password URL with the unhashed token
-      const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+      const instructionsUrl = `${process.env.FRONTEND_URL}/reset-password`;
       const subject = "Complete Your Registration";
-      const text = `Welcome to our platform! Please complete your registration by setting your password. Click the link below to set up your password: ${resetUrl}`;
-      const html = `<p>Welcome to our platform!</p><p>Please complete your registration by setting your password. Click the link below to set up your password:</p><p><a href="${resetUrl}">Set Your Password</a></p>`;
+      const text = `Welcome to our platform! Please complete your registration by setting your password. Copy your reset token below and follow the instructions on the page: ${instructionsUrl} \nYour Reset Token: ${resetToken}`;
+      const html = `<p>Welcome to our platform!</p><p>Please complete your registration by setting your password. Copy your reset token below and visit the following page to set up your password:</p><p><a href="${instructionsUrl}">Set Your Password</a></p><p>Your Reset Token: <strong>${resetToken}</strong></p>`;
 
       sendEmail({
         to: email,
@@ -204,26 +203,17 @@ const forgotPassword = async (req, res) => {
 
     const { resetToken, hash, resetTokenExpire } = generateResetToken();
     user.resetPasswordToken = hash;
-    user.resetPasswordExpire = resetTokenExpire;
+    user.resetPasswordTokenExpire = resetTokenExpire;
     await user.save();
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. If you did not request this, please ignore this email and your password will remain unchanged.`;
-    const emailBody = `
-    <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; color: #333;">
-      <h2 style="color: #0056b3;">Password Reset Request</h2>
-      <p>${message}</p>
-      <p><a href="${resetUrl}" style="display: inline-block; background-color: #0056b3; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
-      <p>If the button above does not work, paste this link in your browser:</p>
-      <p><a href="${resetUrl}" style="color: #0056b3;">${resetUrl}</a></p>
-    </div>
-  `;
+    // Remove the direct link and provide instructions instead
+    const instructionsUrl = `${process.env.FRONTEND_URL}/reset-password`;
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please copy your reset token below and follow the instructions on our page to reset your password.\n\nReset Token: ${resetToken}\n\nInstructions Page: ${instructionsUrl}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.`;
 
     await sendEmail({
       to: user.email,
       subject: "Password Reset Request",
       text: message,
-      html: emailBody,
     });
 
     res
@@ -231,13 +221,11 @@ const forgotPassword = async (req, res) => {
       .json({ message: "Email sent with password reset instructions." });
   } catch (error) {
     if (error.message.includes("Error sending email")) {
-      // This condition checks for SMTP errors
       console.error(`SMTP Error for ${email}:`, error);
       res.status(500).json({
         message: "Failed to send password reset email. Please try again later.",
       });
     } else {
-      // Handle other errors
       console.error(
         `Internal error during password reset for ${email}:`,
         error
@@ -301,7 +289,6 @@ const changePassword = async (req, res) => {
       .status(400)
       .json({ message: "New password must be at least 4 characters long." });
   }
-
 
   try {
     const user = await User.findById(userId);
