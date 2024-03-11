@@ -910,7 +910,6 @@ export const BookingsModalContent = ({
             value={formData.otherComments}
             rows={5}
           />
-          <TextareaAutosize />
 
           {user && user.role != 'artist' && (
             <button

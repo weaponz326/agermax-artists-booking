@@ -289,7 +289,8 @@ const FinancialDetailsPage = () => {
         </div>
         <div className={styles.previewSummary}>
           <h3>
-            {selectedCurrencySymbol} {grandTotalAmount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
+            {selectedCurrencySymbol} {invoiceData.amount.toFixed(2)} due{' '}
+            {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
           </h3>
           <div className={styles.bill}>
             <div className={styles.billFrom}>
@@ -315,21 +316,22 @@ const FinancialDetailsPage = () => {
           )}
           {type === 'payments' && <PaymentTable details={details} />}
         </div>
-        {user.role === 'organizer' && (
-          <div>
-            <h4>Payment Gateways</h4>
-            <ul>
-              <li>
-                <Link
-                  className={styles.paymentGatewayLink}
-                  href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
-                >
-                  Stripe Payment
-                </Link>
-              </li>
-            </ul>
-          </div>
-        )}
+        {user.role === 'organizer' ||
+          ('admin' && (
+            <div>
+              <h4>Payment Gateways</h4>
+              <ul>
+                <li>
+                  <Link
+                    className={styles.paymentGatewayLink}
+                    href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
+                  >
+                    Stripe Payment
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          ))}
       </div>
     </div>
   )
