@@ -68,7 +68,7 @@ const CalendarComponent = () => {
     fetchEvent()
   }, [])
 
-  if (upcomingEvent === null) return <FallbackSpinner />
+  if (upcomingEvent === null) return <div>Loading...</div>
   return (
     <Box
       sx={{

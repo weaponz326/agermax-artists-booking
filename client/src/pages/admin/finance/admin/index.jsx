@@ -38,6 +38,10 @@ const Finance = () => {
         setInvoiceDataSource(filteredInvoiceData)
         const filteredPaymentsData = paymentsData.filter(payment => payment.bookingOrganizerId === user._id)
         setPaymentsDataSource(filteredPaymentsData)
+      } else if (user.role === 'artist') {
+        setActiveView('payments')
+        const filteredPaymentsData = paymentsData.filter(payment => payment.artistId === user._id)
+        setPaymentsDataSource(filteredPaymentsData)
       }
     }
   }, [invoiceData, paymentsData, user])
@@ -115,6 +119,13 @@ export const AdminFinance = ({ activeView, queriedInvoiceData, queriedPaymentDat
   ]
 
   const paymentsColumns = [
+    {
+      title: 'Event',
+      dataIndex: 'eventTitle',
+      key: 'eventTitle',
+      sorter: (a, b) => b.eventTitle.localeCompare(a.eventTitle),
+      render: (text, event) => text
+    },
     {
       title: 'Organizer',
       dataIndex: 'organizerFirstName',

@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/SearchBar'
 import styles from './AdminPagesNavBar.module.css'
 import { GridFilterAltIcon } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
+import { useAuth } from 'src/hooks/useAuth'
 
 const AdminPagesNavBar = ({
   setActiveView,
@@ -14,6 +15,7 @@ const AdminPagesNavBar = ({
   setQueriedPaymentData
 }) => {
   const [query, setQuery] = useState('')
+  const { user } = useAuth()
 
   /*********Handle Search Query************** */
   function handleQueryChange(e) {
@@ -44,9 +46,9 @@ const AdminPagesNavBar = ({
         // Otherwise, filter paymentsDataSource based on the query
         const filteredList = paymentsDataSource.filter(
           payment =>
-            payment.email.toLowerCase().includes(value.toLowerCase()) ||
-            payment.organizerFirstName.toLowerCase().includes(value.toLowerCase()) ||
-            payment.organizerLastName.toLowerCase().includes(value.toLowerCase())
+            (payment.eventTitle && payment.eventTitle.toLowerCase().includes(value.toLowerCase())) ||
+            (payment.organizerFirstName && payment.organizerFirstName.toLowerCase().includes(value.toLowerCase())) ||
+            (payment.organizerLastName && payment.organizerLastName.toLowerCase().includes(value.toLowerCase()))
         )
         setQueriedPaymentData(filteredList)
       }
@@ -56,7 +58,7 @@ const AdminPagesNavBar = ({
   return (
     <nav className={styles.navigationPanel}>
       <div className={styles.calendarViewTabs}>
-        <ViewStyleTabs setActiveView={setActiveView} activeView={activeView} />
+        {user && user.role != 'artist' && <ViewStyleTabs setActiveView={setActiveView} activeView={activeView} />}
         <div className={styles.searchBar}>
           <SearchBar
             onChange={handleQueryChange}
