@@ -107,18 +107,17 @@ const getUserById = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   const userId = req.user._id;
-  const { password, profilePhoto, gallery, ...updateData } = req.body;
+  const { password, ...updateData } = req.body; 
 
   try {
-    const userData = await User.findByIdAndUpdate(
-      userId,
-      {
-        ...updateData,
-        profilePhoto: profilePhoto || undefined, // Update profile photo if provided
-        gallery: gallery || undefined, // Update gallery if provided
-      },
-      { new: true }
-    ).select("-password");
+    const updateObj = { ...updateData };
+
+    if (req.file) {
+      const baseUrl = req.protocol + '://' + req.get('host'); // Dynamically get the base URL
+      updateObj.profilePhoto = baseUrl + '/uploads/user/profile_photo/' + req.file.filename; // Construct the full URL
+    }
+
+    const userData = await User.findByIdAndUpdate(userId, updateObj, { new: true }).select("-password");
 
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
@@ -133,10 +132,10 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+
 const updateUserDetailsById = async (req, res) => {
-  console.log("Controller user route called!");
   const targetUserId = req.params.id;
-  const { password, profilePhoto, gallery, ...updateData } = req.body;
+  const { password, ...updateData } = req.body; 
 
   try {
     const userExists = await User.exists({ _id: targetUserId });
@@ -144,16 +143,14 @@ const updateUserDetailsById = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update user details in the database
-    const updatedUser = await User.findByIdAndUpdate(
-      targetUserId,
-      {
-        ...updateData,
-        profilePhoto: profilePhoto || undefined, // Update profile photo if provided
-        gallery: gallery || undefined, // Update gallery if provided
-      },
-      { new: true }
-    ).select("-password"); // Exclude password field in the response
+    const updateObj = { ...updateData };
+
+    if (req.file) {
+      const baseUrl = req.protocol + '://' + req.get('host'); // Dynamically get the base URL
+      updateObj.profilePhoto = baseUrl + '/uploads/user/profile_photo/' + req.file.filename; // Construct the full URL
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateObj, { new: true }).select("-password");
 
     res.json({
       message: "User details updated successfully",
@@ -163,6 +160,8 @@ const updateUserDetailsById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+ 
 
 const deleteUser = async (req, res) => {
   try {

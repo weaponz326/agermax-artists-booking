@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import styles from './ImageUpload.module.css'
 
 const ImageUpload = ({ formData, setFormData, profilePhoto, setProfilePhoto }) => {
+  // Initial setup omitted for brevity
+
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [loading, setLoading] = useState(false)
@@ -35,6 +37,14 @@ const ImageUpload = ({ formData, setFormData, profilePhoto, setProfilePhoto }) =
     fileReader.readAsDataURL(file)
   }, [])
 
+  useEffect(() => {
+    // Set initial previewUrl if profilePhoto is passed
+    if (profilePhoto && !previewUrl) {
+      setPreviewUrl(profilePhoto)
+    }
+  }, [profilePhoto, previewUrl])
+
+  
   useEffect(() => {
     if (file && fileValidate(file.type, file.size)) {
       uploadFile(file)

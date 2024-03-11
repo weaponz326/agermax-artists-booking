@@ -50,6 +50,9 @@ require("./configs/passport-configs");
 // Body parsing middleware setup
 app.use(express.json());
 
+app.use('/uploads', express.static('uploads'));
+
+
 // Routes
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");

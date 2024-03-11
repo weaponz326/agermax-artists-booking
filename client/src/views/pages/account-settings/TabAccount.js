@@ -76,55 +76,49 @@ const TabAccount = () => {
     const newValues = additionalFormData[field].filter((_, idx) => idx !== index)
     setAdditionalFormData({ ...additionalFormData, [field]: newValues })
   }
+
   const handleSubmit = async e => {
     e.preventDefault()
 
     const combinedData = {
       ...formData,
       ...additionalFormData,
+      availableDates: formattedAvailableDates,
+      // Filter out empty strings to avoid appending unnecessary data
       genre: additionalFormData.genre.filter(item => item),
       socialMediaLinks: additionalFormData.socialMediaLinks.filter(item => item),
-      availableDates: additionalFormData.availableDates.filter(item => item),
       eventsHosted: additionalFormData.eventsHosted.filter(item => item),
-      gallery: additionalFormData.gallery.filter(item => item) // Assuming you handle file uploads separately and have their references here
+      gallery: additionalFormData.gallery.filter(item => item)
     }
-    // Create a new FormData object
+
     const formDataToSend = new FormData()
-    //Append the profile photo this formDataToSend
-    if (!!profilePhoto && !!profilePhoto.file) {
-      formDataToSend.append('photo  ', profilePhoto.file)
+    if (profilePhoto && profilePhoto.file) {
+      formDataToSend.append('profilePhoto', profilePhoto.file)
     }
+
     Object.keys(combinedData).forEach(key => {
       if (Array.isArray(combinedData[key])) {
-        for (let i = 0; i < combinedData[key].length; i++) {
-          formDataToSend.append(`${key}[${i}]`, combinedData[key][i])
-        }
+        combinedData[key].forEach((item, index) => {
+          formDataToSend.append(`${key}[${index}]`, item)
+        })
       } else {
         formDataToSend.append(key, combinedData[key])
       }
     })
 
-    // Append all form data fields to formDataToSend
-    for (const key in combinedData) {
-      formDataToSend.append(key, combinedData[key])
-    }
-
-    // Append profile photo if it exists
-    formDataToSend.append('profilePhoto', profilePhoto)
-    console.log('Combined Form Data:', combinedData)
-    console.log('Form Data to send:', formDataToSend)
-
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formDataToSend, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/profile`, formDataToSend, {
+        headers: { Authorization: `Bearer ${token}` }
       })
+      console.log(response.data)
       setSnackbarMessage('Profile updated successfully.')
       setSnackbarSeverity('success')
     } catch (error) {
-      setSnackbarMessage('Error updating profile.')
+      console.error('Error object:', error)
+      setSnackbarMessage(`Error updating profile: ${error.response?.data?.message || 'Server error'}`)
       setSnackbarSeverity('error')
     }
-    setSnackbarOpen(true) // Open the snackbar with the message
+    setSnackbarOpen(true)
   }
 
   // Function to close the Snackbar
@@ -134,10 +128,7 @@ const TabAccount = () => {
     }
     setSnackbarOpen(false)
   }
-  // const handleFileChange = e => {
-  //   const file = e.target.files[0]
-  //   setFormData({ ...formData, profilePhoto: file })
-  // }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -148,11 +139,7 @@ const TabAccount = () => {
               <Typography sx={{ mb: 12 }}>Profile Photo</Typography>
             </Grid>
             <Grid item xs={6}>
-              {/* <input type='file' id='profilePhoto' name='profilePhoto' onChange={handleFileChange} accept='image/*' /> */}
-
               <ImageUpload
-                image={profilePhoto}
-                onImageUpload={handleProfilePhotoChange}
                 profilePhoto={profilePhoto}
                 setProfilePhoto={setProfilePhoto}
                 formData={formData}
