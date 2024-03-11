@@ -120,12 +120,11 @@ const addUser = async (req, res) => {
       user.resetPasswordExpire = resetTokenExpire;
       await user.save();
 
-      // Construct the reset password URL with the unhashed token
-      const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+      const instructionsUrl = `${process.env.FRONTEND_URL}/reset-password`;
       const subject = "Complete Your Registration";
-      const text = `Welcome to our platform! Please complete your registration by setting your password. Click the link below to set up your password: ${resetUrl}`;
-      const html = `<p>Welcome to our platform!</p><p>Please complete your registration by setting your password. Click the link below to set up your password:</p><p><a href="${resetUrl}">Set Your Password</a></p>`;
-
+      const text = `Welcome to our platform! Please complete your registration by setting your password. Copy your reset token below and follow the instructions on the page: ${instructionsUrl} \nYour Reset Token: ${resetToken}`;
+      const html = `<p>Welcome to our platform!</p><p>Please complete your registration by setting your password. Copy your reset token below and visit the following page to set up your password:</p><p><a href="${instructionsUrl}">Set Your Password</a></p><p>Your Reset Token: <strong>${resetToken}</strong></p>`;
+      
       sendEmail({
         to: email,
         subject: subject,
