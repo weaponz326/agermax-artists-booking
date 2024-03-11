@@ -1,8 +1,4 @@
-// import axios from 'axios'
-import Unsplash from 'src/components/mock-data-apis/Unsplash'
-import usersData from 'src/@fake-db/usersData.json'
 import axios from 'axios'
-import { Data2 } from 'iconsax-react'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 export async function getAllUsers() {
@@ -51,12 +47,19 @@ export async function updateUserById(userID, userData) {
   }
 }
 
-export async function uploadUserProfilePhoto(user) {
+export const uploadUserProfilePhoto = async userData => {
   try {
-    const response = await axios.put(`${baseUrl}/users/${user._id}`, user.profilePhoto)
-    return response // Return the whole response data
+    const formData = new FormData()
+    formData.append('profilePhoto', userData.profilePhoto)
+
+    const response = await axios.put(`${baseUrl}/users/${userData._id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    return response.data
   } catch (error) {
-    console.log('Error: ', error.response || error.message)
     throw error
   }
 }

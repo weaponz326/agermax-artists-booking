@@ -385,7 +385,7 @@ export const EditUserModalContent = ({
     try {
       const profilePhotoResponse = await uploadUserPhotoUpdate(userData) // Upload profile photo separately
       console.log(profilePhotoResponse)
-      const updatedUserData = { ...userData }
+      const updatedUserData = { ...userData, profilePhoto: profilePhotoResponse }
       const response = await updateUser(selectedUser, updatedUserData) // Ensure correct ID usage
       console.log('User updated successfully! ', response)
       setSnackbarMessage('User updated successfully!')

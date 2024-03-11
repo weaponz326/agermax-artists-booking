@@ -48,8 +48,6 @@ const UsersProvider = ({ children }) => {
   const addUser = async userData => {
     const newUser = await services.addUser(userData)
     return newUser
-
-    // setUsers(users.filter(u => u._id !== userID))
   }
 
   const deleteUser = async userID => {
