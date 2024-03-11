@@ -59,11 +59,12 @@ const FinancialDetailsPage = () => {
 
   //Grand Total Calculations
   useEffect(() => {
-    const calculatedAmt =
+    const calculatedAmt = (
       Number(invoiceData?.amount || 0) -
       Number(invoiceData?.amount || 0) * Number(invoiceData?.discount / 100 || 0) +
       Number(invoiceData?.amount || 0) * Number(invoiceData?.tax / 100 || 0)
-    setGrandTotalAmount(Number(calculatedAmt.toFixed(2)))
+    ).toFixed(2)
+    setGrandTotalAmount(calculatedAmt)
     setSelectedCurrencySymbol(currencySymbols[selectedCurrency])
   }, [invoiceData, selectedCurrency])
 
@@ -305,7 +306,12 @@ const FinancialDetailsPage = () => {
 
           {/* Which Table to display  here depending on the type */}
           {type === 'invoice' && (
-            <InvoiceTable details={details} bookingDetails={bookingDetails} invoiceData={invoiceData} />
+            <InvoiceTable
+              details={details}
+              bookingDetails={bookingDetails}
+              invoiceData={invoiceData}
+              selectedCurrency={selectedCurrency}
+            />
           )}
           {type === 'payments' && <PaymentTable details={details} />}
         </div>
@@ -407,7 +413,7 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
   )
 }
 
-export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
+export const InvoiceTable = ({ details, bookingDetails, selectedCurrency }) => {
   return (
     <table className={styles.priceTotalTable}>
       <thead>
@@ -420,7 +426,9 @@ export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
       <tbody>
         <tr>
           <td>{bookingDetails.eventTitle}</td>
-          <td className={styles.underlinedCell}>Sub-Total</td>
+          <td className={styles.underlinedCell}>
+            Sub-Total {`(${details.currency ? details.currency : selectedCurrency})`}
+          </td>
           <td className={styles.underlinedCell}>{details.amount}</td>
         </tr>
         <tr>
@@ -435,8 +443,10 @@ export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Grand Total {`(${details.currency ? details.currency : 'N/A'})`}</td>
-          <td className={styles.underlinedCell}>{details.amount}</td>
+          <td className={styles.underlinedCell}>
+            Grand Total {`(${details.currency ? details.currency : selectedCurrency})`}
+          </td>
+          <td className={styles.underlinedCell}>{details.amount.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>
