@@ -50,6 +50,8 @@ const DateBox = styled(Box)(({ theme }) => ({
 }))
 
 const CalendarComponent = () => {
+  const [upcomingEvent, setUpcomingEvent] = useState({})
+
   return (
     <Box
       sx={{
@@ -70,15 +72,15 @@ const CalendarComponent = () => {
         </DateBox>
         <Box sx={{ float: 'left', width: 'calc(100% - 60px)', mb: 4 }}>
           <Typography variant='body1' component='p' sx={{ textAlign: 'left' }}>
-            Stockholm music fes..
+            {upcomingEvent.eventTitle}
           </Typography>
           <Typography variant='body1' component='p' sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-            John Doe
+            {upcomingEvent.artistName}
           </Typography>
         </Box>
-        <Divider sx={{ width: '100%', mb: 4  }} />
+        <Divider sx={{ width: '100%', mb: 4 }} />
         <Typography variant='h4' component='p' sx={{ my: 2 }}>
-          21:00 to 01:00
+          {upcomingEvent.startTime} to {upcomingEvent.endTime}
         </Typography>
         <StyledButton size='small'>Details</StyledButton>
       </EventCard>

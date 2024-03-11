@@ -42,6 +42,7 @@ exports.getAllInvoice = async (req, res) => {
         _id: invoice._id,
         amount: invoice.amount,
         tax: invoice.tax,
+        currency: invoice.currency,
         email: invoice.email,
         status: invoice.status,
         invoiceDate: invoice.invoiceDate,
@@ -112,6 +113,7 @@ exports.getInvoiceById = async (req, res) => {
       _id: invoice._id,
       amount: invoice.amount,
       tax: invoice.tax,
+      currency: invoice.currency,
       email: invoice.email,
       status: invoice.status,
       invoiceDate: invoice.invoiceDate,
@@ -127,7 +129,7 @@ exports.getInvoiceById = async (req, res) => {
       artistId,
       artistFirstName,
       artistLastName,
-      eventTitle, 
+      eventTitle,
     };
 
     res.json(transformedInvoice);
