@@ -347,6 +347,8 @@ export const EditUserModalContent = ({
   setUsers,
   users
 }) => {
+  const { uploadUserPhotoUpdate } = useUsers()
+
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',
     firstName: selectedUser?.firstName || '',
@@ -375,12 +377,17 @@ export const EditUserModalContent = ({
 
   const handleChange = (name, value) => {
     setUserData({ ...userData, [name]: value })
+    console.log(userData)
   }
 
   const handleUpdateUser = async e => {
     e.preventDefault()
     try {
-      const response = await updateUser(selectedUser, userData) // Ensure correct ID usage
+      const profilePhotoResponse = await uploadUserPhotoUpdate(userData) // Upload profile photo separately
+      console.log(profilePhotoResponse)
+      const updatedUserData = { ...userData }
+      const response = await updateUser(selectedUser, updatedUserData) // Ensure correct ID usage
+      console.log('User updated successfully! ', response)
       setSnackbarMessage('User updated successfully!')
       setSnackbarSeverity('success')
       setSnackbarOpen(true)
@@ -389,8 +396,8 @@ export const EditUserModalContent = ({
 
       setSnackbarOpen(true)
     } catch (error) {
-      console.error('Failed to update user:', error.response?.data?.message || error.message)
-      setSnackbarMessage(error.response?.data?.message || 'Failed to update user')
+      console.error('Failed to update user:', error)
+      setSnackbarMessage('Failed to update user')
       setSnackbarSeverity('error')
       setSnackbarOpen(true)
     }
@@ -403,10 +410,24 @@ export const EditUserModalContent = ({
     setSnackbarOpen(false)
   }
 
+  const handleFileChange = e => {
+    const file = e.target.files[0]
+    setUserData({ ...userData, profilePhoto: file })
+    console.log(userData)
+  }
+
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
-        {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />}
+        {/* {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />} */}
+        <ImageUpload setFormData={setUserData} formData={userData} />
+        {/* <input
+          type='file'
+          name='profilePhoto'
+          id='profilePhoto'
+          // value={userData.profilePhoto ? userData.profilePhoto : ''}
+          onChange={handleFileChange}
+        /> */}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
         <input

@@ -51,6 +51,16 @@ export async function updateUserById(userID, userData) {
   }
 }
 
+export async function uploadUserProfilePhoto(user) {
+  try {
+    const response = await axios.put(`${baseUrl}/users/${user._id}`, user.profilePhoto)
+    return response // Return the whole response data
+  } catch (error) {
+    console.log('Error: ', error.response || error.message)
+    throw error
+  }
+}
+
 // Getting the total number of users by user role
 export async function getTotalArtists() {
   try {

@@ -41,6 +41,10 @@ const UsersProvider = ({ children }) => {
     }
   }
 
+  const uploadUserPhotoUpdate = async userData => {
+    const { data } = await services.uploadUserProfilePhoto(userData)
+  }
+
   const addUser = async userData => {
     const newUser = await services.addUser(userData)
     return newUser
@@ -56,7 +60,17 @@ const UsersProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ users, setUsers, loading, error, updateUser, deleteUser, addUser, setIsUsersListUpdated }}
+      value={{
+        users,
+        setUsers,
+        loading,
+        error,
+        updateUser,
+        deleteUser,
+        addUser,
+        setIsUsersListUpdated,
+        uploadUserPhotoUpdate
+      }}
     >
       {children}
     </UserContext.Provider>
