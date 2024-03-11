@@ -154,7 +154,7 @@ const MainDashboard = () => {
           {user.role === 'admin' && (
             <Grid item xs={12} sm={6} md={4} lg={2}>
               <StyledCard>
-                <Typography variant='subtitle1'>Total Artists</Typography>
+                <Typography variant='subtitle1'>Total Performers</Typography>
                 <Typography variant='h4'>{artistsCount}</Typography>
                 <Typography variant='h4'></Typography>
                 <Typography variant='h4'></Typography>
