@@ -40,6 +40,13 @@ const BookingsProvider = ({ children }) => {
     return deletedBooking
   }
 
+  const getNextUpcomingEvent = async () => {
+    const nextBooking = await services.getNextUpcomingApprovedBooking()
+    console.log(nextBooking)
+    // Update local state to remove deleted booking
+    return nextBooking
+  }
+
   const createBooking = async booking => {
     const createdBooking = await services.createBooking(booking)
     // Update local state to add created booking
@@ -49,7 +56,16 @@ const BookingsProvider = ({ children }) => {
 
   return (
     <BookingContext.Provider
-      value={{ bookings, setBookings, loading, error, updateBooking, deleteBooking, createBooking }}
+      value={{
+        bookings,
+        setBookings,
+        loading,
+        error,
+        updateBooking,
+        deleteBooking,
+        createBooking,
+        getNextUpcomingEvent
+      }}
     >
       {children}
     </BookingContext.Provider>

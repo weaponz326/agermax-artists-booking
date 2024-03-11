@@ -14,6 +14,8 @@ import { useAuth } from 'src/hooks/useAuth'
 import { useRouter } from 'next/router'
 import { Snackbar, Alert } from '@mui/material'
 import AvatarsImage from 'src/views/components/avatars/AvatarsImage'
+import TextField from '@mui/material/TextField'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 const UsersListPage = () => {
   // ** State for storing users data
@@ -385,7 +387,7 @@ export const EditUserModalContent = ({
     try {
       const profilePhotoResponse = await uploadUserPhotoUpdate(userData) // Upload profile photo separately
       console.log(profilePhotoResponse)
-      const updatedUserData = { ...userData, profilePhoto: profilePhotoResponse }
+      const updatedUserData = { ...userData }
       const response = await updateUser(selectedUser, updatedUserData) // Ensure correct ID usage
       console.log('User updated successfully! ', response)
       setSnackbarMessage('User updated successfully!')
@@ -420,18 +422,18 @@ export const EditUserModalContent = ({
     <>
       <div className={styles.modalCardContentPictureInput}>
         {/* {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />} */}
-        <ImageUpload setFormData={setUserData} formData={userData} />
-        {/* <input
-          type='file'
-          name='profilePhoto'
-          id='profilePhoto'
-          // value={userData.profilePhoto ? userData.profilePhoto : ''}
-          onChange={handleFileChange}
-        /> */}
+        {/* <ImageUpload setFormData={setUserData} formData={userData} /> */}
+        <img
+          className={styles.profilePhoto}
+          src={`${baseUrl}/uploads/user/profile_photo/${userData.profilePhoto}`}
+          alt='Profile Photo'
+        />
+        {/* <div style={{ background: 'red', width: '200px', aspectRatio: '1' }}></div> */}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
-        <input
+        <TextField
           placeholder='First Name'
+          label='First Name'
           className={styles.modalCardContentInputField}
           type='text'
           name='firstName'
@@ -440,8 +442,9 @@ export const EditUserModalContent = ({
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
-        <input
+        <TextField
           placeholder='Last Name'
+          label='Last Name'
           className={styles.modalCardContentInputField}
           type='text'
           name='lastName'
@@ -451,8 +454,9 @@ export const EditUserModalContent = ({
           required
         />
 
-        <input
+        <TextField
           placeholder='Email Address'
+          label='Email Address'
           className={styles.modalCardContentInputField}
           type='email'
           name='email'
@@ -460,9 +464,11 @@ export const EditUserModalContent = ({
           value={userData.email} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
+          disabled
         />
-        <input
+        <TextField
           placeholder='Phone'
+          label='Phone'
           className={styles.modalCardContentInputField}
           type='tel'
           name='contactPhone'
@@ -471,8 +477,9 @@ export const EditUserModalContent = ({
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
         />
-        <input
+        <TextField
           placeholder='Address'
+          label='Address'
           className={styles.modalCardContentInputField}
           type='text'
           name='address'
@@ -480,8 +487,9 @@ export const EditUserModalContent = ({
           value={userData.address} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <textarea
+        <TextField
           placeholder='Biography'
+          label='Biography'
           className={styles.modalCardContentInputField}
           type='text'
           name='bio'
@@ -489,8 +497,9 @@ export const EditUserModalContent = ({
           value={userData.bio} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <input
+        <TextField
           placeholder='Nickname'
+          label='Nickname'
           className={styles.modalCardContentInputField}
           type='text'
           name='nickname'
@@ -498,8 +507,9 @@ export const EditUserModalContent = ({
           value={userData.nickName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <input
+        <TextField
           placeholder='Company Name'
+          label='Company Name'
           className={styles.modalCardContentInputField}
           type='text'
           name='companyName'
@@ -507,8 +517,9 @@ export const EditUserModalContent = ({
           value={userData.companyName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
         />
-        <input
+        <TextField
           placeholder='Organization Number'
+          label='Organization Number'
           className={styles.modalCardContentInputField}
           type='text'
           name='organizationNumber'

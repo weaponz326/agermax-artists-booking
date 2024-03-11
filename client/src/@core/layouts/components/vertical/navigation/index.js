@@ -1,5 +1,5 @@
 // ** React Import
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './NavStyles.module.css'
 
 // ** MUI Imports
@@ -50,8 +50,25 @@ const DateBox = styled(Box)(({ theme }) => ({
 }))
 
 const CalendarComponent = () => {
-  const [upcomingEvent, setUpcomingEvent] = useState({})
+  const [upcomingEvent, setUpcomingEvent] = useState(null)
 
+  const { getNextUpcomingEvent } = useBookings()
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const { nextBooking } = await getNextUpcomingEvent()
+        setUpcomingEvent(nextBooking)
+        console.log(nextBooking)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchEvent()
+  }, [])
+
+  if (upcomingEvent === null) return <FallbackSpinner />
   return (
     <Box
       sx={{
@@ -68,7 +85,7 @@ const CalendarComponent = () => {
         }}
       >
         <DateBox>
-          <CalendarIcon />
+          <CalendarIcon booking={upcomingEvent} />
         </DateBox>
         <Box sx={{ float: 'left', width: 'calc(100% - 60px)', mb: 4 }}>
           <Typography variant='body1' component='p' sx={{ textAlign: 'left' }}>
@@ -80,7 +97,7 @@ const CalendarComponent = () => {
         </Box>
         <Divider sx={{ width: '100%', mb: 4 }} />
         <Typography variant='h4' component='p' sx={{ my: 2 }}>
-          {upcomingEvent.startTime} to {upcomingEvent.endTime}
+          {formatTime(upcomingEvent.startTime)} to {formatTime(upcomingEvent.endTime)}
         </Typography>
         <StyledButton size='small'>Details</StyledButton>
       </EventCard>
@@ -169,6 +186,9 @@ import themeOptions from 'src/@core/theme/ThemeOptions'
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { useRouter } from 'next/router'
+import { useBookings } from 'src/providers/BookingsProvider'
+import { formatTime } from 'src/utils/dateUtils'
+import FallbackSpinner from 'src/@core/components/spinner'
 
 const StyledBoxForShadow = styled(Box)(({ theme }) => ({
   top: 60,

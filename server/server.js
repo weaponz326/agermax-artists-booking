@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const connectDB = require("./configs/db");
-const passport = require("passport"); 
+const passport = require("passport");
 const cors = require("cors");
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.use(
       }
       return callback(null, true);
     },
-    credentials: true, 
+    credentials: true,
   })
 );
 
@@ -36,7 +36,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "yourSecretKey", // Use an environment variable or replace 'yourSecretKey'
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: !!(process.env.NODE_ENV === "production") }, 
+    cookie: { secure: !!(process.env.NODE_ENV === "production") },
   })
 );
 

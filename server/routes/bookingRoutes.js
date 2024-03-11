@@ -96,6 +96,12 @@ router.get(
 // Route for getting all approved bookings
 router.get("/approved-bookings", bookingController.getAllApprovedBookings);
 
+// Route for getting the next upcoming approved booking compared to the current date
+router.get(
+  "/next-upcoming-approved",
+  bookingController.getNextUpcomingApprovedBooking
+);
+
 // Route for getting upcoming approved bookings by organizer
 router.get(
   "/bookings/organizer/:organizerID/upcoming-approved",

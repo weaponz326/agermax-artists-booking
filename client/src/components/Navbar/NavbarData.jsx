@@ -29,7 +29,7 @@ export const menuConfig = [
 
     altConfig: (
       <span>
-        <p>Hot Artists</p>
+        <p>Hot Performers</p>
       </span>
     )
   },

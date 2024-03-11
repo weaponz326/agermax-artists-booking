@@ -6,6 +6,7 @@ import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 import { Avatar, Space } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
+const imageBaseUrl = process.env.NEXT_PUBLIC_PHOTOUPLOAD_URL
 
 // import { useAuth } from 'src/providers/AuthProvider'
 
@@ -59,7 +60,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
       label: (
         <Link href='/artists'>
           <div className={styles.menuItem}>
-            <BiMicrophone size={20} /> Artists
+            <BiMicrophone size={20} /> Performers
           </div>
         </Link>
       )
@@ -121,7 +122,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
       label: (
         <Link href='/artists'>
           <div className={styles.menuItem}>
-            <BiMicrophone size={20} /> Artists
+            <BiMicrophone size={20} /> Performers
           </div>
         </Link>
       )
@@ -201,11 +202,9 @@ const CustomizedDropdown = ({ className, user, logout }) => {
           <Button className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
-              <div className={styles.userImage}>
-                {user.profilePhoto ? user.profilePhoto : <Avatar icon={<UserOutlined size={36} />} />}
-              </div>
+              <img className={styles.userImage} src={`${imageBaseUrl}/${user.profilePhoto}`} alt='profilePhoto' />
             </div>
-            <HambergerMenu />
+            {/* <HambergerMenu /> */}
           </Button>
         </Dropdown>
       </div>

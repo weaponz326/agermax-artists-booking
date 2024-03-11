@@ -572,7 +572,7 @@ function NavBarBookingCard({
       </LocalizationProvider>
     )
   } else {
-    return <p>Please Select An Artist/Entertainer First</p>
+    return <p onClick={() => setActiveInputTab(0)}>Please Select Performer First</p>
   }
 }
 

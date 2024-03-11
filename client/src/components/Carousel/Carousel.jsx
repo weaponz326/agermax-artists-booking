@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Skeleton from '@mui/material/Skeleton'
 import { getOnePhoto, getRandomArtistPhotos } from 'src/services/mock'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function Carousel({ artist }) {
   const router = useRouter()
@@ -43,7 +44,11 @@ export default function Carousel({ artist }) {
           <Image
             className={styles['carousel-img']}
             alt='Artist-Image'
-            src={artist.profilePhoto ? artist.profilePhoto : '/images/artist-1.jpg'}
+            src={
+              artist.profilePhoto
+                ? `${baseUrl}/uploads/user/profile_photo/${artist.profilePhoto}`
+                : '/images/artist-1.jpg'
+            }
             fill
             // loading='eager'
           />

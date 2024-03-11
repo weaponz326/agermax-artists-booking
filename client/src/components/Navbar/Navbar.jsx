@@ -111,31 +111,33 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
 
   // *********** */
   // Click Event handler
-  // useEffect(() => {
-  //   //Listen to a click event outside the searchBarContainer ref and set activeTab to null
-  //   const handleClickOutsideSearch = event => {
-  //     event.stopPropagation()
-  //     const menuWrapper = event.target.closest('.menu-bar-wrapper')
-  //     const antDropdown = event.target.closest('.ant-select-dropdown')
-  //     const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
-  //     const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
-  //     const bookingCardWrapper = event.target.closest('.bookingCardWrapper')
+  useEffect(() => {
+    //Listen to a click event outside the searchBarContainer ref and set activeTab to null
+    const handleClickOutsideSearch = event => {
+      event.stopPropagation()
+      const menuWrapper = event.target.closest('.menu-bar-wrapper')
+      const antDropdown = event.target.closest('.ant-select-dropdown')
+      const antDropdownPicker = event.target.closest('.ant-picker-dropdown')
+      const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
+      const bookingCardWrapper = event.target.closest('.bookingCardWrapper')
+      const muiButtonBase = event.target.closest('.MuiButtonBase-root')
 
-  //     // if (navBarRef.current) return
-  //     if (antDropdown) return
-  //     if (antDropdownMenu) return
-  //     if (antDropdownPicker) return
-  //     if (bookingCardWrapper) return
-  //     if (menuWrapper == null) {
-  //       setActiveInputTab(null)
-  //       setHideMenuItems(true)
-  //     }
-  //   }
-  //   document.addEventListener('click', handleClickOutsideSearch)
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutsideSearch)
-  //   }
-  // }, [])
+      // if (navBarRef.current) return
+      if (antDropdown) return
+      if (antDropdownMenu) return
+      if (antDropdownPicker) return
+      if (bookingCardWrapper) return
+      if (muiButtonBase) return
+      if (menuWrapper == null) {
+        setActiveInputTab(null)
+        setHideMenuItems(true)
+      }
+    }
+    document.addEventListener('click', handleClickOutsideSearch)
+    return () => {
+      document.removeEventListener('click', handleClickOutsideSearch)
+    }
+  }, [])
 
   const [submittable, setSubmittable] = useState(false)
 
@@ -246,7 +248,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
           style={!hideMenuItems ? noDisplayStyle : displayStyle}
           wrapperClassName={styles.collapsedStateSearchBarWrapper}
           className={styles.collapsedStateSearchInput}
-          placeholder='Find & Book your Artist here....'
+          placeholder='Find & Book A Performer here....'
           onClickWrapper={handleMenuClick}
           onChange={handleMenuClick}
         />
@@ -271,14 +273,14 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
                 }}
                 popupMatchSelectWidth={false}
                 allowClear
-                notFoundContent='Sorry, no artist found'
+                notFoundContent='Sorry, no performers found'
                 variant='borderless'
                 options={options.map(artist => ({
                   artistID: artist._id,
                   value: `${artist.firstName} ${artist.lastName}`,
                   label: artistsDropdownDisplay(artist)
                 }))}
-                placeholder='Search Entertainer'
+                placeholder='Search Performer'
                 filterOption={filterOption}
                 onSelect={handleChangeArtist}
                 id={0}

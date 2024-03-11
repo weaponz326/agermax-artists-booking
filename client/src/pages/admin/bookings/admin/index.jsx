@@ -19,6 +19,7 @@ import dayjs from 'dayjs'
 
 //Import from Material UI Components
 import TextField from '@mui/material/TextField'
+import TextareaAutosize from '@mui/material/TextareaAutosize'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -909,6 +910,7 @@ export const BookingsModalContent = ({
             value={formData.otherComments}
             rows={5}
           />
+          <TextareaAutosize />
 
           {user && user.role != 'artist' && (
             <button

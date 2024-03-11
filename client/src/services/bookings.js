@@ -40,6 +40,16 @@ export async function updateBooking(bookingData) {
   }
 }
 
+export async function getNextUpcomingApprovedBooking() {
+  try {
+    const response = await axios.get(`${baseUrl}/next-upcoming-approved`)
+    return response.data
+  } catch (error) {
+    console.log('Error Updating booking: ', error)
+    throw error // Re-throwing the error so that it can be handled where the function is called
+  }
+}
+
 export async function deleteBookingById(id) {
   try {
     const { data } = await axios.delete(`${baseUrl}/bookings/${id}`)

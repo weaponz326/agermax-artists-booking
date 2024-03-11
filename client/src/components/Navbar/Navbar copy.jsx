@@ -111,7 +111,7 @@ const Search = ({ displayNavItems, navItemsOpen }) => {
                 </form>
               ) : (
                 <span>
-                  <p>Hot Artists</p>
+                  <p>Hot Performers</p>
                 </span>
               )}
             </div>

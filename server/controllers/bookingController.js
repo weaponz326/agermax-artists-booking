@@ -206,6 +206,24 @@ exports.getAllApprovedBookings = async (req, res) => {
   }
 };
 
+exports.getNextUpcomingApprovedBooking = async (req, res) => {
+  try {
+    // Get the current date
+    const currentDate = dayjs();
+
+    // Find the next upcoming approved booking compared to the current date
+    const nextBooking = await Booking.findOne({
+      status: "approved",
+      dateTimeRequested: { $gt: currentDate.toDate() },
+    }).sort({ dateTimeRequested: 1 });
+
+    res.status(200).json({ nextBooking });
+  } catch (error) {
+    console.error("Error retrieving next upcoming approved booking:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 exports.getApprovedBookingsByOrganizer = async (req, res) => {
   const { organizerID } = req.params;
 
