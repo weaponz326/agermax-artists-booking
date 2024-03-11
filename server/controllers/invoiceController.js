@@ -22,6 +22,7 @@ exports.getAllInvoice = async (req, res) => {
       const booking = invoice.booking || {};
       const organizer = booking.organizerID || {};
       const artist = booking.artistID || {};
+      const eventTitle = booking.eventTitle || "";
 
       const {
         _id: organizerId = "",
@@ -56,6 +57,7 @@ exports.getAllInvoice = async (req, res) => {
         artistId,
         artistFirstName,
         artistLastName,
+        eventTitle,
       };
     });
 
@@ -90,6 +92,7 @@ exports.getInvoiceById = async (req, res) => {
     const booking = invoice.booking || {};
     const organizer = booking.organizerID || {};
     const artist = booking.artistID || {};
+    const eventTitle = booking.eventTitle || "";
 
     const {
       _id: organizerId = "",
@@ -124,6 +127,7 @@ exports.getInvoiceById = async (req, res) => {
       artistId,
       artistFirstName,
       artistLastName,
+      eventTitle, 
     };
 
     res.json(transformedInvoice);

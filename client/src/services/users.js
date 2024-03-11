@@ -14,6 +14,15 @@ export async function getAllUsers() {
   }
 }
 
+export async function addUser(userData) {
+  try {
+    const { data } = await axios.post(`${baseUrl}/add-user`, userData)
+    return data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
 export async function getUserById(id) {
   try {
     const { data } = await axios.get(`${baseUrl}/users/${id}`)

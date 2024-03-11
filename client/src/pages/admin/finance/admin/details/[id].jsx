@@ -5,10 +5,13 @@ import styles from './FinancialDetails.module.css'
 import CustomMenuItem from 'src/components/AdminPagesSharedComponents/CustomMenuItem/CustomMenuItem'
 import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import { Calendar, Note } from 'iconsax-react'
-import InvoiceProvider, { useInvoiceContext } from 'src/providers/InvoiceProvider'
+import { useInvoiceContext } from 'src/providers/InvoiceProvider'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { useAuth } from 'src/hooks/useAuth'
+import { updateInvoice } from 'src/services/invoice'
+import { Snackbar, Alert } from '@mui/material'
+import Link from 'next/link'
 
 const FinancialDetailsPage = () => {
   const router = useRouter()
@@ -19,6 +22,51 @@ const FinancialDetailsPage = () => {
   const [error, setError] = useState('')
   const { user } = useAuth()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const { setIsUpdated } = useInvoiceContext()
+
+  // State to store the selected currency
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR') // Default currency for Greece is Euro (EUR)
+  const [selectedCurrencySymbol, setSelectedCurrencySymbol] = useState('€')
+  // Function to handle currency change
+
+  // Define currency symbols
+  const currencySymbols = {
+    EUR: '€', // Euro
+    USD: '$', // US Dollar
+    GBP: '£', // British Pound
+    JPY: '¥', // Japanese Yen
+    AUD: 'A$', // Australian Dollar
+    CAD: 'C$', // Canadian Dollar
+    CHF: 'Fr', // Swiss Franc
+    CNY: '¥', // Chinese Yuan
+    NZD: 'NZ$', // New Zealand Dollar
+    INR: '₹' // Indian Rupee
+  }
+  /****************SnackBar Options***************/
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info')
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
+
+  /****************Invoice Data***************/
+  const [invoiceData, setInvoiceData] = useState({})
+  const [grandTotalAmount, setGrandTotalAmount] = useState('')
+
+  //Grand Total Calculations
+  useEffect(() => {
+    const calculatedAmt = (
+      Number(invoiceData?.amount || 0) -
+      Number(invoiceData?.amount || 0) * Number(invoiceData?.discount / 100 || 0) +
+      Number(invoiceData?.amount || 0) * Number(invoiceData?.tax / 100 || 0)
+    ).toFixed(2)
+    setGrandTotalAmount(calculatedAmt)
+    setSelectedCurrencySymbol(currencySymbols[selectedCurrency])
+  }, [invoiceData, selectedCurrency])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +75,7 @@ const FinancialDetailsPage = () => {
       try {
         const { data } = await axios.get(`${baseUrl}/${type}/${id}`) // Ensure endpoint matches your API route
         setDetails(data)
+        setInvoiceData({ ...data })
       } catch (err) {
         console.error('Error fetching details:', err)
         setError('Failed to fetch details')
@@ -36,7 +85,8 @@ const FinancialDetailsPage = () => {
     }
 
     if (id && type) fetchData()
-  }, [id, type, baseUrl])
+    console.log(invoiceData)
+  }, [id, type, baseUrl, snackbarOpen])
 
   /***********Fetch Booking Details ************/
   useEffect(() => {
@@ -54,26 +104,41 @@ const FinancialDetailsPage = () => {
     }
 
     if (details !== null && type === 'invoice') fetchData()
-    console.log(details)
+    // console.log(details)
   }, [details, type])
 
-  /****************Invoice Data***************/
-  const [invoiceData, setInvoiceData] = useState({
-    booking: details?.booking,
-    amount: details?.amount || 0,
-    discount: details?.discount || 0,
-    tax: details?.tax || 0,
-    email: details?.email || '',
-    status: details?.status || 'unpaid',
-    invoiceDate: details?.invoiceDate || dayjs(),
-    paymentDueDate: details?.paymentDueDate || dayjs().add(14, 'day')
-  })
+  /***********Invoice Data Changes handlers ************/
 
   const handleChange = e => {
     setInvoiceData({
       ...invoiceData,
       [e.target.name]: e.target.value
     })
+    console.log(invoiceData)
+  }
+
+  const handleInvoiceUpdate = async () => {
+    try {
+      const updatedInvoicedData = { ...invoiceData, amount: grandTotalAmount, currency: selectedCurrency }
+      const updatedInvoice = await updateInvoice(updatedInvoicedData)
+      console.log('Invoice Updated Successfully! : ', updatedInvoice)
+      setSnackbarMessage('Invoice Updated Successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsUpdated(true)
+    } catch (error) {
+      console.error('Error updating invoice: ', error)
+      // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error updating invoice!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    } finally {
+      setIsUpdated(false)
+    }
+  }
+
+  const handleCurrencyChange = event => {
+    setSelectedCurrency(event.target.value)
   }
 
   /****************Rendering***************/
@@ -81,7 +146,6 @@ const FinancialDetailsPage = () => {
   if (loading) return <div className={styles.loading}>Loading...</div>
   if (error) return <div className={styles.error}>Error: {error}</div>
   return (
-    // <InvoiceProvider>
     <div className={styles.financialDetailsPage}>
       {/* Condition Rendering of Preview and Details */}
       {type === 'invoice' && user.role === 'admin' && (
@@ -89,9 +153,9 @@ const FinancialDetailsPage = () => {
           <div className={styles.organizerDetails}>
             <h3 className={styles.sectionUnderLined}>Event Organizer</h3>
             <p>
-              {details.organizerFirstName} {details.organizerLastName}
+              {invoiceData.organizerFirstName} {invoiceData.organizerLastName}
             </p>
-            <p>Payment ID: {details._id}</p>
+            <p>Invoice ID: {invoiceData._id}</p>
           </div>
           <div className={styles.paymentItemsDetails}>
             <div className={styles.priceTotal}>
@@ -106,7 +170,7 @@ const FinancialDetailsPage = () => {
                 <tbody>
                   <tr>
                     <td>{bookingDetails.eventTitle}</td>
-                    <td className={styles.underlinedCell}>Sub-Total</td>
+                    <td className={styles.underlinedCell}>Sub-Total {`(${selectedCurrency})`} </td>
                     <td className={styles.underlinedCell}>
                       <input
                         type='number'
@@ -120,31 +184,40 @@ const FinancialDetailsPage = () => {
                   </tr>
                   <tr>
                     <td></td>
-                    <td className={styles.underlinedCell}>Add Discount</td>
+                    <td className={styles.underlinedCell}>Discount (%)</td>
                     <td className={styles.underlinedCell}>
                       <input
                         className={`${styles.itemName} ${styles.itemPrice}`}
-                        value={invoiceData.discount}
+                        value={Number(invoiceData.discount)}
                         name='discount'
                         onChange={handleChange}
                         type='number'
                         min={0}
+                        max={100}
+                        defaultValue={Number(0)}
                       />
                     </td>
                   </tr>
                   <tr>
                     <td></td>
-                    <td className={styles.underlinedCell}>Add Tax</td>
+                    <td className={styles.underlinedCell}>Add Tax (%)</td>
                     <td className={styles.underlinedCell}>
                       <input
                         className={`${styles.itemName} ${styles.itemPrice}`}
-                        value={invoiceData.tax}
+                        value={Number(invoiceData?.tax || 0)}
                         name='tax'
                         onChange={handleChange}
                         type='number'
                         min={0}
+                        max={100}
+                        defaultValue={Number(0)}
                       />
                     </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td className={styles.underlinedCell}>Grand Total {`(${selectedCurrency})`}</td>
+                    <td className={styles.underlinedCell}>{grandTotalAmount}</td>
                   </tr>
                 </tbody>
               </table>
@@ -155,7 +228,16 @@ const FinancialDetailsPage = () => {
               menuContainer={styles.customMenuItemContainer}
               labelClassName={styles.customMenuItemLabel}
               label='Payment Details'
-              subMenuItems={[<PaymentSubItems details={details} invoiceData={invoiceData} />]}
+              subMenuItems={[
+                <PaymentSubItems
+                  details={details}
+                  invoiceData={invoiceData}
+                  handleCurrencyChange={handleCurrencyChange}
+                  selectedCurrency={selectedCurrency}
+                  setSelectedCurrency={setSelectedCurrency}
+                  currencySymbols={currencySymbols}
+                />
+              ]}
             />
             <CustomMenuItem
               menuContainer={styles.customMenuItemContainer}
@@ -166,7 +248,19 @@ const FinancialDetailsPage = () => {
               ]}
             />
           </div>
-          <TabButton className={styles.saveChangesBtn}>Save Changes</TabButton>
+          <TabButton className={styles.saveChangesBtn} onClick={handleInvoiceUpdate}>
+            Save Changes
+          </TabButton>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'down', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       )}
 
@@ -195,7 +289,7 @@ const FinancialDetailsPage = () => {
         </div>
         <div className={styles.previewSummary}>
           <h3>
-            {invoiceData.amount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
+            {selectedCurrencySymbol} {grandTotalAmount} due {dayjs(invoiceData.paymentDueDate).format('YYYY-MM-DD')}
           </h3>
           <div className={styles.bill}>
             <div className={styles.billFrom}>
@@ -209,29 +303,55 @@ const FinancialDetailsPage = () => {
               </p>
             </div>
           </div>
+
+          {/* Which Table to display  here depending on the type */}
           {type === 'invoice' && (
-            <InvoiceTable details={details} bookingDetails={bookingDetails} invoiceData={invoiceData} />
+            <InvoiceTable
+              details={details}
+              bookingDetails={bookingDetails}
+              invoiceData={invoiceData}
+              selectedCurrency={selectedCurrency}
+            />
           )}
           {type === 'payments' && <PaymentTable details={details} />}
-          {/* <CustomMenuItem
-              menuContainer={styles.customMenuItemContainer}
-              labelClassName={styles.customMenuItemLabel}
-              label='Edit Payment Details'
-              subMenuItems={[<EditSubItems invoiceID={details._id} />]}
-            /> */}
         </div>
+        {user.role === 'organizer' && (
+          <div>
+            <h4>Payment Gateways</h4>
+            <ul>
+              <li>
+                <Link
+                  className={styles.paymentGatewayLink}
+                  href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
+                >
+                  Stripe Payment
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
-    // </InvoiceProvider>
   )
 }
 
-export const PaymentSubItems = ({ details, invoiceData }) => {
+export const PaymentSubItems = ({
+  details,
+  invoiceData,
+  selectedCurrency,
+  setSelectedCurrency,
+  handleCurrencyChange,
+  currencySymbols
+}) => {
   return (
     <div>
       <p>Due In</p>
       <TabButton>In {dayjs(invoiceData.paymentDueDate).diff(dayjs(invoiceData.invoiceDate), 'day')} days</TabButton>
       <h4>Payment Gateways</h4>
+      <div className={styles.paymentGateway}>
+        <input type='checkbox' name='' id='' checked />
+        <span>Stripe Payment</span>
+      </div>
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Credit Card</span>
@@ -239,6 +359,17 @@ export const PaymentSubItems = ({ details, invoiceData }) => {
       <div className={styles.paymentGateway}>
         <input type='checkbox' name='' id='' />
         <span>Bank Transfer</span>
+      </div>
+      {/* Currency select field */}
+      <div className={styles.currencyField}>
+        <label htmlFor='currency'>Select Currency: </label>
+        <select id='currency' value={selectedCurrency} onChange={handleCurrencyChange}>
+          {Object.entries(currencySymbols).map(([currencyCode, currencySymbol]) => (
+            <option key={currencyCode} value={currencyCode}>
+              {currencySymbol} {currencyCode}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   )
@@ -282,7 +413,7 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
   )
 }
 
-export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
+export const InvoiceTable = ({ details, bookingDetails, selectedCurrency }) => {
   return (
     <table className={styles.priceTotalTable}>
       <thead>
@@ -295,18 +426,27 @@ export const InvoiceTable = ({ details, bookingDetails, invoiceData }) => {
       <tbody>
         <tr>
           <td>{bookingDetails.eventTitle}</td>
-          <td className={styles.underlinedCell}>Sub-Total</td>
+          <td className={styles.underlinedCell}>
+            Sub-Total {`(${details.currency ? details.currency : selectedCurrency})`}
+          </td>
           <td className={styles.underlinedCell}>{details.amount}</td>
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Add Discount</td>
+          <td className={styles.underlinedCell}>Discount(%)</td>
           <td className={styles.underlinedCell}>{details.discount}</td>
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>Add Tax</td>
+          <td className={styles.underlinedCell}>Add Tax (%)</td>
           <td className={styles.underlinedCell}>{details.tax}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td className={styles.underlinedCell}>
+            Grand Total {`(${details.currency ? details.currency : selectedCurrency})`}
+          </td>
+          <td className={styles.underlinedCell}>{details.amount.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>

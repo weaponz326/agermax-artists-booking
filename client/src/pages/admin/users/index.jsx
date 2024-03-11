@@ -1,9 +1,5 @@
 // ** React Imports
 import { useState, useEffect } from 'react'
-
-// import { UserOutlined } from '@ant-design/icons'
-// import { Avatar } from 'antd'
-
 import UsersListTable from 'src/components/AdminPagesSharedComponents/UsersListTable/UsersListTable'
 import axios from 'axios'
 import SearchBar from 'src/components/AdminPagesSharedComponents/SearchBar/SearchBar'
@@ -35,7 +31,6 @@ const UsersListPage = () => {
 
   useEffect(() => {
     if (users) {
-      console.log('Updated!')
       setUsersList(users)
     }
   }, [users])
@@ -173,6 +168,7 @@ export const AddUserModalContent = ({
   setSnackbarOpen
 }) => {
   const [submitting, setSubmitting] = useState(false)
+  const { addUser, setIsUsersListUpdated } = useUsers()
 
   // ** Router for redirection after successful registration
   const router = useRouter()
@@ -204,24 +200,21 @@ export const AddUserModalContent = ({
     setSubmitting(true)
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/add-user`, userData)
-      if (response.status === 201) {
-        // Assuming response.data.userData contains the newly added user
-        setUsersList(prevUsers => [...prevUsers, response.data.userData])
-        hideModal()
-        setSnackbarMessage('User added successfully')
-        setSnackbarSeverity('success')
-        setSnackbarOpen(true)
-      } else {
-        router.push('/admin/users') // Or redirect to a 'success' page
-      }
+      const { data } = await addUser(userData)
+      console.log('New user added successfully ', data)
+      setSnackbarMessage('User added successfully')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsUsersListUpdated(true)
+      hideModal()
     } catch (err) {
-      console.error('An error occurred while adding th user', err.response?.data?.message || err.message)
-      setSnackbarMessage(err.response?.data?.message)
+      console.error('An error occurred while adding a user', err.message)
+      setSnackbarMessage('Error adding user')
       setSnackbarSeverity('error')
       setSnackbarOpen(true)
     } finally {
       setSubmitting(false)
+      setIsUsersListUpdated(false)
     }
   }
 

@@ -1,21 +1,12 @@
 import styles from './AdminFinance.module.css'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Table, Space } from 'antd'
-import SlideInModal from 'src/components/AdminPagesSharedComponents/SlidingModal/SlideInModal'
+import { Table } from 'antd'
 
 //Import Internal COmponents
-import TabButton from 'src/components/AdminPagesSharedComponents/ViewTab/TabButton'
 import AdminPagesNavBar from 'src/components/AdminPagesSharedComponents/AdminPagesNavBar/AdminPagesNavBar'
 
-//Import from Material UI Components
-import TextField from '@mui/material/TextField'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
 
 //Import Providers & services
 import { usePaymentsContext } from 'src/providers/PaymentsProvider'
@@ -29,6 +20,13 @@ const Finance = () => {
   const { paymentsData } = usePaymentsContext()
   const [invoiceDataSource, setInvoiceDataSource] = useState([])
   const [paymentsDataSource, setPaymentsDataSource] = useState([])
+  const [queriedInvoiceData, setQueriedInvoiceData] = useState(null)
+  const [queriedPaymentData, setQueriedPaymentData] = useState(null)
+
+  useEffect(() => {
+    setQueriedInvoiceData(invoiceDataSource)
+    setQueriedPaymentData(paymentsDataSource)
+  }, [paymentsDataSource, invoiceDataSource])
 
   useEffect(() => {
     if (user && invoiceData && paymentsData) {
@@ -50,19 +48,16 @@ const Finance = () => {
         activeView={activeView}
         setActiveView={setActiveView}
         invoiceDataSource={invoiceDataSource}
-        setInvoiceDataSource={setInvoiceDataSource}
         paymentsDataSource={paymentsDataSource}
-        setPaymentsDataSource={setPaymentsDataSource}
+        setQueriedInvoiceData={setQueriedInvoiceData}
+        setQueriedPaymentData={setQueriedPaymentData}
       />
       <AdminFinance
         activeView={activeView}
-        setActiveView={setActiveView}
-        invoiceData={invoiceData}
-        paymentsData={paymentsData}
-        invoiceDataSource={invoiceDataSource}
-        setInvoiceDataSource={setInvoiceDataSource}
-        paymentsDataSource={paymentsDataSource}
-        setPaymentsDataSource={setPaymentsDataSource}
+        queriedInvoiceData={queriedInvoiceData}
+        queriedPaymentData={queriedPaymentData}
+        setQueriedInvoiceData={setQueriedInvoiceData}
+        setQueriedPaymentData={setQueriedPaymentData}
       />
     </>
   )
@@ -70,19 +65,16 @@ const Finance = () => {
 
 export default Finance
 
-export const AdminFinance = ({
-  activeView,
-  setActiveView,
-  invoiceData,
-  paymentsData,
-  invoiceDataSource,
-  setInvoiceDataSource,
-  paymentsDataSource,
-  setPaymentsDataSource
-}) => {
-  /****************Fetch Details for table display***************/
-
+export const AdminFinance = ({ activeView, queriedInvoiceData, queriedPaymentData }) => {
+  /****************Set up columns for table display***************/
   const invoicesColumns = [
+    {
+      title: 'Event',
+      dataIndex: 'eventTitle',
+      key: 'eventTitle',
+      sorter: (a, b) => b.eventTitle.localeCompare(a.eventTitle),
+      render: (text, event) => text
+    },
     {
       title: 'Organizer',
       dataIndex: 'organizerFirstName',
@@ -90,7 +82,6 @@ export const AdminFinance = ({
       sorter: (a, b) => b.organizerFirstName.localeCompare(a.organizerFirstName),
       render: (text, booker) => `${booker.organizerFirstName} ${booker.organizerLastName}`
     },
-
     {
       title: 'Phone',
       dataIndex: 'organizerContactPhone',
@@ -164,14 +155,14 @@ export const AdminFinance = ({
     return (
       <div className={styles.financePage}>
         <h4>Invoices</h4>
-        <Table columns={invoicesColumns} dataSource={invoiceDataSource} />
+        <Table columns={invoicesColumns} dataSource={queriedInvoiceData} />
       </div>
     )
   } else if (activeView === 'payments') {
     return (
       <div className={styles.financePage}>
         <h4>Payments</h4>
-        <Table columns={paymentsColumns} dataSource={paymentsDataSource} />
+        <Table columns={paymentsColumns} dataSource={queriedPaymentData} />
       </div>
     )
   }

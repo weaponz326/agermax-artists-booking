@@ -10,15 +10,15 @@ function useBookingFormData(booking) {
     _id: booking && booking._id,
     status: booking?.status || 'pending',
     organizerID: booking?.organizerID || '',
-    eventTitle: booking?.eventTitle || 'Event Name/Title not provided yet.',
+    eventTitle: booking?.eventTitle || '',
     dateTimeRequested: booking ? dayjs(booking.dateTimeRequested) : '',
     startTime: booking ? dayjs(booking.startTime) : '',
     endTime: booking ? dayjs(booking.endTime) : '',
     getInTime: booking ? dayjs(booking.getInTime) : '',
     numberOfGuests: booking?.numberOfGuests || '',
     ageRange: booking?.ageRange || '',
-    locationVenue: booking?.locationVenue || 'Location not provided yet.',
-    streetAddress: booking?.streetAddress || 'Street Address not provided yet.',
+    locationVenue: booking?.locationVenue || '',
+    streetAddress: booking?.streetAddress || '',
     artistID: booking?.artistID || '',
     availableTechnology: booking?.availableTechnology || '',
     otherComments: booking?.otherComments || '',
@@ -36,7 +36,6 @@ function useBookingFormData(booking) {
       artistID: artist ? artist : formData.artistID,
       organizerID: user
     })
-    console.log(formData)
   }
 
   const handleChangeWithEvent = e => {
@@ -44,7 +43,6 @@ function useBookingFormData(booking) {
       ...formData,
       [e.target.name]: e.target.value
     })
-    console.log(formData)
   }
 
   return { formData, setFormData, handleChangeFormData, handleChangeWithEvent }

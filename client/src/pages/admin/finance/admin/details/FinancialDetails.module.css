@@ -315,3 +315,10 @@
   text-align: right;
   border-bottom: 1px solid #000;
 }
+
+.paymentGatewayLink:hover {
+  text-decoration: underline;
+}
+.currencyField {
+  margin-top: 0.5rem;
+}

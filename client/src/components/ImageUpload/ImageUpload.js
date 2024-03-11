@@ -52,8 +52,8 @@ const ImageUpload = ({ formData, setFormData, profilePhoto, setProfilePhoto }) =
     console.log(chosenFile)
     setFile(chosenFile)
     // setProfilePhoto(chosenFile)
-    setFormData({ ...formData, profilePhoto: chosenFile })
-    console.log(formData)
+    // setFormData({ ...formData, profilePhoto: chosenFile })
+    // console.log(formData)
   }
   const resetUploader = () => {
     setFile(null)

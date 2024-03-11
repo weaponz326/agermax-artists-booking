@@ -7,6 +7,7 @@ const UsersProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isUsersListUpdated, setIsUsersListUpdated] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +22,7 @@ const UsersProvider = ({ children }) => {
     }
 
     fetchData()
-  }, [])
+  }, [isUsersListUpdated])
 
   const updateUser = async (userID, userData) => {
     try {
@@ -40,6 +41,13 @@ const UsersProvider = ({ children }) => {
     }
   }
 
+  const addUser = async userData => {
+    const newUser = await services.addUser(userData)
+    return newUser
+
+    // setUsers(users.filter(u => u._id !== userID))
+  }
+
   const deleteUser = async userID => {
     const deletedUser = await services.deleteUserById(userID)
     // Update local state to remove deleted booking
@@ -47,7 +55,9 @@ const UsersProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ users, setUsers, loading, error, updateUser, deleteUser }}>
+    <UserContext.Provider
+      value={{ users, setUsers, loading, error, updateUser, deleteUser, addUser, setIsUsersListUpdated }}
+    >
       {children}
     </UserContext.Provider>
   )
