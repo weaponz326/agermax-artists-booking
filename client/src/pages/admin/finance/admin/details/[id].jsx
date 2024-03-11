@@ -60,9 +60,9 @@ const FinancialDetailsPage = () => {
   //Grand Total Calculations
   useEffect(() => {
     const calculatedAmt = (
-      Number(invoiceData?.amount || 0) -
-      Number(invoiceData?.amount || 0) * Number(invoiceData?.discount / 100 || 0) +
-      Number(invoiceData?.amount || 0) * Number(invoiceData?.tax / 100 || 0)
+      Number(invoiceData?.subTotal || 0) -
+      Number(invoiceData?.subTotal || 0) * Number(invoiceData?.discount / 100 || 0) +
+      Number(invoiceData?.subTotal || 0) * Number(invoiceData?.tax / 100 || 0)
     ).toFixed(2)
     setGrandTotalAmount(calculatedAmt)
     setSelectedCurrencySymbol(currencySymbols[selectedCurrency])
@@ -176,8 +176,8 @@ const FinancialDetailsPage = () => {
                         type='number'
                         min={0}
                         className={`${styles.itemName} ${styles.itemPrice}`}
-                        value={invoiceData.amount}
-                        name='amount'
+                        value={invoiceData.subTotal}
+                        name='subTotal'
                         onChange={handleChange}
                       />
                     </td>
@@ -429,7 +429,7 @@ export const InvoiceTable = ({ details, bookingDetails, selectedCurrency }) => {
           <td className={styles.underlinedCell}>
             Sub-Total {`(${details.currency ? details.currency : selectedCurrency})`}
           </td>
-          <td className={styles.underlinedCell}>{details.amount}</td>
+          <td className={styles.underlinedCell}>{details.subTotal}</td>
         </tr>
         <tr>
           <td></td>

@@ -41,6 +41,7 @@ exports.getAllInvoice = async (req, res) => {
       return {
         _id: invoice._id,
         amount: invoice.amount,
+        subTotal: invoice.subTotal,
         tax: invoice.tax,
         currency: invoice.currency,
         discount: invoice.discount,
@@ -115,6 +116,7 @@ exports.getInvoiceById = async (req, res) => {
       amount: invoice.amount,
       tax: invoice.tax,
       currency: invoice.currency,
+      subTotal: invoice.subTotal,
       discount: invoice.discount,
       email: invoice.email,
       status: invoice.status,
