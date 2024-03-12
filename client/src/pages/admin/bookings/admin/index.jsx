@@ -46,6 +46,7 @@ import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
+import { uploadBookingMainBanner } from 'src/services/bookings'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -752,6 +753,14 @@ export const BookingsModalContent = ({
     // setFormData({ ...formData, gallery: fileList })
   }
 
+  const handleFileUpload = async (booking, file) => {
+    try {
+      const response = await uploadBookingMainBanner(booking, file)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   /*********************Rendering**********************/
   if (modalContentView === 'details') {
     return (
@@ -1015,6 +1024,8 @@ export const BookingsModalContent = ({
             setFormData={setFormData}
             fileList={fileList}
             setFileList={setFileList}
+            handleFileUpload={handleFileUpload}
+            booking={booking}
           />
         </div>
         <div className={styles.divider}></div>

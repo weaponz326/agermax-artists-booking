@@ -59,7 +59,7 @@ const bookingSchema = new mongoose.Schema({
     default: false,
   },
   mainBanner: {
-    type: [String],
+    type: String,
   },
   gallery: {
     type: [String],

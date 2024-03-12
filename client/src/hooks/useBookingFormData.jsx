@@ -22,10 +22,12 @@ function useBookingFormData(booking) {
     artistID: booking?.artistID || '',
     availableTechnology: booking?.availableTechnology || '',
     otherComments: booking?.otherComments || '',
+    mainBanner: booking?.mainBanner || '',
     gallery: booking?.gallery || [],
     genre: booking?.genre || [],
     invoiced: booking?.invoiced || false,
     createdAt: booking?.createdAt || dayjs(),
+    updatedAt: booking?.updatedAt || dayjs(),
     isNew: booking?.isNew || true
   })
 

@@ -40,6 +40,23 @@ export async function updateBooking(bookingData) {
   }
 }
 
+export const uploadBookingMainBanner = async (booking, mainBannerFile) => {
+  try {
+    const formData = new FormData()
+    formData.append('mainBanner', mainBannerFile)
+
+    const response = await axios.put(`${baseUrl}/bookings/${booking._id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
 export async function getNextUpcomingApprovedBooking() {
   try {
     const response = await axios.get(`${baseUrl}/next-upcoming-approved`)

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Modal, Upload } from 'antd'
+import styles from './UploadPictures.module.css'
 
 const getBase64 = file =>
   new Promise((resolve, reject) => {
@@ -9,49 +10,24 @@ const getBase64 = file =>
     reader.onload = () => resolve(reader.result)
     reader.onerror = error => reject(error)
   })
-const UploadPictures = ({ listType, maxCount, formData, setFormData, fileList, setFileList }) => {
+
+const UploadPictures = ({
+  listType,
+  maxCount,
+  booking,
+  formData,
+  setFormData,
+  fileList,
+  setFileList,
+  handleFileUpload
+}) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
+  //Custom Request
+  const [imageUrl, setImageUrl] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  // const sampleData = [
-  //   {
-  //     uid: '-1',
-  //     name: 'image.png',
-  //     status: 'done',
-  //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-  //   },
-  //   {
-  //     uid: '-2',
-  //     name: 'image.png',
-  //     status: 'done',
-  //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-  //   },
-  //   {
-  //     uid: '-3',
-  //     name: 'image.png',
-  //     status: 'done',
-  //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-  //   },
-  //   {
-  //     uid: '-4',
-  //     name: 'image.png',
-  //     status: 'done',
-  //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-  //   },
-  //   {
-  //     uid: '-xxx',
-  //     percent: 50,
-  //     name: 'image.png',
-  //     status: 'uploading',
-  //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-  //   },
-  //   {
-  //     uid: '-5',
-  //     name: 'image.png',
-  //     status: 'error'
-  //   }
-  // ]
   const handleCancel = () => setPreviewOpen(false)
   const handlePreview = async file => {
     if (!file.url && !file.preview) {
@@ -66,6 +42,11 @@ const UploadPictures = ({ listType, maxCount, formData, setFormData, fileList, s
     setFileList(newFileList)
     // setFormData({ ...formData, gallery: newFileList })
     // console.log(formData)
+    console.log(newFileList)
+  }
+
+  const onCustomFileUpload = () => {
+    handleFileUpload(booking, fileList)
   }
 
   const uploadButton = (
@@ -75,6 +56,7 @@ const UploadPictures = ({ listType, maxCount, formData, setFormData, fileList, s
         background: 'none'
       }}
       type='button'
+      className={styles.uploadPhotoBtn}
     >
       <PlusOutlined />
       <div
@@ -96,6 +78,7 @@ const UploadPictures = ({ listType, maxCount, formData, setFormData, fileList, s
         maxCount={maxCount ? maxCount : undefined}
         onPreview={handlePreview}
         onChange={handleChange}
+        customRequest={onCustomFileUpload}
       >
         {fileList.length >= 8 ? null : uploadButton}
       </Upload>
