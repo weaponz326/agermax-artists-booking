@@ -24,10 +24,12 @@ const getAllUsers = async (req, res) => {
 
     let users = await User.find(filter).select("-password").lean();
 
-    // Add fullName to each user object
     users = users.map((user) => ({
-      fullName: `${user.firstName} ${user.lastName}`,
       ...user,
+      fullName: `${user.firstName} ${user.lastName}`,
+      profilePhoto: user.profilePhoto
+        ? `${process.env.APP_URL}${user.profilePhoto}`
+        : "",
     }));
 
     res.json(users);
@@ -67,7 +69,9 @@ const getUserProfile = async (req, res) => {
           fullName: firstName + " " + lastName,
           email,
           role,
-          profilePhoto,
+          profilePhoto: req.user.profilePhoto
+            ? `${process.env.APP_URL}${req.user.profilePhoto}`
+            : "",
           contactPhone,
           address,
           nickName,
@@ -92,11 +96,19 @@ const getUserProfile = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const userId = req.params.id; // Assuming you're getting the user ID from the URL parameters
-    const user = await User.findById(userId).select("-password"); // Exclude the password field for security
+    const userId = req.params.id;
+    let user = await User.findById(userId).select("-password").lean(); // Use lean() for easier object modification
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prepend APP_URL to profilePhoto if it exists
+    if (user.profilePhoto) {
+      user = {
+        ...user,
+        profilePhoto: `${process.env.APP_URL}${user.profilePhoto}`,
+      };
     }
 
     res.json(user);
@@ -107,20 +119,27 @@ const getUserById = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   const userId = req.user._id;
-  const { password, ...updateData } = req.body; 
+  const { password, ...updateData } = req.body;
 
   try {
-    const updateObj = { ...updateData };
-
     if (req.file) {
-      const baseUrl = req.protocol + '://' + req.get('host'); // Dynamically get the base URL
-      updateObj.profilePhoto = baseUrl + '/uploads/user/profile_photo/' + req.file.filename; // Construct the full URL
+      updateData.profilePhoto =
+        "/uploads/user/profile_photo/" + req.file.filename;
     }
 
-    const userData = await User.findByIdAndUpdate(userId, updateObj, { new: true }).select("-password");
+    let userData = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    })
+      .select("-password")
+      .lean(); // Use lean for simpler object modification
 
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    // Dynamically construct the full URL for the profilePhoto if it exists
+    if (userData.profilePhoto) {
+      userData.profilePhoto = `${process.env.APP_URL}${userData.profilePhoto}`;
     }
 
     res.json({
@@ -132,25 +151,26 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
-
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
-  const { password, ...updateData } = req.body; 
+  const { password, ...updateData } = req.body;
 
   try {
-    const userExists = await User.exists({ _id: targetUserId });
-    if (!userExists) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const updateObj = { ...updateData };
-
     if (req.file) {
-      const baseUrl = req.protocol + '://' + req.get('host'); // Dynamically get the base URL
-      updateObj.profilePhoto = baseUrl + '/uploads/user/profile_photo/' + req.file.filename; // Construct the full URL
+      updateData.profilePhoto =
+        "/uploads/user/profile_photo/" + req.file.filename;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateObj, { new: true }).select("-password");
+    let updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
+      new: true,
+    })
+      .select("-password")
+      .lean(); // Use lean for simpler object modification
+
+    // Dynamically construct the full URL for the profilePhoto if it exists
+    if (updatedUser.profilePhoto) {
+      updatedUser.profilePhoto = `${process.env.APP_URL}${updatedUser.profilePhoto}`;
+    }
 
     res.json({
       message: "User details updated successfully",
@@ -160,8 +180,6 @@ const updateUserDetailsById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
- 
 
 const deleteUser = async (req, res) => {
   try {
