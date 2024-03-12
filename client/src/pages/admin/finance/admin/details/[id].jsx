@@ -217,7 +217,7 @@ const FinancialDetailsPage = () => {
                   <tr>
                     <td></td>
                     <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>
-                      Grand Total {`(${selectedCurrency})`}
+                      Total Amount {`(${selectedCurrency})`}
                     </td>
                     <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>{grandTotalAmount}</td>
                   </tr>
@@ -449,7 +449,7 @@ export const FinanceDetailsTable = ({ details, bookingDetails, selectedCurrency,
         <tr>
           <td></td>
           <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>
-            Grand Total {`(${details.currency ? details.currency : selectedCurrency})`}
+            Total Amount {`(${details.currency ? details.currency : selectedCurrency})`}
           </td>
           <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>{details.amount.toFixed(2)}</td>
         </tr>
