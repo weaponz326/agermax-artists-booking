@@ -76,13 +76,13 @@ const EventCard = ({ booking }) => {
       const bookingArtist = await getUserById(booking.artistID)
       if (booking) {
         setBookingImage(booking.mainBanner)
+        console.log('booking banner', booking.mainBanner)
       } else {
         setBookingImage(bookingArtist.profilePhoto)
       }
     }
 
     fetchArtist()
-    console.log(booking)
   }, [booking])
 
   return (
