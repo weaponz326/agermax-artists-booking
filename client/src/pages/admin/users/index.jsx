@@ -422,13 +422,8 @@ export const EditUserModalContent = ({
     <>
       <div className={styles.modalCardContentPictureInput}>
         {/* {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />} */}
-        {/* <ImageUpload setFormData={setUserData} formData={userData} /> */}
-        <img
-          className={styles.profilePhoto}
-          src={`${baseUrl}/uploads/user/profile_photo/${userData.profilePhoto}`}
-          alt='Profile Photo'
-        />
-        {/* <div style={{ background: 'red', width: '200px', aspectRatio: '1' }}></div> */}
+        <ImageUpload setFormData={setUserData} formData={userData} />
+        {/* <img className={styles.profilePhoto} src={`${userData.profilePhoto}`} alt={<AvatarsImage />} /> */}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
         <TextField
@@ -441,6 +436,7 @@ export const EditUserModalContent = ({
           value={userData.firstName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
+          size='small'
         />
         <TextField
           placeholder='Last Name'
@@ -452,6 +448,7 @@ export const EditUserModalContent = ({
           value={userData.lastName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
+          size='small'
         />
 
         <TextField
@@ -465,6 +462,7 @@ export const EditUserModalContent = ({
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
           disabled
+          size='small'
         />
         <TextField
           placeholder='Phone'
@@ -476,6 +474,7 @@ export const EditUserModalContent = ({
           value={userData.contactPhone} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
           required
+          size='small'
         />
         <TextField
           placeholder='Address'
@@ -486,6 +485,7 @@ export const EditUserModalContent = ({
           id='address'
           value={userData.address} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          size='small'
         />
         <TextField
           placeholder='Biography'
@@ -496,6 +496,7 @@ export const EditUserModalContent = ({
           id='bio'
           value={userData.bio} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          // size='small'
         />
         <TextField
           placeholder='Nickname'
@@ -506,6 +507,7 @@ export const EditUserModalContent = ({
           id='nickname'
           value={userData.nickName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          size='small'
         />
         <TextField
           placeholder='Company Name'
@@ -516,6 +518,7 @@ export const EditUserModalContent = ({
           id='companyName'
           value={userData.companyName} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          size='small'
         />
         <TextField
           placeholder='Organization Number'
@@ -526,6 +529,7 @@ export const EditUserModalContent = ({
           id='organizationNumber'
           value={userData.organizationNumber} // @todo fix this when we have a real user to edit
           onChange={e => handleChange(e.target.name, e.target.value)}
+          size='small'
         />
         <div className={styles.modalCardContentUserProfile}>
           <div className={styles.modalCardContentUserProfileTitle}>Profile</div>
