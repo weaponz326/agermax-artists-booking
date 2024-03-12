@@ -757,7 +757,7 @@ export const BookingsModalContent = ({
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form className={styles.modalCardContentUserDetails} onSubmit={handleSubmit}>
-          <h3 style={{ margin: '0' }}>Booking Details</h3>
+          <h3 className={styles.contentHeading}>Booking Details</h3>
           <TextField
             placeholder='Event Title'
             className={styles.modalCardContentInputField}
@@ -1005,9 +1005,29 @@ export const BookingsModalContent = ({
     )
   } else if (modalContentView === 'gallery') {
     return (
-      <div className={styles.addGalleryContainer}>
-        <p>Your Gallery</p>
-        <UploadPictures formData={formData} setFormData={setFormData} fileList={fileList} setFileList={setFileList} />
+      <div className={styles.modalCardContentUserDetails}>
+        <h3 className={styles.contentHeading}>Event Gallery</h3>
+        <div className={styles.contentEventGallery}>
+          <div className={styles.contentSubHeading}>Main Banner</div>
+          <UploadPictures
+            maxCount={1}
+            formData={formData}
+            setFormData={setFormData}
+            fileList={fileList}
+            setFileList={setFileList}
+          />
+        </div>
+        <div className={styles.divider}></div>
+        <div className={styles.contentEventGallery}>
+          <div className={styles.contentSubHeading}>Other Photos</div>
+          <UploadPictures
+            listType='picture-card'
+            formData={formData}
+            setFormData={setFormData}
+            fileList={fileList}
+            setFileList={setFileList}
+          />
+        </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>
           <ArrowBack />
           Back to details
