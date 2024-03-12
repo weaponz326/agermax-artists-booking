@@ -1,5 +1,6 @@
 // controllers/userController.js
 const User = require("../models/User");
+require('dotenv').config();
 
 // Create User is handled by the register function in authController.js)
 
