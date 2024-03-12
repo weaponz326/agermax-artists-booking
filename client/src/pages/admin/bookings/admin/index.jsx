@@ -46,7 +46,7 @@ import { getUserById } from 'src/services/users'
 import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import { uploadBookingMainBanner } from 'src/services/bookings'
+import { uploadBookingBookingGallery, uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -588,7 +588,8 @@ export const BookingsModalContent = ({
   const { formData, setFormData, handleChangeFormData, handleChangeWithEvent } = useBookingFormData(booking)
 
   /****************Gallery********************/
-  const [fileList, setFileList] = useState(formData.gallery)
+  const [singleFileList, setSingleFileList] = useState([formData.mainBanner])
+  const [multiFileList, setMultiFileList] = useState(formData.gallery)
 
   /****************Save Button Text********************/
   const [saveButtonText, setSaveButtonText] = useState('')
@@ -753,12 +754,16 @@ export const BookingsModalContent = ({
     // setFormData({ ...formData, gallery: fileList })
   }
 
-  const handleFileUpload = async (booking, file) => {
-    try {
-      const response = await uploadBookingMainBanner(booking, file)
-    } catch (error) {
-      console.log(error)
-    }
+  const handleBookingBannerFileUpload = async ({ file, onSuccess, onError }) => {
+    console.log(file)
+    const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
+    console.log(updatedBooking)
+  }
+
+  const handleBookingGalleryUpload = async ({ file, onSuccess, onError }) => {
+    console.log(file)
+    const updatedBooking = await uploadBookingGallery(file, onSuccess, onError, booking)
+    console.log(updatedBooking)
   }
 
   /*********************Rendering**********************/
@@ -1022,10 +1027,11 @@ export const BookingsModalContent = ({
             maxCount={1}
             formData={formData}
             setFormData={setFormData}
-            fileList={fileList}
-            setFileList={setFileList}
-            handleFileUpload={handleFileUpload}
+            fileList={singleFileList}
+            setFileList={setSingleFileList}
+            singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
+            buttonText={'Set Banner Image'}
           />
         </div>
         <div className={styles.divider}></div>
@@ -1035,8 +1041,10 @@ export const BookingsModalContent = ({
             listType='picture-card'
             formData={formData}
             setFormData={setFormData}
-            fileList={fileList}
-            setFileList={setFileList}
+            maxCount={8}
+            fileList={multiFileList}
+            setFileList={setMultiFileList}
+            multiFileUpload={handleBookingGalleryUpload}
           />
         </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>
