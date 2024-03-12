@@ -44,11 +44,7 @@ export default function Carousel({ artist }) {
           <Image
             className={styles['carousel-img']}
             alt='Artist-Image'
-            src={
-              artist.profilePhoto
-                ? `${baseUrl}/uploads/user/profile_photo/${artist.profilePhoto}`
-                : '/images/artist-1.jpg'
-            }
+            src={artist.profilePhoto ? `${artist.profilePhoto}` : '/images/artist-1.jpg'}
             fill
             // loading='eager'
           />
