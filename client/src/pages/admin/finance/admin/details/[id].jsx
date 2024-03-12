@@ -216,8 +216,10 @@ const FinancialDetailsPage = () => {
                   </tr>
                   <tr>
                     <td></td>
-                    <td className={styles.underlinedCell}>Grand Total {`(${selectedCurrency})`}</td>
-                    <td className={styles.underlinedCell}>{grandTotalAmount}</td>
+                    <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>
+                      Grand Total {`(${selectedCurrency})`}
+                    </td>
+                    <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>{grandTotalAmount}</td>
                   </tr>
                 </tbody>
               </table>
@@ -269,7 +271,7 @@ const FinancialDetailsPage = () => {
         <div className={styles.previewHeader}>
           <div className={styles.invoiceDetails}>
             <div className={styles.previewHeaderInvoiceTitle}>
-              <h2>Invoice</h2>
+              <h2>{type === 'invoice' ? 'Invoice' : 'Payment'}</h2>
               <p>#001381</p>
             </div>
             <div className={styles.previewHeaderInvoiceLogo}>
@@ -305,16 +307,13 @@ const FinancialDetailsPage = () => {
             </div>
           </div>
 
-          {/* Which Table to display  here depending on the type */}
-          {type === 'invoice' && (
-            <InvoiceTable
-              details={details}
-              bookingDetails={bookingDetails}
-              invoiceData={invoiceData}
-              selectedCurrency={selectedCurrency}
-            />
-          )}
-          {type === 'payments' && <PaymentTable details={details} />}
+          <FinanceDetailsTable
+            details={details}
+            bookingDetails={bookingDetails}
+            invoiceData={invoiceData}
+            selectedCurrency={selectedCurrency}
+            type={type}
+          />
         </div>
         {user.role === 'organizer' ||
           ('admin' && (
@@ -322,12 +321,16 @@ const FinancialDetailsPage = () => {
               <h4>Payment Gateways</h4>
               <ul>
                 <li>
-                  <Link
-                    className={styles.paymentGatewayLink}
-                    href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
-                  >
-                    Stripe Payment
-                  </Link>
+                  {type === 'invoice' ? (
+                    <Link
+                      className={styles.paymentGatewayLink}
+                      href={`/admin/finance/admin/details/stripe-payment/${details._id}`}
+                    >
+                      Stripe Payment
+                    </Link>
+                  ) : (
+                    'Stripe Payment'
+                  )}
                 </li>
               </ul>
             </div>
@@ -415,7 +418,7 @@ export const AdvancedOptionsSubItems = ({ details, invoiceData, handleChange }) 
   )
 }
 
-export const InvoiceTable = ({ details, bookingDetails, selectedCurrency }) => {
+export const FinanceDetailsTable = ({ details, bookingDetails, selectedCurrency, type }) => {
   return (
     <table className={styles.priceTotalTable}>
       <thead>
@@ -445,44 +448,10 @@ export const InvoiceTable = ({ details, bookingDetails, selectedCurrency }) => {
         </tr>
         <tr>
           <td></td>
-          <td className={styles.underlinedCell}>
+          <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>
             Grand Total {`(${details.currency ? details.currency : selectedCurrency})`}
           </td>
-          <td className={styles.underlinedCell}>{details.amount.toFixed(2)}</td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
-export const PaymentTable = ({ details }) => {
-  return (
-    <table className={styles.invoiceTable}>
-      <thead>
-        <tr>
-          <th style={{ width: '30%' }}>Item</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>To be fetched later!</td>
-          <td className={styles.underlinedCell}>Subtotal</td>
-          <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{details.amount}</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td className={styles.underlinedCell}>Total</td>
-          <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>{details.amount + details.tax}</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td className={styles.underlinedCell}>Amount due</td>
-          <td className={styles.underlinedCell}></td>
-          <td className={styles.underlinedCell}>$0.00</td>
+          <td className={`${styles.underlinedCell} ${styles.grandTotalAmountCell}`}>{details.amount.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>

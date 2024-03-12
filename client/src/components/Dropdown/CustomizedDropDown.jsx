@@ -202,7 +202,7 @@ const CustomizedDropdown = ({ className, user, logout }) => {
           <Button className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
-              <img className={styles.userImage} src={`${imageBaseUrl}/${user.profilePhoto}`} alt='profilePhoto' />
+              <img className={styles.userImage} src={`${user.profilePhoto}`} alt='profilePhoto' />
             </div>
             {/* <HambergerMenu /> */}
           </Button>

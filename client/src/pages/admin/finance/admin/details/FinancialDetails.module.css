@@ -322,3 +322,7 @@
 .currencyField {
   margin-top: 0.5rem;
 }
+
+.grandTotalAmountCell {
+  font-weight: 700;
+}
