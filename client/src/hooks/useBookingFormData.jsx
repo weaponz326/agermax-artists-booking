@@ -28,7 +28,7 @@ function useBookingFormData(booking) {
     invoiced: booking?.invoiced || false,
     createdAt: booking?.createdAt || dayjs(),
     updatedAt: booking?.updatedAt || dayjs(),
-    isNew: booking?.isNew || true
+    isNew: booking?.isNewBooking || true
   })
 
   const handleChangeFormData = (name, value, artist) => {
@@ -38,6 +38,7 @@ function useBookingFormData(booking) {
       artistID: artist ? artist : formData.artistID,
       organizerID: user
     })
+    console.log(formData)
   }
 
   const handleChangeWithEvent = e => {
@@ -45,6 +46,7 @@ function useBookingFormData(booking) {
       ...formData,
       [e.target.name]: e.target.value
     })
+    console.log(formData)
   }
 
   return { formData, setFormData, handleChangeFormData, handleChangeWithEvent }
