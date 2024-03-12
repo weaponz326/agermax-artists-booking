@@ -23,7 +23,7 @@ function ImageUploader({ onChange, booking }) {
     if (info.file.status === 'done') {
       setLoading(false)
       setImageUrl(info.file.response.url)
-      onChange(info.file.response.url) // Pass the uploaded image URL to parent component
+      // onChange(info.file.response.url) // Pass the uploaded image URL to parent component
     }
   }
 
@@ -31,13 +31,14 @@ function ImageUploader({ onChange, booking }) {
     try {
       const formData = new FormData()
       formData.append('mainBanner', file)
-      const response = await axios.put(`${baseUrl}/bookings/${booking._id}`, formData, {
+      const { data } = await axios.put(`${baseUrl}/bookings/${booking._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      onSuccess(response.data)
-      return response.data
+      onSuccess(data)
+      console.log(data.updatedBooking)
+      return data
     } catch (error) {
       console.log(error, 'mainBanner upload failed')
       // setLoading(false)
