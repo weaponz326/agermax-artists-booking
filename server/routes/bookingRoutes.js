@@ -6,6 +6,24 @@ const { createVismaInvoice } = require("../services/vismaInvoiceService");
 const multer = require("multer");
 
 const galleryUpload = multer({ dest: "uploads/booking/artist_gallery/" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/booking"); // Adjust path as necessary
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname +
+        "-" +
+        uniqueSuffix +
+        "." +
+        file.originalname.split(".").pop()
+    );
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Route to handle booking approval and invoice creation
 router.post("/approveBooking/:bookingId", async (req, res) => {
@@ -34,12 +52,20 @@ router.get("/bookings", bookingController.getAllBookings);
 router.get("/bookings/:id", bookingController.getBookingById);
 router.post(
   "/bookings",
-  galleryUpload.array("gallery", 10),
+  upload.fields([
+    { name: "mainBanner", maxCount: 1 },
+    { name: "gallery", maxCount: 10 },
+  ]),
   bookingController.createBooking
 );
+
+// For updating a booking
 router.put(
   "/bookings/:id",
-  galleryUpload.array("gallery", 10),
+  upload.fields([
+    { name: "mainBanner", maxCount: 1 },
+    { name: "gallery", maxCount: 10 },
+  ]),
   bookingController.updateBooking
 );
 router.delete("/bookings/:id", bookingController.deleteBooking);
