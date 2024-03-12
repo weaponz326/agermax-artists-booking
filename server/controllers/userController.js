@@ -1,6 +1,5 @@
 // controllers/userController.js
 const User = require("../models/User");
-require('dotenv').config();
 
 // Create User is handled by the register function in authController.js)
 
@@ -25,12 +24,10 @@ const getAllUsers = async (req, res) => {
 
     let users = await User.find(filter).select("-password").lean();
 
+    // Add fullName to each user object
     users = users.map((user) => ({
-      ...user,
       fullName: `${user.firstName} ${user.lastName}`,
-      profilePhoto: user.profilePhoto
-        ? `${process.env.APP_URL}${user.profilePhoto}`
-        : "",
+      ...user,
     }));
 
     res.json(users);
@@ -70,9 +67,7 @@ const getUserProfile = async (req, res) => {
           fullName: firstName + " " + lastName,
           email,
           role,
-          profilePhoto: req.user.profilePhoto
-            ? `${process.env.APP_URL}${req.user.profilePhoto}`
-            : "",
+          profilePhoto,
           contactPhone,
           address,
           nickName,
@@ -98,18 +93,10 @@ const getUserProfile = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = await User.findById(userId).select("-password").lean(); // Use lean() for easier object modification
+    const user = await User.findById(userId).select("-password"); // Exclude the password field for security
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
-    }
-
-    // Prepend APP_URL to profilePhoto if it exists
-    if (user.profilePhoto) {
-      user = {
-        ...user,
-        profilePhoto: `${process.env.APP_URL}${user.profilePhoto}`,
-      };
     }
 
     res.json(user);
@@ -120,27 +107,32 @@ const getUserById = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   const userId = req.user._id;
-  const { password, ...updateData } = req.body;
+  let updateData = req.body;
 
   try {
-    if (req.file) {
-      updateData.profilePhoto =
-        "/uploads/user/profile_photo/" + req.file.filename;
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+    // Handling profile photo
+    if (req.files["profilePhoto"]) {
+      const profilePhotoFile = req.files["profilePhoto"][0]; // Since it's a single file, access the first item
+      updateData.profilePhoto = `${baseUrl}/uploads/user/profile_photo/${profilePhotoFile.filename}`;
     }
 
-    let userData = await User.findByIdAndUpdate(userId, updateData, {
+    // Handling gallery
+    if (req.files["gallery"] && req.files["gallery"].length > 0) {
+      updateData.gallery = req.files["gallery"].map(
+        (file) => `${baseUrl}/uploads/user/artist_gallery/${file.filename}`
+      );
+    }
+
+    const userData = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
     })
       .select("-password")
-      .lean(); // Use lean for simpler object modification
+      .lean();
 
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
-    }
-
-    // Dynamically construct the full URL for the profilePhoto if it exists
-    if (userData.profilePhoto) {
-      userData.profilePhoto = `${process.env.APP_URL}${userData.profilePhoto}`;
     }
 
     res.json({
@@ -148,29 +140,39 @@ const updateUserDetails = async (req, res) => {
       userData,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 const updateUserDetailsById = async (req, res) => {
   const targetUserId = req.params.id;
-  const { password, ...updateData } = req.body;
+  let updateData = req.body;
 
   try {
-    if (req.file) {
-      updateData.profilePhoto =
-        "/uploads/user/profile_photo/" + req.file.filename;
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+    // Handling profile photo
+    if (req.files["profilePhoto"]) {
+      const profilePhotoFile = req.files["profilePhoto"][0]; // Since it's a single file, access the first item
+      updateData.profilePhoto = `${baseUrl}/uploads/user/profile_photo/${profilePhotoFile.filename}`;
     }
 
-    let updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
+    // Handling gallery
+    if (req.files["gallery"] && req.files["gallery"].length > 0) {
+      updateData.gallery = req.files["gallery"].map(
+        (file) => `${baseUrl}/uploads/user/artist_gallery/${file.filename}`
+      );
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
       new: true,
     })
       .select("-password")
-      .lean(); // Use lean for simpler object modification
+      .lean();
 
-    // Dynamically construct the full URL for the profilePhoto if it exists
-    if (updatedUser.profilePhoto) {
-      updatedUser.profilePhoto = `${process.env.APP_URL}${updatedUser.profilePhoto}`;
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.json({
@@ -178,6 +180,7 @@ const updateUserDetailsById = async (req, res) => {
       updatedUser,
     });
   } catch (error) {
+    console.error(error); // Ensure you log the error to see what might be wrong
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

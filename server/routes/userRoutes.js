@@ -49,25 +49,29 @@ router.use(express.json({ limit: "50mb" }));
 router.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 router.route("/profile").get(protect, userController.getUserProfile);
-router
-  .route("/profile")
-  .put(
-    protect,
-    profilePhotoUpload.single("profilePhoto"),
-    galleryUpload.array("gallery", 10),
-    userController.updateUserDetails
-  );
 
 router.route("/users").get(userController.getAllUsers);
-
 router.route("/users/:id").get(userController.getUserById);
-router
-  .route("/users/:id")
-  .put(
-    profilePhotoUpload.single("profilePhoto"),
-    galleryUpload.array("gallery", 10),
-    userController.updateUserDetailsById
-  );
+
+const upload = multer({ storage: multer.diskStorage({
+  destination: function (req, file, cb) {
+    if (file.fieldname === "profilePhoto") {
+      cb(null, "uploads/user/profile_photo/");
+    } else if (file.fieldname === "gallery") {
+      cb(null, "uploads/user/artist_gallery/");
+    }
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.originalname.split('.').pop());
+  }
+})});
+
+// Adjust your route to use this new upload middleware
+router.route("/profile").put(protect, upload.fields([{ name: 'profilePhoto', maxCount: 1 }, { name: 'gallery', maxCount: 10 }]), userController.updateUserDetails);
+
+router.route("/users/:id").put(upload.fields([{ name: 'profilePhoto', maxCount: 1 }, { name: 'gallery', maxCount: 10 }]), userController.updateUserDetailsById);
+
 
 router.delete("/users/:id", userController.deleteUser);
 
