@@ -9,7 +9,7 @@ const getBase64 = file =>
     reader.onload = () => resolve(reader.result)
     reader.onerror = error => reject(error)
   })
-const UploadPictures = ({ formData, setFormData, fileList, setFileList }) => {
+const UploadPictures = ({ listType, maxCount, formData, setFormData, fileList, setFileList }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
@@ -91,8 +91,9 @@ const UploadPictures = ({ formData, setFormData, fileList, setFileList }) => {
     <>
       <Upload
         action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-        listType='picture'
+        listType={listType ? listType : 'picture'}
         fileList={fileList}
+        maxCount={maxCount ? maxCount : undefined}
         onPreview={handlePreview}
         onChange={handleChange}
       >

@@ -58,10 +58,17 @@ const bookingSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  mainBanner: {
+    type: [String],
+  },
   gallery: {
     type: [String],
   },
   createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
