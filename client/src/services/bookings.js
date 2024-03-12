@@ -57,6 +57,23 @@ export const uploadBookingMainBanner = async (file, onSuccess, onError, booking)
   }
 }
 
+export const uploadBookingGallery = async (file, onSuccess, onError, booking) => {
+  try {
+    const formData = new FormData()
+    formData.append('gallery', [...booking.gallery, file])
+    const response = await axios.put(`${baseUrl}/bookings/${booking._id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    onSuccess(response.data)
+    return response.data
+  } catch (error) {
+    console.log(error, 'mainBanner upload failed')
+    // setLoading(false)
+  }
+}
+
 export async function getNextUpcomingApprovedBooking() {
   try {
     const response = await axios.get(`${baseUrl}/next-upcoming-approved`)
