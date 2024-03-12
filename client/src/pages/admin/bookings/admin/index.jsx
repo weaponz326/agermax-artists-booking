@@ -1024,7 +1024,7 @@ export const BookingsModalContent = ({
         <h3 className={styles.contentHeading}>Event Gallery</h3>
         <div className={styles.contentEventGallery}>
           <div className={styles.contentSubHeading}>Main Banner</div>
-          {/* <UploadPictures
+          <UploadPictures
             maxCount={1}
             formData={formData}
             setFormData={setFormData}
@@ -1033,8 +1033,8 @@ export const BookingsModalContent = ({
             singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
             buttonText={'Set Banner Image'}
-          /> */}
-          <ImageUploader booking={booking} />
+          />
+          {/* <ImageUploader booking={booking} /> */}
         </div>
         <div className={styles.divider}></div>
         <div className={styles.contentEventGallery}>

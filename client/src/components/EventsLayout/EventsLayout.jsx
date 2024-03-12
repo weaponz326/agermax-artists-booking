@@ -7,6 +7,7 @@ import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import Link from 'next/link'
 import { getUserById } from 'src/services/users'
+import { useUsers } from 'src/providers/UsersProvider'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()
@@ -69,15 +70,20 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
 
 //Booking.Picture not yet supplied in the backend
 const EventCard = ({ booking }) => {
+  const [bookingArtistImage, setBookingArtistImage] = useState(null)
+  useEffect(() => {
+    const fetchArtist = async () => {
+      const bookingArtist = await getUserById(booking.artistID)
+      setBookingArtistImage(bookingArtist.profilePhoto)
+    }
+
+    fetchArtist()
+    console.log(booking)
+  }, [booking])
+
   return (
     <div className={styles['events-preview-container']}>
-      <Image
-        className={styles['evt-img']}
-        src={booking.picture ? booking.picture : '/images/artist-1.jpg'}
-        alt='BookingImg'
-        loading='eager'
-        fill
-      />
+      <Image className={styles['evt-img']} src={booking.mainBanner} alt={'bookingImage'} loading='eager' fill />
       <CalendarIcon booking={booking} />
       <EventsDetails booking={booking} />
       <div className={styles.gradientOverlay}></div>
