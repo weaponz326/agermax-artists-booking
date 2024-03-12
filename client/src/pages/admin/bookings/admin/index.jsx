@@ -588,7 +588,8 @@ export const BookingsModalContent = ({
   const { formData, setFormData, handleChangeFormData, handleChangeWithEvent } = useBookingFormData(booking)
 
   /****************Gallery********************/
-  const [fileList, setFileList] = useState(formData.gallery)
+  const [singleFileList, setSingleFileList] = useState([formData.mainBanner])
+  const [multiFileList, setMultiFileList] = useState(formData.gallery)
 
   /****************Save Button Text********************/
   const [saveButtonText, setSaveButtonText] = useState('')
@@ -1020,8 +1021,8 @@ export const BookingsModalContent = ({
             maxCount={1}
             formData={formData}
             setFormData={setFormData}
-            fileList={fileList}
-            setFileList={setFileList}
+            fileList={singleFileList}
+            setFileList={setSingleFileList}
             singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
             buttonText={'Set Banner Image'}
@@ -1034,8 +1035,9 @@ export const BookingsModalContent = ({
             listType='picture-card'
             formData={formData}
             setFormData={setFormData}
-            // fileList={fileList}
-            // setFileList={setFileList}
+            maxCount={8}
+            fileList={multiFileList}
+            setFileList={setMultiFileList}
           />
         </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>
