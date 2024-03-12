@@ -1,10 +1,33 @@
 // controllers/bookingController.js
 const Booking = require("../models/Booking");
 const dayjs = require("dayjs");
+require('dotenv').config();
+
+const prependBaseUrl = (path) => {
+  if (!path) return "";
+  const baseUrl = process.env.APP_URL.endsWith("/")
+    ? process.env.APP_URL.slice(0, -1)
+    : process.env.APP_URL; // Ensure no trailing slash
+  return path.startsWith("http")
+    ? path
+    : `${baseUrl}/${path.replace(/\\/g, "/")}`; // Replace backslashes for Windows paths
+};
 
 exports.getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find();
+    let bookings = await Booking.find().lean(); // Use lean() for easier modification
+
+    bookings = bookings.map((booking) => {
+      // Dynamically construct image URLs
+      if (booking.mainBanner) {
+        booking.mainBanner = prependBaseUrl(booking.mainBanner);
+      }
+      if (booking.gallery && booking.gallery.length) {
+        booking.gallery = booking.gallery.map(prependBaseUrl);
+      }
+      return booking;
+    });
+
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,7 +36,14 @@ exports.getAllBookings = async (req, res) => {
 
 exports.getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id);
+    let booking = await Booking.findById(req.params.id).lean();
+
+    if (booking) {
+      // Dynamically construct image URLs
+      booking.mainBanner = prependBaseUrl(booking.mainBanner);
+      booking.gallery = booking.gallery.map(prependBaseUrl);
+    }
+
     res.json(booking);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -21,8 +51,20 @@ exports.getBookingById = async (req, res) => {
 };
 
 exports.createBooking = async (req, res) => {
-  const booking = new Booking(req.body);
+  let bookingData = { ...req.body };
+
+  // Handle single mainBanner upload
+  if (req.files["mainBanner"] && req.files["mainBanner"].length > 0) {
+    bookingData.mainBanner = req.files["mainBanner"][0].path.replace(/\\/g, "/");
+  }
+
+  // Handle multiple gallery uploads
+  if (req.files["gallery"] && req.files["gallery"].length > 0) {
+    bookingData.gallery = req.files["gallery"].map(file => file.path.replace(/\\/g, "/"));
+  }
+
   try {
+    const booking = new Booking(bookingData);
     const newBooking = await booking.save();
     res.status(201).json(newBooking);
   } catch (error) {
@@ -31,15 +73,32 @@ exports.createBooking = async (req, res) => {
 };
 
 exports.updateBooking = async (req, res) => {
+  const { id } = req.params;
+  let updateData = { ...req.body };
+
+  // Handle mainBanner upload
+  if (req.files["mainBanner"] && req.files["mainBanner"].length > 0) {
+    updateData.mainBanner = req.files["mainBanner"][0].path.replace(/\\/g, "/");
+  }
+
+  // Handle gallery uploads
+  if (req.files["gallery"] && req.files["gallery"].length > 0) {
+    updateData.gallery = req.files["gallery"].map(file => file.path.replace(/\\/g, "/"));
+  }
+
   try {
-    const updatedBooking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(updatedBooking);
+    const updatedBooking = await Booking.findByIdAndUpdate(id, updateData, { new: true }).lean();
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    // Dynamically prepend APP_URL for response
+    updatedBooking.mainBanner = prependBaseUrl(updatedBooking.mainBanner);
+    updatedBooking.gallery = updatedBooking.gallery.map(prependBaseUrl);
+
+    res.json({ message: "Booking updated successfully", updatedBooking });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: "Server error", error: error.message });
   }
 };
 
