@@ -70,11 +70,15 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
 
 //Booking.Picture not yet supplied in the backend
 const EventCard = ({ booking }) => {
-  const [bookingArtistImage, setBookingArtistImage] = useState(null)
+  const [bookingImage, setBookingImage] = useState('')
   useEffect(() => {
     const fetchArtist = async () => {
       const bookingArtist = await getUserById(booking.artistID)
-      setBookingArtistImage(bookingArtist.profilePhoto)
+      if (booking) {
+        setBookingImage(booking.mainBanner)
+      } else {
+        setBookingImage(bookingArtist.profilePhoto)
+      }
     }
 
     fetchArtist()
@@ -83,7 +87,7 @@ const EventCard = ({ booking }) => {
 
   return (
     <div className={styles['events-preview-container']}>
-      <Image className={styles['evt-img']} src={booking.mainBanner} alt={'bookingImage'} loading='eager' fill />
+      <Image className={styles['evt-img']} src={bookingImage} alt={'bookingImage'} loading='eager' fill />
       <CalendarIcon booking={booking} />
       <EventsDetails booking={booking} />
       <div className={styles.gradientOverlay}></div>
