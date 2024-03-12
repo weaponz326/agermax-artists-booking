@@ -47,6 +47,7 @@ import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
 import { uploadBookingBookingGallery, uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
+import ImageUploader from 'src/components/AdminPagesSharedComponents/UploadPictures/ImageUploader'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -1023,7 +1024,7 @@ export const BookingsModalContent = ({
         <h3 className={styles.contentHeading}>Event Gallery</h3>
         <div className={styles.contentEventGallery}>
           <div className={styles.contentSubHeading}>Main Banner</div>
-          <UploadPictures
+          {/* <UploadPictures
             maxCount={1}
             formData={formData}
             setFormData={setFormData}
@@ -1032,12 +1033,13 @@ export const BookingsModalContent = ({
             singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
             buttonText={'Set Banner Image'}
-          />
+          /> */}
+          <ImageUploader booking={booking} />
         </div>
         <div className={styles.divider}></div>
         <div className={styles.contentEventGallery}>
           <div className={styles.contentSubHeading}>Other Photos</div>
-          <UploadPictures
+          {/* <UploadPictures
             listType='picture-card'
             formData={formData}
             setFormData={setFormData}
@@ -1045,7 +1047,7 @@ export const BookingsModalContent = ({
             fileList={multiFileList}
             setFileList={setMultiFileList}
             multiFileUpload={handleBookingGalleryUpload}
-          />
+          /> */}
         </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>
           <ArrowBack />
