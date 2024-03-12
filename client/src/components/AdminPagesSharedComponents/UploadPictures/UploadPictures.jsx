@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Modal, Upload } from 'antd'
 import styles from './UploadPictures.module.css'
+import axios from 'axios'
+import { fi } from 'date-fns/locale'
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 const getBase64 = file =>
   new Promise((resolve, reject) => {
@@ -19,7 +22,9 @@ const UploadPictures = ({
   setFormData,
   fileList,
   setFileList,
-  handleFileUpload
+  singleFileUpload,
+  multiFileUpload,
+  buttonText
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
@@ -42,11 +47,6 @@ const UploadPictures = ({
     setFileList(newFileList)
     // setFormData({ ...formData, gallery: newFileList })
     // console.log(formData)
-    console.log(newFileList)
-  }
-
-  const onCustomFileUpload = () => {
-    handleFileUpload(booking, fileList)
   }
 
   const uploadButton = (
@@ -64,7 +64,7 @@ const UploadPictures = ({
           marginTop: 8
         }}
       >
-        Upload
+        {buttonText ? buttonText : 'Upload'}
       </div>
     </button>
   )
@@ -72,15 +72,15 @@ const UploadPictures = ({
   return (
     <>
       <Upload
-        action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
+        // action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
         listType={listType ? listType : 'picture'}
         fileList={fileList}
         maxCount={maxCount ? maxCount : undefined}
         onPreview={handlePreview}
         onChange={handleChange}
-        customRequest={onCustomFileUpload}
+        customRequest={listType ? multiFileUpload : singleFileUpload}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList && fileList.length >= 8 ? null : uploadButton}
       </Upload>
       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
         <img

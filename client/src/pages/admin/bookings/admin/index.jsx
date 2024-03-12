@@ -753,12 +753,10 @@ export const BookingsModalContent = ({
     // setFormData({ ...formData, gallery: fileList })
   }
 
-  const handleFileUpload = async (booking, file) => {
-    try {
-      const response = await uploadBookingMainBanner(booking, file)
-    } catch (error) {
-      console.log(error)
-    }
+  const handleBookingBannerFileUpload = async ({ file, onSuccess, onError }) => {
+    console.log(file)
+    const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
+    console.log(updatedBooking)
   }
 
   /*********************Rendering**********************/
@@ -1024,8 +1022,9 @@ export const BookingsModalContent = ({
             setFormData={setFormData}
             fileList={fileList}
             setFileList={setFileList}
-            handleFileUpload={handleFileUpload}
+            singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
+            buttonText={'Set Banner Image'}
           />
         </div>
         <div className={styles.divider}></div>
@@ -1035,8 +1034,8 @@ export const BookingsModalContent = ({
             listType='picture-card'
             formData={formData}
             setFormData={setFormData}
-            fileList={fileList}
-            setFileList={setFileList}
+            // fileList={fileList}
+            // setFileList={setFileList}
           />
         </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>

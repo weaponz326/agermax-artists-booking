@@ -40,20 +40,20 @@ export async function updateBooking(bookingData) {
   }
 }
 
-export const uploadBookingMainBanner = async (booking, mainBannerFile) => {
+export const uploadBookingMainBanner = async (file, onSuccess, onError, booking) => {
   try {
     const formData = new FormData()
-    formData.append('mainBanner', mainBannerFile)
-
+    formData.append('mainBanner', file)
     const response = await axios.put(`${baseUrl}/bookings/${booking._id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-
+    onSuccess(response.data)
     return response.data
   } catch (error) {
-    throw error
+    console.log(error, 'mainBanner upload failed')
+    // setLoading(false)
   }
 }
 
