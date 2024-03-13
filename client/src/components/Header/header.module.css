@@ -194,6 +194,17 @@ header .greetings-message {
   transform: scale(1.02);
 }
 
+.collapsedStateSearchBarWrapper {
+  background-color: #fff;
+  color: #262626;
+  display: flex;
+  border-radius: 0.5rem;
+  height: 56px;
+  width: 100%;
+  max-width: 34rem;
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+  display: none;
+}
 .header-carousel {
   display: flex;
   flex-direction: column;
@@ -240,6 +251,9 @@ header .greetings-message {
     padding: 0.5rem 1rem;
     margin-bottom: 2rem;
   }
+  .collapsedStateSearchBarWrapper {
+    display: flex;
+  }
 
   .events {
     padding: 0.5rem 0.5rem;
@@ -266,7 +280,7 @@ header .greetings-message {
   }
 
   header .greetings {
-    margin: 7rem 0 0 0;
+    margin: 2rem 0 0 0;
     text-align: left;
   }
 

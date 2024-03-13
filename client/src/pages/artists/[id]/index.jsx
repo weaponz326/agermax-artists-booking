@@ -252,15 +252,12 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
           {artist ? (
             <Image
               // className={styles['evt-img']}
-              src={artist.picture ? artist.picture : '/images/artist-1.jpg'}
+              src={artist.profilePhoto ? artist.profilePhoto : '/images/artist-1.jpg'}
               alt='artistImg'
               loading='eager'
               fill
             />
           ) : (
-            // <div>
-            //   {artist.profilePhoto ? artist.profilePhoto : <Avatar size={60} icon={<UserOutlined size={100} />} />}
-            // </div>
             <Skeleton
               animation='wave'
               variant='rounded'

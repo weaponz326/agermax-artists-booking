@@ -12,7 +12,8 @@ const SearchBar = ({
   onClick,
   style,
   onClickWrapper,
-  id
+  id,
+  slot
 }) => {
   const searchInputRef = useRef()
 
@@ -31,6 +32,7 @@ const SearchBar = ({
         value={value ? value : ''}
         onClick={onClick}
       />
+      {slot && slot}
     </div>
   )
 }

@@ -106,3 +106,10 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+@media (width < 700px) {
+  .userMenuSignInButton {
+    /* background-color: red; */
+    display: none;
+  }
+}

@@ -22,6 +22,20 @@ import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
 import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
 import useBookingFormData from 'src/hooks/useBookingFormData'
+import MobileNav from './MobileNavBar'
+import {
+  BiBadge,
+  BiCalendar,
+  BiHome,
+  BiSolidDashboard,
+  BiSolidHelpCircle,
+  BiSolidHome,
+  BiSolidMusic,
+  BiSolidUser,
+  BiSolidUserAccount,
+  BiUserVoice,
+  BiUserX
+} from 'react-icons/bi'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -65,6 +79,7 @@ export default function Navbar() {
           )}
         </div>
       </div>
+      <MobileNavBar />
     </nav>
   )
 }
@@ -104,18 +119,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
       setOptions(artists)
     }
   }, [artists, isUserUpdated])
-
-  //Effects from scroll and click events
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setHideMenuItems(true)
-  //     // setActiveTab(null)
-  //   }
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll)
-  //   }
-  // }, [hideMenuItems])
 
   // *********** */
   // Click Event handler
@@ -196,24 +199,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   }
 
   const navMenu = <h3 className={styles['nav-menu-bar']}>Booking Entertainment</h3>
-  const artistsDropdownDisplay = artist => (
-    <div className={styles.artistsListPreview}>
-      <div className={styles.searchInputFieldPictureContainer}>
-        <img className={styles.searchInputFieldPicture} src={artist.profilePhoto} alt='' />
-      </div>
-      <div className={styles.dropdownLabelWrapper}>
-        <span className={styles.dropdownLabelName}>
-          {artist.firstName} {artist.lastName}
-        </span>
-        <div className={styles.dropdownLabelGenreWrapper}>
-          {artist.genre.map((g, index) => (
-            <span key={index}>{g}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-
   ///Set Conditional Classes
   const checkActiveClass = id => {
     if (activeInputTab == id) return styles.activeTab
@@ -286,7 +271,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 options={options.map(artist => ({
                   artistID: artist._id,
                   value: `${artist.firstName} ${artist.lastName}`,
-                  label: artistsDropdownDisplay(artist)
+                  label: <PerformersDropdownDisplay artist={artist} />
                 }))}
                 placeholder='Search Performer'
                 filterOption={filterOption}
@@ -354,7 +339,26 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
     </CSSTransition>
   )
 }
-// }
+
+export const PerformersDropdownDisplay = ({ artist }) => {
+  return (
+    <div className={styles.artistsListPreview}>
+      <div className={styles.searchInputFieldPictureContainer}>
+        <img className={styles.searchInputFieldPicture} src={artist.profilePhoto} alt='' />
+      </div>
+      <div className={styles.dropdownLabelWrapper}>
+        <span className={styles.dropdownLabelName}>
+          {artist.firstName} {artist.lastName}
+        </span>
+        <div className={styles.dropdownLabelGenreWrapper}>
+          {artist.genre.map((g, index) => (
+            <span key={index}>{g}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export const Backdrop = ({ handleModalEffect }) => {
   return <div className={styles['backdrop']} onClick={() => handleModalEffect()}></div>
@@ -527,5 +531,53 @@ export const UserDetailsForm = ({ user, logout }) => {
         size='small'
       />
     </div>
+  )
+}
+
+export const MobileNavBar = () => {
+  const [selectedTab, setSelectedTab] = useState(null)
+  return (
+    <nav className={styles.mobileNavBar}>
+      <button
+        onClick={e => setSelectedTab(e.target.name)}
+        type='button'
+        name='home'
+        className={selectedTab === 'home' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+      >
+        <BiSolidHome className={styles.mobileNavIcon} /> Home
+      </button>
+      <button
+        onClick={e => setSelectedTab(e.target.name)}
+        type='button'
+        name='performers'
+        className={selectedTab === 'performers' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+      >
+        <BiSolidMusic className={styles.mobileNavIcon} /> Performers
+      </button>
+      <button
+        onClick={e => setSelectedTab(e.target.name)}
+        type='button'
+        name='events'
+        className={selectedTab === 'events' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+      >
+        <BiCalendar className={styles.mobileNavIcon} /> Events
+      </button>
+      <button
+        onClick={e => setSelectedTab(e.target.name)}
+        type='button'
+        name='about'
+        className={selectedTab === 'about' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+      >
+        <BiSolidHelpCircle className={styles.mobileNavIcon} /> About
+      </button>
+      <button
+        onClick={e => setSelectedTab(e.target.name)}
+        type='button'
+        name='account'
+        className={selectedTab === 'account' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+      >
+        <BiSolidUserAccount className={styles.mobileNavIcon} /> Account
+      </button>
+    </nav>
   )
 }
