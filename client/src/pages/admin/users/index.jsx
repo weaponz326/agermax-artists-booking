@@ -169,6 +169,8 @@ export const AddUserModalContent = ({
   setSnackbarSeverity,
   setSnackbarOpen
 }) => {
+  const { user } = useAuth()
+  const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto || '')
   const [submitting, setSubmitting] = useState(false)
   const { addUser, setIsUsersListUpdated } = useUsers()
 
@@ -223,7 +225,7 @@ export const AddUserModalContent = ({
   return (
     <>
       <div className={styles.modalCardContentPictureInput}>
-        <ImageUpload />
+        <ImageUpload setProfilePhoto={setProfilePhoto} userData={userData} setUserData={setUserData} />{' '}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleCreateUser}>
         <input
