@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(defaultProvider.user)
   const [token, setToken] = useState(defaultProvider.token) // State for the token
   const [loading, setLoading] = useState(defaultProvider.loading)
+  const [isUserUpdated, setIsUserUpdated] = useState(false)
 
   // ** Hooks
   const router = useRouter()
@@ -98,7 +99,7 @@ const AuthProvider = ({ children }) => {
     }
     initAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isUserUpdated])
 
   useEffect(() => {
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
@@ -166,7 +167,9 @@ const AuthProvider = ({ children }) => {
     login: handleLogin,
     logout: handleLogout,
     register: handleRegistration,
-    initiateOAuth
+    initiateOAuth,
+    isUserUpdated,
+    setIsUserUpdated
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

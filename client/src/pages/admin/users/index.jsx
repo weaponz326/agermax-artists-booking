@@ -350,6 +350,7 @@ export const EditUserModalContent = ({
   users
 }) => {
   const { uploadUserPhotoUpdate } = useUsers()
+  const { setIsUserUpdated } = useAuth()
 
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',
@@ -393,6 +394,7 @@ export const EditUserModalContent = ({
       setSnackbarMessage('User updated successfully!')
       setSnackbarSeverity('success')
       setSnackbarOpen(true)
+      setIsUserUpdated(true)
       hideModal()
       // setUserData(response.data) // Update userData with the response
 
@@ -402,6 +404,8 @@ export const EditUserModalContent = ({
       setSnackbarMessage('Failed to update user')
       setSnackbarSeverity('error')
       setSnackbarOpen(true)
+    } finally {
+      setIsUserUpdated(false)
     }
   }
 

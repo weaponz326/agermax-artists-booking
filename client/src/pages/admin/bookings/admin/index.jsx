@@ -597,7 +597,7 @@ export const BookingsModalContent = ({
       id: 'img1'
     }
   ])
-  const [multiFileList, setMultiFileList] = useState(formData.gallery)
+  const [multiFileList, setMultiFileList] = useState([...formData.gallery])
 
   /****************Save Button Text********************/
   const [saveButtonText, setSaveButtonText] = useState('')
@@ -784,7 +784,7 @@ export const BookingsModalContent = ({
     }
   }
 
-  const handleDropSingleFile = async booking => {
+  const handleRemoveSingleFile = async booking => {
     try {
       const updatedFormData = { ...formData, mainBanner: '' }
       const updatedBooking = await updateBooking(updatedFormData)
@@ -809,8 +809,24 @@ export const BookingsModalContent = ({
 
   const handleBookingGalleryUpload = async ({ file, onSuccess, onError }) => {
     console.log(file)
-    const updatedBooking = await uploadBookingGallery(file, onSuccess, onError, booking)
-    console.log(updatedBooking)
+    try {
+      const updatedBooking = await uploadBookingGallery(multiFileList, onSuccess, onError, booking)
+      console.log(updatedBooking)
+      console.log('Booking Updated Successfully! : ', updatedBooking)
+      setSnackbarMessage('Booking Updated Successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(true)
+    } catch (error) {
+      console.error('Error updating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error updating booking!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(false)
+    } finally {
+      setIsBookingsUpdated(false)
+    }
   }
 
   /*********************Rendering**********************/
@@ -1072,15 +1088,13 @@ export const BookingsModalContent = ({
           <div className={styles.contentSubHeading}>Main Banner</div>
           <UploadPictures
             maxCount={1}
-            // formData={formData}
-            // setFormData={setFormData}
             fileList={singleFileList}
             setFileList={setSingleFileList}
             singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
             buttonText={'Upload/Change Event Banner Image'}
             name={'Event Banner'}
-            handleRemove={handleDropSingleFile}
+            handleRemove={handleRemoveSingleFile}
           />
           {/* <ImageUploader booking={booking} /> */}
         </div>

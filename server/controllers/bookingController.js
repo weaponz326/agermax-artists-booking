@@ -54,14 +54,16 @@ exports.createBooking = async (req, res) => {
 //   const { id } = req.params;
 //   let updateData = { ...req.body };
 
-//   if (req.files["mainBanner"] && req.files["mainBanner"].length > 0) {
+//   // Check if req.files exists and contains mainBanner property
+//   if (req.files?.["mainBanner"] && req.files["mainBanner"].length > 0) {
 //     updateData.mainBanner = constructFullPath(
 //       req,
 //       req.files["mainBanner"][0].path
 //     );
 //   }
 
-//   if (req.files["gallery"] && req.files["gallery"].length > 0) {
+//   // Check if req.files exists and contains gallery property
+//   if (req.files?.["gallery"] && req.files["gallery"].length > 0) {
 //     updateData.gallery = req.files["gallery"].map((file) =>
 //       constructFullPath(req, file.path)
 //     );
@@ -91,9 +93,12 @@ exports.updateBooking = async (req, res) => {
 
   // Check if req.files exists and contains gallery property
   if (req.files?.["gallery"] && req.files["gallery"].length > 0) {
-    updateData.gallery = req.files["gallery"].map((file) =>
+    // Map over the files and construct full paths for each file
+    const gallery = req.files["gallery"].map((file) =>
       constructFullPath(req, file.path)
     );
+    // Update the updateData object to include the gallery files
+    updateData.gallery = gallery;
   }
 
   try {
@@ -105,6 +110,11 @@ exports.updateBooking = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// function constructFullPath(req, filePath) {
+//   // Construct full path based on server configuration
+//   return `${req.protocol}://${req.get("host")}/${filePath}`;
+// }
 
 exports.deleteBooking = async (req, res) => {
   try {

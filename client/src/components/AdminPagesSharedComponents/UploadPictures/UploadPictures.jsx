@@ -45,7 +45,8 @@ const UploadPictures = ({
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList)
     // setFormData({ ...formData, gallery: newFileList })
-    // console.log(formData)
+    console.log(fileList)
+    console.log(formData)
   }
 
   return (
@@ -62,6 +63,7 @@ const UploadPictures = ({
         isImageUrl={file => true}
         multiple={multiple ? multiple : false}
         name={name && name}
+        accept='.jpg,.jpeg,.png' // Accepted file types
       >
         {fileList && fileList.length >= 8 ? null : <UploadButton listType={listType} buttonText={buttonText} />}
       </Upload>

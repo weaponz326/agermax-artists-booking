@@ -30,7 +30,7 @@ import useBookingFormData from 'src/hooks/useBookingFormData'
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
-  const { user, logout, loading } = useAuth()
+  const { user, logout, loading, isUserUpdated } = useAuth()
 
   const navBarRef = useRef()
 
@@ -49,13 +49,19 @@ export default function Navbar() {
             navBarRef={navBarRef}
             user={user}
             logout={logout}
+            isUserUpdated={isUserUpdated}
           />
           {loading ? (
             <div className={styles.userActionsButtons}>
               <CircularProgress disableShrink />
             </div>
           ) : (
-            <CustomizedDropdown className={styles.userActionsButtons} user={user} logout={logout} />
+            <CustomizedDropdown
+              className={styles.userActionsButtons}
+              user={user}
+              logout={logout}
+              isUserUpdated={isUserUpdated}
+            />
           )}
         </div>
       </div>
@@ -63,7 +69,7 @@ export default function Navbar() {
   )
 }
 
-const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
+const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUserUpdated }) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [options, setOptions] = useState([])
   const [selectedArtist, setSelectedArtist] = useState(null)
@@ -94,8 +100,10 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
 
   useEffect(() => {
     //Get All Artists Lists
-    if (artists) setOptions(artists)
-  }, [artists])
+    if (artists) {
+      setOptions(artists)
+    }
+  }, [artists, isUserUpdated])
 
   //Effects from scroll and click events
   // useEffect(() => {
@@ -191,7 +199,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout }) => {
   const artistsDropdownDisplay = artist => (
     <div className={styles.artistsListPreview}>
       <div className={styles.searchInputFieldPictureContainer}>
-        <img className={styles.searchInputFieldPicture} src={artist.picture} alt='' />
+        <img className={styles.searchInputFieldPicture} src={artist.profilePhoto} alt='' />
       </div>
       <div className={styles.dropdownLabelWrapper}>
         <span className={styles.dropdownLabelName}>
