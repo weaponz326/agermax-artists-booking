@@ -7,6 +7,7 @@ const BookingsProvider = ({ children }) => {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isBookingsUpdated, setIsBookingsUpdated] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +22,7 @@ const BookingsProvider = ({ children }) => {
     }
 
     fetchData()
-  }, [])
+  }, [isBookingsUpdated])
 
   const updateBooking = async booking => {
     const updatedBooking = await services.updateBooking(booking)
@@ -64,7 +65,8 @@ const BookingsProvider = ({ children }) => {
         updateBooking,
         deleteBooking,
         createBooking,
-        getNextUpcomingEvent
+        getNextUpcomingEvent,
+        setIsBookingsUpdated
       }}
     >
       {children}

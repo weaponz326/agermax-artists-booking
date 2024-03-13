@@ -581,7 +581,7 @@ export const BookingsModalContent = ({
   const { organizers } = useOrganizers()
   const [modalContentView, setModalContentView] = useState('details')
   const [bookingOrganizer, setBookingOrganizer] = useState([])
-  const { updateBooking, createBooking, deleteBooking, loading } = useBookings()
+  const { updateBooking, createBooking, deleteBooking, loading, setIsBookingsUpdated } = useBookings()
   const [open, setOpen] = useState(false)
   const [invoicedState, setInvoicedState] = useState(false)
 
@@ -589,7 +589,14 @@ export const BookingsModalContent = ({
   const { formData, setFormData, handleChangeFormData, handleChangeWithEvent } = useBookingFormData(booking)
 
   /****************Gallery********************/
-  const [singleFileList, setSingleFileList] = useState([formData.mainBanner])
+  const [singleFileList, setSingleFileList] = useState([
+    {
+      url: formData.mainBanner,
+      name: formData.mainBanner.substring(formData.mainBanner.lastIndexOf('/') + 1),
+      status: 'done',
+      id: 'img1'
+    }
+  ])
   const [multiFileList, setMultiFileList] = useState(formData.gallery)
 
   /****************Save Button Text********************/
@@ -687,7 +694,7 @@ export const BookingsModalContent = ({
         setSnackbarMessage('Booking Updated Successfully!')
         setSnackbarSeverity('success')
         setSnackbarOpen(true)
-        // hideModal()
+        hideModal()
 
         // Optionally, you can redirect or perform any other action after successful booking creation
       } catch (error) {
@@ -757,8 +764,47 @@ export const BookingsModalContent = ({
 
   const handleBookingBannerFileUpload = async ({ file, onSuccess, onError }) => {
     console.log(file)
-    const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
-    console.log(updatedBooking)
+    try {
+      const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
+      console.log(updatedBooking)
+      console.log('Booking Updated Successfully! : ', updatedBooking)
+      setSnackbarMessage('Booking Updated Successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(true)
+    } catch (error) {
+      console.error('Error updating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error updating booking!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(false)
+    } finally {
+      setIsBookingsUpdated(false)
+    }
+  }
+
+  const handleDropSingleFile = async booking => {
+    try {
+      const updatedFormData = { ...formData, mainBanner: '' }
+      const updatedBooking = await updateBooking(updatedFormData)
+      console.log('Booking Updated Successfully! : ', updatedBooking)
+      setSnackbarMessage('Booking Updated Successfully!')
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(true)
+
+      // Optionally, you can redirect or perform any other action after successful booking creation
+    } catch (error) {
+      console.error('Error updating booking: ', error)
+      // Handle error, e.g., display an error message to the user
+      setSnackbarMessage('Error updating booking!')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+      setIsBookingsUpdated(false)
+    } finally {
+      // setIsBookingsUpdated(false)
+    }
   }
 
   const handleBookingGalleryUpload = async ({ file, onSuccess, onError }) => {
@@ -1026,20 +1072,22 @@ export const BookingsModalContent = ({
           <div className={styles.contentSubHeading}>Main Banner</div>
           <UploadPictures
             maxCount={1}
-            formData={formData}
-            setFormData={setFormData}
+            // formData={formData}
+            // setFormData={setFormData}
             fileList={singleFileList}
             setFileList={setSingleFileList}
             singleFileUpload={handleBookingBannerFileUpload}
             booking={booking}
-            buttonText={'Set Banner Image'}
+            buttonText={'Upload/Change Event Banner Image'}
+            name={'Event Banner'}
+            handleRemove={handleDropSingleFile}
           />
           {/* <ImageUploader booking={booking} /> */}
         </div>
         <div className={styles.divider}></div>
         <div className={styles.contentEventGallery}>
           <div className={styles.contentSubHeading}>Other Photos</div>
-          {/* <UploadPictures
+          <UploadPictures
             listType='picture-card'
             formData={formData}
             setFormData={setFormData}
@@ -1047,7 +1095,8 @@ export const BookingsModalContent = ({
             fileList={multiFileList}
             setFileList={setMultiFileList}
             multiFileUpload={handleBookingGalleryUpload}
-          /> */}
+            multiple={true}
+          />
         </div>
         <button type='button' className={styles.backToDetailsButton} onClick={handleBackToDetails}>
           <ArrowBack />

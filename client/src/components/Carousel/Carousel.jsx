@@ -46,7 +46,7 @@ export default function Carousel({ artist }) {
             alt='Artist-Image'
             src={artist.profilePhoto ? `${artist.profilePhoto}` : '/images/artist-1.jpg'}
             fill
-            // loading='eager'
+            loading='eager'
           />
         </div>
         <div className={styles['carousel-title-text']}>

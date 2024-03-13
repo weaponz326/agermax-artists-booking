@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
-import { Modal, Upload } from 'antd'
+import { Modal, Upload, Button, Space } from 'antd'
 import styles from './UploadPictures.module.css'
-import axios from 'axios'
-import { fi } from 'date-fns/locale'
-const baseUrl = process.env.NEXT_PUBLIC_API_URL
+import { UploadOutlined } from '@ant-design/icons'
 
 const getBase64 = file =>
   new Promise((resolve, reject) => {
@@ -24,14 +22,15 @@ const UploadPictures = ({
   setFileList,
   singleFileUpload,
   multiFileUpload,
-  buttonText
+  buttonText,
+  multiple,
+  name,
+  handleRemove
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
   //Custom Request
-  const [imageUrl, setImageUrl] = useState(null)
-  const [loading, setLoading] = useState(false)
 
   const handleCancel = () => setPreviewOpen(false)
   const handlePreview = async file => {
@@ -49,26 +48,6 @@ const UploadPictures = ({
     // console.log(formData)
   }
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: 'none'
-      }}
-      type='button'
-      className={styles.uploadPhotoBtn}
-    >
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8
-        }}
-      >
-        {buttonText ? buttonText : 'Upload'}
-      </div>
-    </button>
-  )
-
   return (
     <>
       <Upload
@@ -78,9 +57,13 @@ const UploadPictures = ({
         maxCount={maxCount ? maxCount : undefined}
         onPreview={handlePreview}
         onChange={handleChange}
+        onRemove={handleRemove}
         customRequest={listType ? multiFileUpload : singleFileUpload}
+        isImageUrl={file => true}
+        multiple={multiple ? multiple : false}
+        name={name && name}
       >
-        {fileList && fileList.length >= 8 ? null : uploadButton}
+        {fileList && fileList.length >= 8 ? null : <UploadButton listType={listType} buttonText={buttonText} />}
       </Upload>
       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
         <img
@@ -94,4 +77,23 @@ const UploadPictures = ({
     </>
   )
 }
+
 export default UploadPictures
+
+export const UploadButton = ({ listType, buttonText }) => {
+  if (listType) {
+    return (
+      <button type='button' className={styles.uploadPhotoBtn}>
+        <PlusOutlined />
+        <div
+          style={{
+            marginTop: 8
+          }}
+        >
+          {buttonText ? buttonText : 'Upload'}
+        </div>
+      </button>
+    )
+  }
+  return <Button icon={<UploadOutlined />}>{buttonText}</Button>
+}
