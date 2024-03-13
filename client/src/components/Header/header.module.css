@@ -199,7 +199,7 @@ header .greetings-message {
   color: #262626;
   display: flex;
   border-radius: 0.5rem;
-  height: 56px;
+  height: 46px;
   width: 100%;
   max-width: 34rem;
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.08);

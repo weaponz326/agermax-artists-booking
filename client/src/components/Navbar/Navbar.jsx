@@ -36,6 +36,7 @@ import {
   BiUserVoice,
   BiUserX
 } from 'react-icons/bi'
+import { useRouter } from 'next/router'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -341,8 +342,9 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
 }
 
 export const PerformersDropdownDisplay = ({ artist }) => {
+  const router = useRouter()
   return (
-    <div className={styles.artistsListPreview}>
+    <div className={styles.artistsListPreview} onClick={() => router.push(`/artists/${artist._id}`)}>
       <div className={styles.searchInputFieldPictureContainer}>
         <img className={styles.searchInputFieldPicture} src={artist.profilePhoto} alt='' />
       </div>
