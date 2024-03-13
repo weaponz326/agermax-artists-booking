@@ -258,7 +258,7 @@ const MainDashboard = () => {
                       recentBookings.map((booking, index) => (
                         <ListItem key={index}>
                           <ListItemAvatar>
-                            <Avatar>{booking.eventTitle}</Avatar>
+                            <Avatar src={booking.mainBanner}></Avatar>
                           </ListItemAvatar>
                           <ListItemText
                             primary={booking.eventTitle}
@@ -319,7 +319,7 @@ const MainDashboard = () => {
                     ? upcomingBookings.map((booking, index) => (
                         <ListItem key={index}>
                           <ListItemAvatar>
-                            <Avatar>{booking.gallery[0]}</Avatar>
+                            <Avatar src={booking.mainBanner}></Avatar>
                           </ListItemAvatar>
                           <ListItemText
                             primary={booking.eventTitle}
@@ -354,7 +354,7 @@ const MainDashboard = () => {
                       ? topPerformers.map((performer, index) => (
                           <ListItem key={index}>
                             <ListItemAvatar>
-                              <Avatar>{performer.profilePhoto && performer.profilePhoto}</Avatar>
+                              <Avatar src={performer.profilePhoto}></Avatar>
                             </ListItemAvatar>
                             <ListItemText
                               primary={`${performer.firstName} ${performer.lastName}`}

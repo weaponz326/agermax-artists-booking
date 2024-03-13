@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Table, Space, Dropdown, Menu, Avatar } from 'antd'
+import { Table, Space, Dropdown, Menu } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { deleteUserById } from 'src/services/users'
 import Dialog from '@mui/material/Dialog'
@@ -11,6 +11,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
+
+import { Avatar } from '@mui/material'
 
 const UsersListTable = ({
   hideModal,
@@ -42,7 +44,7 @@ const UsersListTable = ({
       title: 'Profile',
       dataIndex: 'picture',
       key: 'picture',
-      render: text => <Avatar src={text} size={40} />
+      render: (text, record) => <Avatar src={record.profilePhoto} size={40} />
     },
     {
       title: 'Name',

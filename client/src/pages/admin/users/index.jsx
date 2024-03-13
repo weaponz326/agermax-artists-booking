@@ -353,6 +353,7 @@ export const EditUserModalContent = ({
 }) => {
   const { uploadUserPhotoUpdate } = useUsers()
   const { setIsUserUpdated } = useAuth()
+  const [profilePhoto, setProfilePhoto] = useState(selectedUser?.profilePhoto || '')
 
   const [userData, setUserData] = useState({
     profilePhoto: selectedUser?.profilePhoto || '',
@@ -376,6 +377,7 @@ export const EditUserModalContent = ({
     const fetchUserData = async () => {
       const data = await getUserById(selectedUser)
       setUserData(data)
+      setProfilePhoto(data.profilePhoto)
     }
     fetchUserData()
   }, [selectedUser])
@@ -428,7 +430,7 @@ export const EditUserModalContent = ({
     <>
       <div className={styles.modalCardContentPictureInput}>
         {/* {selectedUser.profilePhoto ? selectedUser.profilePhoto : <AvatarsImage />} */}
-        <ImageUpload setFormData={setUserData} formData={userData} />
+        <ImageUpload setFormData={setUserData} formData={userData} profilePhoto={profilePhoto} />
         {/* <img className={styles.profilePhoto} src={`${userData.profilePhoto}`} alt={<AvatarsImage />} /> */}
       </div>
       <form className={styles.modalCardContentUserDetails} onSubmit={handleUpdateUser}>
