@@ -16,11 +16,11 @@ const AboutPage = () => {
           <section className={styles.aboutSection}>
             <div className={styles.aboutContent}>
               <div className={styles.aboutText}>
-                <h2>About the Artist</h2>
+                <h2>About Agermax</h2>
                 <p>
                   We understand the importance of your event, and our dedicated support team is here to ensure
                   everything runs smoothly. From initial inquiries to the day of the event, we are committed to
-                  providing unmatched assistance to both artists and event organizers.
+                  providing unmatched assistance to both performers and event organizers.
                 </p>
               </div>
               <div className={styles.aboutImageContainer}>
@@ -28,8 +28,8 @@ const AboutPage = () => {
                   src={'/images/rectangle-22462.png'}
                   alt='Artist performing'
                   loading='eager'
-                  height={450}
-                  width={578}
+                  height={250}
+                  width={250}
                   // style={styles.aboutImage}
                 />
               </div>

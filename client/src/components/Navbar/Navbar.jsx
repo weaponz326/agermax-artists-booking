@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import styles from './navbar.module.css'
 import { CSSTransition } from 'react-transition-group'
 import { Dropdown, DatePicker, Space, AutoComplete, ConfigProvider } from 'antd'
@@ -28,6 +29,7 @@ import {
   BiCalendar,
   BiHome,
   BiSolidDashboard,
+  BiSolidGroup,
   BiSolidHelpCircle,
   BiSolidHome,
   BiSolidMusic,
@@ -537,44 +539,63 @@ export const UserDetailsForm = ({ user, logout }) => {
 }
 
 export const MobileNavBar = () => {
+  const { user } = useAuth()
+  const pathname = usePathname()
   const [selectedTab, setSelectedTab] = useState(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    setSelectedTab(pathname)
+    console.log(pathname)
+  }, [pathname])
+
+  const handleTabClick = e => {
+    setSelectedTab(e.target.name)
+    router.push(e.target.id)
+  }
+
   return (
     <nav className={styles.mobileNavBar}>
       <button
-        onClick={e => setSelectedTab(e.target.name)}
+        onClick={handleTabClick}
         type='button'
-        name='home'
-        className={selectedTab === 'home' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+        id='/'
+        name='/'
+        className={selectedTab === '/' ? styles.mobileNavActiveButton : `${styles.mobileNavButton} `}
       >
         <BiSolidHome className={styles.mobileNavIcon} /> Home
       </button>
       <button
-        onClick={e => setSelectedTab(e.target.name)}
+        onClick={handleTabClick}
         type='button'
-        name='performers'
-        className={selectedTab === 'performers' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+        id='/artists'
+        name='/artists/'
+        className={selectedTab === '/artists/' ? styles.mobileNavActiveButton : styles.mobileNavButton}
       >
-        <BiSolidMusic className={styles.mobileNavIcon} /> Performers
+        <BiSolidGroup className={styles.mobileNavIcon} /> Performers
       </button>
       <button
-        onClick={e => setSelectedTab(e.target.name)}
+        onClick={handleTabClick}
         type='button'
-        name='events'
-        className={selectedTab === 'events' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+        id='/events'
+        name='/events/'
+        className={selectedTab === '/events/' ? styles.mobileNavActiveButton : styles.mobileNavButton}
       >
         <BiCalendar className={styles.mobileNavIcon} /> Events
       </button>
       <button
-        onClick={e => setSelectedTab(e.target.name)}
+        onClick={handleTabClick}
         type='button'
-        name='about'
-        className={selectedTab === 'about' ? styles.mobileNavActiveButton : styles.mobileNavButton}
+        id='/about'
+        name='/about/'
+        className={selectedTab === '/about/' ? styles.mobileNavActiveButton : styles.mobileNavButton}
       >
         <BiSolidHelpCircle className={styles.mobileNavIcon} /> About
       </button>
       <button
-        onClick={e => setSelectedTab(e.target.name)}
+        onClick={handleTabClick}
         type='button'
+        id={user ? `/admin/home/${user.role}` : 'login'}
         name='account'
         className={selectedTab === 'account' ? styles.mobileNavActiveButton : styles.mobileNavButton}
       >
