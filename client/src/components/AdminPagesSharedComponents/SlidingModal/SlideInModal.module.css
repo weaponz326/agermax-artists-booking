@@ -16,7 +16,8 @@
   height: 98%;
   max-height: 60rem;
   overflow: auto;
-  width: 380px; /* Adjust width as needed */
+  width: 100%; /* Adjust width as needed */
+  max-width: 380px; /* Adjust width as needed */
   background-color: #ffffff;
   padding: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);

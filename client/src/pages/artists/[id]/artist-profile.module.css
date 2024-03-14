@@ -95,7 +95,7 @@
 }
 
 .profile-card #username {
-  margin: 0;
+  margin: 20px;
   padding: 0;
   border: none;
   list-style: none;
@@ -261,6 +261,7 @@
 
 .tab-menu-wrapper .tab-item[data-active='true'] {
   color: var(--text-color);
+  font-weight: 500;
 }
 
 .tab-menu-wrapper .tab-item::after {
@@ -368,8 +369,9 @@
   list-style: none;
   position: relative;
   font-size: var(--large-size);
-  font-weight: 500;
+  font-weight: 600;
   color: #4b627f;
+  line-height: 1;
 }
 
 .events-table .event-tile .event-name .name {

@@ -15,9 +15,10 @@ const Footer = () => {
           </Link>
           <div className={styles['footer-nav']}>
             <Link href='/'>Home</Link>
-            <Link href='/about'>About Us</Link>
+            <Link href='/about'>About</Link>
+            <Link href='/artists'>Entertainers</Link>
+            <Link href='/events'>Events</Link>
             <Link href=''>Contact</Link>
-            <Link href=''>Newsletter</Link>
           </div>
           <div className={styles['social-media']}>
             <Link href='#'>

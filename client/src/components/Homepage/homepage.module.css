@@ -99,12 +99,11 @@
   box-shadow: none;
 }
 .activeGenre {
-  /* background-image: linear-gradient(to right, #ffa34f, #ff5e4b); */
-  /* background-clip: text; */
-  /* -webkit-text-fill-color: transparent; */
-  background-color: #ffa34f;
-  color: white;
+  background-color: #ececec;
+  color: #353b40;
   cursor: pointer;
+  border: 1px solid #36393c;
+  font-weight: 600;
 }
 
 .genre-btn::-webkit-scrollbar {

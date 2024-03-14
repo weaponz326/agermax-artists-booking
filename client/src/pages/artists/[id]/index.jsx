@@ -49,7 +49,6 @@ function ArtistProfile() {
       try {
         const artist = await getUserById(id)
         setArtist(artist)
-        console.log(artist)
       } catch (error) {
         console.log('failed to fetch user')
       }
@@ -61,13 +60,7 @@ function ArtistProfile() {
     setOpenDrawer(value)
   }
 
-  if (artist === null)
-    return (
-      <div>
-        <h2>Loading ...</h2>
-        <FallbackSpinner />
-      </div>
-    )
+  if (!artist) return null
 
   return (
     <CustomPagesLayout>

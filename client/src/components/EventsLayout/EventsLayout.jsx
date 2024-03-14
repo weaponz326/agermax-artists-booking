@@ -7,7 +7,6 @@ import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'
 import Link from 'next/link'
 import { getUserById } from 'src/services/users'
-import { useUsers } from 'src/providers/UsersProvider'
 
 export default function EventsLayout({ bookings, numOfBookings, selectedGenre, setSelectedGenre }) {
   const [bookingsList, setBookingsList] = useState()

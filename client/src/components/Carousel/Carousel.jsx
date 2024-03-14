@@ -64,11 +64,7 @@ export default function Carousel({ artist }) {
         {/* A good place to map your tags from Api calls */}
 
         <div className={styles['carousel-genre']}>
-          {artist.genre.length ? (
-            artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-          ) : (
-            <Tag>No genre provided yet.</Tag>
-          )}
+          {artist.genre.length && artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
         </div>
         <Link
           className={styles.carouselArtistNameLinks}

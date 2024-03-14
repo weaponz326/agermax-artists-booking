@@ -36,9 +36,16 @@ export default function Header() {
   }, [artists])
 
   const renderedItem = !user ? (
-    <Link href='/register'>
-      <TabButton className={styles.joinAgermaxButton}>Join Agermax Today</TabButton>
-    </Link>
+    <div>
+      <h4 className={styles.headerMessage}>Welcome to Agermax.</h4>
+      <h2 className={styles.headerMessage}>Everything you need for entertainment, now in one place.</h2>
+      <p className={styles.headerMessage}>
+        Take control of your entertainment management with our cutting-edge portal.
+      </p>
+      <Link href='/register'>
+        <TabButton className={styles.joinAgermaxButton}>Join now-it’s FREE</TabButton>
+      </Link>
+    </div>
   ) : (
     <div>
       <h2>

@@ -10,6 +10,8 @@
 .hot-artists-nav p {
   margin: 0;
   flex: 1;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .carousel-img {

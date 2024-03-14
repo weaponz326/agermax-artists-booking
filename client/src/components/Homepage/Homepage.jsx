@@ -189,24 +189,11 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
     background: 'rgb(219, 224, 228)'
   }
 
-  if (!genreList) {
+  if (!genreList.length) {
     return (
       <>
-        <div className={styles.seeAllGenreButton}>
-          <div className={styles.skeletonGenreButton}>
-            <Skeleton
-              animation='wave'
-              variant='rounded'
-              height='100%'
-              className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
-              sx={{ borderRadius: 'inherit', ...skeletonCarouselDetail }}
-            >
-              All Genre
-            </Skeleton>
-          </div>
-        </div>
         <div className={styles.skeletonGenre}>
-          {Array.from({ length: 13 }).map((genre, index) => (
+          {Array.from({ length: 5 }).map((genre, index) => (
             <div className={styles.skeletonGenreButton} key={index}>
               <Skeleton
                 width={70}
@@ -224,15 +211,14 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
   }
   return (
     <>
-      <div className={styles.seeAllGenreButton}>
+      {/* <div className={styles.seeAllGenreButton}></div> */}
+      <div className={styles['events-genre-buttons']}>
         <TabButton
           className={selectedGenre === null ? styles['activeGenre'] : styles['genre-btn']}
           onClick={() => setSelectedGenre(null)}
         >
           All Genre
         </TabButton>
-      </div>
-      <div className={styles['events-genre-buttons']}>
         {genreList.map((genre, index) => (
           <div
             key={index}

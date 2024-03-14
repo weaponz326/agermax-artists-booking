@@ -26,7 +26,7 @@
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  /* background-color: #e2e8ed; */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   background-color: var(--off-light-body-background);
   padding: 1rem 1.5rem;
 }
