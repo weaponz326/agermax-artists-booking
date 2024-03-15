@@ -28,14 +28,14 @@ exports.getBookingById = async (req, res) => {
 exports.createBooking = async (req, res) => {
   let bookingData = { ...req.body };
 
-  if (req.files["mainBanner"] && req.files["mainBanner"].length > 0) {
+  if (req.files?.["mainBanner"] && req.files["mainBanner"].length > 0) {
     bookingData.mainBanner = constructFullPath(
       req,
       req.files["mainBanner"][0].path
     );
   }
 
-  if (req.files["gallery"] && req.files["gallery"].length > 0) {
+  if (req.files?.["gallery"] && req.files["gallery"].length > 0) {
     bookingData.gallery = req.files["gallery"].map((file) =>
       constructFullPath(req, file.path)
     );

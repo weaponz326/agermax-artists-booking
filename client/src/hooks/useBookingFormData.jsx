@@ -35,8 +35,8 @@ function useBookingFormData(booking) {
     setFormData({
       ...formData,
       [name]: value,
-      artistID: artist ? artist : formData.artistID,
-      organizerID: user
+      artistID: artist ? artist : formData.artistID
+      // organizerID: user.role === 'organizer' && user
     })
     console.log(formData)
   }

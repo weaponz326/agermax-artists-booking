@@ -1018,7 +1018,7 @@ export const BookingsModalContent = ({
               </select>
             </div>
           )}
-          {/* ********************************** */}
+          {/**************************************/}
 
           <TabButton className={styles.modalCardContentSaveButton}>{saveButtonText}</TabButton>
         </form>

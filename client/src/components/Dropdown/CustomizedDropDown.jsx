@@ -4,9 +4,8 @@ import { HambergerMenu } from 'iconsax-react'
 import Link from 'next/link'
 import styles from './CustomizedDropdown.module.css'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
-import { Avatar, Space } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-const imageBaseUrl = process.env.NEXT_PUBLIC_PHOTOUPLOAD_URL
+import Avatar from '@mui/material/Avatar'
 
 // import { useAuth } from 'src/providers/AuthProvider'
 
@@ -202,9 +201,8 @@ const CustomizedDropdown = ({ className, user, logout }) => {
           <Button className={styles.userMenuButton}>
             <div className={styles.userImageContainer}>
               <div className={styles.userOnlineIndicator}></div>
-              <img className={styles.userImage} src={`${user.profilePhoto}`} alt='profilePhoto' />
+              <Avatar src={`${user.profilePhoto}`} />
             </div>
-            {/* <HambergerMenu /> */}
           </Button>
         </Dropdown>
       </div>

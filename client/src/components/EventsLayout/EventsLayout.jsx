@@ -54,7 +54,6 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
     )
   } else {
     return (
-      // <div className={styles['main-events']}>
       <div className={styles['events-preview']}>
         {bookingsList.map((booking, index) => (
           <Fragment key={index}>
@@ -62,7 +61,6 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
           </Fragment>
         ))}
       </div>
-      // </div>
     )
   }
 }
@@ -74,11 +72,12 @@ const EventCard = ({ booking }) => {
     const fetchArtist = async () => {
       const bookingArtist = await getUserById(booking.artistID)
       if (booking) {
-        if (booking.mainBanner === '') {
+        if (!booking.mainBanner || booking.mainBanner === '') {
           setBookingImage(bookingArtist.profilePhoto)
+        } else {
+          setBookingImage(booking.mainBanner)
+          console.log('booking banner', booking.mainBanner)
         }
-        setBookingImage(booking.mainBanner)
-        console.log('booking banner', booking.mainBanner)
       } else {
         setBookingImage(bookingArtist.profilePhoto)
         console.log('Artist Profile Photo', bookingArtist.profilePhoto)
