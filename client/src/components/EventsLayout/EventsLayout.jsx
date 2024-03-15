@@ -42,9 +42,9 @@ export default function EventsLayout({ bookings, numOfBookings, selectedGenre, s
                 />
               </div>
               <div>
-                <Skeleton variant='text' width='40%' height={25} sx={{ ...skeletonCarouselDetail }} />
-                <Skeleton variant='text' width='55%' height={25} sx={{ ...skeletonCarouselDetail }} />
-                <Skeleton variant='text' width='45%' height={25} sx={{ ...skeletonCarouselDetail }} />
+                <Skeleton variant='text' width='40%' height={30} sx={{ ...skeletonCarouselDetail }} />
+                <Skeleton variant='text' width='55%' height={30} sx={{ ...skeletonCarouselDetail }} />
+                <Skeleton variant='text' width='45%' height={30} sx={{ ...skeletonCarouselDetail }} />
               </div>
             </div>
           </Fragment>

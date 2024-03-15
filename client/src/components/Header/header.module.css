@@ -7,7 +7,8 @@
   /* background-color: var(--background-color); */
   display: flex;
   flex-direction: column;
-  height: 27rem;
+  height: 52vh;
+  min-height: 35rem;
   padding: 2rem 3rem;
   gap: 4rem;
   position: relative;
@@ -153,7 +154,8 @@
   display: flex;
   justify-content: flex-end;
 }
-header .greetings {
+header .greetings,
+.greetingsWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;

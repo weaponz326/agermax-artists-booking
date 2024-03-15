@@ -35,26 +35,6 @@ export default function Header() {
     console.log(performersList)
   }, [artists])
 
-  const renderedItem = !user ? (
-    <div>
-      <h4 className={styles.headerMessage}>Welcome to Agermax.</h4>
-      <h2 className={styles.headerMessage}>Everything you need for entertainment, now in one place.</h2>
-      <p className={styles.headerMessage}>
-        Take control of your entertainment management with our cutting-edge portal.
-      </p>
-      <Link href='/register'>
-        <TabButton className={styles.joinAgermaxButton}>Join now-it’s FREE</TabButton>
-      </Link>
-    </div>
-  ) : (
-    <div>
-      <h2>
-        Welcome, {user?.firstName || 'Friend'} {user?.lastName || ''}
-      </h2>
-      <p className={styles['greetings-message']}>Book amazing Performers for your next events.</p>
-    </div>
-  )
-
   const handleSelectPerformer = performer => {
     console.log(performer)
   }
@@ -66,29 +46,47 @@ export default function Header() {
     <header className={styles['header']}>
       <div className={styles['header-background']}>
         <div className={styles['greetings']}>
-          <div>{renderedItem}</div>
-          <AutoComplete
-            autoFocus
-            // onClick={e => setActiveInputTab(0)}
-            // onChange={e => setActiveInputTab(1)}
-            className={`${styles.collapsedStateSearchBarWrapper} `}
-            popupMatchSelectWidth={false}
-            allowClear
-            notFoundContent='Sorry, no performers found'
-            variant='borderless'
-            options={performersList.map(artist => ({
-              artistID: artist._id,
-              value: `${artist.firstName} ${artist.lastName}`,
-              label: <PerformersDropdownDisplay artist={artist} />
-            }))}
-            placeholder='Search Performer'
-            filterOption={filterOption}
-            onSelect={performer => handleSelectPerformer(performer)}
-            id={0}
-            // onClear={handleClear}
-            // ref={selectArtistRef}
-          />
+          {!user ? (
+            <div className={styles.greetingsWrapper}>
+              <h4 className={styles.headerMessage}>Welcome to Agermax.</h4>
+              <h2 className={styles.headerMessage}>Everything you need for entertainment, now in one place.</h2>
+              <p className={styles.headerMessage}>
+                Take control of your entertainment management with our cutting-edge portal.
+              </p>
+              <Link href='/register'>
+                <TabButton className={styles.joinAgermaxButton}>Join now-it’s FREE</TabButton>
+              </Link>
+            </div>
+          ) : (
+            <div className={styles.greetingsWrapper}>
+              <h2>
+                Welcome, {user?.firstName || 'Friend'} {user?.lastName || ''}
+              </h2>
+              <p className={styles['greetings-message']}>Book amazing Performers for your next events.</p>
+            </div>
+          )}
         </div>
+        <AutoComplete
+          autoFocus
+          // onClick={e => setActiveInputTab(0)}
+          // onChange={e => setActiveInputTab(1)}
+          className={`${styles.collapsedStateSearchBarWrapper} `}
+          popupMatchSelectWidth={false}
+          allowClear
+          notFoundContent='Sorry, no performers found'
+          variant='borderless'
+          options={performersList.map(artist => ({
+            artistID: artist._id,
+            value: `${artist.firstName} ${artist.lastName}`,
+            label: <PerformersDropdownDisplay artist={artist} />
+          }))}
+          placeholder='Search Performer'
+          filterOption={filterOption}
+          onSelect={performer => handleSelectPerformer(performer)}
+          id={0}
+          // onClear={handleClear}
+          // ref={selectArtistRef}
+        />
       </div>
       <HeaderCarouselContainer
         layout={styles['header-carousel-layout']}
