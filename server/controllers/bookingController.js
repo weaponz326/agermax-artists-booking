@@ -50,35 +50,6 @@ exports.createBooking = async (req, res) => {
   }
 };
 
-// exports.updateBooking = async (req, res) => {
-//   const { id } = req.params;
-//   let updateData = { ...req.body };
-
-//   // Check if req.files exists and contains mainBanner property
-//   if (req.files?.["mainBanner"] && req.files["mainBanner"].length > 0) {
-//     updateData.mainBanner = constructFullPath(
-//       req,
-//       req.files["mainBanner"][0].path
-//     );
-//   }
-
-//   // Check if req.files exists and contains gallery property
-//   if (req.files?.["gallery"] && req.files["gallery"].length > 0) {
-//     updateData.gallery = req.files["gallery"].map((file) =>
-//       constructFullPath(req, file.path)
-//     );
-//   }
-
-//   try {
-//     const updatedBooking = await Booking.findByIdAndUpdate(id, updateData, {
-//       new: true,
-//     }).lean();
-//     res.json(updatedBooking);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// };
-
 exports.updateBooking = async (req, res) => {
   const { id } = req.params;
   let updateData = { ...req.body };
