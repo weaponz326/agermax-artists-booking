@@ -71,16 +71,10 @@ const EventCard = ({ booking }) => {
   useEffect(() => {
     const fetchArtist = async () => {
       const bookingArtist = await getUserById(booking.artistID)
-      if (booking) {
-        if (!booking.mainBanner || booking.mainBanner === '') {
-          setBookingImage(bookingArtist.profilePhoto)
-        } else {
-          setBookingImage(booking.mainBanner)
-          console.log('booking banner', booking.mainBanner)
-        }
-      } else {
+      if (!booking.mainBanner || booking.mainBanner === '') {
         setBookingImage(bookingArtist.profilePhoto)
-        console.log('Artist Profile Photo', bookingArtist.profilePhoto)
+      } else {
+        setBookingImage(booking.mainBanner)
       }
     }
 
