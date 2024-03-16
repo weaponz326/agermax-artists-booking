@@ -131,10 +131,10 @@
   align-self: flex-end;
 }
 .evt-img {
-  position: absolute;
+  /* position: absolute; */
   top: 0;
   left: 0;
-  width: 100%;
+  /* width: 100%; */
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 1.1rem;

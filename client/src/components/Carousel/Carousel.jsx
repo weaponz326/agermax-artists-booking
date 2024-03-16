@@ -9,7 +9,6 @@ import { getOnePhoto, getRandomArtistPhotos } from 'src/services/mock'
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function Carousel({ artist }) {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
 
   /**************** */
@@ -36,6 +35,7 @@ export default function Carousel({ artist }) {
     } else {
       setLoading(false)
     }
+    console.log(artist)
   }, [artist])
   if (!loading) {
     return (
@@ -51,7 +51,7 @@ export default function Carousel({ artist }) {
         </div>
         <div className={styles['carousel-title-text']}>
           <Link
-            className={styles.carouselArtistNameLinks}
+            className={styles.artistDetailsLink}
             href={{
               pathname: `/artists/${artist._id}`
             }}
@@ -64,10 +64,10 @@ export default function Carousel({ artist }) {
         {/* A good place to map your tags from Api calls */}
 
         <div className={styles['carousel-genre']}>
-          {artist.genre.length && artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
+          {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
         </div>
         <Link
-          className={styles.carouselArtistNameLinks}
+          className={styles.artistDetailsLink}
           href={{
             pathname: `/artists/${artist._id}`
           }}

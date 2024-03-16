@@ -2,21 +2,18 @@ import { useEffect, useState } from 'react'
 import { Clock, ExportSquare, Location, PlayCircle } from 'iconsax-react'
 import CustomPagesLayout from 'src/layouts/CustomPagesLayout'
 import styles from './artist-profile.module.css'
-import { Drawer, ConfigProvider, Avatar } from 'antd'
-import Image from 'next/image'
+import { Drawer, ConfigProvider } from 'antd'
 
-import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
+import Avatar from '@mui/material/Avatar'
 
 import { useRouter } from 'next/router'
 import BookingCard from 'src/components/BookingCard/BookingCard'
 import Link from 'next/link'
-import { getArtistById, getEventsPhotos } from 'src/services/artists'
 import { getUserById } from 'src/services/users'
 import Skeleton from '@mui/material/Skeleton'
 import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import FallbackSpinner from 'src/@core/components/spinner'
 import { useAuth } from 'src/hooks/useAuth'
 
 export const dateTimeFormat = (dateTime, format) => {
@@ -230,43 +227,15 @@ const TabView = ({ config }) => {
 const ArtisteProfileSection = ({ artist, user, logout }) => {
   const [open, setOpen] = useState(false)
 
-  const handleOpenBookingCard = () => {
-    if (user) {
-      setOpen(true)
-    } else {
-      logout()
-    }
-  }
-
   return (
     <section>
       <Card className={styles['profile-card']}>
         <div className={styles['avatar-container']}>
-          {artist ? (
-            <Image
-              // className={styles['evt-img']}
-              src={artist.profilePhoto ? artist.profilePhoto : '/images/artist-1.jpg'}
-              alt='artistImg'
-              loading='eager'
-              fill
-            />
-          ) : (
-            <Skeleton
-              animation='wave'
-              variant='rounded'
-              height={100}
-              sx={{ borderRadius: '50%' }}
-              className={styles['skeletonImg']}
-            />
-          )}
+          <Avatar sx={{ width: '120px', height: '120px' }} src={artist.profilePhoto} />
         </div>
-        <h5 id={styles['username']}>{artist ? `${artist.firstName} ${artist.lastName}` : 'Unknown Artist'}</h5>
+        <h5 id={styles['username']}>{`${artist.firstName} ${artist.lastName}`}</h5>
         <div className={styles['tags-container']}>
-          {artist && artist.genre.length > 0 ? (
-            artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-          ) : (
-            <Tag>No genre provided yet.</Tag>
-          )}
+          {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
         </div>
         <div className={styles['button-container']}>
           <TransitionsModal
@@ -278,7 +247,7 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
         </div>
         <div className={styles['bio-container']}>
           <p className={styles['title']}>Biography</p>
-          <p className={styles['body']}>{artist.bio ? artist.bio : 'No bio provided yet!'}</p>
+          <p className={styles['body']}>{artist.bio && artist.bio}</p>
         </div>
       </Card>
     </section>

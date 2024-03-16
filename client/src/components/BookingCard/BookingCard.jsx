@@ -8,7 +8,7 @@ import MobileStepper from '@mui/material/MobileStepper'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import { Tag } from 'src/pages/artists/[id]'
-import { Calendar, Clock } from 'iconsax-react'
+import { ArrowForward, ArrowLeft, ArrowRight, Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 // import { createBooking } from 'src/services/bookings'
@@ -18,6 +18,8 @@ import dayjs from 'dayjs'
 import useBookingFormData from 'src/hooks/useBookingFormData'
 import { useRouter } from 'next/router'
 import { useBookings } from 'src/providers/BookingsProvider'
+import { BiArrowBack, BiArrowFromRight, BiArrowToRight } from 'react-icons/bi'
+import { textTransform } from '@mui/system'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -77,7 +79,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
         }
       },
 
-      // MuiButton: {
+      // MuiMobileStepper-dot: {
       //   styleOverrides: {
       //     root: {
       //       padding: '5px  16px',
@@ -114,7 +116,8 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
         styleOverrides: {
           root: {
             fontSize: '16px',
-            fontFamily: 'inherit'
+            fontFamily: 'inherit',
+            color: 'red'
           }
         }
       },
@@ -239,7 +242,13 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
                     What time?
                   </Typography>
-                  <Grid container border='1px solid #CBD4DC' borderRadius='12px'>
+                  <Grid
+                    container
+                    border='1px solid #CBD4DC'
+                    borderRadius='12px'
+                    padding={'1rem 0.5rem'}
+                    justifyContent={'center'}
+                  >
                     <Grid item xs={4} padding={1.5}>
                       <Typography color='#4B627F' fontSize='13px'>
                         Get In Time
@@ -273,6 +282,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         disabled={!formData.dateTimeRequested}
                         skipDisabled
                         ampm={false}
+                        referenceDate={formData.dateTimeRequested}
                       />
                     </Grid>
                     <Grid item xs={4} padding={1.5}>
@@ -308,10 +318,12 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         format='HH:mm'
                         disabled={!formData.getInTime}
                         ampm={false}
+                        referenceDate={formData.dateTimeRequested}
                         skipDisabled
                       />
                     </Grid>
-                    <Grid item xs={4} padding={1.5}>
+                    <VerticalDivider />
+                    <Grid item xs={3} padding={1.5}>
                       <Typography color='#4B627F' fontSize='13px'>
                         End Time
                       </Typography>
@@ -345,6 +357,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         skipDisabled
                         ampm={false}
                         name='endTime'
+                        referenceDate={formData.dateTimeRequested}
                       />
                     </Grid>
                   </Grid>
@@ -507,6 +520,17 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
 
 const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext, allowCancel }) => {
   const theme = useTheme()
+  const buttonStyle = {
+    background: '#D5DFEC',
+    color: '#4B627F',
+    borderRadius: '9px',
+    fontSize: '16px',
+    fontWeight: '500',
+    padding: '10px 14px',
+    width: '110px',
+    textTransform: 'none',
+    ':hover': { background: '#f07a4b' }
+  }
 
   return (
     <MobileStepper
@@ -514,11 +538,15 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
       sx={{
         marginTop: 'auto',
         color: '#FC8A5E',
-        '& .MuiMobileStepper-dotActive': {
-          backgroundColor: '#f07a4b'
+        fontSize: '20px',
+        '& .MuiMobileStepper-dot': {
+          backgroundColor: '#f07a4b6e'
         },
         '.MuiMobileStepper-dots': {
-          gap: '15px'
+          gap: '20px'
+        },
+        '.MuiMobileStepper-dotActive': {
+          background: '#f07a4b'
         }
       }}
       steps={3}
@@ -528,17 +556,15 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
         <Button
           size='small'
           sx={{
+            ...buttonStyle,
             background: '#FC8A5E',
-            color: 'white',
-            borderRadius: '9px',
-            padding: '8px 10px',
-            ':hover': { background: '#f07a4b' }
+            color: 'white'
           }}
           onClick={handleNext}
           disabled={disableNext}
         >
           Next
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          {theme.direction === 'rtl' ? <ArrowLeft /> : <ArrowRight />}
         </Button>
       }
       backButton={
@@ -546,20 +572,20 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           size='small'
           onClick={handleBack}
           sx={{
-            background: '#D5DFEC',
-            // display: !allowCancel && 'none',
-            color: '#4B627F',
-            borderRadius: '9px',
-            padding: '8px 10px',
-            ':hover': { background: '#f07a4b' }
+            ...buttonStyle,
+            ':hover': { background: '#D5DFEC' }
           }}
         >
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+          {theme.direction === 'rtl' ? <ArrowRight /> : <ArrowLeft />}
           {activeStep === 0 ? 'Cancel' : 'Back'}
         </Button>
       }
     />
   )
+}
+
+const VerticalDivider = () => {
+  return <div className={styles.verticalDivider}></div>
 }
 
 export default BookingCard
