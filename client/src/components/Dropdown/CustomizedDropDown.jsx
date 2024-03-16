@@ -23,9 +23,9 @@ import {
 
 const CustomizedDropdown = ({ className, user, logout }) => {
   const UserAccountLink = ({ children }) => {
-    if (user.role === 'artist') return <Link href='admin/home/artist'>{children}</Link>
-    if (user.role === 'admin') return <Link href='admin/home/admin'>{children}</Link>
-    if (user.role === 'organizer') return <Link href='admin/home/organizer'>{children}</Link>
+    if (user.role === 'artist') return <Link href='/admin/home/artist'>{children}</Link>
+    if (user.role === 'admin') return <Link href='/admin/home/admin'>{children}</Link>
+    if (user.role === 'organizer') return <Link href='/admin/home/organizer'>{children}</Link>
   }
 
   const isLoggedInItems = [

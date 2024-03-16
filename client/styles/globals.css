@@ -68,3 +68,22 @@ code[class*='language-'] {
 }
 
 /* End General Styles */
+
+:where(.css-1qhpsh8).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #262626;
+  border-color: transparent;
+}
+
+:where(.css-1qhpsh8).ant-dropdown .ant-dropdown-menu,
+:where(.css-1qhpsh8).ant-dropdownmenu-submenu .ant-dropdown-menu {
+  padding: 10px;
+  list-style-type: none;
+  background-color: #ffffff;
+  background-clip: padding-box;
+  border-radius: 12px;
+  outline: none;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

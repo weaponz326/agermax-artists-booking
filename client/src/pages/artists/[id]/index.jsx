@@ -268,7 +268,7 @@ const EventsTable = ({ artist, artistEvents, title, onLoadMore, numberOfEvents }
             <div className={styles['event-name']}>
               <div className={styles['name']}>
                 <h5 className={styles['event-text']}>{event.eventTitle}</h5>
-                <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
+                <img src={event.mainBanner ? event.mainBanner : artist.profilePhoto} alt='' />
               </div>
               <p className={styles['location-name']}>{event.locationVenue}</p>
             </div>
@@ -293,47 +293,6 @@ const EventsTable = ({ artist, artistEvents, title, onLoadMore, numberOfEvents }
           More
         </div>
       )}
-    </>
-  )
-}
-
-const PastEventsTable = ({ artist, artistsPastEvents, handleLoadPastEvents }) => {
-  if (artistsPastEvents === null) return <div>No Past Events to display for this artist.</div>
-  return (
-    <>
-      <div className={styles['events-table']}>
-        {artistsPastEvents.map((num, index) => (
-          <div key={`event-tile-${index}`} className={styles['event-tile']}>
-            <div className={styles['date']}>
-              <p>Dec</p>
-              <h5>18</h5>
-            </div>
-            <div className={styles['event-name']}>
-              <div className={styles['name']}>
-                <h5 className={styles['event-text']}>
-                  {artist.firstName} {artist.lastName}
-                </h5>
-                <img src='https://source.unsplash.com/3tYZjGSBwbk' alt='' />
-              </div>
-              <p className={styles['location-name']}>Stockholm Music Stadium</p>
-            </div>
-            <div className={styles['event-location']}>
-              <Link href='#' className={styles.openMap}>
-                Open Map <ExportSquare size={13} />
-              </Link>
-              <p className={styles['event-text']}>
-                Street address 18 <Location variant='Bold' size={12} />
-              </p>
-              <p className={styles['event-text']}>
-                20:00 - 01:00 <Clock size={12} variant='Bold' />
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div onClick={handleLoadPastEvents} className={styles.moreBtn}>
-        More
-      </div>
     </>
   )
 }

@@ -472,3 +472,12 @@
   width: 100%;
   border-radius: 21px;
 }
+
+@media (width < 700px) {
+  .page-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}

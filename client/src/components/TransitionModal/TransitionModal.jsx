@@ -40,7 +40,8 @@ export default function TransitionsModal({ modalContent, btnClassName, open, set
           background: 'var(--button-color)',
           color: 'white',
           ':hover': { background: '#f07a4b' },
-          margin: '5px 0'
+          margin: '5px 0',
+          borderRadius: '12px'
         }}
         className={btnClassName}
         onClick={handleOpen}
