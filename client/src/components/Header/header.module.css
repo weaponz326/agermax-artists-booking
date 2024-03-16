@@ -161,7 +161,7 @@ header .greetings,
   justify-content: center;
   text-align: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2.5rem;
   max-width: 1740px;
   margin-inline: auto;
 }

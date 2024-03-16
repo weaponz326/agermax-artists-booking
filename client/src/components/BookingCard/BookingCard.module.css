@@ -35,8 +35,8 @@
 }
 
 .verticalDivider {
-  width: 3px;
+  width: 2px;
   margin: auto 0;
-  height: 80%;
-  background-color: red;
+  height: 100%;
+  background-color: #cbd4dc;
 }

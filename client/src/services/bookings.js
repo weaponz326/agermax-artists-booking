@@ -188,7 +188,6 @@ export async function getTop10BookedArtists() {
 
 export async function getOrganizersByArtistID(user) {
   let url = `bookings/${user.role}/${user._id}/organizers-by-artist`
-  console.log(url)
   try {
     const { data } = await axios.get(`${baseUrl}/${url}`)
     return data
@@ -199,7 +198,6 @@ export async function getOrganizersByArtistID(user) {
 
 export async function getVenuesByArtistID(user) {
   let url = `bookings/${user.role}/${user._id}/venues`
-  console.log(url)
   try {
     const { data } = await axios.get(`${baseUrl}/${url}`)
     return data

@@ -2,24 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DateCalendar } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import TextField from '@mui/material/TextField'
 
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import { Tag } from 'src/pages/artists/[id]'
-import { ArrowForward, ArrowLeft, ArrowRight, Calendar, Clock } from 'iconsax-react'
+import { ArrowLeft, ArrowRight, Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
 import CheckCircle from '@material-ui/icons/CheckCircle'
-// import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import useBookingFormData from 'src/hooks/useBookingFormData'
 import { useRouter } from 'next/router'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { BiArrowBack, BiArrowFromRight, BiArrowToRight } from 'react-icons/bi'
-import { textTransform } from '@mui/system'
+import Tooltip from 'src/@core/theme/overrides/tooltip'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -253,6 +250,9 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                       <Typography color='#4B627F' fontSize='13px'>
                         Get In Time
                       </Typography>
+                      <Typography color='#4B627F' fontSize='13px'>
+                        Select
+                      </Typography>
                       <TimePicker
                         name='getInTime'
                         value={dayjs(formData.getInTime)}
@@ -380,11 +380,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     {artist && artist.firstName} {artist && artist.lastName}
                   </Typography>
                   <Grid container gap={1} marginBottom={4}>
-                    {artist.genre.length ? (
-                      artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)
-                    ) : (
-                      <Tag>No genre provided yet.</Tag>
-                    )}
+                    {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)}
                   </Grid>
                   <Grid container justifyContent='space-between' alignItems='center'>
                     <Typography fontSize='19px' fontWeight='600'>
@@ -447,13 +443,42 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>Your Details</Typography>
                   </Grid>
                   <Grid container direction='column' marginTop={3} color="'#4B627F'">
-                    <Typography>
-                      Name: {user.firstName} {user.lastName}
-                    </Typography>
-                    <Typography>User Type: {user.role}</Typography>
-                    <Typography>Contact: {user.contactPhone}</Typography>
-                    <Typography>Email: {user.email}</Typography>
-                    <Typography>Address: {user.address}</Typography>
+                    <TextField
+                      fullWidth
+                      type='text'
+                      label='First Name'
+                      value={user.firstName}
+                      // onChange={handleFieldChange('email')}
+                      sx={{ mb: 1 }}
+                      size='small'
+                    />
+                    <TextField
+                      fullWidth
+                      type='text'
+                      label='Last Name'
+                      value={user.lastName}
+                      // onChange={handleFieldChange('email')}
+                      sx={{ mb: 1 }}
+                      size='small'
+                    />
+                    <TextField
+                      fullWidth
+                      type='email'
+                      label='Email'
+                      value={user.email}
+                      // onChange={handleFieldChange('email')}
+                      sx={{ mb: 1 }}
+                      size='small'
+                    />
+                    <TextField
+                      fullWidth
+                      type='tel'
+                      label='Phone'
+                      value={user.contactPhone}
+                      // onChange={handleFieldChange('email')}
+                      sx={{ mb: 1 }}
+                      size='small'
+                    />
                   </Grid>
                   <Grid marginTop='auto'>
                     <NavMobileStepper

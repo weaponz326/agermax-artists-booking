@@ -62,7 +62,7 @@ export default function Header() {
               <h2>
                 Welcome, {user?.firstName || 'Friend'} {user?.lastName || ''}
               </h2>
-              <p className={styles['greetings-message']}>Book amazing Performers for your next events.</p>
+              <p className={styles.headerMessage}>Book amazing Performers for your next events.</p>
             </div>
           )}
         </div>

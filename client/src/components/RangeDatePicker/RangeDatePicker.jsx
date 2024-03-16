@@ -1,6 +1,6 @@
 import React from 'react'
 import { DatePicker, Space } from 'antd'
-const { RangePicker } = DatePicker
+const { RangePicker, TimePicker } = DatePicker
 
 const RangeDatePicker = () => (
   <Space direction='vertical' size={16}>

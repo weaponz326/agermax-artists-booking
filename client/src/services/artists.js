@@ -1,6 +1,4 @@
 // import axios from 'axios'
-import Unsplash from 'src/components/mock-data-apis/Unsplash'
-import usersData from 'src/@fake-db/usersData.json'
 import axios from 'axios'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
