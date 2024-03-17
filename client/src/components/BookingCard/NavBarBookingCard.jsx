@@ -30,7 +30,8 @@ function NavBarBookingCard({
   selectedArtist,
   setSelectedArtist,
   setActiveInputTab,
-  activeInputTab
+  activeInputTab,
+  setIsScheduled
 }) {
   const router = useRouter()
 
@@ -193,6 +194,7 @@ function NavBarBookingCard({
   const handleNext = () => {
     if (activeStep === 1) {
       setActiveInputTab(2)
+      setIsScheduled(true)
     } else {
       setActiveStep(prevActiveStep => prevActiveStep + 1)
     }

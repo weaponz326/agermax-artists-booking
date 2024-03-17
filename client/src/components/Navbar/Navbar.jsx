@@ -100,6 +100,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   const [activeInputTab, setActiveInputTab] = useState(0)
   const { setIsBookingsUpdated } = useBookings()
   const [submittable, setSubmittable] = useState(false)
+  const [isScheduled, setIsScheduled] = useState(false)
 
   const router = useRouter()
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -338,6 +339,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                     onDone={() => setOpenDropdown(false)}
                     activeInputTab={activeInputTab}
                     setActiveInputTab={setActiveInputTab}
+                    setIsScheduled={setIsScheduled}
                   />
                 }
               />
