@@ -111,6 +111,17 @@ export async function getTotalBookings(user) {
   }
 }
 
+export async function getAllBookingsWithArtist(user) {
+  let url
+  url = `bookings/artist/${user._id}/all-with-artist`
+  try {
+    const { totalBookings } = await axios.get(`${baseUrl}/${url}`)
+    return totalBookings
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
 //Pending Books
 export async function getTotalPendingBookings(user) {
   let url

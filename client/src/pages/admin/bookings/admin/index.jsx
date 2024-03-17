@@ -607,7 +607,7 @@ export const BookingsModalContent = ({
     } else if ((booking != undefined && user && user.role === 'admin') || 'organizer') {
       setSaveButtonText('Update')
     } else if (booking != undefined && user && user.role === 'artist') {
-      setSaveButtonText('Accept & Submit for Approval')
+      setSaveButtonText('OK')
     }
   }, [user, booking])
 
@@ -1068,10 +1068,10 @@ export const BookingsModalContent = ({
                 </TabButton>
               </div>
             )}
-            {!booking.invoiced && (
+            {!booking.invoiced && user.role != 'artist' && (
               <form onSubmit={handleRejectBooking}>
                 <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
-                  {user.role === 'admin' || 'artist' ? 'Reject Booking 👎' : 'Cancel Booking'}
+                  {user.role === 'admin' ? 'Reject Booking 👎' : 'Cancel Booking'}
                 </TabButton>
               </form>
             )}

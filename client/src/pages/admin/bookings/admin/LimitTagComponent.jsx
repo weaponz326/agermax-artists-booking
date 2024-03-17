@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import { useAuth } from 'src/hooks/useAuth'
 
 const modalCardContentInputField = {
   textAlign: 'left',
@@ -17,6 +18,8 @@ const modalCardContentInputField = {
 }
 
 export default function LimitTags({ formData, setFormData }) {
+  const { user } = useAuth()
+
   const handleGenreInput = (e, newValue) => {
     const title = [...newValue]
     setFormData({ ...formData, genre: newValue })
@@ -37,6 +40,7 @@ export default function LimitTags({ formData, setFormData }) {
       renderInput={params => <TextField {...params} label='Genre' placeholder='Genre' />}
       size='small'
       sx={modalCardContentInputField}
+      disabled={user.role === 'artist'}
     />
   )
 }

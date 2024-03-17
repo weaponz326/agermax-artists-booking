@@ -17,6 +17,7 @@ import useBookingFormData from 'src/hooks/useBookingFormData'
 import { useRouter } from 'next/router'
 import { useBookings } from 'src/providers/BookingsProvider'
 import Tooltip from 'src/@core/theme/overrides/tooltip'
+import BookingCardSchedular from './CustomBookingCard'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -181,359 +182,350 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={customLocale}>
         <ThemeProvider theme={customTheme}>
-          <div
-            style={{
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'auto',
-              padding: '20px',
-              fontFamily: 'var(--main-font-family)'
-            }}
-            className='bookingCardWrapper'
-          >
-            <div style={{ height: '100%' }}>
-              {activeStep === 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
-                    {artist && artist.firstName} {artist && artist.lastName}
-                  </Typography>
-                  <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
-                    {artist ? (
-                      artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-                    ) : (
-                      <Tag>No genre provided yet.</Tag>
-                    )}
-                  </div>
-                  <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
-                    Choose When 👇
-                  </Typography>
-                  <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
-                    <DateCalendar
-                      sx={{
-                        width: '100%',
-                        '& .MuiDayCalendar-header': {
-                          justifyContent: 'space-between',
-                          fontSize: '1rem'
-                        },
-                        '& .MuiDayCalendar-weekContainer': {
-                          justifyContent: 'space-between'
-                        },
-                        '& .MuiPickersCalendarHeader-label': {
-                          color: '#4B627F'
-                        },
-                        '& .MuiDayCalendar-weekDayLabel': {
-                          color: '#4B627F',
-                          fontSize: '16px'
-                        }
-                      }}
-                      // onChange={date => handleChange('dateTimeRequested', dayjs(date))}
-                      onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
-                      // className={styles.modalCardContentInputField}
-                      label='Select Event Date'
-                      value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
-                      disablePast
-                      name='dateTimeRequested'
-                    />
-                  </Grid>
-                  <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
-                    What time?
-                  </Typography>
-                  <Grid
-                    container
-                    border='1px solid #CBD4DC'
-                    borderRadius='12px'
-                    padding={'1rem 0.5rem'}
-                    justifyContent={'center'}
-                  >
-                    <Grid item xs={4} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        Get In Time
-                      </Typography>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        Select
-                      </Typography>
-                      <TimePicker
-                        name='getInTime'
-                        value={dayjs(formData.getInTime)}
-                        minutesStep={15}
-                        // onChange={time => handleChange('getInTime', dayjs(time))}
-                        onChange={time => handleChangeFormData('getInTime', dayjs(time))}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        format='HH:mm'
-                        disabled={!formData.dateTimeRequested}
-                        skipDisabled
-                        ampm={false}
-                        referenceDate={formData.dateTimeRequested}
-                      />
-                    </Grid>
-                    <Grid item xs={4} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        Start Time
-                      </Typography>
-                      <TimePicker
-                        minutesStep={15}
-                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
-                        // onChange={time => handleChange('startTime', dayjs(time))}
-                        onChange={time => handleChangeFormData('startTime', dayjs(time))}
-                        value={dayjs(formData.startTime)}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        name='startTIme'
-                        format='HH:mm'
-                        disabled={!formData.getInTime}
-                        ampm={false}
-                        referenceDate={formData.dateTimeRequested}
-                        skipDisabled
-                      />
-                    </Grid>
-                    <VerticalDivider />
-                    <Grid item xs={3} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        End Time
-                      </Typography>
-                      <TimePicker
-                        minutesStep={15}
-                        minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
-                        value={formData.endTime}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        // onChange={time => handleChange('endTime', dayjs(time))}
-                        onChange={time => handleChangeFormData('endTime', dayjs(time))}
-                        format='HH:mm'
-                        disabled={!formData.startTime}
-                        skipDisabled
-                        ampm={false}
-                        name='endTime'
-                        referenceDate={formData.dateTimeRequested}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid marginTop='auto'>
-                    <NavMobileStepper
-                      activeStep={activeStep}
-                      setActiveStep={setActiveStep}
-                      handleBack={handleBack}
-                      handleNext={handleNext}
-                      disableNext={disableNext}
-                      // allowCancel={allowCancel}
-                    />
-                  </Grid>
-                </div>
-              )}
+          <div style={{ height: '100%' }}>
+            {activeStep === 0 && (
+              // <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
+              //   <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
+              //     {artist && artist.firstName} {artist && artist.lastName}
+              //   </Typography>
+              //   <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
+              //     {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
+              //   </div>
+              //   <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
+              //     Choose When 👇
+              //   </Typography>
+              //   <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
+              //     <DateCalendar
+              //       sx={{
+              //         width: '100%',
+              //         '& .MuiDayCalendar-header': {
+              //           justifyContent: 'space-between',
+              //           fontSize: '1rem'
+              //         },
+              //         '& .MuiDayCalendar-weekContainer': {
+              //           justifyContent: 'space-between'
+              //         },
+              //         '& .MuiPickersCalendarHeader-label': {
+              //           color: '#4B627F'
+              //         },
+              //         '& .MuiDayCalendar-weekDayLabel': {
+              //           color: '#4B627F',
+              //           fontSize: '16px'
+              //         }
+              //       }}
+              //       // onChange={date => handleChange('dateTimeRequested', dayjs(date))}
+              //       onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
+              //       // className={styles.modalCardContentInputField}
+              //       label='Select Event Date'
+              //       value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
+              //       disablePast
+              //       name='dateTimeRequested'
+              //     />
+              //   </Grid>
+              //   <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
+              //     What time?
+              //   </Typography>
+              //   <Grid
+              //     container
+              //     border='1px solid #CBD4DC'
+              //     borderRadius='12px'
+              //     padding={'1rem 0.5rem'}
+              //     justifyContent={'center'}
+              //   >
+              //     <Grid item xs={4} padding={1.5}>
+              //       <Typography color='#4B627F' fontSize='13px'>
+              //         Get In Time
+              //       </Typography>
+              //       <Typography color='#4B627F' fontSize='13px'>
+              //         Select
+              //       </Typography>
+              //       <TimePicker
+              //         name='getInTime'
+              //         value={dayjs(formData.getInTime)}
+              //         minutesStep={15}
+              //         // onChange={time => handleChange('getInTime', dayjs(time))}
+              //         onChange={time => handleChangeFormData('getInTime', dayjs(time))}
+              //         sx={{
+              //           '& .MuiTextField-root': {
+              //             paddingRight: '12px'
+              //           },
+              //           '& .MuiOutlinedInput-input': {
+              //             padding: '0',
+              //             fontSize: '19px',
+              //             color: '#183D4C',
+              //             fontWeight: '600'
+              //           },
+              //           '& .MuiIconButton-root': {
+              //             padding: '0'
+              //           },
+              //           '& .MuiOutlinedInput-root': {
+              //             padding: '0 10px 0 0'
+              //           },
+              //           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+              //           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+              //         }}
+              //         format='HH:mm'
+              //         disabled={!formData.dateTimeRequested}
+              //         skipDisabled
+              //         ampm={false}
+              //         referenceDate={formData.dateTimeRequested}
+              //       />
+              //     </Grid>
+              //     <Grid item xs={4} padding={1.5}>
+              //       <Typography color='#4B627F' fontSize='13px'>
+              //         Start Time
+              //       </Typography>
+              //       <TimePicker
+              //         minutesStep={15}
+              //         minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
+              //         // onChange={time => handleChange('startTime', dayjs(time))}
+              //         onChange={time => handleChangeFormData('startTime', dayjs(time))}
+              //         value={dayjs(formData.startTime)}
+              //         sx={{
+              //           '& .MuiTextField-root': {
+              //             paddingRight: '12px'
+              //           },
+              //           '& .MuiOutlinedInput-input': {
+              //             padding: '0',
+              //             fontSize: '19px',
+              //             color: '#183D4C',
+              //             fontWeight: '600'
+              //           },
+              //           '& .MuiIconButton-root': {
+              //             padding: '0'
+              //           },
+              //           '& .MuiOutlinedInput-root': {
+              //             padding: '0 10px 0 0'
+              //           },
+              //           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+              //           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+              //         }}
+              //         name='startTIme'
+              //         format='HH:mm'
+              //         disabled={!formData.getInTime}
+              //         ampm={false}
+              //         referenceDate={formData.dateTimeRequested}
+              //         skipDisabled
+              //       />
+              //     </Grid>
+              //     <VerticalDivider />
+              //     <Grid item xs={3} padding={1.5}>
+              //       <Typography color='#4B627F' fontSize='13px'>
+              //         End Time
+              //       </Typography>
+              //       <TimePicker
+              //         minutesStep={15}
+              //         minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
+              //         value={formData.endTime}
+              //         sx={{
+              //           '& .MuiTextField-root': {
+              //             paddingRight: '12px'
+              //           },
+              //           '& .MuiOutlinedInput-input': {
+              //             padding: '0',
+              //             fontSize: '19px',
+              //             color: '#183D4C',
+              //             fontWeight: '600'
+              //           },
+              //           '& .MuiIconButton-root': {
+              //             padding: '0'
+              //           },
+              //           '& .MuiOutlinedInput-root': {
+              //             padding: '0 10px 0 0'
+              //           },
+              //           '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+              //           '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
+              //         }}
+              //         // onChange={time => handleChange('endTime', dayjs(time))}
+              //         onChange={time => handleChangeFormData('endTime', dayjs(time))}
+              //         format='HH:mm'
+              //         disabled={!formData.startTime}
+              //         skipDisabled
+              //         ampm={false}
+              //         name='endTime'
+              //         referenceDate={formData.dateTimeRequested}
+              //       />
+              //     </Grid>
+              //   </Grid>
+              //   <Grid marginTop='auto'>
+              //     <NavMobileStepper
+              //       activeStep={activeStep}
+              //       setActiveStep={setActiveStep}
+              //       handleBack={handleBack}
+              //       handleNext={handleNext}
+              //       disableNext={disableNext}
+              //       // allowCancel={allowCancel}
+              //     />
+              //   </Grid>
+              // </div>
+              <BookingCardSchedular
+                setOpen={setOpen}
+                artist={artist}
+                formData={formData}
+                handleChangeFormData={handleChangeFormData}
+                disableNext={disableNext}
+              />
+            )}
 
-              {activeStep === 1 && (
-                <Grid container direction='column' overflow={'auto'} height='100%'>
-                  <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
-                    {artist && artist.firstName} {artist && artist.lastName}
+            {activeStep === 1 && (
+              <Grid container direction='column' overflow={'auto'} height='100%'>
+                <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
+                  {artist && artist.firstName} {artist && artist.lastName}
+                </Typography>
+                <Grid container gap={1} marginBottom={4}>
+                  {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)}
+                </Grid>
+                <Grid container justifyContent='space-between' alignItems='center'>
+                  <Typography fontSize='19px' fontWeight='600'>
+                    Summary
                   </Typography>
-                  <Grid container gap={1} marginBottom={4}>
-                    {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)}
+                  <Typography
+                    sx={{ cursor: 'pointer' }}
+                    fontSize='15px'
+                    color='#62AFE8'
+                    onClick={() => setActiveStep(0)}
+                  >
+                    Change
+                  </Typography>
+                </Grid>
+                <Grid container className={styles.summaryDetailsContainer}>
+                  <Grid item>
+                    <Calendar />
                   </Grid>
-                  <Grid container justifyContent='space-between' alignItems='center'>
-                    <Typography fontSize='19px' fontWeight='600'>
-                      Summary
+                  <Grid item>
+                    <Typography fontSize='15px' color='#4B627F'>
+                      Date
                     </Typography>
-                    <Typography
-                      sx={{ cursor: 'pointer' }}
-                      fontSize='15px'
-                      color='#62AFE8'
-                      onClick={() => setActiveStep(0)}
-                    >
-                      Change
+                    <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                      {dayjs(formData.dateTimeRequested).format('YYYY-MM-DD')}
                     </Typography>
                   </Grid>
-                  <Grid container className={styles.summaryDetailsContainer}>
-                    <Grid item>
-                      <Calendar />
-                    </Grid>
-                    <Grid item>
+                </Grid>
+                <Grid container className={styles.summaryDetailsContainer}>
+                  <Grid item>
+                    <Clock />
+                  </Grid>
+                  <Grid display='flex' gap={8}>
+                    <Grid item textAlign='center'>
                       <Typography fontSize='15px' color='#4B627F'>
-                        Date
+                        Get In
                       </Typography>
                       <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
-                        {dayjs(formData.dateTimeRequested).format('YYYY-MM-DD')}
+                        {dayjs(formData.getInTime).format('HH:mm')}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign='center'>
+                      <Typography fontSize='15px' color='#4B627F'>
+                        Start
+                      </Typography>
+                      <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                        {dayjs(formData.startTime).format('HH:mm')}
+                      </Typography>
+                    </Grid>
+                    <Grid item textAlign='center'>
+                      <Typography fontSize='15px' color='#4B627F'>
+                        End
+                      </Typography>
+                      <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+                        {dayjs(formData.endTime).format('HH:mm')}
                       </Typography>
                     </Grid>
                   </Grid>
-                  <Grid container className={styles.summaryDetailsContainer}>
-                    <Grid item>
-                      <Clock />
-                    </Grid>
-                    <Grid display='flex' gap={8}>
-                      <Grid item textAlign='center'>
-                        <Typography fontSize='15px' color='#4B627F'>
-                          Get In
-                        </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
-                          {dayjs(formData.getInTime).format('HH:mm')}
-                        </Typography>
-                      </Grid>
-                      <Grid item textAlign='center'>
-                        <Typography fontSize='15px' color='#4B627F'>
-                          Start
-                        </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
-                          {dayjs(formData.startTime).format('HH:mm')}
-                        </Typography>
-                      </Grid>
-                      <Grid item textAlign='center'>
-                        <Typography fontSize='15px' color='#4B627F'>
-                          End
-                        </Typography>
-                        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
-                          {dayjs(formData.endTime).format('HH:mm')}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid container gap={4} marginTop={3}>
-                    <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>Your Details</Typography>
-                  </Grid>
-                  <Grid container direction='column' marginTop={3} color="'#4B627F'">
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='First Name'
-                      value={user.firstName}
-                      // onChange={handleFieldChange('email')}
-                      sx={{ mb: 1 }}
-                      size='small'
-                    />
-                    <TextField
-                      fullWidth
-                      type='text'
-                      label='Last Name'
-                      value={user.lastName}
-                      // onChange={handleFieldChange('email')}
-                      sx={{ mb: 1 }}
-                      size='small'
-                    />
-                    <TextField
-                      fullWidth
-                      type='email'
-                      label='Email'
-                      value={user.email}
-                      // onChange={handleFieldChange('email')}
-                      sx={{ mb: 1 }}
-                      size='small'
-                    />
-                    <TextField
-                      fullWidth
-                      type='tel'
-                      label='Phone'
-                      value={user.contactPhone}
-                      // onChange={handleFieldChange('email')}
-                      sx={{ mb: 1 }}
-                      size='small'
-                    />
-                  </Grid>
-                  <Grid marginTop='auto'>
-                    <NavMobileStepper
-                      activeStep={activeStep}
-                      setActiveStep={setActiveStep}
-                      handleBack={handleBack}
-                      handleNext={handleNext}
-                    />
-                  </Grid>
                 </Grid>
-              )}
-              {activeStep === 2 && (
-                <Grid textAlign='center' color='#183D4C'>
-                  <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
-                    Thank you!
-                  </Typography>
-                  <Typography fontSize='17px' fontWeight='400' marginTop='40px'>
-                    Your booking is now pending moderation. We will get back to you with further details.
-                  </Typography>
-                  <Grid marginTop={4}>
-                    <CheckCircle
-                      style={{
-                        color: '#32ED7D',
-                        width: '150px',
-                        height: '150px',
-                        borderRadius: '50%',
-                        padding: '0px',
-                        border: '2px solid red'
-                      }}
-                    />
-                  </Grid>
-                  <Button
-                    onClick={() => router.push(`/admin/bookings/${user.role}`)}
-                    sx={{
-                      background: '#FC8A5E',
-                      width: '70%',
-                      fontSize: '19px',
-                      marginTop: '8rem',
-                      color: 'white',
-                      borderRadius: '50px',
-                      textTransform: 'none',
-                      boxShadow: '0px 8px 20px #fc8e5e40',
-                      ':hover': {
-                        background: '#f07a4b'
-                      }
+                <Grid container gap={4} marginTop={3}>
+                  <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>Your Details</Typography>
+                </Grid>
+                <Grid container direction='column' marginTop={3} color="'#4B627F'">
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='First Name'
+                    value={user.firstName}
+                    // onChange={handleFieldChange('email')}
+                    sx={{ mb: 1 }}
+                    size='small'
+                  />
+                  <TextField
+                    fullWidth
+                    type='text'
+                    label='Last Name'
+                    value={user.lastName}
+                    // onChange={handleFieldChange('email')}
+                    sx={{ mb: 1 }}
+                    size='small'
+                  />
+                  <TextField
+                    fullWidth
+                    type='email'
+                    label='Email'
+                    value={user.email}
+                    // onChange={handleFieldChange('email')}
+                    sx={{ mb: 1 }}
+                    size='small'
+                  />
+                  <TextField
+                    fullWidth
+                    type='tel'
+                    label='Phone'
+                    value={user.contactPhone}
+                    // onChange={handleFieldChange('email')}
+                    sx={{ mb: 1 }}
+                    size='small'
+                  />
+                </Grid>
+                <Grid marginTop='auto'>
+                  <NavMobileStepper
+                    activeStep={activeStep}
+                    setActiveStep={setActiveStep}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                  />
+                </Grid>
+              </Grid>
+            )}
+            {activeStep === 2 && (
+              <Grid textAlign='center' color='#183D4C'>
+                <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
+                  Thank you!
+                </Typography>
+                <Typography fontSize='17px' fontWeight='400' marginTop='40px'>
+                  Your booking is now pending moderation. We will get back to you with further details.
+                </Typography>
+                <Grid marginTop={4}>
+                  <CheckCircle
+                    style={{
+                      color: '#32ED7D',
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '50%',
+                      padding: '0px',
+                      border: '2px solid red'
                     }}
-                  >
-                    View Booking
-                  </Button>
-                  <Typography color='#62AFE8' marginTop={2}>
-                    <Link href={'/'}>Back to Home</Link>
-                  </Typography>
+                  />
                 </Grid>
-              )}
-            </div>
+                <Button
+                  onClick={() => router.push(`/admin/bookings/${user.role}`)}
+                  sx={{
+                    background: '#FC8A5E',
+                    width: '70%',
+                    fontSize: '19px',
+                    marginTop: '8rem',
+                    color: 'white',
+                    borderRadius: '50px',
+                    textTransform: 'none',
+                    boxShadow: '0px 8px 20px #fc8e5e40',
+                    ':hover': {
+                      background: '#f07a4b'
+                    }
+                  }}
+                >
+                  View Booking
+                </Button>
+                <Typography color='#62AFE8' marginTop={2}>
+                  <Link href={'/'}>Back to Home</Link>
+                </Typography>
+              </Grid>
+            )}
           </div>
         </ThemeProvider>
       </LocalizationProvider>
@@ -543,7 +535,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
   }
 }
 
-const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext, allowCancel }) => {
+export const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext, allowCancel }) => {
   const theme = useTheme()
   const buttonStyle = {
     background: '#D5DFEC',
@@ -583,13 +575,15 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           sx={{
             ...buttonStyle,
             background: '#FC8A5E',
-            color: 'white'
+            color: 'white',
+            display: 'flex',
+            gap: '5px'
           }}
           onClick={handleNext}
           disabled={disableNext}
         >
           Next
-          {theme.direction === 'rtl' ? <ArrowLeft /> : <ArrowRight />}
+          {theme.direction === 'rtl' ? <ArrowLeft color='white' /> : <ArrowRight color='white' />}
         </Button>
       }
       backButton={
@@ -598,7 +592,9 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           onClick={handleBack}
           sx={{
             ...buttonStyle,
-            ':hover': { background: '#D5DFEC' }
+            ':hover': { background: '#D5DFEC' },
+            display: 'flex',
+            gap: '5px'
           }}
         >
           {theme.direction === 'rtl' ? <ArrowRight /> : <ArrowLeft />}

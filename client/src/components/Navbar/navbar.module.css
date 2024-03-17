@@ -216,7 +216,7 @@
   padding-inline: 0.5rem;
   border-radius: inherit;
   height: 100%;
-  width: 150px;
+  width: 100px;
 }
 
 .searchWrapper:nth-child(2) {
@@ -537,7 +537,7 @@ header .greetings-message {
     display: flex;
   }
   .main-nav-search-bar {
-    display: none;
+    /* display: none; */
   }
 
   .header-background,

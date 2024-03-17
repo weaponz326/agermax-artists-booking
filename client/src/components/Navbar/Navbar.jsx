@@ -102,9 +102,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
 
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
-  const handleClick = () => {
-    setOpen(true)
-  }
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -135,6 +132,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
       const antDropdownMenu = event.target.closest('.ant-dropdown-menu')
       const bookingCardWrapper = event.target.closest('.bookingCardWrapper')
       const muiButtonBase = event.target.closest('.MuiButtonBase-root')
+      const muiTypography = event.target.closest('.MuiTypography-root')
 
       // if (navBarRef.current) return
       if (antDropdown) return
@@ -142,6 +140,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
       if (antDropdownPicker) return
       if (bookingCardWrapper) return
       if (muiButtonBase) return
+      if (muiTypography) return
       if (menuWrapper == null) {
         setActiveInputTab(null)
         setHideMenuItems(true)
@@ -343,10 +342,10 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   )
 }
 
-export const PerformersDropdownDisplay = ({ artist }) => {
+export const PerformersDropdownDisplay = ({ artist, onClick }) => {
   const router = useRouter()
   return (
-    <div className={styles.artistsListPreview} onClick={() => router.push(`/artists/${artist._id}`)}>
+    <div className={styles.artistsListPreview} onClick={onClick}>
       <div className={styles.searchInputFieldPictureContainer}>
         <img className={styles.searchInputFieldPicture} src={artist.profilePhoto} alt='' />
       </div>
@@ -427,7 +426,7 @@ export const CustomDropdown = ({
 
   const items = [
     {
-      label: <div style={{ width: popUpWidth ? popUpWidth : '550px' }}>{slot}</div>,
+      label: <div style={{ width: popUpWidth && popUpWidth }}>{slot}</div>,
       key: '0'
     }
   ]
@@ -466,6 +465,7 @@ export const CustomDropdown = ({
         pointAtCenter: true
       }}
       id={id}
+      autoAdjustOverflow
     >
       <div
         className={`${styles.searchWrapper} ${checkActiveClass(id)}`}

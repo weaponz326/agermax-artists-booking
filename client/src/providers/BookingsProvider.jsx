@@ -43,7 +43,7 @@ const BookingsProvider = ({ children }) => {
 
   const getNextUpcomingEvent = async () => {
     const nextBooking = await services.getNextUpcomingApprovedBooking()
-    console.log(nextBooking)
+    // console.log(nextBooking)
     // Update local state to remove deleted booking
     return nextBooking
   }

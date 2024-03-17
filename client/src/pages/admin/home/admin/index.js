@@ -18,6 +18,7 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import {
+  getAllBookingsWithArtist,
   getOrganizersByArtistID,
   getRecentBookings,
   getTop10BookedArtists,
@@ -86,15 +87,18 @@ const MainDashboard = () => {
     const fetchData = async () => {
       try {
         //Getters
-        const { totalBookings } = await getTotalBookings(user)
         if (user.role === 'artist') {
+          // const { totalBookings } = getAllBookingsWithArtist(user)
           const { artistOrganizers } = getOrganizersByArtistID(user)
           const { venues } = getVenuesByArtistID(user)
           setListOfOrganizers(artistOrganizers)
           setListOfVenues(venues)
+          // setUserBookingsCount(totalBookings)
+
           // console.log(venues)
         }
         if (user.role != 'artist') {
+          const { totalBookings } = await getTotalBookings(user)
           const { totalArtists } = await getTotalArtists()
           const { totalOrganizers } = await getTotalOrganizers()
           const { totalPendingBookings } = await getTotalPendingBookings(user)
@@ -113,8 +117,8 @@ const MainDashboard = () => {
           setRecentUsers(recentUsers)
           setUpcomingBookings(approvedBookings)
           setTopPerformers(top10BookedArtists)
+          setUserBookingsCount(totalBookings)
         }
-        setUserBookingsCount(totalBookings)
       } catch (error) {
         console.log(error)
       }
@@ -123,7 +127,7 @@ const MainDashboard = () => {
     fetchData()
   }, [user])
 
-  if (!user) return <FallbackSpinner />
+  if (!user) return null
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Grid container spacing={2}>

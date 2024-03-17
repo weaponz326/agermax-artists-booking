@@ -15,6 +15,7 @@ import TransitionsModal from 'src/components/TransitionModal/TransitionModal'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import { useAuth } from 'src/hooks/useAuth'
+import BookingCardSchedular from 'src/components/BookingCard/CustomBookingCard'
 
 export const dateTimeFormat = (dateTime, format) => {
   const options = { month: 'short' }
@@ -243,6 +244,7 @@ const ArtisteProfileSection = ({ artist, user, logout }) => {
             setOpen={setOpen}
             btnClassName={styles['side-drawer-button']}
             modalContent={<BookingCard open={open} setOpen={setOpen} artist={artist} />}
+            // modalContent={<BookingCardSchedular open={open} setOpen={setOpen} artist={artist} />}
           />
         </div>
         <div className={styles['bio-container']}>

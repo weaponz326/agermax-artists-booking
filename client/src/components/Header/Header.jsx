@@ -9,15 +9,13 @@ import { useEffect, useState } from 'react'
 import SearchBar from '../AdminPagesSharedComponents/SearchBar/SearchBar'
 import { AutoComplete } from 'antd'
 import { PerformersDropdownDisplay } from '../Navbar/Navbar'
+import { useRouter } from 'next/router'
 export default function Header() {
+  const router = useRouter()
   const { user } = useAuth()
   const [displayedArtists, setDisplayedArtists] = useState([])
   const [performersList, setPerformersList] = useState([])
   const { artists } = useArtists()
-  const options = [
-    { value: 'Kofi', fullName: 'kofi' },
-    { value: 'Ama', fullName: 'kofi' }
-  ]
 
   useEffect(() => {
     if (!artists) {
@@ -32,7 +30,6 @@ export default function Header() {
 
     setDisplayedArtists(selectedItems)
     setPerformersList(shuffledArtists)
-    console.log(performersList)
   }, [artists])
 
   const handleSelectPerformer = performer => {
@@ -78,7 +75,7 @@ export default function Header() {
           options={performersList.map(artist => ({
             artistID: artist._id,
             value: `${artist.firstName} ${artist.lastName}`,
-            label: <PerformersDropdownDisplay artist={artist} />
+            label: <PerformersDropdownDisplay artist={artist} onClick={() => router.push(`/artists/${artist._id}`)} />
           }))}
           placeholder='Search Performer'
           filterOption={filterOption}

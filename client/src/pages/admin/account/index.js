@@ -113,8 +113,6 @@ const TabAccount = () => {
           {activeStep === 0 && (
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                {/* <input type='file' id='profilePhoto' name='profilePhoto' onChange={handleFileChange} accept='image/*' /> */}
-
                 <ImageUpload formData={formData} setFormData={setFormData} />
               </Grid>
               <Grid item xs={12} sm={6}>

@@ -3,21 +3,16 @@ import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { LocalizationProvider, TimePicker, DatePicker } from '@mui/x-date-pickers'
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
-import TextField from '@mui/material/TextField'
 
 import dayjs from 'dayjs'
 // import moment from 'moment'
 
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import MobileStepper from '@mui/material/MobileStepper'
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 // import { Tag } from 'src/pages/artist-profile'
 import { Tag } from 'src/pages/artists/[id]'
-import { Calendar, Clock } from 'iconsax-react'
+import { ArrowLeft, ArrowRight, Calendar, Clock } from 'iconsax-react'
 import styles from './BookingCard.module.css'
-import CheckCircle from '@material-ui/icons/CheckCircle'
 import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
@@ -231,23 +226,13 @@ function NavBarBookingCard({
                     {selectedArtist.firstName} {selectedArtist.lastName}
                   </Typography>
                   <Grid container gap={1} marginBottom={4}>
-                    {selectedArtist.genre.length ? (
-                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-                    ) : (
-                      <Tag>No genre provided yet.</Tag>
-                    )}
+                    {selectedArtist.genre.length > 0 &&
+                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)}
                   </Grid>
                 </div>
               )}
               {activeStep === 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  {/* <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
-                    {selectedArtist.genre ? (
-                      selectedArtist.genre.map((g, index) => <Tag key={`${g} index`}>{g}</Tag>)
-                    ) : (
-                      <Tag>No genre provided yet.</Tag>
-                    )}
-                  </div> */}
                   <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
                     Choose When 👇
                   </Typography>
@@ -609,7 +594,7 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           disabled={disableNext}
         >
           Next
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          {theme.direction === 'rtl' ? <ArrowLeft /> : <ArrowRight />}
         </Button>
       }
       backButton={
@@ -626,7 +611,7 @@ const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, d
           }}
         >
           {activeStep === 0 ? 'Cancel' : 'Back'}
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+          {theme.direction === 'rtl' ? <ArrowRight /> : <ArrowLeft />}
         </Button>
       }
     />
