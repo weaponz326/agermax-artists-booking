@@ -39,6 +39,8 @@ import {
   BiUserX
 } from 'react-icons/bi'
 import { useRouter } from 'next/router'
+import { ro } from 'date-fns/locale'
+import { useBookings } from 'src/providers/BookingsProvider'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -48,6 +50,7 @@ import { useRouter } from 'next/router'
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
   const { user, logout, loading, isUserUpdated } = useAuth()
+  const router = useRouter()
 
   const navBarRef = useRef()
 
@@ -56,9 +59,12 @@ export default function Navbar() {
       <div className={styles.navBarContainer}>
         <div className={`${styles['top-bar']} ${styles['nav-bar']}`}>
           <div className={styles.agermaxLogoContainer}>
-            <Link href='/'>
-              <img className={styles['logo-img ']} alt='App dark' src='/images/logo.png' />
-            </Link>
+            <img
+              className={styles['logo-img ']}
+              alt='App dark'
+              src='/images/logo.png'
+              onClick={() => router.push('/')}
+            />
           </div>
           <BookArtistPanel
             hideMenuItems={hideMenuItems}
@@ -92,6 +98,20 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   const [options, setOptions] = useState([])
   const [selectedArtist, setSelectedArtist] = useState(null)
   const [activeInputTab, setActiveInputTab] = useState(0)
+  const { setIsBookingsUpdated } = useBookings()
+  const [submittable, setSubmittable] = useState(false)
+
+  const router = useRouter()
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarSeverity, setSnackbarSeverity] = useState('')
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
+  }
 
   const { artists } = useArtists()
   const menuBarWrapper = useRef()
@@ -152,8 +172,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
     }
   }, [])
 
-  const [submittable, setSubmittable] = useState(false)
-
   useEffect(() => {
     if (!formData.dateTimeRequested || !formData.endTime || !formData.startTime || !formData.getInTime) {
       setSubmittable(false)
@@ -179,17 +197,36 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   const handleSubmit = async e => {
     e.preventDefault()
     if (!user) {
-      logout()
-    } else if (submittable) {
+      setSnackbarMessage('Kindly Login first.')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+      router.push('/login')
+    } else if (user && submittable) {
       try {
         const newBooking = await createBooking(formData)
+        setIsBookingsUpdated(true)
+        // setOpen(true)
         console.log('New booking created: ', newBooking)
-        // Optionally, you can redirect or perform any other action after successful booking creation
+        setSnackbarMessage('New Booking Created Successfully!')
+        setSnackbarSeverity('success')
+        setSnackbarOpen(true)
+        setSelectedArtist(null)
+        console.log('New booking created: ', newBooking)
+        router.push(`admin/bookings/${user.role}`)
       } catch (error) {
+        setSnackbarMessage('Error creating booking!')
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
         console.error('Error creating booking: ', error)
         // Handle error, e.g., display an error message to the user
+      } finally {
+        setIsBookingsUpdated(false)
+        setSubmittable(false)
       }
     } else {
+      setSnackbarMessage('Set Artist, Date, Get-In, Start, End Times first.')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
       return
     }
   }
@@ -264,7 +301,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 onFocus={e => setActiveInputTab(0)}
                 className={`${styles.searchWrapper} ${checkActiveClass(0)}`}
                 style={{
-                  width: 250
+                  width: 135
                 }}
                 popupMatchSelectWidth={false}
                 allowClear
@@ -316,23 +353,18 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 setActiveInputTab={setActiveInputTab}
               />
 
-              <TabButton className={styles.bookNowButton} onClick={() => setOpen(true)}>
+              <TabButton className={styles.bookNowButton} onClick={handleSubmit}>
                 Book Now
               </TabButton>
             </form>
             <Snackbar
-              open={open}
+              open={snackbarOpen}
               autoHideDuration={6000}
-              onClose={handleClose}
+              onClose={handleCloseSnackbar}
               anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-              <Alert
-                onClose={handleClose}
-                severity={submittable === true ? 'success' : 'error'}
-                variant='filled'
-                sx={{ width: '100%' }}
-              >
-                {!submittable ? 'Please Provide all necessary info for the booking' : 'Booking Successful!'}
+              <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+                {snackbarMessage}
               </Alert>
             </Snackbar>
           </div>
@@ -529,7 +561,7 @@ export const UserDetailsForm = ({ user, logout }) => {
         id='contactPhone'
         value={user.contactPhone}
         // onChange={handleChange}
-        required
+        // required
         variant='outlined'
         label='Phone'
         size='small'

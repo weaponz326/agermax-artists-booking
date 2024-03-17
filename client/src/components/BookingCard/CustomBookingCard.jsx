@@ -154,7 +154,7 @@ const BookingCardSchedular = ({
           <div className={styles.cardTitle}>
             {artist.firstName} {artist.lastName}
           </div>
-          <div style={{ gap: '8px', marginBottom: '32px', display: 'flex' }}>
+          <div className={styles.genreList}>
             {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g}-$${index}`}>{g}</Tag>)}
           </div>
           <div className={styles.calendarInstruction}>Choose When 👇</div>
@@ -225,3 +225,115 @@ const VerticalDivider = () => {
 }
 
 export default BookingCardSchedular
+
+export const BookingCardSummary = ({ artist, setOpen, activeStep, setActiveStep }) => {
+  return (
+    <div className={styles.bookingScheduleCard}>
+      <div className={styles.cardTitle}>
+        {artist && artist.firstName} {artist && artist.lastName}
+      </div>
+      <div className={styles.genreList}>
+        {artist.genre.length > 0 && artist.genre.map((g, index) => <Tag key={`${g}-${index}`}>{g}</Tag>)}
+      </div>
+      <div className={styles.summaryWrapper}>
+        <div className={styles.summaryText}>Summary</div>
+        <div className={styles.summaryChangeText} onClick={() => setActiveStep(0)}>
+          Change
+        </div>
+      </div>
+      <Grid container className={styles.summaryDetailsContainer}>
+        <Grid item>
+          <Calendar />
+        </Grid>
+        <Grid item>
+          <Typography fontSize='15px' color='#4B627F'>
+            Date
+          </Typography>
+          <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+            {dayjs(formData.dateTimeRequested).format('YYYY-MM-DD')}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container className={styles.summaryDetailsContainer}>
+        <Grid item>
+          <Clock />
+        </Grid>
+        <Grid display='flex' gap={8}>
+          <Grid item textAlign='center'>
+            <Typography fontSize='15px' color='#4B627F'>
+              Get In
+            </Typography>
+            <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+              {dayjs(formData.getInTime).format('HH:mm')}
+            </Typography>
+          </Grid>
+          <Grid item textAlign='center'>
+            <Typography fontSize='15px' color='#4B627F'>
+              Start
+            </Typography>
+            <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+              {dayjs(formData.startTime).format('HH:mm')}
+            </Typography>
+          </Grid>
+          <Grid item textAlign='center'>
+            <Typography fontSize='15px' color='#4B627F'>
+              End
+            </Typography>
+            <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>
+              {dayjs(formData.endTime).format('HH:mm')}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container gap={4} marginTop={3}>
+        <Typography sx={{ fontSize: '19px', fontWeight: '600' }}>Your Details</Typography>
+      </Grid>
+      <Grid container direction='column' marginTop={3} color="'#4B627F'">
+        <TextField
+          fullWidth
+          type='text'
+          label='First Name'
+          value={user.firstName}
+          // onChange={handleFieldChange('email')}
+          sx={{ mb: 1 }}
+          size='small'
+        />
+        <TextField
+          fullWidth
+          type='text'
+          label='Last Name'
+          value={user.lastName}
+          // onChange={handleFieldChange('email')}
+          sx={{ mb: 1 }}
+          size='small'
+        />
+        <TextField
+          fullWidth
+          type='email'
+          label='Email'
+          value={user.email}
+          // onChange={handleFieldChange('email')}
+          sx={{ mb: 1 }}
+          size='small'
+        />
+        <TextField
+          fullWidth
+          type='tel'
+          label='Phone'
+          value={user.contactPhone}
+          // onChange={handleFieldChange('email')}
+          sx={{ mb: 1 }}
+          size='small'
+        />
+      </Grid>
+      <Grid marginTop='auto'>
+        <NavMobileStepper
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          handleBack={handleBack}
+          handleNext={handleNext}
+        />
+      </Grid>
+    </div>
+  )
+}

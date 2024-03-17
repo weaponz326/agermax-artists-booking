@@ -7,7 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 
 const CustomFullCalendar = ({ view, userBookings }) => {
   const [events, setEvents] = useState([
-    // { title: 'Event 1', id: '1', date: '2024-02-28' },
+    // { title: 'Event 1', id: '1', date: '2024-03-28' },
     // { title: 'Event 2', id: '2' },
     // { title: 'Event 3', id: '3' },
     // { title: 'Event 4', id: '4' },
@@ -17,8 +17,11 @@ const CustomFullCalendar = ({ view, userBookings }) => {
 
   useEffect(() => {
     if (userBookings) {
+      const formattedBookings = userBookings.map(booking => {
+        return { ...booking, dateTimeRequested: new Date(booking.dateTimeRequested).toLocaleDateString() }
+      })
       // Mapping over the original array and transforming objects
-      const transformedArray = userBookings.map(obj => {
+      const transformedArray = formattedBookings.map(obj => {
         // Mapping each key-value pair and renaming keys
         return Object.keys(obj).reduce((acc, key) => {
           // Define new key names based on your requirements
@@ -54,6 +57,7 @@ const CustomFullCalendar = ({ view, userBookings }) => {
         }, {})
       })
       setEvents(transformedArray)
+      console.log(transformedArray)
     }
   }, [userBookings])
 
@@ -70,9 +74,9 @@ const CustomFullCalendar = ({ view, userBookings }) => {
         events={events}
         nowIndicator
         selectable
-        editable
+        // editable
         selectMirror
-        droppable
+        // droppable
       />
     </div>
   )

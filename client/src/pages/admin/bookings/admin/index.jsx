@@ -512,6 +512,7 @@ export const EventsListItem = ({ event }) => {
 
       <div className={styles.eventStatusButton}>
         {/* {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>} */}
+        {event.isNewBooking && <div className={styles.newFlag}>New</div>}
         {event.status && (
           <TabButton onClick={unhideModal} buttonStyle={eventStatusStyle()}>
             Details
@@ -637,7 +638,7 @@ export const BookingsModalContent = ({
     e.preventDefault()
 
     // Update formData with invoiced: true
-    const updatedFormData = { ...formData, invoiced: true }
+    const updatedFormData = { ...formData, invoiced: true, isNewBooking: false }
 
     try {
       // Update the booking first
@@ -689,7 +690,8 @@ export const BookingsModalContent = ({
       }
     } else {
       try {
-        const updatedBooking = await updateBooking(formData)
+        const updatedFormData = { ...formData, isNewBooking: false }
+        const updatedBooking = await updateBooking(updatedFormData)
         console.log('Booking Updated Successfully! : ', updatedBooking)
         setSnackbarMessage('Booking Updated Successfully!')
         setSnackbarSeverity('success')
@@ -711,7 +713,7 @@ export const BookingsModalContent = ({
     e.preventDefault()
 
     // Update formData with status: cancelled
-    const updatedFormData = { ...formData, status: 'cancelled' }
+    const updatedFormData = { ...formData, status: 'cancelled', isNewBooking: false }
 
     try {
       const rejectedBooking = await updateBooking(updatedFormData)
@@ -1047,14 +1049,16 @@ export const BookingsModalContent = ({
         {/* ****Conditional Rendering for different bookings Status --- PENDING ****/}
         {booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
-            {user && user.role === 'admin' && !booking.invoiced ? (
+            {user && user.role === 'admin' && !booking.invoiced && (
               <form
                 // action={`/admin/finance/admin/details/${invoiceData._id}`}
                 onSubmit={handleCreateInvoice}
               >
                 <TabButton className={styles.modalCardContentSaveButton}>Create Invoice 👍</TabButton>
               </form>
-            ) : (
+            )}
+
+            {booking && booking.invoiced && (
               <div style={{ flex: 1 }}>
                 <TabButton
                   // onClick={router.push({
@@ -1068,7 +1072,7 @@ export const BookingsModalContent = ({
                 </TabButton>
               </div>
             )}
-            {!booking.invoiced && user.role != 'artist' && (
+            {booking && !booking.invoiced && user.role != 'artist' && (
               <form onSubmit={handleRejectBooking}>
                 <TabButton className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}>
                   {user.role === 'admin' ? 'Reject Booking 👎' : 'Cancel Booking'}

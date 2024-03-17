@@ -108,6 +108,7 @@
 .searchFormWrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .main-nav-search-bar {
   /* border: 1px solid brown; */
@@ -140,13 +141,14 @@
   position: relative;
   margin: 0 auto;
   display: flex;
-  justify-content: stretch;
+  justify-content: space-between;
   align-items: center;
   z-index: 2;
   border-radius: 2rem;
   padding: 0.2rem;
   font-size: 0.75rem;
   gap: 0.25rem;
+  width: 90%;
 }
 
 .search-item {
@@ -217,6 +219,8 @@
   border-radius: inherit;
   height: 100%;
   width: 100px;
+  flex: 1;
+  cursor: pointer;
 }
 
 .searchWrapper:nth-child(2) {
@@ -331,8 +335,13 @@
   justify-content: center;
   border-radius: inherit;
   border: none;
+  /* cursor: pointer; */
+}
+
+.bookNowButton:hover {
   cursor: pointer;
 }
+
 .bookerDetailsButton {
   background-color: transparent;
   border: none;
@@ -362,7 +371,7 @@
   outline-color: #4428f2;
 }
 .bookNowButton:hover {
-  filter: brightness(95%);
+  filter: brightness(110%);
 }
 
 .search-icon {
@@ -401,7 +410,7 @@
 }
 
 .top-bar * {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .top-bar input:hover {
@@ -421,6 +430,7 @@
   display: flex;
   width: 182.5px;
   /* min-width: 15%; */
+  align-items: center;
 }
 .userActionsButtons {
   justify-content: flex-end;
@@ -554,23 +564,23 @@ header .greetings-message {
     padding: 0.5rem 0.5rem;
   }
 
-  .top-bar {
+  /* .top-bar {
     display: flex;
     gap: 0.5rem;
     justify-content: space-between;
     align-items: center;
-  }
+  } */
   .header-carousel {
     padding-top: 0;
     margin-top: -8rem;
   }
 
-  .search-bar {
+  /* .search-bar {
     border-radius: 1.5rem;
     width: 100%;
     max-width: 25rem;
     transition: all 5s ease-in-out;
-  }
+  } */
 
   /* header .greetings {
     margin: 5rem 0 0 0;

@@ -107,6 +107,21 @@
 /* .listViewTab {
   border-radius: 0 var(--tabs-border-radius) var(--tabs-border-radius) 0;
 } */
+.eventStatusButton {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: white;
+}
+.newFlag {
+  /* position: absolute; */
+  font-size: smaller;
+  background-color: rgba(5, 141, 141, 0.747);
+  right: -30;
+  top: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+}
 
 .activeTab {
   border-radius: inherit;

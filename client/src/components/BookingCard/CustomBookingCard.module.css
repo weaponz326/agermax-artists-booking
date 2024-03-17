@@ -25,6 +25,12 @@
   margin-bottom: 1.2rem;
 }
 
+.genreList {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
 .calendarInstruction {
   margin-bottom: 0.35em;
   font-size: 19px;
@@ -62,4 +68,21 @@
 
 .stepper {
   margin-top: auto;
+}
+
+.summaryWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summaryText {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.summaryChangeText {
+  color: #62afe8;
+  font-size: 15px;
+  cursor: pointer;
 }
