@@ -141,6 +141,12 @@ const FinancialDetailsPage = () => {
     setSelectedCurrency(event.target.value)
   }
 
+  const handlePaymentStatusChange = e => {
+    console.log(e.target.value)
+    console.log(invoiceData)
+    setInvoiceData({ ...invoiceData, status: e.target.value })
+  }
+
   /****************Rendering***************/
 
   if (loading) return <div className={styles.loading}>Loading...</div>
@@ -238,6 +244,7 @@ const FinancialDetailsPage = () => {
                   selectedCurrency={selectedCurrency}
                   setSelectedCurrency={setSelectedCurrency}
                   currencySymbols={currencySymbols}
+                  handlePaymentStatusChange={handlePaymentStatusChange}
                 />
               ]}
             />
@@ -346,7 +353,8 @@ export const PaymentSubItems = ({
   selectedCurrency,
   setSelectedCurrency,
   handleCurrencyChange,
-  currencySymbols
+  currencySymbols,
+  handlePaymentStatusChange
 }) => {
   return (
     <div>
@@ -374,6 +382,16 @@ export const PaymentSubItems = ({
               {currencySymbol} {currencyCode}
             </option>
           ))}
+        </select>
+      </div>
+      <div className={styles.currencyField}>
+        <label htmlFor='paymentStatus'>Manually Set Payment Status?: </label>
+
+        <select id='paymentStatus' value={invoiceData.status} onChange={handlePaymentStatusChange}>
+          <option value='unpaid'>Unpaid</option>
+          <option value='paid' disabled>
+            Paid
+          </option>
         </select>
       </div>
     </div>
