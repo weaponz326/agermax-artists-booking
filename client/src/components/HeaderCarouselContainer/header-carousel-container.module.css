@@ -7,11 +7,13 @@
   width: 100%;
 }
 
-.hot-artists-nav p {
+.hotPerformersTitle {
   margin: 0;
   flex: 1;
   font-size: 1.8rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .carousel-img {
@@ -129,6 +131,10 @@
   }
   .hot-artists-nav {
     padding: 0;
+  }
+
+  .hotPerformersTitle {
+    font-size: large;
   }
 
   .events {

@@ -512,7 +512,7 @@ header .greetings-message {
   flex-direction: column;
   cursor: pointer;
   gap: 0.2rem;
-  padding: 0.75rem;
+  padding: 0.75rem 0;
   border: none;
   position: relative;
   color: #5e90cc;
@@ -541,13 +541,30 @@ header .greetings-message {
   font-size: 1.25rem;
 }
 
+.noDisplayStyle {
+  display: none;
+}
+
+.displayStyle {
+  display: flex;
+}
+
+.mobileViewSearchBar {
+  display: none;
+  padding: none;
+  height: 45px;
+  width: 100%;
+}
 /***************Media Queries*************/
 @media (width < 700px) {
   .mobileNavBar {
     display: flex;
   }
-  .main-nav-search-bar {
-    /* display: none; */
+  .collapsedStateSearchBarWrapper {
+    display: none;
+  }
+  .mobileViewSearchBar {
+    display: flex;
   }
 
   .header-background,
@@ -653,6 +670,9 @@ header .greetings-message {
 
   .search-bar {
     margin: 0;
+  }
+  .agermaxLogoContainer {
+    display: none;
   }
 }
 

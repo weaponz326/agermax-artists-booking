@@ -4,6 +4,11 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 const bookingSchema = new mongoose.Schema({
   eventTitle: {
     type: String,
+    trim: true,
+    set: (value) => {
+      // Convert to sentence case before saving
+      return value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    },
   },
   artistID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +41,11 @@ const bookingSchema = new mongoose.Schema({
   },
   locationVenue: {
     type: String,
+    trim: true,
+    set: (value) => {
+      // Convert to sentence case before saving
+      return value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    },
   },
   streetAddress: {
     type: String,

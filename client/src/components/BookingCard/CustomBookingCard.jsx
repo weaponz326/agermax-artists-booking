@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styles from './CustomBookingCard.module.css'
+import { useForm } from 'react-hook-form'
 
 import { LocalizationProvider, TimePicker, DatePicker, DateCalendar } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
@@ -8,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useBookingFormData from 'src/hooks/useBookingFormData'
 import { Tag } from 'src/pages/artists/[id]'
 import { NavMobileStepper } from './BookingCard'
+import { Button, Popover } from '@mui/material'
 
 const customTheme = createTheme({
   components: {
@@ -134,6 +136,13 @@ const BookingCardSchedular = ({
   handleChangeFormData,
   disableNext
 }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting }
+  } = useForm()
+
   //Handlers for Next and Back Buttons Click and Submission of Date
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
@@ -146,6 +155,25 @@ const BookingCardSchedular = ({
     if (activeStep === 0) setOpen(false)
     return
   }
+
+  /*************************Popover****************** */
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedTime, setSelectedTime] = useState(null)
+
+  const handleChooseClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleTimeSelection = time => {
+    setSelectedTime(time)
+    handleClose()
+  }
+
+  /*************************Popover****************** */
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -160,6 +188,7 @@ const BookingCardSchedular = ({
           <div className={styles.calendarInstruction}>Choose When 👇</div>
           <div>
             <DateCalendar
+              {...register('date', { required: 'Date is required.' })}
               sx={{
                 width: '100%',
                 '& .MuiDayCalendar-header': {
@@ -178,19 +207,42 @@ const BookingCardSchedular = ({
                 }
               }}
               // onChange={date => handleChange('dateTimeRequested', dayjs(date))}
-              onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
+              // onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
               // className={styles.modalCardContentInputField}
               label='Select Event Date'
-              value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
+              // value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
               disablePast
-              name='dateTimeRequested'
+              // name='dateTimeRequested'
             />
           </div>
           <div className={styles.calendarInstruction}>What Time?</div>
           <div className={styles.timePickersWrapper}>
             <div className={styles.timePicker}>
               <div className={styles.specificTime}>Get-In Time</div>
-              <div className={styles.chosenTime}>Choose</div>
+              <div className={styles.chosenTime} onClick={handleChooseClick}>
+                Choose
+              </div>
+              <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left'
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left'
+                }}
+              >
+                {/* TimePicker component hidden by default */}
+                <TimePicker
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  value={selectedTime}
+                  onChange={time => handleTimeSelection(time)}
+                />
+              </Popover>
             </div>
             <VerticalDivider />
             <div className={styles.timePicker}>

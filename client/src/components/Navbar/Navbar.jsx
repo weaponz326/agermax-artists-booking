@@ -278,13 +278,35 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
     >
       <nav className={`${styles['main-nav-search-bar']} menu-bar-wrapper`} ref={menuBarWrapper}>
         <SearchBar
-          style={!hideMenuItems ? noDisplayStyle : displayStyle}
-          wrapperClassName={styles.collapsedStateSearchBarWrapper}
+          // style={!hideMenuItems ? noDisplayStyle : displayStyle}
+          wrapperClassName={hideMenuItems ? styles.collapsedStateSearchBarWrapper : styles.noDisplayStyle}
           className={styles.collapsedStateSearchInput}
           placeholder='Find & Book A Performer here....'
           onClickWrapper={handleMenuClick}
           onChange={handleMenuClick}
         />
+        <AutoComplete
+          autoFocus
+          // onClick={e => setActiveInputTab(0)}
+          // onChange={e => setActiveInputTab(1)}
+          className={`${styles.collapsedStateSearchBarWrapper} ${styles.mobileViewSearchBar}`}
+          popupMatchSelectWidth={false}
+          allowClear
+          notFoundContent='Sorry, no performers found'
+          variant='borderless'
+          options={options.map(artist => ({
+            artistID: artist._id,
+            value: `${artist.firstName} ${artist.lastName}`,
+            label: <PerformersDropdownDisplay artist={artist} onClick={() => router.push(`/artists/${artist._id}`)} />
+          }))}
+          placeholder='Search Performer'
+          filterOption={filterOption}
+          // onSelect={performer => handleSelectPerformer(performer)}
+          id={0}
+          // onClear={handleClear}
+          // ref={selectArtistRef}
+        />
+
         <ConfigProvider
           theme={{
             token: {
@@ -292,7 +314,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
             }
           }}
         >
-          <div className={styles.searchFormWrapper} style={hideMenuItems ? noDisplayStyle : displayStyle}>
+          <div className={`${styles.searchFormWrapper} ${hideMenuItems && styles.noDisplayStyle}`}>
             {navMenu}
             <form className={styles['search-bar']} onSubmit={handleSubmit} ref={searchBarContainerRef}>
               <AutoComplete

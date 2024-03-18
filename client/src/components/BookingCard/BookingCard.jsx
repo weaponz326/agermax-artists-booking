@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import { useBookings } from 'src/providers/BookingsProvider'
 import Tooltip from 'src/@core/theme/overrides/tooltip'
 import BookingCardSchedular, { BookingCardSummary } from './CustomBookingCard'
+import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -236,13 +237,13 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                     <Typography color='#4B627F' fontSize='13px'>
                       Get In Time
                     </Typography>
-                    <Typography color='#4B627F' fontSize='13px'>
-                      Select
-                    </Typography>
+
                     <TimePicker
                       name='getInTime'
                       value={dayjs(formData.getInTime)}
                       minutesStep={15}
+                      label={'Choose'}
+                      // disableOpenPicker
                       // onChange={time => handleChange('getInTime', dayjs(time))}
                       onChange={time => handleChangeFormData('getInTime', dayjs(time))}
                       sx={{
@@ -264,11 +265,12 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                         '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
                         '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
                       }}
-                      format='HH:mm'
+                      // format='HH:mm'
                       disabled={!formData.dateTimeRequested}
                       skipDisabled
                       ampm={false}
                       referenceDate={formData.dateTimeRequested}
+                      slots={{ clearIcon: <TabButton>X</TabButton> }}
                     />
                   </Grid>
                   <Grid item xs={4} padding={1.5}>

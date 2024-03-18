@@ -63,7 +63,7 @@ export default function Header() {
             </div>
           )}
         </div>
-        <AutoComplete
+        {/* <AutoComplete
           autoFocus
           // onClick={e => setActiveInputTab(0)}
           // onChange={e => setActiveInputTab(1)}
@@ -83,7 +83,7 @@ export default function Header() {
           id={0}
           // onClear={handleClear}
           // ref={selectArtistRef}
-        />
+        /> */}
       </div>
       <HeaderCarouselContainer
         layout={styles['header-carousel-layout']}

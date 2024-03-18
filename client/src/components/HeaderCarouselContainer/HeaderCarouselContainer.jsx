@@ -9,7 +9,7 @@ const HeaderCarouselContainer = ({ artists, className, layout }) => {
     return (
       <div className={className}>
         <div className={styles['hot-artists-nav']}>
-          <p>Hot Performers 🔥</p>
+          <p className={styles.hotPerformersTitle}>Hot Performers 🔥</p>
           <Link href={'/artists'} className={styles['see-all-artists']}>
             <p>See all</p>
           </Link>
@@ -27,7 +27,7 @@ const HeaderCarouselContainer = ({ artists, className, layout }) => {
     return (
       <div className={className}>
         <div className={styles['hot-artists-nav']}>
-          <p>Hot Performers 🔥</p>
+          <p className={styles.hotPerformersTitle}>Hot Performers 🔥</p>
           <Link href={'/artists'} className={styles['see-all-artists']}>
             <p>See all</p>
           </Link>

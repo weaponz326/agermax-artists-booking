@@ -73,7 +73,8 @@
 
 .footer-nav {
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .search-icon {
@@ -82,7 +83,7 @@
 
 @media (width < 700px) {
   .footer {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem 4rem 1rem;
   }
 
   .footer .links,
