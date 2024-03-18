@@ -18,7 +18,6 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import {
-  getAllBookingsWithArtist,
   getOrganizersByArtistID,
   getRecentBookings,
   getTop10BookedArtists,
@@ -87,18 +86,15 @@ const MainDashboard = () => {
     const fetchData = async () => {
       try {
         //Getters
+        const { totalBookings } = await getTotalBookings(user)
         if (user.role === 'artist') {
-          // const { totalBookings } = getAllBookingsWithArtist(user)
           const { artistOrganizers } = getOrganizersByArtistID(user)
           const { venues } = getVenuesByArtistID(user)
           setListOfOrganizers(artistOrganizers)
           setListOfVenues(venues)
-          // setUserBookingsCount(totalBookings)
-
           // console.log(venues)
         }
         if (user.role != 'artist') {
-          const { totalBookings } = await getTotalBookings(user)
           const { totalArtists } = await getTotalArtists()
           const { totalOrganizers } = await getTotalOrganizers()
           const { totalPendingBookings } = await getTotalPendingBookings(user)
@@ -117,8 +113,8 @@ const MainDashboard = () => {
           setRecentUsers(recentUsers)
           setUpcomingBookings(approvedBookings)
           setTopPerformers(top10BookedArtists)
-          setUserBookingsCount(totalBookings)
         }
+        setUserBookingsCount(totalBookings)
       } catch (error) {
         console.log(error)
       }
@@ -127,7 +123,7 @@ const MainDashboard = () => {
     fetchData()
   }, [user])
 
-  if (!user) return null
+  if (!user) return <FallbackSpinner />
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Grid container spacing={2}>
@@ -137,7 +133,7 @@ const MainDashboard = () => {
             Hey {user.role}, {user.firstName}! 👋
           </Typography>
           <Typography variant='subtitle1'>
-            You have {pendingBookingsCount} pending bookings and 2* unread messages.
+            You have {pendingBookingsCount} pending bookings and 0* unread messages.
           </Typography>
         </Grid>
 
@@ -182,7 +178,7 @@ const MainDashboard = () => {
 
             <StyledCard>
               <Typography variant='subtitle1'>Unread Messages</Typography>
-              <Typography variant='h4'>1*</Typography>
+              <Typography variant='h4'>0*</Typography>
               <StyledButton size='small'>Inbox</StyledButton>
             </StyledCard>
           </Grid>
@@ -274,7 +270,6 @@ const MainDashboard = () => {
                 </CardContent>
               </Card>
             </Grid>
-
             {/* Recent Users List */}
             {user && user.role === 'admin' && (
               <Grid item xs={12} md={6}>
@@ -302,43 +297,41 @@ const MainDashboard = () => {
                   <Box sx={{ height: 300 }}></Box>
                 </ChartCard>
               </Grid>
-            )}
+            )}{' '}
+
+            {/* Upcoming Bookings */}
+            <Grid item xs={12} md={6}>
+              <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
+                <CardContent>
+                  <Typography variant='h6' sx={{ mb: 2 }}>
+                    Upcoming Events{' '}
+                    <Button size='small' flex onClick={() => router.push(`/admin/bookings/${user.role}`)}>
+                      See all
+                    </Button>
+                  </Typography>
+
+                  <StyledList>
+                    {upcomingBookings && upcomingBookings.length > 0
+                      ? upcomingBookings.map((booking, index) => (
+                          <ListItem key={index}>
+                            <ListItemAvatar>
+                              <Avatar src={booking.mainBanner}></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={booking.eventTitle}
+                              secondary={`${(formatDate, formatTime(booking.dateTimeRequested))}, ${
+                                booking.locationVenue
+                              }, ${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} `}
+                            />
+                          </ListItem>
+                        ))
+                      : 'No Approved Upcoming events to display now.'}
+                  </StyledList>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
         )}
-
-        {/* Upcoming Bookings */}
-        <Grid container item spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
-              <CardContent>
-                <Typography variant='h6' sx={{ mb: 2 }}>
-                  Upcoming Events{' '}
-                  <Button size='small' flex onClick={() => router.push(`/admin/bookings/${user.role}`)}>
-                    See all
-                  </Button>
-                </Typography>
-
-                <StyledList>
-                  {upcomingBookings && upcomingBookings.length > 0
-                    ? upcomingBookings.map((booking, index) => (
-                        <ListItem key={index}>
-                          <ListItemAvatar>
-                            <Avatar src={booking.mainBanner}></Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={booking.eventTitle}
-                            secondary={`${(formatDate, formatTime(booking.dateTimeRequested))}, ${
-                              booking.locationVenue
-                            }, ${formatTime(booking.startTime)} - ${formatTime(booking.endTime)} `}
-                          />
-                        </ListItem>
-                      ))
-                    : 'No Approved Upcoming events to display now.'}
-                </StyledList>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
 
         {/* Top Performers */}
         {user.role != 'artist' && (

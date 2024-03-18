@@ -140,7 +140,7 @@ const QuickActions = () => {
   const router = useRouter()
   const quickLinks = [
     { title: 'Invoice', icon: 'tabler:receipt', path: '/admin/invoice' },
-    { title: 'Profile', icon: 'tabler:user', path: '/admin/account' },
+    { title: 'Profile', icon: 'tabler:user', path: '/admin/account/account' },
     { title: 'Notifs', icon: 'tabler:bell', path: '/admin/notifications' }
   ]
 
