@@ -168,8 +168,8 @@ exports.processPayment = async (req, res) => {
       return res.status(400).json({ message: "receipt_email is required." });
 
     const charge = await stripe.charges.create({
-      amount: amount, // Ensure amount is in the smallest currency unit (e.g., cents for USD)
-      currency: "usd",
+      amount: amount, 
+      currency: "eur",
       source: source,
       receipt_email: receipt_email,
       description: `Charge for ${receipt_email}`,
