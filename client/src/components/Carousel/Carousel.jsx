@@ -10,6 +10,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function Carousel({ artist }) {
   const [loading, setLoading] = useState(true)
+  const { router } = useRouter()
 
   /**************** */
   /*   Mock Data from Unsplash  */

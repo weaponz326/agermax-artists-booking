@@ -110,6 +110,7 @@
 .artistDetailsLink {
   text-decoration: none;
   color: #183d4c;
+  margin-top: auto;
 }
 
 .carousel-genre,
