@@ -113,15 +113,40 @@
   align-items: center;
   color: white;
 }
+
 .newFlag {
+  content: 'New';
+  height: 20px;
+  width: 35px;
   /* position: absolute; */
-  font-size: smaller;
-  background-color: rgba(5, 141, 141, 0.747);
-  right: -30;
-  top: 0;
-  padding: 0.25rem 0.5rem;
-  border-radius: 5px;
+  color: white;
+  top: 5;
+  left: 5;
+  /* transform: translate(-60%, -135%) rotate(-45deg); */
+  border-radius: 100%;
+  background-color: var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.65rem;
 }
+
+/* .newFlag::before {
+  content: 'New';
+  height: 20px;
+  width: 35px;
+  position: absolute;
+  color: white;
+  top: 5;
+  left: 5;
+  transform: translate(-60%, -135%) rotate(-45deg);
+  border-radius: 100%;
+  background-color: #ff0000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.65rem;
+} */
 
 .activeTab {
   border-radius: inherit;
@@ -217,6 +242,7 @@
 }
 
 .monthEventListItem {
+  position: relative;
   background-color: var(--events-panel-backgroundColor);
   display: flex;
   align-items: center;

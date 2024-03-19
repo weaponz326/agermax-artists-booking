@@ -34,7 +34,7 @@ export default function LimitTags({ formData, setFormData }) {
       limitTags={2}
       id='multiple-limit-tags'
       value={formData.genre}
-      options={musicGenres}
+      options={genreOptions}
       // getOptionLabel={option}
       onChange={handleGenreInput}
       renderInput={params => <TextField {...params} label='Genre' placeholder='Genre' />}
@@ -44,57 +44,17 @@ export default function LimitTags({ formData, setFormData }) {
     />
   )
 }
-const musicGenres = [
-  'Pop',
-  'Rock',
-  'Jazz',
-  'Blues',
-  'Classical',
-  'Country',
-  'Hip Hop/Rap',
-  'Electronic',
-  'R&B/Soul',
-  'Reggae',
-  'Folk',
-  'Punk',
-  'Metal',
-  'Funk',
-  'Alternative',
-  'Gospel',
-  'Dance',
-  'Indie',
-  'World',
-  'Latin',
-  'Ambient',
-  'Experimental',
-  'Ska',
-  'Techno',
-  'Dubstep',
-  'House',
-  'Trance',
-  'Drum and Bass',
-  'Grunge',
-  'Disco',
-  'Psychedelic',
-  'New Wave',
-  'Salsa',
-  'Flamenco',
-  'Bluegrass',
-  'Bollywood',
-  'Celtic',
-  'K-Pop',
-  'J-Pop',
-  'Opera',
-  'Baroque',
-  'Chamber',
-  'Choral',
-  'Gregorian Chant',
-  'Acoustic',
-  'Instrumental',
-  'Synth-pop',
-  'Shoegaze',
-  'Krautrock',
-  'Afrobeat'
+const genreOptions = [
+  'Troubadour',
+  'Cover Band',
+  'Musician',
+  'Singer',
+  'Confrensier',
+  'DJ',
+  'Stand up Comedian',
+  'Show Group',
+  'Bar Piano',
+  'Magician'
 ]
 
 // const musicGenres = [

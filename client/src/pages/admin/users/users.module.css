@@ -9,7 +9,7 @@
   --tabs-hover-color: rgb(252, 142, 94);
   --events-panel-backgroundColor: #f2f5f6;
 
-  max-width: 48rem;
+  /* max-width: 48rem; */
 }
 .customSnackbar {
   z-index: 1400 !important; /* Ensure this is higher than the modal's z-index */

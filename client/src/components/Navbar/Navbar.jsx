@@ -60,7 +60,7 @@ export default function Navbar() {
         <div className={`${styles['top-bar']} ${styles['nav-bar']}`}>
           <div className={styles.agermaxLogoContainer}>
             <img
-              className={styles['logo-img ']}
+              className={styles.agermaxLogo}
               alt='App dark'
               src='/images/logo.png'
               onClick={() => router.push('/')}

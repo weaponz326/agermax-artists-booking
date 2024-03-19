@@ -432,6 +432,11 @@
   /* min-width: 15%; */
   align-items: center;
 }
+
+.agermaxLogo {
+  cursor: pointer;
+}
+
 .userActionsButtons {
   justify-content: flex-end;
 }

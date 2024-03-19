@@ -43,11 +43,13 @@ import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
 import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
 import { getUserById } from 'src/services/users'
-import { BiTrash } from 'react-icons/bi'
+import { BiTag, BiTagAlt, BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
 import { uploadBookingBookingGallery, uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
 import ImageUploader from 'src/components/AdminPagesSharedComponents/UploadPictures/ImageUploader'
+import { Tag, Tag2 } from 'iconsax-react'
+import { TagFacesSharp } from '@mui/icons-material'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -500,7 +502,10 @@ export const EventsListItem = ({ event }) => {
   }
 
   return (
-    <div className={styles.monthEventListItem}>
+    <div
+      // className={`${styles.monthEventListItem} ${event.isNewBooking && event.status === 'pending' && styles.newFlag}`}
+      className={`${styles.monthEventListItem}`}
+    >
       <div className={styles.statusInfo}>
         <EventStatusIcon event={event} />
         <CalendarIcon booking={event} />
@@ -512,7 +517,7 @@ export const EventsListItem = ({ event }) => {
 
       <div className={styles.eventStatusButton}>
         {/* {event.status === 'pending' && <TabButton buttonStyle={eventStatus.buttonStyle}>Approve</TabButton>} */}
-        {event.isNewBooking && <div className={styles.newFlag}>New</div>}
+        {event.isNewBooking && event.status === 'pending' && <div className={styles.newFlag}>New</div>}
         {event.status && (
           <TabButton onClick={unhideModal} buttonStyle={eventStatusStyle()}>
             Details
