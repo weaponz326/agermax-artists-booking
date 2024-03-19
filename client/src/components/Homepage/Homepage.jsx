@@ -225,7 +225,7 @@ export const EventsGenreButtons = ({ events, setEvents, bookings, selectedGenre,
             className={selectedGenre === genre ? styles['activeGenre'] : styles['genre-btn']}
             onClick={() => handleGenreFilter(genre)}
           >
-            🎸{genre}
+            {genre}
           </div>
         ))}
       </div>

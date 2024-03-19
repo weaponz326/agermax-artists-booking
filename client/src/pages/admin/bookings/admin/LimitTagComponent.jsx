@@ -45,16 +45,16 @@ export default function LimitTags({ formData, setFormData }) {
   )
 }
 const genreOptions = [
-  'Troubadour',
-  'Cover Band',
-  'Musician',
-  'Singer',
-  'Confrensier',
-  'DJ',
-  'Stand up Comedian',
-  'Show Group',
-  'Bar Piano',
-  'Magician'
+  '🎶 Troubadour',
+  '🎸 Cover Band',
+  '🎹 Musician',
+  '🎤 Singer',
+  '🎙 Confrensier',
+  '🎧 DJ',
+  '🎭 Stand up Comedian',
+  '🎪 Show Group',
+  '🎹🍸 Bar Piano',
+  '🎩✨ Magician'
 ]
 
 // const musicGenres = [
