@@ -1,4 +1,69 @@
+//controllers/invoiceController.js
 const Invoice = require("../models/Invoice");
+const getVismaToken = require("../utils/vismaAuth");
+const sendEmail = require("../utils/mailSender");
+const axios = require("axios");
+
+
+exports.testVismaToken = async (req, res) => {
+  try {
+    const token = await getVismaToken();
+    console.log('Visma Access Token:', token);
+    res.status(200).json({ message: 'Token retrieved successfully', token });
+  } catch (error) {
+    console.error('Error obtaining Visma token:', error);
+    res.status(500).json({ message: 'Failed to retrieve token', error: error.toString() });
+  }
+};
+
+exports.sendInvoiceToClient = async (req, res) => {
+  const invoiceId = req.params.id;
+
+  try {
+    const invoice = await Invoice.findById(invoiceId);
+    if (!invoice) {
+      return res.status(404).json({ message: "Invoice not found" });
+    }
+
+    // Send the invoice to Visma
+    const accessToken = await getVismaToken();
+    const vismaResponse = await axios.post(
+      "https://api.visma.net/v2/invoices", //placeholder endpoint, i couldnt find the actual endpoint
+      invoice,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Check if the invoice was successfully sent to Visma
+    if (vismaResponse.status !== 200) {
+      throw new Error("Failed to send invoice to Visma");
+    }
+
+    // Prepare email content
+    const emailContent = {
+      to: invoice.email, // Assuming the invoice has an 'email' field
+      subject: "Invoice from Your Company",
+      text: `Dear Customer, please find attached the invoice for your recent transaction. Invoice ID: ${invoice._id}`,
+      html: `<p>Dear Customer,</p><p>Please find attached the invoice for your recent transaction.</p><p>Invoice ID: ${invoice._id}</p>`,
+      // Attachments can be added if necessary
+    };
+
+    // Send the invoice via email using the mailSender utility
+    await sendEmail(emailContent);
+
+    res
+      .status(200)
+      .json({ message: "Invoice sent successfully to Visma and via email." });
+  } catch (error) {
+    console.error("Error sending invoice to client:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 exports.getAllInvoice = async (req, res) => {
   try {
