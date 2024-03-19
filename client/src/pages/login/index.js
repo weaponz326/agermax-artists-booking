@@ -97,7 +97,7 @@ const LoginPage = () => {
     auth.login({ email, password, rememberMe }, () => {
       setError('email', {
         type: 'manual',
-        message: 'Email or Password is invalid'
+        message: 'Invalid Email or Password'
       })
     })
   }
@@ -142,12 +142,11 @@ const LoginPage = () => {
                     onBlur={onBlur}
                     onChange={onChange}
                     placeholder='admin@vuexy.com'
-                    error={Boolean(errors.email)}
-                    {...(errors.email && { helperText: errors.email.message })}
                   />
                 )}
               />
             </Box>
+
             <Box sx={{ mb: 1.5 }}>
               <Controller
                 name='password'
@@ -180,6 +179,11 @@ const LoginPage = () => {
                   />
                 )}
               />
+              {errors.email && (
+                <Typography color='error' variant='caption'>
+                  {errors.email.message}
+                </Typography>
+              )}
             </Box>
             <Box
               sx={{

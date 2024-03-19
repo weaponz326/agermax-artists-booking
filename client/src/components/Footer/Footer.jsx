@@ -16,7 +16,7 @@ const Footer = () => {
           <div className={styles['footer-nav']}>
             <Link href='/'>Home</Link>
             <Link href='/about'>About</Link>
-            <Link href='/artists'>Entertainers</Link>
+            <Link href='/artists'>Performers</Link>
             <Link href='/events'>Events</Link>
             <Link href=''>Contact</Link>
           </div>
@@ -39,7 +39,7 @@ const Footer = () => {
           </div>
         </div>
         <div className={styles['copyright-terms']}>
-          <div className={styles['copyright']}>@Copyright Agermax {currentYear}</div>
+          <div className={styles['copyright']}>@ Copyright Agermax {currentYear}</div>
           <div className={styles['terms-privacy']}>
             <Link href=''>Terms</Link>
             <Link href=''>Privacy Policy</Link>
