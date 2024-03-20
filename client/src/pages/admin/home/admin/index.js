@@ -181,13 +181,12 @@ const MainDashboard = () => {
         setBookingsChartData(newBookingsChartData)
       } catch (error) {
         console.error('Error fetching chart data:', error)
+        setBookingsChartData(null) // Reset the chart data on error
       }
     }
 
-    if (user) {
-      fetchChartData()
-    }
-  }, [user])
+    fetchChartData()
+  }, [])
 
   if (!user) return <FallbackSpinner />
   return (
@@ -212,7 +211,11 @@ const MainDashboard = () => {
                 Total bookings
               </Typography>
               <Box sx={{ height: 300 }}>
-                <Bar data={bookingsChartData} />
+                {bookingsChartData ? (
+                  <Bar key={JSON.stringify(bookingsChartData)} data={bookingsChartData} />
+                ) : (
+                  <Typography>Loading chart data...</Typography>
+                )}
               </Box>
             </ChartCard>
           </Grid>
