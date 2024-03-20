@@ -1,10 +1,13 @@
-import * as React from 'react'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button'
 import Slide from '@mui/material/Slide'
 import { useAuth } from 'src/hooks/useAuth'
+import styles from './TransitionModal.module.css'
+
+import React, { useState } from 'react'
+import { Drawer, Space } from 'antd'
 
 const style = {
   position: 'absolute',
@@ -33,6 +36,10 @@ export default function TransitionsModal({ modalContent, btnClassName, open, set
   }
   const handleClose = () => setOpen(false)
 
+  const onClose = () => {
+    setOpen(false)
+  }
+
   return (
     <div>
       <Button
@@ -48,23 +55,30 @@ export default function TransitionsModal({ modalContent, btnClassName, open, set
       >
         Book Now
       </Button>
-      <Modal
-        aria-labelledby='transition-modal-title'
-        aria-describedby='transition-modal-description'
+      <Drawer
+        styles={{ wrapper: { boxShadow: 'none', top: '5px', right: '20px', padding: '0' } }}
+        style={{ height: '840px', boxShadow: 'none', borderRadius: '24px', padding: '0px' }}
+        width={470}
+        closeIcon={false}
+        // title={`Drawer`}
+        variant='persistent'
+        anchor='right'
+        className={styles.drawer}
+        placement='right'
+        // size={size}
+        onClose={onClose}
         open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 400
-          }
-        }}
+        // extra={
+        //   <Space>
+        //     <Button onClick={onClose}>Cancel</Button>
+        //     <Button type='primary' onClick={onClose}>
+        //       OK
+        //     </Button>
+        //   </Space>
+        // }
       >
-        <Slide direction='left' in={open} mountOnEnter unmountOnExit>
-          <Box sx={style}>{modalContent}</Box>
-        </Slide>
-      </Modal>
+        {modalContent}
+      </Drawer>
     </div>
   )
 }
