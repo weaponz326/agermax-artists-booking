@@ -164,20 +164,7 @@ const MainDashboard = () => {
         })
 
         const newBookingsChartData = {
-          labels: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec'
-          ],
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           datasets: [
             {
               label: 'Total Bookings',
@@ -225,8 +212,7 @@ const MainDashboard = () => {
                 Total bookings
               </Typography>
               <Box sx={{ height: 300 }}>
-                {/* Conditional rendering */}
-                {bookingsChartData && <Bar data={bookingsChartData} />}
+                <Bar data={bookingsChartData} />
               </Box>
             </ChartCard>
           </Grid>

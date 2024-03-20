@@ -1,6 +1,7 @@
 .bookingScheduleCard * {
   font-family: var(--main-font-family);
   color: #183d4c;
+  /* cursor: pointer; */
 }
 
 .bookingScheduleCard {
@@ -9,11 +10,11 @@
   /* width: 90%; */
   background-color: transparent;
   border: none;
-  border-radius: 36px;
+  /* border-radius: 36px; */
   height: 100%;
   /* max-height: 65rem; */
   /* box-shadow: 0px 10px 30px #183d4c; */
-  padding: 1.25rem;
+  /* padding: 1.25rem; */
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -44,8 +45,11 @@
   flex-direction: row;
   border: 2px solid #cbd4dc;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem 0.5rem;
   justify-content: space-between;
+}
+.timePicker {
+  cursor: pointer;
 }
 .verticalDivider {
   width: 2px;
@@ -56,16 +60,27 @@
 .timePicker {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .specificTime {
   font-weight: 500;
+  text-align: center;
   color: inherit;
 }
-.chosenTime {
-  color: #66b0e8;
+.chosenTime * {
+  color: #183d4c;
+  background-color: transparent;
+  border: none;
+  /* font-size: 2rem; */
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--main-font-family);
+  text-align: center;
 }
-
+.chosenTime {
+  /* font-size: 3rem; */
+}
 .stepper {
   margin-top: auto;
 }

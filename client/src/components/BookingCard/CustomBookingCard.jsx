@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import styles from './CustomBookingCard.module.css'
 import { useForm } from 'react-hook-form'
 
-import { LocalizationProvider, TimePicker, DatePicker, DateCalendar } from '@mui/x-date-pickers'
+import { LocalizationProvider, DatePicker, DateCalendar } from '@mui/x-date-pickers'
+import { TimePicker, ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -143,6 +144,8 @@ const BookingCardSchedular = ({
     formState: { errors, isSubmitting }
   } = useForm()
 
+  const [getInTime, setGetInTime] = useState(false)
+
   //Handlers for Next and Back Buttons Click and Submission of Date
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
@@ -156,24 +159,11 @@ const BookingCardSchedular = ({
     return
   }
 
-  /*************************Popover****************** */
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedTime, setSelectedTime] = useState(null)
-
-  const handleChooseClick = event => {
-    setAnchorEl(event.currentTarget)
+  const handleOkay = () => {
+    setGetInTime(true)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handleTimeSelection = time => {
-    setSelectedTime(time)
-    handleClose()
-  }
-
-  /*************************Popover****************** */
+  const getInTimeColor = getInTime == true ? 'black' : '#66b0e8'
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -207,55 +197,82 @@ const BookingCardSchedular = ({
                 }
               }}
               // onChange={date => handleChange('dateTimeRequested', dayjs(date))}
-              // onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
+              onChange={date => handleChangeFormData('dateTimeRequested', dayjs(date), artist)}
               // className={styles.modalCardContentInputField}
               label='Select Event Date'
-              // value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
+              value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
               disablePast
-              // name='dateTimeRequested'
+              name='dateTimeRequested'
             />
           </div>
           <div className={styles.calendarInstruction}>What Time?</div>
-          <div className={styles.timePickersWrapper}>
-            <div className={styles.timePicker}>
-              <div className={styles.specificTime}>Get-In Time</div>
-              <div className={styles.chosenTime} onClick={handleChooseClick}>
-                Choose
-              </div>
-              <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left'
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left'
-                }}
-              >
-                {/* TimePicker component hidden by default */}
+          <ConfigProvider
+            theme={{
+              components: {
+                DatePicker: {
+                  inputFontSizeLG: '30px'
+                  // inputFontSize: '24px'
+                }
+              },
+              token: {
+                colorTextPlaceholder: '#66b0e8',
+                paddingLG: '1.6rem'
+                // colorText: 'red'
+              }
+            }}
+          >
+            ...
+            <div className={styles.timePickersWrapper}>
+              <div className={styles.timePicker}>
+                <div className={styles.specificTime}>Get-In Time</div>
                 <TimePicker
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  value={selectedTime}
-                  onChange={time => handleTimeSelection(time)}
+                  // style={{ fontSize: '2.5rem' }}
+                  className={styles.chosenTime}
+                  variant='borderless'
+                  placeholder='Choose'
+                  minuteStep={15}
+                  size='large'
+                  showSecond={false}
+                  showNow={false}
+                  suffixIcon={false}
+                  format={'HH:mm'}
+                  onOk={handleOkay}
+                  name='getInTime'
                 />
-              </Popover>
-            </div>
-            <VerticalDivider />
-            <div className={styles.timePicker}>
-              <div className={styles.specificTime}>Start Time</div>
-              <div className={styles.chosenTime}>Choose</div>
-            </div>
-            <VerticalDivider />
+              </div>
+              <VerticalDivider />
+              <div className={styles.timePicker}>
+                <div className={styles.specificTime}>Start Time</div>
+                <TimePicker
+                  className={styles.chosenTime}
+                  variant='borderless'
+                  placeholder='Choose'
+                  minuteStep={15}
+                  size='large'
+                  showSecond={false}
+                  format={'HH:mm'}
+                  suffixIcon={false}
+                  showNow={false}
+                />
+              </div>
+              <VerticalDivider />
 
-            <div className={styles.timePicker}>
-              <div className={styles.specificTime}>End Time</div>
-              <div className={styles.chosenTime}>Choose</div>
+              <div className={styles.timePicker}>
+                <div className={styles.specificTime}>End Time</div>
+                <TimePicker
+                  className={styles.chosenTime}
+                  variant='borderless'
+                  placeholder='Choose'
+                  minuteStep={15}
+                  size='large'
+                  suffixIcon={false}
+                  format={'HH:mm'}
+                  showNow={false}
+                  showSecond={false}
+                />
+              </div>
             </div>
-          </div>
+          </ConfigProvider>
           <div className={styles.stepper}>
             <NavMobileStepper
               activeStep={activeStep}
