@@ -1,21 +1,20 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
-import { getMonth, getYear } from 'date-fns';
-
+import { getMonth, getYear } from 'date-fns'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
+// import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 // ** Third Party Imports
-import format from 'date-fns/format'
-import { Bar } from 'react-chartjs-2'
-import DatePicker from 'react-datepicker'
+// import format from 'date-fns/format'
+// import { Bar } from 'react-chartjs-2'
+// import DatePicker from 'react-datepicker'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+// import Icon from 'src/@core/components/icon'
 import styles from './MainDashboard.module.css'
 import { formatDate, formatTime } from 'src/utils/dateUtils'
 
@@ -142,41 +141,54 @@ const MainDashboard = () => {
       }
 
       // Fetch all bookings data
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bookings`);
-      const bookings = await response.data;
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bookings`)
+      const bookings = await response.data
 
       // Initialize an object to hold the count of bookings per month for the current year
-      const currentYear = new Date().getFullYear();
-      const bookingsPerMonth = Array.from({ length: 12 }).fill(0); // Initialize array with 0s for each month
+      const currentYear = new Date().getFullYear()
+      const bookingsPerMonth = Array.from({ length: 12 }).fill(0) // Initialize array with 0s for each month
 
       bookings.forEach(booking => {
-        const date = new Date(booking.dateTimeRequested);
-        const year = getYear(date);
-        const month = getMonth(date);
+        const date = new Date(booking.dateTimeRequested)
+        const year = getYear(date)
+        const month = getMonth(date)
 
-        if (year === currentYear) { // Adjust this condition based on your needs
-          bookingsPerMonth[month]++;
+        if (year === currentYear) {
+          // Adjust this condition based on your needs
+          bookingsPerMonth[month]++
         }
-      });
+      })
 
       // Create the dataset for the chart
       const bookingsChartData = {
         labels: [
-          'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December'
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December'
         ],
-        datasets: [{
-          label: 'Total Bookings',
-          data: bookingsPerMonth,
-          backgroundColor: 'rgba(153, 102, 255, 0.6)',
-          borderColor: 'rgba(153, 102, 255, 1)',
-          borderWidth: 1,
-          borderRadius: 5,
-          barThickness: 10
-        }]
-      };
+        datasets: [
+          {
+            label: 'Total Bookings',
+            data: bookingsPerMonth,
+            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1,
+            borderRadius: 5,
+            barThickness: 10
+          }
+        ]
+      }
 
-      setBookingsChartData(bookingsChartData);
+      setBookingsChartData(bookingsChartData)
 
       const incomeData = {
         labels: [
@@ -225,11 +237,10 @@ const MainDashboard = () => {
             You have {pendingBookingsCount} pending bookings and 0* unread messages.
           </Typography>
         </Grid>
-
-        {/* Cards Grid */}
+        Cards Grid
         <Grid container item spacing={2}>
           {/* Chart Card */}
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <ChartCard>
               <Typography variant='h6' sx={{ my: 2 }}>
                 Total bookings
@@ -238,7 +249,7 @@ const MainDashboard = () => {
                 <Bar data={bookingsChartData} />
               </Box>
             </ChartCard>
-          </Grid>
+          </Grid> */}
 
           {/* Info Cards */}
           {user.role === 'admin' && (
@@ -329,7 +340,6 @@ const MainDashboard = () => {
             </Grid>
           )}
         </Grid>
-
         {/* Recent Bookings and Users List */}
         {user.role != 'artist' && (
           <Grid container item spacing={2}>
@@ -379,17 +389,16 @@ const MainDashboard = () => {
             )}
             {user && user.role === 'admin' && (
               <Grid item xs={12} md={6}>
-                <ChartCard>
-                  {/* Replace with your actual chart */}
+                {/* <ChartCard>
                   <Typography variant='h6' sx={{ my: 2 }}>
                     Income
                   </Typography>
                   <Box sx={{ height: 300 }}>
                     <Bar data={incomeChartData} />
                   </Box>
-                </ChartCard>
+                </ChartCard> */}
               </Grid>
-            )}{' '}
+            )}
             {/* Upcoming Bookings */}
             <Grid item xs={12} md={6}>
               <Card sx={{ boxShadow: 3, borderRadius: 2, minHeight: 350 }}>
@@ -423,7 +432,6 @@ const MainDashboard = () => {
             </Grid>
           </Grid>
         )}
-
         {/* Top Performers */}
         {user.role != 'artist' && (
           <Grid container item spacing={2}>
