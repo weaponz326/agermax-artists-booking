@@ -1,6 +1,18 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Grid, Divider, Box, Button, Typography, InputAdornment, TextField, Snackbar, Alert } from '@mui/material'
+import {
+  Grid,
+  Chip,
+  Divider,
+  Box,
+  Button,
+  Typography,
+  InputAdornment,
+  TextField,
+  Snackbar,
+  Alert,
+  Autocomplete
+} from '@mui/material'
 import CustomTextField from 'src/@core/components/mui/text-field' // Adjust based on your project structure
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
@@ -76,6 +88,18 @@ const TabAccount = () => {
     const newValues = additionalFormData[field].filter((_, idx) => idx !== index)
     setAdditionalFormData({ ...additionalFormData, [field]: newValues })
   }
+  const genreOptions = [
+    '🎶 Troubadour',
+    '🎸 Cover Band',
+    '🎹 Musician',
+    '🎤 Singer',
+    '🎙 Confrensier',
+    '🎧 DJ',
+    '🎭 Stand up Comedian',
+    '🎪 Show Group',
+    '🎹🍸 Bar Piano',
+    '🎩✨ Magician'
+  ]
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -206,18 +230,23 @@ const TabAccount = () => {
                 <Divider sx={{ width: '100%', m: 4 }} />
               </Grid>
 
-              <Grid item container alignItems='flex-end' spacing={2} sx={{ mb: 4 }}>
-                <Grid item xs={4}>
-                  <Typography>Genres</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <ArrayFieldComponent
-                    initialValues={additionalFormData.genre}
-                    type='text'
-                    onChange={handleGenresChange} // Ensure this handler updates the state correctly
-                  />
-                </Grid>
-                <Divider sx={{ width: '100%', m: 4 }} />
+              <Grid item xs={4}>
+                <Typography>Genres</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Autocomplete
+                  multiple
+                  id='genre-select'
+                  options={genreOptions}
+                  value={additionalFormData.genre}
+                  onChange={(event, newValue) => {
+                    handleGenresChange(newValue)
+                  }}
+                  renderInput={params => <TextField {...params} variant='outlined' label='Select genres' />}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
+                  }
+                />
               </Grid>
 
               <Grid item container alignItems='flex-end' spacing={2} sx={{ mb: 4 }}>
