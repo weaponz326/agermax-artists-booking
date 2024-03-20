@@ -1,12 +1,24 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
 import { getMonth, getYear } from 'date-fns'
+import { Line } from 'react-chartjs-2'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+// Register the components
+ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, LineElement, Title, Tooltip, Legend)
 
 // ** Third Party Imports
 import format from 'date-fns/format'
@@ -188,6 +200,57 @@ const MainDashboard = () => {
     fetchChartData()
   }, [])
 
+  const [incomeChartData, setIncomeChartData] = useState(null)
+
+  useEffect(() => {
+    const fetchIncomeData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payments`)
+        const payments = response.data
+
+        const currentYear = new Date().getFullYear()
+        const incomePerMonth = Array.from({ length: 12 }).fill(0)
+
+        payments.forEach(payment => {
+          const date = new Date(payment.createdAt) // Using 'createdAt' as the payment date
+          const year = getYear(date)
+          const month = getMonth(date)
+
+          if (year === currentYear) {
+            incomePerMonth[month] += payment.amount
+          }
+        })
+
+        const newIncomeChartData = {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [
+            {
+              label: 'Total Income',
+              data: incomePerMonth,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+              tension: 0.4 // Adjusts the curve of the line
+            }
+          ]
+        }
+
+        setIncomeChartData(newIncomeChartData)
+      } catch (error) {
+        console.error('Error fetching income data:', error)
+        setIncomeChartData(null) // Reset the chart data on error
+      }
+    }
+
+    if (user) {
+      fetchIncomeData()
+    }
+  }, [user])
+
   if (!user) return <FallbackSpinner />
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -358,13 +421,18 @@ const MainDashboard = () => {
               </Grid>
             )}
             {user && user.role === 'admin' && (
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} lg={6}>
                 <ChartCard>
-                  {/* Replace with your actual chart */}
                   <Typography variant='h6' sx={{ my: 2 }}>
-                    Income
+                    Total Income
                   </Typography>
-                  <Box sx={{ height: 300 }}>{/* <Bar data={incomeChartData} /> */}</Box>
+                  <Box sx={{ height: 300 }}>
+                    {incomeChartData ? (
+                      <Line key={JSON.stringify(incomeChartData)} data={incomeChartData} />
+                    ) : (
+                      <Typography>Loading income data...</Typography>
+                    )}
+                  </Box>
                 </ChartCard>
               </Grid>
             )}{' '}
