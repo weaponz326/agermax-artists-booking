@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
-import { getMonth, getYear } from 'date-fns'
+import { getMonth, getYear } from 'date-fns';
+
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -100,6 +101,8 @@ const MainDashboard = () => {
   const [topPerformers, setTopPerformers] = useState(null)
   const [listOfVenues, setListOfVenues] = useState(null)
   const [listOfOrganizers, setListOfOrganizers] = useState(null)
+  const [bookingsChartData, setBookingsChartData] = useState({})
+  const [incomeChartData, setIncomeChartData] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,69 +140,74 @@ const MainDashboard = () => {
       } catch (error) {
         console.log(error)
       }
+
+      // Fetch all bookings data
+      const allBookings = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bookings`);
+      const bookings = await allBookings.data;
+
+      // Initialize an object to hold the count of bookings per month for the current year
+      const currentYear = new Date().getFullYear();
+      const bookingsPerMonth = Array.from({ length: 12 }).fill(0);
+
+      bookings.forEach(booking => {
+        const date = new Date(booking.dateTimeRequested);
+        const year = getYear(date);
+        const month = getMonth(date);
+
+        if (year === currentYear) { // Adjust this condition based on your needs
+          bookingsPerMonth[month]++;
+        }
+      });
+          console.log(bookingsPerMonth);
+
+      // Create the dataset for the chart
+      const bookingsChartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Bookings',
+          data: bookingsPerMonth,
+          backgroundColor: 'rgba(153, 102, 255, 0.6)',
+          borderColor: 'rgba(153, 102, 255, 1)',
+          borderWidth: 1,
+          borderRadius: 5,
+          barThickness: 10
+        }]
+      };
+
+      setBookingsChartData(bookingsChartData);
+
+      const incomeData = {
+        labels: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December'
+        ], // Adjust labels based on your data
+        datasets: [
+          {
+            label: 'Total Income',
+            data: [10, 20, 30, 40, 30, 40, 50, 60, 70, 80, 90, 100], // This will be replaced with real data
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+            borderRadius: 5,
+            barThickness: 10 // Control the bar width
+          }
+        ]
+      }
+
+      // setBookingsChartData(bookingsData)
+      setIncomeChartData(incomeData)
     }
     fetchData()
-  }, [user])
-
-  const [bookingsChartData, setBookingsChartData] = useState(null)
-
-  // Existing useEffect to fetch chart data
-  useEffect(() => {
-    const fetchChartData = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bookings`)
-        const bookings = response.data
-
-        const currentYear = new Date().getFullYear()
-        const bookingsPerMonth = Array.from({ length: 12 }).fill(0)
-
-        bookings.forEach(booking => {
-          const date = new Date(booking.dateTimeRequested)
-          const year = getYear(date)
-          const month = getMonth(date)
-
-          if (year === currentYear) {
-            bookingsPerMonth[month]++
-          }
-        })
-
-        const newBookingsChartData = {
-          labels: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec'
-          ],
-          datasets: [
-            {
-              label: 'Total Bookings',
-              data: bookingsPerMonth,
-              backgroundColor: 'rgba(153, 102, 255, 0.6)',
-              borderColor: 'rgba(153, 102, 255, 1)',
-              borderWidth: 1,
-              borderRadius: 5,
-              barThickness: 10
-            }
-          ]
-        }
-
-        setBookingsChartData(newBookingsChartData)
-      } catch (error) {
-        console.error('Error fetching chart data:', error)
-      }
-    }
-
-    if (user) {
-      fetchChartData()
-    }
   }, [user])
 
   if (!user) return <FallbackSpinner />
@@ -225,8 +233,7 @@ const MainDashboard = () => {
                 Total bookings
               </Typography>
               <Box sx={{ height: 300 }}>
-                {/* Conditional rendering */}
-                {bookingsChartData && <Bar data={bookingsChartData} />}
+                <Bar data={bookingsChartData} />
               </Box>
             </ChartCard>
           </Grid>
@@ -375,7 +382,9 @@ const MainDashboard = () => {
                   <Typography variant='h6' sx={{ my: 2 }}>
                     Income
                   </Typography>
-                  <Box sx={{ height: 300 }}>{/* <Bar data={incomeChartData} /> */}</Box>
+                  <Box sx={{ height: 300 }}>
+                    <Bar data={incomeChartData} />
+                  </Box>
                 </ChartCard>
               </Grid>
             )}{' '}
