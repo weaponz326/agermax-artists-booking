@@ -83,7 +83,7 @@ const EventCard = ({ booking }) => {
 
   return (
     <div className={styles['events-preview-container']}>
-      <Image className={styles['evt-img']} src={bookingImage} alt={'bookingImage'} loading='eager' fill />
+      <Image className={styles['evt-img']} src={bookingImage} alt={booking.eventTitle} loading='eager' fill />
       <CalendarIcon booking={booking} />
       <EventsDetails booking={booking} />
       <div className={styles.gradientOverlay}></div>
@@ -130,12 +130,12 @@ const EventsDetails = ({ booking }) => {
   return (
     <div className={styles.eventDetailsWrapper}>
       <div className={`${styles['event-prev-detail']} ${styles['artist-name']}`}>
-        <Link
+        <div
           className={`${styles['event-prev-detail']} ${styles['artist-name']}`}
-          href={`/artists/${booking.artistID}`}
+          // href={`/artists/${booking.artistID}`}
         >
-          {artistName ? artistName : 'Not Provided'}
-        </Link>
+          {booking && booking.eventTitle}
+        </div>
       </div>
       <div className={styles['event-prev-detail']}>
         {booking.locationVenue ? booking.locationVenue : 'Location not specified'}
