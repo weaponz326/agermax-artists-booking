@@ -9,6 +9,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Tag } from 'src/pages/artists/[id]'
 import { NavMobileStepper } from './BookingCard'
+import { Tooltip } from 'antd'
+import { BiBarcode, BiQuestionMark, BiSolidHelpCircle } from 'react-icons/bi'
 
 const customTheme = createTheme({
   components: {
@@ -265,7 +267,15 @@ const BookingCardSchedular = ({
           >
             <div className={styles.timePickersWrapper}>
               <div className={styles.timePicker}>
-                <div className={styles.specificTime}>Get-In Time</div>
+                <div className={styles.specificTime}>
+                  <span>Get-In Time</span>
+                  <Tooltip
+                    title='At what time is
+the Performer able to get in to the premises?'
+                  >
+                    <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
+                  </Tooltip>
+                </div>
                 <TimePicker
                   // style={{ fontSize: '2.5rem' }}
                   className={styles.chosenTime}
@@ -286,7 +296,15 @@ const BookingCardSchedular = ({
               </div>
               <VerticalDivider />
               <div className={styles.timePicker}>
-                <div className={styles.specificTime}>Start Time</div>
+                <div className={styles.specificTime}>
+                  <span>Start Time</span>
+                  <Tooltip
+                    title='At what time is the Performer going
+                    to start?'
+                  >
+                    <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
+                  </Tooltip>
+                </div>
                 <TimePicker
                   className={styles.chosenTime}
                   variant='borderless'
@@ -308,7 +326,12 @@ const BookingCardSchedular = ({
               <VerticalDivider />
 
               <div className={styles.timePicker}>
-                <div className={styles.specificTime}>End Time</div>
+                <div className={styles.specificTime}>
+                  <span>End Time</span>
+                  <Tooltip title='At what time will the Performer end?'>
+                    <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
+                  </Tooltip>
+                </div>
                 <TimePicker
                   className={styles.chosenTime}
                   variant='borderless'

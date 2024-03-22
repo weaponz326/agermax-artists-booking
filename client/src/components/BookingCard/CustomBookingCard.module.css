@@ -59,8 +59,11 @@
 
 .specificTime {
   font-weight: 500;
-  text-align: center;
+  justify-content: center;
   color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .chosenTime * {
   color: #183d4c;
