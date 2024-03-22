@@ -1,8 +1,8 @@
 // ** MUI Imports
-import Card from '@mui/material/Card'
-import Chip from '@mui/material/Chip'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
+import { Card } from '@mui/material'
+import { Chip } from '@mui/material'
+import { Typography } from '@mui/material'
+import { CardContent } from '@mui/material'
 
 // ** Custom Component Import
 import Icon from 'src/@core/components/icon'
