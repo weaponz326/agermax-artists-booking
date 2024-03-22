@@ -1,3 +1,10 @@
+.bookingCardWrapper {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .summaryDetailsContainer {
   margin-top: 16px;
   border: 1px solid #cbd4dc;
@@ -39,4 +46,8 @@
   margin: auto 0;
   height: 100%;
   background-color: #cbd4dc;
+}
+
+.mobileStepperWrapper {
+  margin-top: auto;
 }

@@ -57,7 +57,7 @@ export default function TransitionsModal({ modalContent, btnClassName, open, set
       </Button>
       <Drawer
         styles={{ wrapper: { boxShadow: 'none', top: '5px', right: '20px', padding: '0' } }}
-        style={{ height: '840px', boxShadow: 'none', borderRadius: '24px', padding: '0px' }}
+        style={{ minHeight: '700px', boxShadow: 'none', borderRadius: '24px', padding: '0px' }}
         width={470}
         closeIcon={false}
         // title={`Drawer`}

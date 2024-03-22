@@ -5,19 +5,13 @@
 }
 
 .bookingScheduleCard {
-  /* position: absolute; */
-
-  /* width: 90%; */
   background-color: transparent;
   border: none;
-  /* border-radius: 36px; */
-  height: 100%;
-  /* max-height: 65rem; */
-  /* box-shadow: 0px 10px 30px #183d4c; */
-  /* padding: 1.25rem; */
+
   overflow: auto;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .cardTitle {
@@ -54,7 +48,7 @@
 .verticalDivider {
   width: 2px;
   margin: auto 0;
-  height: 100%;
+  height: 50px;
   background-color: #cbd4dc;
 }
 .timePicker {
@@ -81,7 +75,7 @@
 .chosenTime {
   /* font-size: 3rem; */
 }
-.stepper {
+.mobileStepperWrapper {
   margin-top: auto;
 }
 

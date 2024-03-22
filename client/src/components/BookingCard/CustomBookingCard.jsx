@@ -5,12 +5,10 @@ import { useForm } from 'react-hook-form'
 import { LocalizationProvider, DatePicker, DateCalendar } from '@mui/x-date-pickers'
 import { TimePicker, ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import useBookingFormData from 'src/hooks/useBookingFormData'
 import { Tag } from 'src/pages/artists/[id]'
 import { NavMobileStepper } from './BookingCard'
-import { Button, Popover } from '@mui/material'
 
 const customTheme = createTheme({
   components: {
@@ -131,10 +129,12 @@ const customTheme = createTheme({
 const BookingCardSchedular = ({
   artist,
   setOpen,
-  activeStep,
   setActiveStep,
   formData,
   handleChangeFormData,
+  activeStep,
+  handleBack,
+  handleNext,
   disableNext
 }) => {
   const {
@@ -144,26 +144,68 @@ const BookingCardSchedular = ({
     formState: { errors, isSubmitting }
   } = useForm()
 
-  const [getInTime, setGetInTime] = useState(false)
+  const [minTime, setMinTime] = useState(null)
 
-  //Handlers for Next and Back Buttons Click and Submission of Date
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-    //Handle Condition, Embed Artist ID and submit form
-    if (activeStep === 1) handleSubmit()
+  // Handler for when a new time is selected in the first Time Picker
+  const handleTimeChange = (time, timeString) => {
+    setMinTime(dayjs(timeString, 'HH:mm')) // Update the minimum time
+  }
+  // Function to disable time options in the second Time Picker based on the selected time from the first Time Picker
+  const disabledGetInTime = type => {
+    console.log(type)
+    const currentHour = new Date(formData.getInTime).getUTCHours() // Get the current hour
+    const currentMinute = new Date(formData.getInTime).getUTCMinutes() // Get the current minute
+
+    const disabledHours = () => {
+      const hours = []
+      // Loop from 0 to the current hour and disable each hour
+      for (let i = 0; i <= currentHour; i++) {
+        hours.push(i)
+      }
+      return hours
+    }
+    const disabledMinutes = selectedHour => {
+      if (selectedHour === currentHour) {
+        const minutes = []
+        // Loop from 0 to the current minute and disable each minute
+        for (let i = 0; i < currentMinute; i++) {
+          minutes.push(i)
+        }
+        return minutes
+      }
+      // Disable specific minutes for other hours
+      return []
+    }
+    return { disabledHours, disabledMinutes }
   }
 
-  const handleBack = () => {
-    if (activeStep !== 0) setActiveStep(prevActiveStep => prevActiveStep - 1)
-    if (activeStep === 0) setOpen(false)
-    return
-  }
+  const disabledStartTime = type => {
+    console.log(type)
+    const currentHour = new Date(formData.startTime).getUTCHours() // Get the current hour
+    const currentMinute = new Date(formData.startTime).getUTCMinutes() // Get the current minute
 
-  const handleOkay = () => {
-    setGetInTime(true)
+    const disabledHours = () => {
+      const hours = []
+      // Loop from 0 to the current hour and disable each hour
+      for (let i = 0; i <= currentHour; i++) {
+        hours.push(i)
+      }
+      return hours
+    }
+    const disabledMinutes = selectedHour => {
+      if (selectedHour === currentHour) {
+        const minutes = []
+        // Loop from 0 to the current minute and disable each minute
+        for (let i = 0; i < currentMinute; i++) {
+          minutes.push(i)
+        }
+        return minutes
+      }
+      // Disable specific minutes for other hours
+      return []
+    }
+    return { disabledHours, disabledMinutes }
   }
-
-  const getInTimeColor = getInTime == true ? 'black' : '#66b0e8'
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -221,7 +263,6 @@ const BookingCardSchedular = ({
               }
             }}
           >
-            ...
             <div className={styles.timePickersWrapper}>
               <div className={styles.timePicker}>
                 <div className={styles.specificTime}>Get-In Time</div>
@@ -231,13 +272,16 @@ const BookingCardSchedular = ({
                   variant='borderless'
                   placeholder='Choose'
                   minuteStep={15}
+                  secondStep={30}
                   size='large'
                   showSecond={false}
                   showNow={false}
+                  value={formData.getInTime}
                   suffixIcon={false}
                   format={'HH:mm'}
-                  onOk={handleOkay}
+                  onOk={handleTimeChange}
                   name='getInTime'
+                  onChange={time => handleChangeFormData('getInTime', time)}
                 />
               </div>
               <VerticalDivider />
@@ -253,6 +297,12 @@ const BookingCardSchedular = ({
                   format={'HH:mm'}
                   suffixIcon={false}
                   showNow={false}
+                  value={formData.startTime}
+                  name='startTime'
+                  onChange={time => handleChangeFormData('startTime', time)}
+                  disabled={!formData.getInTime}
+                  disabledTime={disabledGetInTime}
+                  hideDisabledOptions
                 />
               </div>
               <VerticalDivider />
@@ -269,11 +319,14 @@ const BookingCardSchedular = ({
                   format={'HH:mm'}
                   showNow={false}
                   showSecond={false}
+                  value={formData.endTime}
+                  onChange={time => handleChangeFormData('endTime', time)}
+                  disabled={!formData.startTime}
+                  disabledTime={disabledStartTime}
+                  hideDisabledOptions
                 />
               </div>
             </div>
-          </ConfigProvider>
-          <div className={styles.stepper}>
             <NavMobileStepper
               activeStep={activeStep}
               setActiveStep={setActiveStep}
@@ -282,7 +335,7 @@ const BookingCardSchedular = ({
               disableNext={disableNext}
               // allowCancel={allowCancel}
             />
-          </div>
+          </ConfigProvider>
         </div>
       </ThemeProvider>
     </LocalizationProvider>
