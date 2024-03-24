@@ -43,13 +43,10 @@ import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
 import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
 import { getUserById } from 'src/services/users'
-import { BiTag, BiTagAlt, BiTrash } from 'react-icons/bi'
+import { BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import { uploadBookingBookingGallery, uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
-import ImageUploader from 'src/components/AdminPagesSharedComponents/UploadPictures/ImageUploader'
-import { Tag, Tag2 } from 'iconsax-react'
-import { TagFacesSharp } from '@mui/icons-material'
+import { uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -770,7 +767,6 @@ export const BookingsModalContent = ({
   }
 
   const handleBookingBannerFileUpload = async ({ file, onSuccess, onError }) => {
-    console.log(file)
     try {
       const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
       console.log(updatedBooking)

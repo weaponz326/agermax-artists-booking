@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
 import { getMonth, getYear } from 'date-fns'
 import { Line } from 'react-chartjs-2'
+import { Avatar as AntDesignAvatar } from 'antd'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -391,7 +392,7 @@ const MainDashboard = () => {
                       recentBookings.map((booking, index) => (
                         <ListItem key={index}>
                           <ListItemAvatar>
-                            <Avatar src={booking.mainBanner}></Avatar>
+                            <AntDesignAvatar src={booking.mainBanner} alt={booking.eventTitle} />
                           </ListItemAvatar>
                           <ListItemText
                             primary={booking.eventTitle}
@@ -452,7 +453,7 @@ const MainDashboard = () => {
                       ? upcomingBookings.map((booking, index) => (
                           <ListItem key={index}>
                             <ListItemAvatar>
-                              <Avatar src={booking.mainBanner}></Avatar>
+                              <AntDesignAvatar src={booking.mainBanner} alt={booking.eventTitle}></AntDesignAvatar>
                             </ListItemAvatar>
                             <ListItemText
                               primary={booking.eventTitle}
