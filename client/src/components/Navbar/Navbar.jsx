@@ -41,6 +41,7 @@ import {
 import { useRouter } from 'next/router'
 import { ro } from 'date-fns/locale'
 import { useBookings } from 'src/providers/BookingsProvider'
+import BookingCardSchedular from '../BookingCard/CustomBookingCard'
 
 // const disabledDate = current => {
 //   // Can not select days before today and today
@@ -119,7 +120,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   const searchBarContainerRef = useRef()
 
   /************************Form Data ************************** */
-  const { formData, setFormData } = useBookingFormData()
+  const { formData, setFormData, handleChangeFormData } = useBookingFormData()
 
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
@@ -341,6 +342,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 id={0}
                 onClear={handleClear}
                 ref={selectArtistRef}
+                open={activeInputTab === 0}
               />
               <div className={styles['search-item-divider']}></div>
               <CustomDropdown
@@ -355,7 +357,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                     allowCancel={false}
                     formData={formData}
                     setFormData={setFormData}
-                    handleSetFormData={handleSetFormData}
+                    handleChangeFormData={handleChangeFormData}
                     selectedArtist={selectedArtist}
                     setSelectedArtist={setSelectedArtist}
                     onDone={() => setOpenDropdown(false)}

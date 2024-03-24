@@ -17,6 +17,9 @@ import { createBooking } from 'src/services/bookings'
 import { useAuth } from 'src/hooks/useAuth'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import BookingCardSchedular from './CustomBookingCard'
+import useBookingFormData from 'src/hooks/useBookingFormData'
+import { NavMobileStepper } from './BookingCard'
 
 function NavBarBookingCard({
   onDone,
@@ -24,16 +27,14 @@ function NavBarBookingCard({
   setOpen,
   artist,
   allowCancel,
-  formData,
-  setFormData,
-  handleSetFormData,
+
   selectedArtist,
   setSelectedArtist,
   setActiveInputTab,
   activeInputTab,
   setIsScheduled
 }) {
-  const router = useRouter()
+  const { formData, setFormData, handleChangeFormData } = useBookingFormData()
 
   /****************Fetch Artist ********************/
   useEffect(() => {
@@ -202,7 +203,7 @@ function NavBarBookingCard({
 
   const handleBack = () => {
     if (activeStep !== 0) setActiveStep(prevActiveStep => prevActiveStep - 1)
-    if (activeStep === 0) setOpen(false)
+    if (activeStep === 0) setActiveInputTab(0)
     return
   }
 
@@ -222,7 +223,7 @@ function NavBarBookingCard({
             className='bookingCardWrapper'
           >
             <div style={{ height: '100%' }}>
-              {activeStep != 2 && (
+              {activeStep === 1 && (
                 <div>
                   <Typography fontSize='24px' fontWeight='500' gutterBottom>
                     {selectedArtist.firstName} {selectedArtist.lastName}
@@ -234,157 +235,24 @@ function NavBarBookingCard({
                 </div>
               )}
               {activeStep === 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: '#183D4C' }}>
-                  <Typography sx={{ fontSize: '19px', fontWeight: '400' }} gutterBottom>
-                    Choose When 👇
-                  </Typography>
-                  <Grid marginBottom={2} padding='16px' borderRadius='20px' boxShadow='0 7px 36px #00000014 '>
-                    <DatePicker
-                      onChange={date => handleChange('dateTimeRequested', dayjs(date))}
-                      className={styles.modalCardContentInputField}
-                      label='Select Event Date'
-                      value={formData.dateTimeRequested ? dayjs(formData.dateTimeRequested) : null}
-                      disablePast
-                      name='dateTimeRequested'
-                      autoFocus
-                      sx={{
-                        width: '100%',
-                        '& .MuiDayCalendar-header': {
-                          justifyContent: 'space-between',
-                          fontSize: '1rem'
-                        },
-                        '& .MuiDayCalendar-weekContainer': {
-                          justifyContent: 'space-between'
-                        },
-                        '& .MuiPickersCalendarHeader-label': {
-                          color: '#4B627F'
-                        },
-                        '& .MuiDayCalendar-weekDayLabel': {
-                          color: '#4B627F',
-                          fontSize: '16px'
-                        }
-                      }}
-                    />
-                  </Grid>
-                  <Typography gutterBottom fontSize='17px' color='#183D4C' fontWeight='450'>
-                    What time?
-                  </Typography>
-                  <Grid container border='1px solid #CBD4DC' borderRadius='12px'>
-                    <Grid item xs={4} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        Get In Time{' '}
-                      </Typography>
-                      <TimePicker
-                        name='getInTime'
-                        value={dayjs(formData.getInTime)}
-                        minutesStep={15}
-                        onChange={time => handleChange('getInTime', dayjs(time))}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        format='HH:mm'
-                        disabled={!formData.dateTimeRequested}
-                        skipDisabled
-                        ampm={false}
-                      />
-                    </Grid>
-                    <Grid item xs={4} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        Start Time
-                      </Typography>
-                      <TimePicker
-                        minutesStep={15}
-                        minTime={formData.getInTime ? dayjs(formData.getInTime).add(1, 'hour') : undefined}
-                        onChange={time => handleChange('startTime', dayjs(time))}
-                        value={dayjs(formData.startTime)}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        name='startTIme'
-                        format='HH:mm'
-                        disabled={!formData.getInTime}
-                        ampm={false}
-                        skipDisabled
-                      />
-                    </Grid>
-                    <Grid item xs={4} padding={1.5}>
-                      <Typography color='#4B627F' fontSize='13px'>
-                        End Time
-                      </Typography>
-                      <TimePicker
-                        minutesStep={15}
-                        minTime={formData.startTime ? dayjs(formData.startTime).add(1, 'hour') : undefined}
-                        value={formData.endTime}
-                        sx={{
-                          '& .MuiTextField-root': {
-                            paddingRight: '12px'
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            padding: '0',
-                            fontSize: '19px',
-                            color: '#183D4C',
-                            fontWeight: '600'
-                          },
-                          '& .MuiIconButton-root': {
-                            padding: '0'
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            padding: '0 10px 0 0'
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                          '& MuiMultiSectionDigitalClockSection-item.Mui-selected ': { backgroundColor: '#FC8A5E' }
-                        }}
-                        onChange={time => handleChange('endTime', dayjs(time))}
-                        format='HH:mm'
-                        disabled={!formData.startTime}
-                        skipDisabled
-                        ampm={false}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid marginTop='auto'>
-                    <NavMobileStepper
-                      activeStep={activeStep}
-                      setActiveStep={setActiveStep}
-                      handleBack={handleBack}
-                      handleNext={handleNext}
-                      disableNext={disableNext}
-                      // allowCancel={allowCancel}
-                    />
-                  </Grid>
-                </div>
+                <BookingCardSchedular
+                  artist={selectedArtist}
+                  allowCancel={false}
+                  formData={formData}
+                  setFormData={setFormData}
+                  handleChangeFormData={handleChangeFormData}
+                  selectedArtist={selectedArtist}
+                  setSelectedArtist={setSelectedArtist}
+                  onDone={() => setOpenDropdown(false)}
+                  activeInputTab={activeInputTab}
+                  setActiveInputTab={setActiveInputTab}
+                  setIsScheduled={setIsScheduled}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  handleBack={handleBack}
+                  handleNext={handleNext}
+                  disableNext={disableNext}
+                />
               )}
 
               {activeStep === 1 && (
@@ -446,63 +314,7 @@ function NavBarBookingCard({
                       </Grid>
                     </Grid>
                   </Grid>
-                  {/* <Grid container gap={4} marginTop={3}>
-                    <Typography sx={{ fontSize: '19px', fontWeight: '450' }}>Your Details</Typography>
-                  </Grid> */}
-                  {/* <Grid container direction='column' marginTop={3} color='#4B627F' gap={1}>
-                    <TextField
-                      placeholder='First Name'
-                      className={styles.modalCardContentInputField}
-                      type='text'
-                      name='firstName'
-                      id='firstName'
-                      value={user.firstName}
-                      // onChange={handleChange}
-                      required
-                      variant='outlined'
-                      label='First Name'
-                      size='small'
-                    />
-                    <TextField
-                      placeholder='Last Name'
-                      className={styles.modalCardContentInputField}
-                      type='text'
-                      name='lastName'
-                      id='lastName'
-                      value={user.lastName}
-                      // onChange={handleChange}
-                      required
-                      variant='outlined'
-                      label='Last Name'
-                      size='small'
-                    />
-                    <TextField
-                      placeholder='Email'
-                      className={styles.modalCardContentInputField}
-                      type='email'
-                      name='email'
-                      id='email'
-                      value={user.email}
-                      // onChange={handleChange}
-                      required
-                      variant='outlined'
-                      label='Email ID'
-                      size='small'
-                    />
-                    <TextField
-                      placeholder='Phone'
-                      className={styles.modalCardContentInputField}
-                      type='tel'
-                      name='phoneContact'
-                      id='phoneContact'
-                      value={user.contactPhone}
-                      // onChange={handleChange}
-                      required
-                      variant='outlined'
-                      label='Phone'
-                      size='small'
-                    />
-                  </Grid> */}
+
                   <Grid marginTop='auto'>
                     <NavMobileStepper
                       activeStep={activeStep}
@@ -513,46 +325,6 @@ function NavBarBookingCard({
                   </Grid>
                 </Grid>
               )}
-              {/* {activeStep === 2 && (
-                <Grid textAlign='center' color='#183D4C'>
-                  <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
-                    Thank you!
-                  </Typography>
-                  <Typography fontSize='17px' fontWeight='400' marginTop='40px'>
-                    Your booking is now pending moderation. We will get back to you with further details.
-                  </Typography>
-                  <Grid marginTop={4}>
-                    <CheckCircle
-                      style={{
-                        color: '#32ED7D',
-                        width: '150px',
-                        height: '150px',
-                        borderRadius: '50%',
-                        padding: '0px',
-                        border: '2px solid red'
-                      }}
-                    />
-                  </Grid>
-                  <Button
-                    onClick={() => router.push(`/admin/bookings/${user.role}`)}
-                    sx={{
-                      background: '#FC8A5E',
-                      width: '70%',
-                      fontSize: '19px',
-                      marginTop: '8rem',
-                      color: 'white',
-                      borderRadius: '50px',
-                      textTransform: 'none',
-                      boxShadow: '0px 8px 20px #fc8e5e40',
-                      ':hover': {
-                        background: '#f07a4b'
-                      }
-                    }}
-                  >
-                    View Booking
-                  </Button>
-                </Grid>
-              )} */}
             </div>
           </div>
         </ThemeProvider>
@@ -561,63 +333,6 @@ function NavBarBookingCard({
   } else {
     return <p onClick={() => setActiveInputTab(0)}>Please Select Performer First</p>
   }
-}
-
-const NavMobileStepper = ({ activeStep, setActiveStep, handleNext, handleBack, disableNext, allowCancel }) => {
-  const theme = useTheme()
-
-  return (
-    <MobileStepper
-      variant='dots'
-      sx={{
-        marginTop: 'auto',
-        color: '#FC8A5E',
-        '& .MuiMobileStepper-dotActive': {
-          backgroundColor: '#f07a4b'
-        },
-        '.MuiMobileStepper-dots': {
-          gap: '15px'
-        }
-      }}
-      steps={3}
-      position='static'
-      activeStep={activeStep}
-      nextButton={
-        <Button
-          size='small'
-          sx={{
-            background: '#FC8A5E',
-            color: 'white',
-            borderRadius: '9px',
-            padding: '8px 10px',
-            ':hover': { background: '#f07a4b' }
-          }}
-          onClick={handleNext}
-          disabled={disableNext}
-        >
-          Next
-          {theme.direction === 'rtl' ? <ArrowLeft /> : <ArrowRight />}
-        </Button>
-      }
-      backButton={
-        <Button
-          size='small'
-          onClick={handleBack}
-          sx={{
-            background: '#D5DFEC',
-            display: !allowCancel && 'none',
-            color: '#4B627F',
-            borderRadius: '9px',
-            padding: '8px 10px',
-            ':hover': { background: '#f07a4b' }
-          }}
-        >
-          {activeStep === 0 ? 'Cancel' : 'Back'}
-          {theme.direction === 'rtl' ? <ArrowRight /> : <ArrowLeft />}
-        </Button>
-      }
-    />
-  )
 }
 
 export default NavBarBookingCard
