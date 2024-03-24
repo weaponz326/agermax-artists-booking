@@ -23,30 +23,9 @@ import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
 import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import MobileNav from './MobileNavBar'
-import {
-  BiBadge,
-  BiCalendar,
-  BiHome,
-  BiSolidDashboard,
-  BiSolidGroup,
-  BiSolidHelpCircle,
-  BiSolidHome,
-  BiSolidMusic,
-  BiSolidUser,
-  BiSolidUserAccount,
-  BiUserVoice,
-  BiUserX
-} from 'react-icons/bi'
+import { BiCalendar, BiSolidGroup, BiSolidHelpCircle, BiSolidHome, BiSolidUserAccount } from 'react-icons/bi'
 import { useRouter } from 'next/router'
-import { ro } from 'date-fns/locale'
 import { useBookings } from 'src/providers/BookingsProvider'
-import BookingCardSchedular from '../BookingCard/CustomBookingCard'
-
-// const disabledDate = current => {
-//   // Can not select days before today and today
-//   return current && current < dayjs().endOf('day')
-// }
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
@@ -125,14 +104,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
-
   const selectArtistRef = useRef(null)
 
   useEffect(() => {
@@ -163,6 +134,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
       if (bookingCardWrapper) return
       if (muiButtonBase) return
       if (muiTypography) return
+
       if (menuWrapper == null) {
         setActiveInputTab(null)
         setHideMenuItems(true)

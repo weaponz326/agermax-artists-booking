@@ -27,24 +27,22 @@ function NavBarBookingCard({
   setOpen,
   artist,
   allowCancel,
-
+  formData,
+  handleChangeFormData,
+  setFormData,
   selectedArtist,
   setSelectedArtist,
   setActiveInputTab,
   activeInputTab,
   setIsScheduled
 }) {
-  const { formData, setFormData, handleChangeFormData } = useBookingFormData()
-
   /****************Fetch Artist ********************/
   useEffect(() => {
     if (artist) setSelectedArtist(artist)
   }, [artist])
 
-  const { user } = useAuth()
   const [activeStep, setActiveStep] = useState(0)
   const [disableNext, setDisableNext] = useState(true)
-  const [cleared, setCleared] = useState(false)
 
   const customTheme = createTheme({
     components: {

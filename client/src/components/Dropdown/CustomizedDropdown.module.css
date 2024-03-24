@@ -59,6 +59,7 @@
   font-weight: 500;
   font-size: 15px;
   border: none;
+  cursor: pointer;
 }
 .userMenuSignInButton:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
