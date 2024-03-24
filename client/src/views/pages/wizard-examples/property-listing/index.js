@@ -2,16 +2,16 @@
 import { useState } from 'react'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import Stepper from '@mui/material/Stepper'
-import StepLabel from '@mui/material/StepLabel'
-import Typography from '@mui/material/Typography'
-import { styled, useTheme } from '@mui/material/styles'
-import MuiStep from '@mui/material/Step'
-import CardContent from '@mui/material/CardContent'
+import { Box } from '@mui/material'
+import { Card } from '@mui/material'
+import { Avatar } from '@mui/material'
+import { Button } from '@mui/material'
+import { Stepper } from '@mui/material'
+import { StepLabel } from '@mui/material'
+import { Typography } from '@mui/material'
+import { styled, useTheme } from '@mui/material'
+import { MuiStep } from '@mui/material'
+import { CardContent } from '@mui/material'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
