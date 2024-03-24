@@ -26,7 +26,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 import { Snackbar, Alert } from '@mui/material'
-import Upload from '@mui/icons-material/Upload'
+import { Upload } from '@mui/icons-material'
 import LimitTags from './LimitTagComponent'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
