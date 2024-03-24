@@ -23,29 +23,9 @@ import { useArtists } from 'src/providers/ArtistsProvider'
 import { useAuth } from 'src/hooks/useAuth'
 import NavBarBookingCard from '../BookingCard/NavBarBookingCard'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import MobileNav from './MobileNavBar'
-import {
-  BiBadge,
-  BiCalendar,
-  BiHome,
-  BiSolidDashboard,
-  BiSolidGroup,
-  BiSolidHelpCircle,
-  BiSolidHome,
-  BiSolidMusic,
-  BiSolidUser,
-  BiSolidUserAccount,
-  BiUserVoice,
-  BiUserX
-} from 'react-icons/bi'
+import { BiCalendar, BiSolidGroup, BiSolidHelpCircle, BiSolidHome, BiSolidUserAccount } from 'react-icons/bi'
 import { useRouter } from 'next/router'
-import { ro } from 'date-fns/locale'
 import { useBookings } from 'src/providers/BookingsProvider'
-
-// const disabledDate = current => {
-//   // Can not select days before today and today
-//   return current && current < dayjs().endOf('day')
-// }
 
 export default function Navbar() {
   const [hideMenuItems, setHideMenuItems] = useState(true)
@@ -119,18 +99,10 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
   const searchBarContainerRef = useRef()
 
   /************************Form Data ************************** */
-  const { formData, setFormData } = useBookingFormData()
+  const { formData, setFormData, handleChangeFormData } = useBookingFormData()
 
   /****************Snack Bar***************/
   const [open, setOpen] = useState(false)
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
 
   const selectArtistRef = useRef(null)
 
@@ -162,6 +134,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
       if (bookingCardWrapper) return
       if (muiButtonBase) return
       if (muiTypography) return
+
       if (menuWrapper == null) {
         setActiveInputTab(null)
         setHideMenuItems(true)
@@ -341,6 +314,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 id={0}
                 onClear={handleClear}
                 ref={selectArtistRef}
+                open={activeInputTab === 0}
               />
               <div className={styles['search-item-divider']}></div>
               <CustomDropdown
@@ -355,7 +329,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                     allowCancel={false}
                     formData={formData}
                     setFormData={setFormData}
-                    handleSetFormData={handleSetFormData}
+                    handleChangeFormData={handleChangeFormData}
                     selectedArtist={selectedArtist}
                     setSelectedArtist={setSelectedArtist}
                     onDone={() => setOpenDropdown(false)}
