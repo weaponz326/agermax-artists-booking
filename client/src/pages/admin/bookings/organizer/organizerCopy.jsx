@@ -31,11 +31,11 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import { createBooking, updateBooking } from 'src/services/bookings'
-import { ArrowBack } from '@material-ui/icons'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
 import { useAuth } from 'src/hooks/useAuth'
-import { Upload } from '@mui/icons-material'
+import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import useBookingFormData from 'src/hooks/useBookingFormData'

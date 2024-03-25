@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import styles from './events-layout.module.css'
 import Image from 'next/image'
-import { Skeleton } from '@mui/material'
+import Skeleton from '@mui/material/Skeleton'
 import { Clock } from 'iconsax-react'
 import { MdArrowForward } from 'react-icons/md'
 import CalendarIcon from '../AdminPagesSharedComponents/CalendarIcon/CalendarIcon'

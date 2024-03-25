@@ -4,7 +4,7 @@ import styles from './carousel.module.css'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Skeleton } from '@mui/material'
+import Skeleton from '@mui/material/Skeleton'
 import { getOnePhoto, getRandomArtistPhotos } from 'src/services/mock'
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 

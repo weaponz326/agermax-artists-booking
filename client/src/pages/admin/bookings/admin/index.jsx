@@ -26,7 +26,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 import { Snackbar, Alert } from '@mui/material'
-import { Upload } from '@mui/icons-material'
+import Upload from '@mui/icons-material/Upload'
 import LimitTags from './LimitTagComponent'
 import UploadPictures from 'src/components/AdminPagesSharedComponents/UploadPictures/UploadPictures'
 
@@ -36,17 +36,20 @@ import CustomFullCalendar from 'src/components/AdminPagesSharedComponents/Custom
 //Import services & Providers
 import { useArtists } from 'src/providers/ArtistsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
-import { ArrowBack } from '@material-ui/icons'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 
 import { useAuth } from 'src/hooks/useAuth'
 import { useOrganizers } from 'src/providers/OrganizersProvider'
 import { createInvoice } from 'src/services/invoice'
 import AntDesignDatePicker from 'src/components/AdminPagesSharedComponents/AntDesignDatePicker/AntDesignDatePicker'
 import { getUserById } from 'src/services/users'
-import { BiTrash } from 'react-icons/bi'
+import { BiTag, BiTagAlt, BiTrash } from 'react-icons/bi'
 import ServerActionModal from 'src/components/ServerActionModal/ServerActionModal'
 import useBookingFormData from 'src/hooks/useBookingFormData'
-import { uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
+import { uploadBookingBookingGallery, uploadBookingGallery, uploadBookingMainBanner } from 'src/services/bookings'
+import ImageUploader from 'src/components/AdminPagesSharedComponents/UploadPictures/ImageUploader'
+import { Tag, Tag2 } from 'iconsax-react'
+// import { TagFacesSharp } from '@mui/icons-material'
 
 const BookingPage = () => {
   const [activeEventsView, setActiveEventsView] = useState('ListView')
@@ -767,6 +770,7 @@ export const BookingsModalContent = ({
   }
 
   const handleBookingBannerFileUpload = async ({ file, onSuccess, onError }) => {
+    console.log(file)
     try {
       const updatedBooking = await uploadBookingMainBanner(file, onSuccess, onError, booking)
       console.log(updatedBooking)

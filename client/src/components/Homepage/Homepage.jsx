@@ -10,7 +10,7 @@ import FaqAccordion from '../FaqAccordion/FaqAccordion'
 import BookingsProvider from 'src/providers/BookingsProvider'
 import { useBookings } from 'src/providers/BookingsProvider'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
-import { Skeleton } from '@mui/material'
+import Skeleton from '@mui/material/Skeleton'
 import { BiLoader } from 'react-icons/bi'
 
 const HomePage = () => {
