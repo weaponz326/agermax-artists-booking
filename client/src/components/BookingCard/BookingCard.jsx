@@ -197,14 +197,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                 disableNext={disableNext}
               />
             )}
-            {/* <NavMobileStepper
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              handleBack={handleBack}
-              handleNext={handleNext}
-              disableNext={disableNext}
-              // allowCancel={allowCancel}
-            /> */}
+        
 
             {activeStep === 1 && (
               <Grid container direction='column' overflow={'auto'} height='100%'>

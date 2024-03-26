@@ -218,15 +218,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
     return null
   }
 
-  const noDisplayStyle = {
-    display: 'none'
-  }
-
-  const displayStyle = {
-    display: 'flex'
-  }
-
-  const filterOption = (inputValue, option) => {
+   const filterOption = (inputValue, option) => {
     return option.value.toLowerCase().includes(inputValue.toLowerCase())
   }
 
@@ -290,8 +282,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
             {navMenu}
             <form className={styles['search-bar']} onSubmit={handleSubmit} ref={searchBarContainerRef}>
               <AutoComplete
-                autoFocus
-                // onClick={e => setActiveInputTab(0)}
+                onClick={e => setActiveInputTab(0)}
                 // onChange={e => setActiveInputTab(1)}
                 onFocus={e => setActiveInputTab(0)}
                 className={`${styles.searchWrapper} ${checkActiveClass(0)}`}
@@ -313,7 +304,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
                 id={0}
                 onClear={handleClear}
                 ref={selectArtistRef}
-                open={activeInputTab === 0}
+                // open={activeInputTab === 0}
               />
               <div className={styles['search-item-divider']}></div>
               <CustomDropdown
