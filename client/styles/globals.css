@@ -43,6 +43,11 @@
   --clr-light-blue: rgb(171, 202, 255);
 }
 
+*{
+  font-family: 'Inter', Arial, sans-serif;
+
+}
+
 a {
   text-decoration: none;
 }

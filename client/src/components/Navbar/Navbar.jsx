@@ -259,7 +259,6 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
           onChange={handleMenuClick}
         />
         <AutoComplete
-          autoFocus
           // onClick={e => setActiveInputTab(0)}
           // onChange={e => setActiveInputTab(1)}
           className={`${styles.collapsedStateSearchBarWrapper} ${styles.mobileViewSearchBar}`}

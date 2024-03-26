@@ -9,7 +9,6 @@
   margin-top: auto;
 }
 .footerContent {
-  max-width: 1740px;
   display: flex;
   flex-direction: column;
   position: relative;
