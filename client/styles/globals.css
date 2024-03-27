@@ -43,9 +43,8 @@
   --clr-light-blue: rgb(171, 202, 255);
 }
 
-*{
+* {
   font-family: 'Inter', Arial, sans-serif;
-
 }
 
 a {
@@ -64,6 +63,7 @@ code {
   color: #d400ff;
   border-radius: 0.1335rem;
 }
+
 code:not([class*='language-']):before,
 code:not([class*='language-']):after {
   content: '`';
