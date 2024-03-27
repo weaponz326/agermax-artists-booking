@@ -251,7 +251,6 @@ header .greetings-message {
 
 @media (width < 700px) {
   .header-background,
-  .header-carousel,
   .about,
   .faq,
   .subscription,
@@ -259,6 +258,8 @@ header .greetings-message {
     padding: 0.5rem 1rem;
     margin-bottom: 2rem;
   }
+
+  
   .collapsedStateSearchBarWrapper {
     display: flex;
   }
@@ -343,10 +344,10 @@ header .greetings-message {
 
 @media (max-width: 500px) {
   .header-background,
-  .header-carousel,
   .header-navbar {
     padding: 0.5rem 1rem;
   }
+  
   .first-img {
     display: none;
   }
