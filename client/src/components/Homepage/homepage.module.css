@@ -46,6 +46,8 @@
 
 .events {
   padding: 0 4rem;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 .eventsWrapper,
 .aboutWrapper,
@@ -170,7 +172,8 @@
 }
 
 .about-content-img {
-  max-width: 25rem;
+  max-width: 350px;
+  width: 90vw;
   aspect-ratio: 1;
   flex: 1;
 }

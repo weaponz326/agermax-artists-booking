@@ -298,3 +298,11 @@
     margin: 0;
   }
 }
+
+@media (max-width: 400px) {
+  .events-preview {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+}
+

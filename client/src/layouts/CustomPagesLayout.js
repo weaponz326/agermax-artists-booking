@@ -11,7 +11,8 @@ const CustomPagesLayout = ({ children }) => {
           flexDirection: 'column',
           height: '100vh',
           // maxWidth: '1440px',
-          marginInline: 'auto'
+          marginInline: 'auto',
+          margin: "0 auto"
         }}
       >
         <Navbar />
