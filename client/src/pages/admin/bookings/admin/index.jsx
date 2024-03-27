@@ -575,7 +575,8 @@ export const BookingsModalContent = ({
   hideModal,
   setSnackbarMessage,
   setSnackbarOpen,
-  setSnackbarSeverity
+  setSnackbarSeverity,
+  bookingType
 }) => {
   const router = useRouter()
   const { user } = useAuth()
@@ -856,89 +857,93 @@ export const BookingsModalContent = ({
             spellCheck
             disabled={user && user.role === 'artist'}
           />
-          <Autocomplete
-            className={styles.modalCardContentInputField}
-            onChange={(event, organizer) => {
-              if (organizer) setFormData({ ...formData, organizerID: organizer._id })
-            }}
-            id='organizerID'
-            options={organizersOptions}
-            getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Organizer' required />}
-            size='small'
-            sx={{ padding: '0' }}
-            value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
-            readOnly={user && user.role === 'artist'}
-          />
-          <Autocomplete
-            className={styles.modalCardContentInputField}
-            onChange={(event, artist) => {
-              if (artist) setFormData({ ...formData, artistID: artist._id })
-            }}
-            id='artistID'
-            options={artistsOptions}
-            getOptionLabel={option => option.fullName}
-            renderInput={params => <TextField {...params} label='Artist' required />}
-            size='small'
-            sx={{ padding: '0' }}
-            value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
-            readOnly={user && user.role === 'artist'}
-          />
-          <DatePicker
-            className={styles.modalCardContentInputField}
-            label='Select Event Date'
-            value={formData.dateTimeRequested}
-            onChange={date => setFormData({ ...formData, dateTimeRequested: dayjs(date) })}
-            slots={params => <TextField {...params} required />}
-            disablePast
-            readOnly={user && user.role === 'artist'}
-          />
-          <TimePicker
-            className={styles.modalCardContentInputField}
-            label='Get In Time'
-            value={formData.getInTime}
-            // onChange={time => setFormData({ ...formData, getInTime: time })}
-            onChange={time => handleChangeFormData('getInTime', time)}
-            minutesStep={15}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.dateTimeRequested}
-            readOnly={user && user.role === 'artist'}
-            name='getInTIme'
-          />
-          <TimePicker
-            className={styles.modalCardContentInputField}
-            label='Event Start Time'
-            value={formData.startTime}
-            // onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
-            onChange={time => handleChangeFormData('startTime', time)}
-            minutesStep={15}
-            slots={params => <TextField {...params} required />}
-            minTime={formData.getInTime ? dayjs(formData.getInTime).add(15, 'minute') : undefined}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.dateTimeRequested || !formData.getInTime}
-            readOnly={user && user.role === 'artist'}
-            name='startTime'
-          />
-          <TimePicker
-            className={styles.modalCardContentInputField}
-            label='Event End Time'
-            value={formData.endTime}
-            // onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
-            onChange={time => handleChangeFormData('endTime', time)}
-            slots={params => <TextField {...params} required />}
-            minutesStep={15}
-            minTime={formData.startTime ? dayjs(formData.startTime).add(30, 'minute') : undefined}
-            format='HH:mm'
-            ampm={false}
-            skipDisabled
-            disabled={!formData.startTime}
-            readOnly={user && user.role === 'artist'}
-            name='endTime'
-          />
+          {bookingType != 'bookingSchedular' && (
+            <>
+              <Autocomplete
+                className={styles.modalCardContentInputField}
+                onChange={(event, organizer) => {
+                  if (organizer) setFormData({ ...formData, organizerID: organizer._id })
+                }}
+                id='organizerID'
+                options={organizersOptions}
+                getOptionLabel={option => option.fullName}
+                renderInput={params => <TextField {...params} label='Organizer' required />}
+                size='small'
+                sx={{ padding: '0' }}
+                value={organizersOptions.find(opt => opt._id === formData.organizerID) || null}
+                readOnly={user && user.role === 'artist'}
+              />
+              <Autocomplete
+                className={styles.modalCardContentInputField}
+                onChange={(event, artist) => {
+                  if (artist) setFormData({ ...formData, artistID: artist._id })
+                }}
+                id='artistID'
+                options={artistsOptions}
+                getOptionLabel={option => option.fullName}
+                renderInput={params => <TextField {...params} label='Artist' required />}
+                size='small'
+                sx={{ padding: '0' }}
+                value={artistsOptions.find(opt => opt._id === formData.artistID) || null}
+                readOnly={user && user.role === 'artist'}
+              />
+              <DatePicker
+                className={styles.modalCardContentInputField}
+                label='Select Event Date'
+                value={formData.dateTimeRequested}
+                onChange={date => setFormData({ ...formData, dateTimeRequested: dayjs(date) })}
+                slots={params => <TextField {...params} required />}
+                disablePast
+                readOnly={user && user.role === 'artist'}
+              />
+              <TimePicker
+                className={styles.modalCardContentInputField}
+                label='Get In Time'
+                value={formData.getInTime}
+                // onChange={time => setFormData({ ...formData, getInTime: time })}
+                onChange={time => handleChangeFormData('getInTime', time)}
+                minutesStep={15}
+                format='HH:mm'
+                ampm={false}
+                skipDisabled
+                disabled={!formData.dateTimeRequested}
+                readOnly={user && user.role === 'artist'}
+                name='getInTIme'
+              />
+              <TimePicker
+                className={styles.modalCardContentInputField}
+                label='Event Start Time'
+                value={formData.startTime}
+                // onChange={time => setFormData({ ...formData, startTime: dayjs(time) })}
+                onChange={time => handleChangeFormData('startTime', time)}
+                minutesStep={15}
+                slots={params => <TextField {...params} required />}
+                minTime={formData.getInTime ? dayjs(formData.getInTime).add(15, 'minute') : undefined}
+                format='HH:mm'
+                ampm={false}
+                skipDisabled
+                disabled={!formData.dateTimeRequested || !formData.getInTime}
+                readOnly={user && user.role === 'artist'}
+                name='startTime'
+              />
+              <TimePicker
+                className={styles.modalCardContentInputField}
+                label='Event End Time'
+                value={formData.endTime}
+                // onChange={time => setFormData({ ...formData, endTime: dayjs(time) })}
+                onChange={time => handleChangeFormData('endTime', time)}
+                slots={params => <TextField {...params} required />}
+                minutesStep={15}
+                minTime={formData.startTime ? dayjs(formData.startTime).add(30, 'minute') : undefined}
+                format='HH:mm'
+                ampm={false}
+                skipDisabled
+                disabled={!formData.startTime}
+                readOnly={user && user.role === 'artist'}
+                name='endTime'
+              />
+            </>
+          )}
 
           <TextField
             placeholder='City/Venue'
@@ -1008,51 +1013,61 @@ export const BookingsModalContent = ({
 
           {/* ****Conditional Rendering for different bookings Status --- CANCELLED ****/}
 
-          {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
-            <div>
-              <label htmlFor='status'>Status:</label>
-              <select
-                className={styles.modalCardContentInputField}
-                name='status'
-                id='status'
-                value={formData.status}
-                onChange={e => setFormData({ ...formData, status: e.target.value })}
-              >
-                <option value='cancelled' selected>
-                  Cancelled
-                </option>
-                <option value='pending'>Pending</option>
-              </select>
-            </div>
-          )}
+          {bookingType != 'bookingSchedular' &&
+            user &&
+            user.role === 'admin' &&
+            booking &&
+            booking.status === 'cancelled' && (
+              <div>
+                <label htmlFor='status'>Status:</label>
+                <select
+                  className={styles.modalCardContentInputField}
+                  name='status'
+                  id='status'
+                  value={formData.status}
+                  onChange={e => setFormData({ ...formData, status: e.target.value })}
+                >
+                  <option value='cancelled' selected>
+                    Cancelled
+                  </option>
+                  <option value='pending'>Pending</option>
+                </select>
+              </div>
+            )}
           {/**************************************/}
 
-          <TabButton className={styles.modalCardContentSaveButton}>{saveButtonText}</TabButton>
+          {bookingType != 'bookingSchedular' && (
+            <TabButton className={styles.modalCardContentSaveButton}>{saveButtonText}</TabButton>
+          )}
         </form>
 
         {/* ****Conditional Rendering for different bookings Status --- CANCELLED ****/}
 
-        {user && user.role === 'admin' && booking && booking.status === 'cancelled' && (
-          <div className={styles.bookingActionButtons}>
-            <TabButton
-              className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}
-              onClick={() => setOpen(true)}
-            >
-              Delete Booking Permanently <BiTrash />
-            </TabButton>
-            <ServerActionModal
-              titleText={'Confirm Delete'}
-              open={open}
-              setOpen={setOpen}
-              okText={'Yes, delete'}
-              onOk={() => handleDelete(booking)}
-              modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
-            />
-          </div>
-        )}
+        {bookingType != 'bookingSchedular' &&
+          user &&
+          user.role === 'admin' &&
+          booking &&
+          booking.status === 'cancelled' && (
+            <div className={styles.bookingActionButtons}>
+              <TabButton
+                className={`${styles.modalCardContentSaveButton} ${styles.rejectButton}`}
+                onClick={() => setOpen(true)}
+              >
+                Delete Booking Permanently <BiTrash />
+              </TabButton>
+              <ServerActionModal
+                titleText={'Confirm Delete'}
+                open={open}
+                setOpen={setOpen}
+                okText={'Yes, delete'}
+                onOk={() => handleDelete(booking)}
+                modalText={'You will not recover it again. Are you sure you want to delete this booking permanently? '}
+              />
+            </div>
+          )}
 
         {/* ****Conditional Rendering for different bookings Status --- PENDING ****/}
-        {booking && booking.status === 'pending' && (
+        {bookingType != 'bookingSchedular' && booking && booking.status === 'pending' && (
           <div className={styles.bookingActionButtons}>
             {user && user.role === 'admin' && !booking.invoiced && (
               <form

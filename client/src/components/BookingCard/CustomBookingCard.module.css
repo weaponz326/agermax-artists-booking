@@ -65,8 +65,13 @@
   align-items: center;
   gap: 5px;
 }
+
+.chosenTimeWrapper *{
+  /* color: red; */
+}
 .chosenTime * {
-  color: #183d4c;
+  /* color: #183d4c; */
+  
   background-color: transparent;
   border: none;
   /* font-size: 2rem; */

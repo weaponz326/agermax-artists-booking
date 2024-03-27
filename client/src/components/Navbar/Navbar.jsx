@@ -160,6 +160,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
     const artist = options.find(artist => `${artist.firstName} ${artist.lastName}` === value)
     handleSetFormData(0, 'artistID', artist._id)
     setSelectedArtist(artist)
+    
   }
 
   function handleSetFormData(id, name, value) {
@@ -308,6 +309,7 @@ const BookArtistPanel = ({ hideMenuItems, setHideMenuItems, user, logout, isUser
               />
               <div className={styles['search-item-divider']}></div>
               <CustomDropdown
+              openDropdown={activeInputTab === 1}
                 id={1}
                 activeInputTab={activeInputTab}
                 checkActiveClass={checkActiveClass}
@@ -472,7 +474,7 @@ export const CustomDropdown = ({
   return (
     <Dropdown
       // disabled={open}
-      open={open}
+      open={open }
       onOpenChange={handleOpenChange}
       menu={{
         items,
