@@ -199,20 +199,27 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               />
             )}
             {activeStep === 1 && (
-              <BookingsModalContent
-                setOpen={setOpen}
-                artist={artist}
-                formData={formData}
-                handleChangeFormData={handleChangeFormData}
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-                handleBack={handleBack}
-                handleNext={handleNext}
-                disableNext={disableNext}
-              />
+              <div className={styles.bookingDetailsWrapper}>
+                <BookingsModalContent
+                  setOpen={setOpen}
+                  artist={artist}
+                  formData={formData}
+                  handleChangeFormData={handleChangeFormData}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  handleBack={handleBack}
+                  handleNext={handleNext}
+                  disableNext={disableNext}
+                  bookingType={"bookingSchedular"}
+                />
+                <NavMobileStepper
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  handleBack={handleBack}
+                  handleNext={handleNext}
+                />
+              </div>
             )}
-
-        
 
             {activeStep === 2 && (
               <Grid container direction='column' overflow={'auto'} height='100%'>

@@ -5,6 +5,12 @@
   height: 100%;
 }
 
+.bookingDetailsWrapper{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .summaryDetailsContainer {
   margin-top: 16px;
   border: 1px solid #cbd4dc;
