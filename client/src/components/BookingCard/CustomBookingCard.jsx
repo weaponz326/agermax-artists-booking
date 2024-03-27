@@ -264,10 +264,7 @@ const BookingCardSchedular = ({
               <div className={styles.timePicker}>
                 <div className={styles.specificTime}>
                   <span>Get-In Time</span>
-                  <Tooltip
-                    title='At what time is
-the Performer able to get in to the premises?'
-                  >
+                  <Tooltip title='At what time is the Performer able to get in to the premises?'>
                     <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
                   </Tooltip>
                 </div>
@@ -295,10 +292,7 @@ the Performer able to get in to the premises?'
               <div className={styles.timePicker}>
                 <div className={styles.specificTime}>
                   <span>Start Time</span>
-                  <Tooltip
-                    title='At what time is the Performer going
-                    to start?'
-                  >
+                  <Tooltip title='At what time is the Performer going to start?'>
                     <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
                   </Tooltip>
                 </div>
