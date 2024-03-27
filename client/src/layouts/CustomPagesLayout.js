@@ -10,7 +10,7 @@ const CustomPagesLayout = ({ children }) => {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
-          maxWidth: '1440px',
+          // maxWidth: '1440px',
           marginInline: 'auto'
         }}
       >
