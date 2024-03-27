@@ -111,7 +111,7 @@
 }
 
 @media (width < 700px) {
-  .userMenuSignInButton {
+  .userMenuSignInButton, .userActionsButtons a {
     /* background-color: red; */
     display: none;
   }
