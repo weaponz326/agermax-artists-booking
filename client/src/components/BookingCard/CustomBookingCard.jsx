@@ -153,10 +153,9 @@ const BookingCardSchedular = ({
     setMinTime(dayjs(timeString, 'HH:mm')) // Update the minimum time
   }
   // Function to disable time options in the second Time Picker based on the selected time from the first Time Picker
-  const disabledGetInTime = type => {
-    console.log(type)
-    const currentHour = new Date(formData.getInTime).getUTCHours() // Get the current hour
-    const currentMinute = new Date(formData.getInTime).getUTCMinutes() // Get the current minute
+  const disabledGetInTime = () => {
+    const currentHour = new Date(formData.getInTime).getHours() // Get the current hour
+    const currentMinute = new Date(formData.getInTime).getMinutes() // Get the current minute
 
     const disabledHours = () => {
       const hours = []
@@ -164,10 +163,11 @@ const BookingCardSchedular = ({
       for (let i = 0; i <= currentHour; i++) {
         hours.push(i)
       }
+      console.log(currentMinute)
       return hours
     }
     const disabledMinutes = selectedHour => {
-      if (selectedHour === currentHour) {
+      if (new Date(formData.startTime).getHours() === currentHour) {
         const minutes = []
         // Loop from 0 to the current minute and disable each minute
         for (let i = 0; i < currentMinute; i++) {
@@ -175,16 +175,14 @@ const BookingCardSchedular = ({
         }
         return minutes
       }
-      // Disable specific minutes for other hours
-      return []
     }
     return { disabledHours, disabledMinutes }
   }
 
   const disabledStartTime = type => {
     console.log(type)
-    const currentHour = new Date(formData.startTime).getUTCHours() // Get the current hour
-    const currentMinute = new Date(formData.startTime).getUTCMinutes() // Get the current minute
+    const currentHour = new Date(formData.startTime).getHours() // Get the current hour
+    const currentMinute = new Date(formData.startTime).getMinutes() // Get the current minute
 
     const disabledHours = () => {
       const hours = []
@@ -194,17 +192,14 @@ const BookingCardSchedular = ({
       }
       return hours
     }
-    const disabledMinutes = selectedHour => {
-      if (selectedHour === currentHour) {
-        const minutes = []
-        // Loop from 0 to the current minute and disable each minute
-        for (let i = 0; i < currentMinute; i++) {
-          minutes.push(i)
-        }
-        return minutes
+
+    const disabledMinutes = () => {
+      const minutes = []
+      // Loop from 0 to the current minute and disable each minute
+      for (let i = 0; i < currentMinute; i++) {
+        minutes.push(i)
       }
-      // Disable specific minutes for other hours
-      return []
+      return minutes
     }
     return { disabledHours, disabledMinutes }
   }
@@ -276,23 +271,25 @@ the Performer able to get in to the premises?'
                     <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
                   </Tooltip>
                 </div>
-                <TimePicker
-                  // style={{ fontSize: '2.5rem' }}
-                  className={styles.chosenTime}
-                  variant='borderless'
-                  placeholder='Choose'
-                  minuteStep={15}
-                  secondStep={30}
-                  size='large'
-                  showSecond={false}
-                  showNow={false}
-                  value={formData.getInTime}
-                  suffixIcon={false}
-                  format={'HH:mm'}
-                  onOk={handleTimeChange}
-                  name='getInTime'
-                  onChange={time => handleChangeFormData('getInTime', time)}
-                />
+                <div className={styles.chosenTimeWrapper}>
+                  <TimePicker
+                    // style={{ fontSize: '2.5rem' }}
+                    className={styles.chosenTime}
+                    variant='borderless'
+                    placeholder='Choose'
+                    minuteStep={15}
+                    secondStep={30}
+                    size='large'
+                    showSecond={false}
+                    showNow={false}
+                    value={formData.getInTime}
+                    suffixIcon={false}
+                    format={'HH:mm'}
+                    onOk={handleTimeChange}
+                    name='getInTime'
+                    onChange={time => handleChangeFormData('getInTime', time)}
+                  />
+                </div>
               </div>
               <VerticalDivider />
               <div className={styles.timePicker}>
@@ -305,23 +302,25 @@ the Performer able to get in to the premises?'
                     <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
                   </Tooltip>
                 </div>
-                <TimePicker
-                  className={styles.chosenTime}
-                  variant='borderless'
-                  placeholder='Choose'
-                  minuteStep={15}
-                  size='large'
-                  showSecond={false}
-                  format={'HH:mm'}
-                  suffixIcon={false}
-                  showNow={false}
-                  value={formData.startTime}
-                  name='startTime'
-                  onChange={time => handleChangeFormData('startTime', time)}
-                  disabled={!formData.getInTime}
-                  disabledTime={disabledGetInTime}
-                  hideDisabledOptions
-                />
+                <div className={styles.chosenTimeWrapper}>
+                  <TimePicker
+                    className={styles.chosenTime}
+                    variant='borderless'
+                    placeholder='Choose'
+                    minuteStep={15}
+                    size='large'
+                    showSecond={false}
+                    format={'HH:mm'}
+                    suffixIcon={false}
+                    showNow={false}
+                    value={formData.startTime}
+                    name='startTime'
+                    onChange={time => handleChangeFormData('startTime', time)}
+                    disabled={!formData.getInTime}
+                    disabledTime={disabledGetInTime}
+                    hideDisabledOptions
+                  />
+                </div>
               </div>
               <VerticalDivider />
 
@@ -332,22 +331,24 @@ the Performer able to get in to the premises?'
                     <BiSolidHelpCircle size={16} style={{ color: 'red' }} />
                   </Tooltip>
                 </div>
-                <TimePicker
-                  className={styles.chosenTime}
-                  variant='borderless'
-                  placeholder='Choose'
-                  minuteStep={15}
-                  size='large'
-                  suffixIcon={false}
-                  format={'HH:mm'}
-                  showNow={false}
-                  showSecond={false}
-                  value={formData.endTime}
-                  onChange={time => handleChangeFormData('endTime', time)}
-                  disabled={!formData.startTime}
-                  disabledTime={disabledStartTime}
-                  hideDisabledOptions
-                />
+                <div className={styles.chosenTimeWrapper}>
+                  <TimePicker
+                    className={styles.chosenTime}
+                    variant='borderless'
+                    placeholder='Choose'
+                    minuteStep={15}
+                    size='large'
+                    suffixIcon={false}
+                    format={'HH:mm'}
+                    showNow={false}
+                    showSecond={false}
+                    value={formData.endTime}
+                    onChange={time => handleChangeFormData('endTime', time)}
+                    disabled={!formData.startTime}
+                    disabledTime={disabledStartTime}
+                    hideDisabledOptions
+                  />
+                </div>
               </div>
             </div>
             <NavMobileStepper

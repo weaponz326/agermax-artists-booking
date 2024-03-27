@@ -19,6 +19,7 @@ import { useBookings } from 'src/providers/BookingsProvider'
 import Tooltip from 'src/@core/theme/overrides/tooltip'
 import BookingCardSchedular, { BookingCardSummary } from './CustomBookingCard'
 import TabButton from '../AdminPagesSharedComponents/ViewTab/TabButton'
+import { BookingsModalContent } from 'src/pages/admin/bookings/admin'
 
 const customLocale = {
   weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Override the day abbreviations
@@ -197,9 +198,23 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
                 disableNext={disableNext}
               />
             )}
+            {activeStep === 1 && (
+              <BookingsModalContent
+                setOpen={setOpen}
+                artist={artist}
+                formData={formData}
+                handleChangeFormData={handleChangeFormData}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+                handleBack={handleBack}
+                handleNext={handleNext}
+                disableNext={disableNext}
+              />
+            )}
+
         
 
-            {activeStep === 1 && (
+            {activeStep === 2 && (
               <Grid container direction='column' overflow={'auto'} height='100%'>
                 <Typography sx={{ fontSize: '24px', fontWeight: '700' }} gutterBottom>
                   {artist && artist.firstName} {artist && artist.lastName}
@@ -316,7 +331,7 @@ function BookingCard({ open, setOpen, artist, allowCancel }) {
               </Grid>
               // <BookingCardSummary setActiveStep={setActiveStep} setOpen={setOpen} activeStep={activeStep} artist={artist}/>
             )}
-            {activeStep === 2 && (
+            {activeStep === 3 && (
               <Grid textAlign='center' color='#183D4C'>
                 <Typography fontSize='32px' fontWeight='450' marginTop='55px'>
                   Thank you!
