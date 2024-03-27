@@ -231,7 +231,7 @@ header .greetings-message {
   display: flex;
   gap: 2rem;
   overflow: auto;
-  margin: 0 0rem;
+  margin: 0 auto;
   padding: 0 4rem;
   padding-bottom: 0.1rem;
   max-width: 1440px;
