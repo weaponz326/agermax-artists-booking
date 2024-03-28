@@ -58,3 +58,10 @@
 .mobileStepperWrapper {
   margin-top: auto;
 }
+
+@media (width < 500px) {
+  .bookingCardWrapper{
+    padding: 0;
+  }
+  
+}

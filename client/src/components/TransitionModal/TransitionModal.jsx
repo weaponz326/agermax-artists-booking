@@ -14,7 +14,8 @@ const style = {
   top: '2%',
   right: '5%',
   transform: 'translate(-50%, -50%)',
-  width: 460,
+  width: "100%",
+  // width: 460,
   bgcolor: 'white',
   border: 'none',
   borderRadius: '36px',
@@ -56,9 +57,9 @@ export default function TransitionsModal({ modalContent, btnClassName, open, set
         Book Now
       </Button>
       <Drawer
-        styles={{ wrapper: { boxShadow: 'none', top: '5px', right: '20px', padding: '0' } }}
-        style={{ minHeight: '700px', boxShadow: 'none', borderRadius: '24px', padding: '0px' }}
-        width={470}
+        styles={{ wrapper: { boxShadow: 'none', top: '5px', right: '1%', padding: '0',  maxWidth: '470px', width: "100%" } }}
+        style={{ minHeight: '700px', boxShadow: 'none', borderRadius: '24px', padding: '0', maxWidth: '470px', width: "100%" }}
+        // width={470}
         closeIcon={false}
         // title={`Drawer`}
         variant='persistent'

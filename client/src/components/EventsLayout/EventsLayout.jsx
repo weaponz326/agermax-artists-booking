@@ -73,10 +73,8 @@ const EventCard = ({ booking }) => {
       const bookingArtist = await getUserById(booking.artistID)
       if (!booking.mainBanner || booking.mainBanner === '' || booking.mainBanner === undefined) {
         setBookingImage(bookingArtist.profilePhoto)
-        console.log('Profile Photo', bookingArtist)
       } else {
         setBookingImage(booking.mainBanner)
-        console.log('Banner', booking.mainBanner)
       }
     }
 
