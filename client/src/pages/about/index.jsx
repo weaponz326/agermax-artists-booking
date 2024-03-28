@@ -25,6 +25,7 @@ const AboutPage = () => {
               </div>
               <div className={styles.aboutImageContainer}>
                 <img
+                  className={styles['about-content-img']}
                   src={'/images/rectangle-22462.png'}
                   alt='Artist performing'
                   loading='eager'

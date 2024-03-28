@@ -5,6 +5,13 @@
   align-items: center;
 }
 
+.about-content-img {
+  max-width: 350px;
+  width: 90vw;
+  flex: 1;
+  border-radius: 1rem;
+}
+
 @media (width < 700px) {
   .about-container {
     padding-inline: 2rem;

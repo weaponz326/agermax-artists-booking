@@ -174,8 +174,8 @@
 .about-content-img {
   max-width: 350px;
   width: 90vw;
-  aspect-ratio: 1;
   flex: 1;
+  border-radius: 1rem;
 }
 
 .about-message {
