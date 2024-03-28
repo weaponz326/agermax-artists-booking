@@ -71,10 +71,12 @@ const EventCard = ({ booking }) => {
   useEffect(() => {
     const fetchArtist = async () => {
       const bookingArtist = await getUserById(booking.artistID)
-      if (!booking.mainBanner || booking.mainBanner === '') {
+      if (!booking.mainBanner || booking.mainBanner === '' || booking.mainBanner === undefined) {
         setBookingImage(bookingArtist.profilePhoto)
+        console.log('Profile Photo', bookingArtist)
       } else {
         setBookingImage(booking.mainBanner)
+        console.log('Banner', booking.mainBanner)
       }
     }
 
@@ -83,7 +85,7 @@ const EventCard = ({ booking }) => {
 
   return (
     <div className={styles['events-preview-container']}>
-      <Image className={styles['evt-img']} src={bookingImage} alt={booking.eventTitle} loading='eager' fill />
+      <Image className={styles['evt-img']} priority src={bookingImage} alt={booking.eventTitle} loading='eager' fill />
       <CalendarIcon booking={booking} />
       <EventsDetails booking={booking} />
       <div className={styles.gradientOverlay}></div>

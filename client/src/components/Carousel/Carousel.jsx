@@ -36,7 +36,6 @@ export default function Carousel({ artist }) {
     } else {
       setLoading(false)
     }
-    console.log(artist)
   }, [artist])
   if (!loading) {
     return (
